@@ -21,6 +21,7 @@ public class BlogController extends HttpServlet {
         List<BlogModel> newListBlog = blogService.getNewBlog();
         request.setAttribute("listBlog", listBlog);
         request.setAttribute("newListBlog", newListBlog);
+        request.setAttribute("activeBlog","active");
         request.getRequestDispatcher("/view/web/blog.jsp").forward(request, response);
     }
 

@@ -37,7 +37,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="product.jsp">
+                        <a href="product">
                             <span>Điện thoại</span>
                         </a>
                     </li>
@@ -86,16 +86,16 @@
                                                 <div class="collapse" id="collapseExample">
                                                     <div class="card card-body" style="border:0;padding-top:0;">
                                                         <ul class="menu-product">
-                                                            <%--                                                            <%--%>
-                                                            <%--                                                                for (CategoryModel brand : listBrand) {--%>
-                                                            <%--                                                            %>--%>
-                                                            <%--                                                            <li class="px-2 <%=brand.getName().toLowerCase().equalsIgnoreCase(checkTagBrand)?"active":""%>">--%>
-                                                            <%--                                                                <a href="category?brand=<%=brand.getName().toLowerCase()%>"--%>
-                                                            <%--                                                                   title="Sửa điện thoại <%=brand.getName()%>">--%>
-                                                            <%--                                                                    Sửa điện thoại <%=brand.getName()%>--%>
-                                                            <%--                                                                </a>--%>
-                                                            <%--                                                            </li>--%>
-                                                            <%--                                                            <% }%>--%>
+                                                            <%
+                                                                for (CategoryModel brand : listBrand) {
+                                                            %>
+                                                            <li class="px-2 <%=brand.getName().toLowerCase().equalsIgnoreCase(checkTagBrand)?"active":""%>">
+                                                                <a href="category?brand=<%=brand.getName().toLowerCase()%>"
+                                                                   title="Sửa điện thoại <%=brand.getName()%>">
+                                                                    Sửa điện thoại <%=brand.getName()%>
+                                                                </a>
+                                                            </li>
+                                                            <% }%>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -138,10 +138,10 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            <li class=""><a href="introduce.jsp"
+                                            <li class=""><a href="introduce"
                                                             title="Giới thiệu"><span>Giới thiệu</span></a></li>
-                                            <li class=""><a href="blog.jsp" title="Blog"><span>Blog</span></a></li>
-                                            <li class=""><a href="contact.jsp" title="Liên hệ"><span>Liên hệ</span></a>
+                                            <li class=""><a href="blog" title="Blog"><span>Blog</span></a></li>
+                                            <li class=""><a href="contact" title="Liên hệ"><span>Liên hệ</span></a>
                                             </li>
                                         </ul>
                                     </div>

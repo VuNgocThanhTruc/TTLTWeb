@@ -4,12 +4,6 @@
     <option name="state">
       <map>
         <entry key="file://$PROJECT_DIR$/src/main/webapp/common/web/header.jsp" value="file://$PROJECT_DIR$/src/main/webapp/common/web" />
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/detailBlog.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/index.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/view/admin/change-product.jsp" value="file://$PROJECT_DIR$/src/main/webapp/view/admin" />
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/view/admin/manage-product.jsp" value="file://$PROJECT_DIR$/src/main/webapp/view/admin" />
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/view/web" value="file://$PROJECT_DIR$/src/main/webapp" />
-        <entry key="file://$PROJECT_DIR$/src/main/webapp/view/web/introduce.jsp" value="file://$PROJECT_DIR$/src/main/webapp/view/web" />
       </map>
     </option>
   </component>
