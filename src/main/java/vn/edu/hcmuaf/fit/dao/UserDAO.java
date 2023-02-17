@@ -285,6 +285,35 @@ public class UserDAO implements ObjectDAO {
         }
     }
 
+    //Lấy ra toàn bộ tài khoản
+    public static List<User> getAllUser(){
+        List<User> listAllUser = new ArrayList<User>();
+        try {
+            ResultSet rs = new ConnectToDatabase().selectData("select * from users");
+            while (rs.next()) {
+                String id = rs.getString(1);
+                String name = rs.getString(2);
+                String username = rs.getString(3);
+                String email = rs.getString(4);
+                String password = rs.getString(5);
+                String avatar = rs.getString(6);
+                String tel = rs.getString(7);
+                int id_type_user = rs.getInt(8);
+                String dob = rs.getString(9);
+                int sex = rs.getInt(10);
+                String address = rs.getString(11);
+                User user = new User(id, name, username, email, password, avatar, tel, id_type_user,
+                        dob, sex, address);
+                listAllUser.add(user);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("error in UserDAO:" + e.getMessage());
+        }
+        return listAllUser;
+    }
+
+
     public static void main(String[] args) {
         UserDAO user = new UserDAO();
         System.out.println(user.checkLoginbyEmail("vutruc0702@gmail.com", "123456"));
@@ -296,5 +325,6 @@ public class UserDAO implements ObjectDAO {
 //        System.out.println(user.checksignup("f", "", ""));
 //        System.out.println(user.checkLogin("",""));
 //        user.editPro("41","Huy Hoàng",0,"hoang@hoang123","01234","2002-11-04","Vũng Tàu");
+        System.out.println(getAllUser());
     }
 }
