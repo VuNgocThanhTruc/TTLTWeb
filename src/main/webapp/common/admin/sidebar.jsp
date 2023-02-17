@@ -17,7 +17,10 @@
     <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="images/admin.png" width="50px"
                                         alt="User Image">
         <div>
-            <p class="app-sidebar__user-name"><b><%=user.getName()%></b></p>
+            <p class="app-sidebar__user-name">
+                <b>
+                    <%=user !=null ? user.getName() : "Guest"%>
+                </b></p>
             <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
         </div>
     </div>
