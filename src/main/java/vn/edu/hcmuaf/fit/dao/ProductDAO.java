@@ -28,6 +28,42 @@ public class ProductDAO {
         }
     }
 
+    public static List<ProductModel> getTop8() {
+        LinkedList<ProductModel> list = new LinkedList<ProductModel>();
+
+        String sql = "select * from products ORDER BY id desc LIMIT 0,4";
+
+        try {
+            PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
+            ResultSet rs = ps.executeQuery(sql);
+            while (rs.next()) {
+                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getLong(7), rs.getInt(8), rs.getString(9), rs.getInt(10)));
+            }
+            return list;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public static List<ProductModel> getNextListProduct(int amount) {
+        LinkedList<ProductModel> list = new LinkedList<ProductModel>();
+
+        String sql = "select * from products ORDER BY id desc LIMIT ?,4";
+
+        try {
+            PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
+            ps.setInt(1, amount);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getLong(7), rs.getInt(8), rs.getString(9), rs.getInt(10)));
+            }
+            return list;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     public static List<ProductModel> newProduct() {
         LinkedList<ProductModel> list = new LinkedList<ProductModel>();
 
