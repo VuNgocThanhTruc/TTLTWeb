@@ -316,15 +316,5 @@ public class UserDAO implements ObjectDAO {
 
     public static void main(String[] args) {
         UserDAO user = new UserDAO();
-        System.out.println(user.checkLoginbyEmail("vutruc0702@gmail.com", "123456"));
-        System.out.println( user.checkLogin("user","123456"));
-
-//        User x = mapUser.get("minhhoang");
-//        System.out.println(x);
-//        System.out.println(user.mapUser);
-//        System.out.println(user.checksignup("f", "", ""));
-//        System.out.println(user.checkLogin("",""));
-//        user.editPro("41","Huy Hoàng",0,"hoang@hoang123","01234","2002-11-04","Vũng Tàu");
-        System.out.println(getAllUser());
     }
 }
