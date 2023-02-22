@@ -166,6 +166,31 @@ public class UserDAO implements ObjectDAO {
             System.out.println("Error when signup custommer:" + e.getMessage());
         }
     }
+    public void signupWithFb(String name, String email, String id) {
+        String sql = "insert into users(id,name,username,email,password,avatar,tel,id_type_user,dob,sex,address) values (?,?,?,?,?,?,?,?,?,?,?)";
+        Connection connect = ConnectToDatabase.getConnect();
+        try {
+            PreparedStatement ppstm = connect.prepareStatement(sql);
+            ppstm.setString(1, null);
+            ppstm.setString(2, name);
+            ppstm.setString(3,id);
+            ppstm.setString(4, email);
+            ppstm.setString(5, id);
+            ppstm.setString(6, "no-avatar.png");
+            ppstm.setString(7, null);
+            ppstm.setInt(8, 1);
+            ppstm.setString(9, null);
+            ppstm.setInt(10, -1);
+
+            ppstm.setString(11, null);
+
+            ppstm.executeUpdate();
+
+
+        } catch (Exception e) {
+            System.out.println("Error when signup custommer:" + e.getMessage());
+        }
+    }
 
     public int checksignup(String name, String username, String email, String password) {
         if (name != "" && username != "" && password != "") {
@@ -316,7 +341,5 @@ public class UserDAO implements ObjectDAO {
 
     public static void main(String[] args) {
         UserDAO user = new UserDAO();
-        
-        
     }
 }

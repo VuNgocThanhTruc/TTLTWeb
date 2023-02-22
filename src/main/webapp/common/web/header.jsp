@@ -1,4 +1,4 @@
-        <%@ page import="vn.edu.hcmuaf.fit.model.CategoryModel" %>
+<%@ page import="vn.edu.hcmuaf.fit.model.CategoryModel" %>
 <%@ page import="java.util.List" %>
 <%@ page import="vn.edu.hcmuaf.fit.model.User" %>
 <%--
@@ -15,7 +15,7 @@
   Time: 1:18 PM
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="../../common/taglib.jsp" %>
 
 <!DOCTYPE html>
@@ -25,14 +25,20 @@
 </head>
 
 <body>
-<% User user = (User) session.getAttribute("userlogin"); %>
-<%ServletContext servletContext =  request.getServletContext();%>
-<%List<CategoryModel> listBrand = (List<CategoryModel>) servletContext.getAttribute("listBrand");%>
+<% User user = (User) session.getAttribute("userlogin");
+    ServletContext servletContext = request.getServletContext();
+    List<CategoryModel> listBrand = (List<CategoryModel>) servletContext.getAttribute("listBrand");
+    String activeH = (String) request.getAttribute("activeH");
+    String activeProduct = (String) request.getAttribute("activeProduct");
+    String activeBooking = (String) request.getAttribute("activeBooking");
+    String activeBlog = (String) request.getAttribute("activeBlog");
+    String activeContact = (String) request.getAttribute("activeContact");
+    String activeIntroduce = (String) request.getAttribute("activeIntroduce");
+%>
 
 <div class="header">
     <a style="color: #ffffff;text-decoration: none;" href="home">Hotline: 1800 2057 (Miễn phí) Thời gian làm việc
         T2 - CN: 8h - 20h</a>
-
 </div>
 
 <!--Navbar-->
@@ -48,40 +54,39 @@
         </a>
         <div class="desk-menu collapse navbar-collapse justify-content-md-center" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item ">
+                <li class="nav-item <%=activeH%>">
                     <a class="nav-link" href="home">TRANG CHỦ</a>
                 </li>
 
-                <li class="nav-item lisanpham active">
+                <li class="nav-item lisanpham <%=activeProduct%>">
                     <a class="nav-link" href="list-product">Điện thoại
                         <i class="fa fa-chevron-down" aria-hidden="true"></i>
                     </a>
                     <ul class="sub_menu active">
-<%--                        <%--%>
-<%--                            for (CategoryModel brand : listBrand) {--%>
-<%--                        %>--%>
-<%--                        <li class="nav-item ">--%>
-<%--                            <a href="category?brand=<%=brand.getName().toLowerCase()%>"--%>
-<%--                               title="Sửa điện thoại <%=brand.getName()%>">--%>
-<%--                                Sửa điện thoại <%=brand.getName()%>--%>
-<%--                            </a>--%>
-<%--                        </li>--%>
-<%--                        <% }%>--%>
+                        <%
+                            for (CategoryModel brand : listBrand) {
+                        %>
+                        <li class="nav-item ">
+                            <a href="category?brand=<%=brand.getName().toLowerCase()%>"
+                               title="Sửa điện thoại <%=brand.getName()%>">
+                                Sửa điện thoại <%=brand.getName()%>
+                            </a>
+                        </li>
+                        <% }%>
 
                     </ul>
                 </li>
-                <li class="nav-item ">
+                <li class="nav-item <%=activeBooking%>">
                     <a class="nav-link" href="bookingOnline">Đặt Lịch Sửa Chữa
-                        <i class="fa fa-chevron-down" aria-hidden="true"></i>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item <%=activeIntroduce%>">
                     <a class="nav-link" href="introduce">GIỚI THIỆU</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item <%=activeBlog%>">
                     <a class="nav-link" href="list-blog">BLOG</a>
                 </li>
-                <li class="">
+                <li class="<%=activeContact%>">
                     <a class="nav-link" href="contact">LIÊN HỆ</a>
                 </li>
             </ul>
@@ -111,13 +116,13 @@
 
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="border:0;">
-<%--                                <%--%>
-<%--                                    for (CategoryModel brand : listBrand) {--%>
-<%--                                %>--%>
-<%--                                <a class="dropdown-item" href="list-product?brand=<%=brand.getName().toLowerCase()%>"--%>
-<%--                                   title="">Sửa điện thoại list-product?brand=<%=brand.getName()%>--%>
-<%--                                </a>--%>
-<%--                                <% }%>--%>
+                                <%--                                <%--%>
+                                <%--                                    for (CategoryModel brand : listBrand) {--%>
+                                <%--                                %>--%>
+                                <%--                                <a class="dropdown-item" href="list-product?brand=<%=brand.getName().toLowerCase()%>"--%>
+                                <%--                                   title="">Sửa điện thoại list-product?brand=<%=brand.getName()%>--%>
+                                <%--                                </a>--%>
+                                <%--                                <% }%>--%>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -227,7 +232,7 @@
             </form>
         </div>
 
-<%--        <div class="user mr-4"></div>--%>
+        <%--        <div class="user mr-4"></div>--%>
 
         <div id="offcanvas-flip3" uk-offcanvas="flip: true; overlay: true">
             <div class="uk-offcanvas-bar" style="    background: white;
@@ -301,7 +306,7 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <%if (user == null) { %>
-            <a href="signin" >
+            <a href="signin">
                 <i class="icon-header fas fa-user"></i>
             </a>
             <%}%>
@@ -326,7 +331,7 @@
                         <a class="dropdown-item" href="profile" title="">Thông tin</a>
                         <a class="dropdown-item" href="booked.html" uk-toggle="target: #offcanvas-flip3" title="">Lịch
                             sử đặt hẹn</a>
-                        <a class="dropdown-item" href="login?action=logout" methods="post" title="" >Đăng xuất</a>
+                        <a class="dropdown-item" href="login?action=logout" methods="post" title="">Đăng xuất</a>
                     </div>
                 </li>
             </ul>

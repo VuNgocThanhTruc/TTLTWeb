@@ -9,21 +9,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 @WebServlet(name = "listProduct", value = "/list-product")
 public class ProductController extends HttpServlet {
 
-    private ProductService productService;
-
-    public ProductController() {
-        productService = new ProductService();
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<ProductModel> listProduct = productService.getListProduct();
+        List<ProductModel> listProduct = ProductService.getTop8();
         request.setAttribute("listProduct", listProduct);
+        request.setAttribute("activeProduct", "active");
 
         request.getRequestDispatcher("/view/web/product.jsp").forward(request, response);
     }

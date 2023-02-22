@@ -22,5 +22,8 @@
 <link rel="stylesheet" href="plugins/uikit/uikit.min.css" />
 
 <link rel="stylesheet" type="text/css" href="css/style.css">
+<link rel="stylesheet" type="text/css"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
 
 <link href="images/logo/logo_PhoneCare.png" rel="shortcut icon" type="image/x-icon">

@@ -16,7 +16,7 @@ public class HomeController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         getServletContext().setAttribute("listBrand", ProductService.getListBrand());
-
+        request.setAttribute("activeH","active");
         request.getRequestDispatcher("/view/web/index.jsp").forward(request,response);
     }
 

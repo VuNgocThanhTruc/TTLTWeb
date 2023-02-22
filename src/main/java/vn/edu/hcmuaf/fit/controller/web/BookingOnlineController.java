@@ -15,6 +15,7 @@ import java.io.IOException;
 public class BookingOnlineController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("activeBooking","active");
         request.getRequestDispatcher("/view/web/bookingOnline.jsp").forward(request, response);
         HttpSession session = request.getSession();
         session.setAttribute("mess", null);

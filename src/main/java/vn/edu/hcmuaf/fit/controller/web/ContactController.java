@@ -11,6 +11,7 @@ import java.io.IOException;
 public class ContactController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("activeContact","active");
         request.getRequestDispatcher("/view/web/contact.jsp").forward(request,response);
         HttpSession session = request.getSession();
         session.setAttribute("mess", null);
