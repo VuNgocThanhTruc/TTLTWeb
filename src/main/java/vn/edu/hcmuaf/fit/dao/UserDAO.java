@@ -316,5 +316,7 @@ public class UserDAO implements ObjectDAO {
 
     public static void main(String[] args) {
         UserDAO user = new UserDAO();
+        
+        
     }
 }
