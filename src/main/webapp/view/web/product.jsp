@@ -37,7 +37,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="product.jsp">
+                        <a href="product">
                             <span>Điện thoại</span>
                         </a>
                     </li>
@@ -86,16 +86,16 @@
                                                 <div class="collapse" id="collapseExample">
                                                     <div class="card card-body" style="border:0;padding-top:0;">
                                                         <ul class="menu-product">
-                                                            <%--                                                            <%--%>
-                                                            <%--                                                                for (CategoryModel brand : listBrand) {--%>
-                                                            <%--                                                            %>--%>
-                                                            <%--                                                            <li class="px-2 <%=brand.getName().toLowerCase().equalsIgnoreCase(checkTagBrand)?"active":""%>">--%>
-                                                            <%--                                                                <a href="category?brand=<%=brand.getName().toLowerCase()%>"--%>
-                                                            <%--                                                                   title="Sửa điện thoại <%=brand.getName()%>">--%>
-                                                            <%--                                                                    Sửa điện thoại <%=brand.getName()%>--%>
-                                                            <%--                                                                </a>--%>
-                                                            <%--                                                            </li>--%>
-                                                            <%--                                                            <% }%>--%>
+                                                            <%
+                                                                for (CategoryModel brand : listBrand) {
+                                                            %>
+                                                            <li class="px-2 <%=brand.getName().toLowerCase().equalsIgnoreCase(checkTagBrand)?"active":""%>">
+                                                                <a href="category?brand=<%=brand.getName().toLowerCase()%>"
+                                                                   title="Sửa điện thoại <%=brand.getName()%>">
+                                                                    Sửa điện thoại <%=brand.getName()%>
+                                                                </a>
+                                                            </li>
+                                                            <% }%>
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -138,10 +138,10 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            <li class=""><a href="introduce.jsp"
+                                            <li class=""><a href="introduce"
                                                             title="Giới thiệu"><span>Giới thiệu</span></a></li>
-                                            <li class=""><a href="blog.jsp" title="Blog"><span>Blog</span></a></li>
-                                            <li class=""><a href="contact.jsp" title="Liên hệ"><span>Liên hệ</span></a>
+                                            <li class=""><a href="blog" title="Blog"><span>Blog</span></a></li>
+                                            <li class=""><a href="contact" title="Liên hệ"><span>Liên hệ</span></a>
                                             </li>
                                         </ul>
                                     </div>
@@ -335,7 +335,7 @@
                 <%
                 } else { %>
                 <% for (ProductModel product : listProduct) { %>
-                <div class="col-md-3 col-sm-6 col-xs-6 col-6 mb-5">
+                <div class="product col-md-3 col-sm-6 col-xs-6 col-6 mb-5">
                     <div class="block-banner-category">
                         <div class="product-img fade-box">
                             <a href="detail-product?id-product=<%=product.getId()%>" title="" class="img-resize">
@@ -343,7 +343,8 @@
                             </a>
                         </div>
                         <div class="product-detail clearfix">
-                            <form class="mini-cart" action="${pageContext.request.contextPath}/cart?action=add-to-cart" method="post">
+                            <form class="mini-cart" action="${pageContext.request.contextPath}/cart?action=add-to-cart"
+                                  method="post">
                                 <fieldset>
                                     <input type="hidden" name="cmd" value="_cart">
                                     <input type="hidden" name="add" value="1">
@@ -372,7 +373,11 @@
                                 </a>
                             </div>
                             <div class="pro-price">
-                                <p class=""><%=product.getPrice()%>
+                                <p>
+                                    <%--                                    <script>--%>
+                                    <%--                                        convertMoney("10000");--%>
+                                    <%--                                    </script>--%>
+                                    <%=product.getPrice()%>
                                 </p>
                             </div>
                         </div>
@@ -388,36 +393,39 @@
             <!-- pagination -->
             <div class="sortpagibar pagi clearfix text-center">
                 <div id="pagination" class="clearfix">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 d-flex align-items-center justify-content-center">
-                        <button class="btn btn-prev-slider">
-                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
-                                 x="0px"
-                                 y="0px" viewBox="0 0 31 10"
-                                 style="enable-background:new 0 0 31 10; width: 31px; height: 10px;"
-                                 xml:space="preserve">
-                  <polygon points="31,5 25,0 25,4 0,4 0,6 25,6 25,10 "></polygon>
-                </svg>
-                        </button>
-                        <ul class="list_page">
 
-                        </ul>
-                        <
-                        button
-                        class="
-                        btn btn-next-slider">
-                        <svg
-                                version="
-                    1.1" xmlns="
-                    http://www.w3.org/2000/svg"
-                                x="0px"
-                                y="0px
-                    " viewBox="0 0 31 10"
-                                style="enable-background:new 0 0 31 10; width: 31px; height: 10px;"
-                                xml:space="preserve">
-                  <polygon points="31,5 25,0 25,4 0,4 0,6 25,6 25,10 "></polygon>
-                </svg>
-                        </button>
-                    </div>
+                    <button class="btn" onclick="showMore()">Hiển thị thêm</button>
+
+                    <%--                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 d-flex align-items-center justify-content-center">--%>
+                    <%--                        <button class="btn btn-prev-slider">--%>
+                    <%--                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg"--%>
+                    <%--                                 x="0px"--%>
+                    <%--                                 y="0px" viewBox="0 0 31 10"--%>
+                    <%--                                 style="enable-background:new 0 0 31 10; width: 31px; height: 10px;"--%>
+                    <%--                                 xml:space="preserve">--%>
+                    <%--                  <polygon points="31,5 25,0 25,4 0,4 0,6 25,6 25,10 "></polygon>--%>
+                    <%--                </svg>--%>
+                    <%--                        </button>--%>
+                    <%--                        <ul class="list_page">--%>
+
+                    <%--                        </ul>--%>
+                    <%--                        <--%>
+                    <%--                        button--%>
+                    <%--                        class="--%>
+                    <%--                        btn btn-next-slider">--%>
+                    <%--                        <svg--%>
+                    <%--                                version="--%>
+                    <%--                    1.1" xmlns="--%>
+                    <%--                    http://www.w3.org/2000/svg"--%>
+                    <%--                                x="0px"--%>
+                    <%--                                y="0px--%>
+                    <%--                    " viewBox="0 0 31 10"--%>
+                    <%--                                style="enable-background:new 0 0 31 10; width: 31px; height: 10px;"--%>
+                    <%--                                xml:space="preserve">--%>
+                    <%--                  <polygon points="31,5 25,0 25,4 0,4 0,6 25,6 25,10 "></polygon>--%>
+                    <%--                </svg>--%>
+                    <%--                        </button>--%>
+                    <%--                    </div>--%>
                 </div>
             </div>
         </div>
@@ -425,7 +433,22 @@
 </div>
 
 <%@include file="../../common/web/footer.jsp" %>
+<script src="js/convertMoney.js"></script>
+<script>
+    function showMore() {
+        let listProduct = document.querySelector(".list-product")
+        let lengthBoxProduct = document.getElementsByClassName("product").length
 
+        $.ajax({
+            type: 'GET',
+            data: {amountNext: lengthBoxProduct},
+            url: "<%=request.getContextPath()%>/LoadDataAJAX",
+            success: function (data) {
+                listProduct.innerHTML += data
+            }
+        });
+    }
+</script>
 </body>
 
 </html>
