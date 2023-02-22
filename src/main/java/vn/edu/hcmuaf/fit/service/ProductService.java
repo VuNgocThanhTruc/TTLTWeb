@@ -12,9 +12,15 @@ public class ProductService {
     }
 
     public static List<ProductModel> getListProduct() {
-        return ProductDAO.findAll();
+        return ProductDAO.getTop8();
+    }
+    public static List<ProductModel> getTop8() {
+        return ProductDAO.getTop8();
     }
 
+    public static List<ProductModel> getNextListProduct(int amount) {
+        return ProductDAO.getNextListProduct(amount);
+    }
 
     public static List<ProductModel> getSellerProduct() {
         return ProductDAO.newProduct();

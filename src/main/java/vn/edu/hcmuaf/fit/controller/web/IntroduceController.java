@@ -9,6 +9,7 @@ import java.io.IOException;
 public class IntroduceController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("activeIntroduce","active");
         request.getRequestDispatcher("/view/web/introduce.jsp").forward(request, response);
     }
 
