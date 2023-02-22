@@ -26,6 +26,7 @@ public class LoginController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=utf-8");
+        HttpSession session = request.getSession();
 
         String action = request.getParameter("action");
         String username = request.getParameter("username");
@@ -36,10 +37,25 @@ public class LoginController extends HttpServlet {
             System.out.println("Khong thuc hien duoc gi het");
 
         } else if (action.equals("logout")) {
-            HttpSession session = request.getSession();
+
             session.invalidate();
 //                response.sendRedirect("signin");
             response.sendRedirect("signin");
+        } else if (action.equals("Face")) {
+
+            String name = request.getParameter("name");
+            String email = request.getParameter("email");
+            String id = request.getParameter("id");
+            User user = UserDAO.loadUsername().get(id);
+            if (user == null) {
+                new UserDAO().signupWithFb(name, email, id);
+                session.setAttribute("userlogin", user);
+                request.getRequestDispatcher("/view/web/signin.jsp").forward(request, response);
+            }
+            else {
+                session.setAttribute("userlogin", user);
+                response.sendRedirect("home");
+            }
         }
     }
 
@@ -100,7 +116,7 @@ public class LoginController extends HttpServlet {
             String email = request.getParameter("email");
             String dob = request.getParameter("dob");
             int sex = Integer.parseInt(request.getParameter("sex"));
-            int check = new UserDAO().checksignup(hovaten, username,email, password);
+            int check = new UserDAO().checksignup(hovaten, username, email, password);
             if (check == 1) {
                 new UserDAO().signup(hovaten, sex, dob, email, username, password);
                 request.getRequestDispatcher("/view/web/signin.jsp").forward(request, response);
