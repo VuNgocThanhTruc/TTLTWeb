@@ -174,7 +174,6 @@
 </footer>
 
 <script async defer crossorigin="anonymous" src="plugins/sdk.js"></script>
-<script src="plugins/jquery-3.4.1/jquery-3.4.1.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="plugins/bootstrap/popper.min.js"></script>
 <script src="plugins/bootstrap/bootstrap.min.js"></script>

@@ -39,7 +39,7 @@ public class ProductService {
         return ProductDAO.getlistProductForBrand(brandPram);
     }
 
-    public List<ProductModel> getListProductBySearch(String searchPram) {
+    public static List<ProductModel> getListProductBySearch(String searchPram) {
         return ProductDAO.getListProductBySearch(searchPram);
     }
 
