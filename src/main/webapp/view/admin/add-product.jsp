@@ -87,7 +87,7 @@
             <div class="tile">
                 <h3 class="tile-title">Tạo mới sản phẩm</h3>
                 <div class="tile-body">
-                    <form action="<%=pageContextPath%>/admin/manage-product?type=add" method="post">
+                    <form action="<%=pageContextPath%>/admin/manage-product?type=add" method="post" enctype="multipart/form-data">
                         <%--                        <div class="row element-button">--%>
                         <%--                            <div class="col-sm-2">--%>
                         <%--                                <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#exampleModalCenter"><i--%>
@@ -196,7 +196,7 @@ MODAL BRAND
      data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <form method="post" class="row" action="${pageContext.request.contextPath}/admin/manage-product?type=edit">
+            <form method="post" class="row" action="${pageContext.request.contextPath}/admin/manage-product?type=add">
                 <div class="modal-body">
                     <div class="row">
                         <div class="form-group  col-md-12">
