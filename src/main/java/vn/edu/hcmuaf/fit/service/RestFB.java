@@ -1,4 +1,5 @@
-package vn.edu.hcmuaf.fit.common;
+package vn.edu.hcmuaf.fit.service;
+
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
@@ -10,9 +11,11 @@ import com.restfb.DefaultFacebookClient;
 import com.restfb.FacebookClient;
 import com.restfb.Version;
 import com.restfb.types.User;
+import vn.edu.hcmuaf.fit.constant.APIConstants;
+
 public class RestFB {
     public static String getToken(final String code) throws ClientProtocolException, IOException {
-        String link = String.format(Constants.FACEBOOK_LINK_GET_TOKEN, Constants.FACEBOOK_APP_ID, Constants.FACEBOOK_APP_SECRET, Constants.FACEBOOK_REDIRECT_URL, code);
+        String link = String.format(APIConstants.FACEBOOK_LINK_GET_TOKEN, APIConstants.FACEBOOK_APP_ID, APIConstants.FACEBOOK_APP_SECRET, APIConstants.FACEBOOK_REDIRECT_URL, code);
         String response = Request.Get(link).execute().returnContent().asString();
         JsonObject jobj = new Gson().fromJson(response, JsonObject.class);
         String accessToken = jobj.get("access_token").toString().replaceAll("\"", "");
@@ -20,8 +23,9 @@ public class RestFB {
     }
 
     public static User getUserInfo(String accessToken) {
-        FacebookClient facebookClient = new DefaultFacebookClient(accessToken, Constants.FACEBOOK_APP_SECRET, Version.LATEST);
+        FacebookClient facebookClient = new DefaultFacebookClient(accessToken, APIConstants.FACEBOOK_APP_SECRET, Version.LATEST);
         return facebookClient.fetchObject("me", User.class);
     }
 
 }
+

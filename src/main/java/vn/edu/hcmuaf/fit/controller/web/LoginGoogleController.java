@@ -8,15 +8,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.restfb.types.User;
+import vn.edu.hcmuaf.fit.model.GooglePojo;
+import vn.edu.hcmuaf.fit.service.GoogleUtils;
 
-import vn.edu.hcmuaf.fit.service.RestFB;
-
-@WebServlet("/login-facebook")
-public class LoginFacebookController extends HttpServlet {
+@WebServlet("/login-google")
+public class LoginGoogleController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    public LoginFacebookController() {
+    public LoginGoogleController() {
         super();
     }
 
@@ -26,16 +25,16 @@ public class LoginFacebookController extends HttpServlet {
 
         if (code == null || code.isEmpty()) {
             request.getRequestDispatcher("/view/web/signin.jsp").forward(request, response);
-
         } else {
-            String accessToken = RestFB.getToken(code);
-            User user = RestFB.getUserInfo(accessToken);
-            request.setAttribute("id-fb", user.getId());
-            request.setAttribute("name-fb", user.getName());
-//            request.setAttribute("email", user.getEmail());
-//            request.setAttribute("avatar", user.getPicture());
-            request.getRequestDispatcher("/view/web/demo.jsp").forward(request, response);
+            String accessToken = GoogleUtils.getToken(code);
+            GooglePojo googlePojo = GoogleUtils.getUserInfo(accessToken);
+            request.setAttribute("id-gg", googlePojo.getId());
+            request.setAttribute("name-gg", googlePojo.getName());
+            request.setAttribute("email-gg", googlePojo.getEmail());
+            request.setAttribute("avatar-gg", googlePojo.getPicture());
 
+
+            request.getRequestDispatcher("/view/web/demo.jsp").forward(request, response);
         }
 
     }
