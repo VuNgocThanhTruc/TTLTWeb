@@ -1,7 +1,7 @@
 package vn.edu.hcmuaf.fit.controller.web;
 
 import vn.edu.hcmuaf.fit.dao.UserDAO;
-import vn.edu.hcmuaf.fit.model.User;
+import vn.edu.hcmuaf.fit.model.UserModel;
 
 
 import javax.servlet.ServletException;
@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.lang.System.*;
 
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
@@ -41,22 +40,8 @@ public class LoginController extends HttpServlet {
             session.invalidate();
 //                response.sendRedirect("signin");
             response.sendRedirect("signin");
-        } else if (action.equals("Face")) {
-
-            String name = request.getParameter("name");
-            String email = request.getParameter("email");
-            String id = request.getParameter("id");
-            User user = UserDAO.loadUsername().get(id);
-            if (user == null) {
-                new UserDAO().signupWithFb(name, email, id);
-                session.setAttribute("userlogin", user);
-                request.getRequestDispatcher("/view/web/signin.jsp").forward(request, response);
-            }
-            else {
-                session.setAttribute("userlogin", user);
-                response.sendRedirect("home");
-            }
         }
+
     }
 
     @Override
@@ -82,25 +67,25 @@ public class LoginController extends HttpServlet {
 
             if (checkUserName == 1) {
 
-                User user = UserDAO.loadUsername().get(username);
+                UserModel user = UserDAO.loadUsername().get(username);
                 session.setAttribute("userlogin", user);
                 session.setAttribute("mess", null);
                 response.sendRedirect("home");
 
             } else if (checkEmail == 1) {
-                User userEmail = UserDAO.loadEmail().get(username);
+                UserModel userEmail = UserDAO.loadEmail().get(username);
                 session.setAttribute("userlogin", userEmail);
                 session.setAttribute("mess", null);
                 response.sendRedirect("home");
 
             } else if (checkUserName == 2) {
-                User user = UserDAO.loadUsername().get(username);
+                UserModel user = UserDAO.loadUsername().get(username);
                 session.setAttribute("userlogin", user);
                 session.setAttribute("mess", null);
                 response.sendRedirect("admin/index");
 
             } else if (checkEmail == 2) {
-                User user = UserDAO.loadUsername().get(username);
+                UserModel user = UserDAO.loadUsername().get(username);
                 session.setAttribute("userlogin", user);
                 session.setAttribute("mess", null);
                 response.sendRedirect("admin/index");

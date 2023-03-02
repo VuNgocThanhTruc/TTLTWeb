@@ -1,6 +1,6 @@
 <%@ page import="vn.edu.hcmuaf.fit.model.CategoryModel" %>
 <%@ page import="java.util.List" %>
-<%@ page import="vn.edu.hcmuaf.fit.model.User" %>
+<%@ page import="vn.edu.hcmuaf.fit.model.UserModel" %>
 <%--
   Created by IntelliJ IDEA.
   User: vutru
@@ -25,7 +25,7 @@
 </head>
 
 <body>
-<% User user = (User) session.getAttribute("userlogin");
+<% UserModel user = (UserModel) session.getAttribute("userlogin");
     ServletContext servletContext = request.getServletContext();
     List<CategoryModel> listBrand = (List<CategoryModel>) servletContext.getAttribute("listBrand");
     String activeH = (String) request.getAttribute("activeH");

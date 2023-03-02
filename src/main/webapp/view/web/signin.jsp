@@ -7,7 +7,7 @@
     <%@include file="../../common/web/head.jsp" %>
     <link rel="stylesheet" href="././css/sign.css">
     <title>Đăng nhập | Phone Care</title>
-<meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-scope" content="profile email">
 
 </head>
 
@@ -48,7 +48,7 @@
                     <br>
                     <div>
                         <a href="https://www.facebook.com/v16.0/dialog/oauth?scope=email&client_id=5842543845823968&redirect_uri=http://localhost:8080/TTLTWeb_war_exploded/login-facebook">
-                            <button type="button" class="btn btn-sm btn-outline-primary">Đăng nhập Facebook <i
+                            <button type="button" class="btn btn-sm btn-outline-primary">Đăng nhập với Facebook <i
                                     class="fa fa-facebook-square"></i></button>
                         </a>
                         <a href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile&&redirect_uri=http://localhost:8080/TTLTWeb_war_exploded/login-google&response_type=code

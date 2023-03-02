@@ -1,9 +1,7 @@
 package vn.edu.hcmuaf.fit.controller.web;
 
-import vn.edu.hcmuaf.fit.dao.BookingDAO;
-import vn.edu.hcmuaf.fit.dao.UserDAO;
 import vn.edu.hcmuaf.fit.model.BookingModel;
-import vn.edu.hcmuaf.fit.model.User;
+import vn.edu.hcmuaf.fit.model.UserModel;
 import vn.edu.hcmuaf.fit.service.CheckoutService;
 
 import javax.servlet.*;
@@ -46,7 +44,7 @@ public class BookingOnlineController extends HttpServlet {
             String payment = request.getParameter("payment");
 
 
-            User user = (User) session.getAttribute("userlogin");
+            UserModel user = (UserModel) session.getAttribute("userlogin");
             CheckoutService checkoutService = new CheckoutService();
             BookingModel booking = new BookingModel();
             if (user != null) {

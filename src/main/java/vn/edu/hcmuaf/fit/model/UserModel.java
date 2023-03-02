@@ -1,6 +1,6 @@
 package vn.edu.hcmuaf.fit.model;
 
-public class User {
+public class UserModel {
     String id;
     String name;
     String username;
@@ -13,8 +13,8 @@ public class User {
     int sex;
     String address;
 
-    public User(String id, String name, String username, String email, String password, String avatar, String tel,
-                int id_type_user, String dob, int sex, String address) {
+    public UserModel(String id, String name, String username, String email, String password, String avatar, String tel,
+                     int id_type_user, String dob, int sex, String address) {
         super();
         this.id = id;
         this.name = name;

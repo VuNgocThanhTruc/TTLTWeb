@@ -1,6 +1,6 @@
 package vn.edu.hcmuaf.fit.filter;
 
-import vn.edu.hcmuaf.fit.model.User;
+import vn.edu.hcmuaf.fit.model.UserModel;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +26,7 @@ public class AuthorizactionFilter implements Filter {
         HttpSession session = request.getSession();
 
         if (url.startsWith("/WebProgramming_war_exploded/admin/")) {
-            User user = (User) session.getAttribute("userlogin");
+            UserModel user = (UserModel) session.getAttribute("userlogin");
             if (user != null) {
                 if (user.getId_type_user() == 2) {
                     filterChain.doFilter(servletRequest, servletResponse);

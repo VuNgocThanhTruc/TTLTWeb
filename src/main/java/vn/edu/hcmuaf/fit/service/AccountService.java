@@ -1,7 +1,7 @@
 package vn.edu.hcmuaf.fit.service;
 
 import vn.edu.hcmuaf.fit.dao.UserDAO;
-import vn.edu.hcmuaf.fit.model.User;
+import vn.edu.hcmuaf.fit.model.UserModel;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public class AccountService {
     }
 
     //Service lấy ra tất cả tài khoản
-    public List<User> getAllUser(){
+    public List<UserModel> getAllUser(){
         return userDAO.getAllUser();
     }
 }

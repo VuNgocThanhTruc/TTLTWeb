@@ -6,13 +6,13 @@
 </head>
 <body>
 <h1>Index</h1>
-<%--<%--%>
-<%--    String idFB = request.getAttribute("id-fb").toString();--%>
-<%--    String nameFB = request.getAttribute("name-fb").toString();--%>
-<%--    out.print("Id fb: " + idFB);--%>
-<%--    out.print("<br/>Name fb: " + nameFB);--%>
+<%
+    String idFB = request.getAttribute("id-fb").toString();
+    String nameFB = request.getAttribute("name-fb").toString();
+    out.print("Id fb: " + idFB);
+    out.print("<br/>Name fb: " + nameFB);
 
-<%--%>--%>
+%>
 
 <%
     String idGG = request.getAttribute("id-gg").toString();

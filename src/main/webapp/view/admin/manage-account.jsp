@@ -5,7 +5,7 @@
   Time: 7:05 CH
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page import="vn.edu.hcmuaf.fit.model.User" %>
+<%@ page import="vn.edu.hcmuaf.fit.model.UserModel" %>
 <%@ page import="java.util.List" %>
 <%@ page import="vn.edu.hcmuaf.fit.service.AccountService" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -23,7 +23,7 @@
 <%@include file="../../common/admin/header.jsp" %>
 <!-- Sidebar menu-->
 <%
-  List<User> listAccount = (List<User>) request.getAttribute("listAcc");
+  List<UserModel> listAccount = (List<UserModel>) request.getAttribute("listAcc");
 %>
 <%@include file="../../common/admin/sidebar.jsp" %>
 <main class="app-content">
@@ -77,7 +77,7 @@
             </thead>
             <tbody>
             <%
-              for (User acc :
+              for (UserModel acc :
                       listAccount) {%>
             <tr>
               <td width="10"><input type="checkbox" name="check1" value="1"></td>
