@@ -1,14 +1,12 @@
 package vn.edu.hcmuaf.fit.controller.web;
 
 import vn.edu.hcmuaf.fit.dao.UserDAO;
-import vn.edu.hcmuaf.fit.db.ConnectToDatabase;
-import vn.edu.hcmuaf.fit.model.User;
+import vn.edu.hcmuaf.fit.model.UserModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -54,7 +52,7 @@ public class AddImage extends HttpServlet {
             e.printStackTrace();
         }
 
-        User user = (User) session.getAttribute("userlogin");
+        UserModel user = (UserModel) session.getAttribute("userlogin");
         session.setAttribute("userlogin", user);
         UserDAO userDAO = new UserDAO();
         userDAO.addImage(user.getId(), imageFileName);

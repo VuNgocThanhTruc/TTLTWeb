@@ -1,14 +1,12 @@
 package vn.edu.hcmuaf.fit.controller.web;
 
 import vn.edu.hcmuaf.fit.dao.UserDAO;
-import vn.edu.hcmuaf.fit.model.User;
+import vn.edu.hcmuaf.fit.model.UserModel;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import static java.lang.Integer.parseInt;
 
@@ -45,7 +43,7 @@ public class ProfileController extends HttpServlet {
             UserDAO user = new UserDAO();
             user.editPro(id, hovaten, sex, email, tel, dob, address);
 
-            User user2 = UserDAO.loadId().get(id);
+            UserModel user2 = UserDAO.loadId().get(id);
             session.setAttribute("userlogin", user2);
             System.out.println(id + " " + hovaten + " " + 0 + " " + email + " " + tel + " " + dob + " " + address);
             request.getRequestDispatcher("/view/web/profile.jsp").forward(request, response);

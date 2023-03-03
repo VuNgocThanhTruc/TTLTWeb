@@ -7,7 +7,7 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
-import vn.edu.hcmuaf.fit.model.User;
+import vn.edu.hcmuaf.fit.model.UserModel;
 //Quản lý tài khoản
 @WebServlet(name = "ManageAccountController", value = "/admin/manage-account")
 public class ManageAccountController extends HttpServlet {
@@ -18,7 +18,7 @@ public class ManageAccountController extends HttpServlet {
         //Gọi danh sách tài khoản
 
         AccountService accountService = new AccountService();
-        List<User> listAcc = accountService.getAllUser();
+        List<UserModel> listAcc = accountService.getAllUser();
         request.setAttribute("listAcc", listAcc);
 
         request.getRequestDispatcher("/view/admin/manage-account.jsp").forward(request,response);

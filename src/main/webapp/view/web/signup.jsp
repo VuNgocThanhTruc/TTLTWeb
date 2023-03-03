@@ -39,7 +39,7 @@
                             Vui lòng<strong> nhập đầy đủ</strong>.
                         </div>
                         <%}%>
-                        <input type="text" id="firstname" name="hovaten" placeholder="Họ và Tên">
+                        <input type="text" id="firstname" name="hovaten" placeholder="Họ và Tên" required>
                     </div>
 
                     <div class="sex form-control1">
@@ -53,17 +53,17 @@
                         </div>
                     </div>
                     <div class="birthday form-control1">
-                        <input type="date" id="birthday" name="dob" placeholder="mm/dd/yyyy">
+                        <input type="date" id="birthday" name="dob" placeholder="mm/dd/yyyy" required>
                     </div>
                     <div class="username form-control1">
                         <input type="email" id="email" name="email" placeholder="Email" >
                     </div>
 
                     <div class="username form-control1">
-                        <input type="text" id="username" name="username" placeholder="Tài khoản">
+                        <input type="text" id="username" name="username" placeholder="Tài khoản" required>
                     </div>
                     <div class="password form-control1">
-                        <input type="password" id="password" name="password" placeholder="Mật khẩu">
+                        <input type="password" id="password" name="password" placeholder="Mật khẩu" required>
                     </div>
                     <div >
                         <input class="submit" type="submit" value="Đăng ký" id="submit" style="color: whitesmoke"/>

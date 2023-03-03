@@ -3,7 +3,7 @@ package vn.edu.hcmuaf.fit.controller.web;
 import vn.edu.hcmuaf.fit.model.BookingModel;
 import vn.edu.hcmuaf.fit.model.DetailBookingModal;
 import vn.edu.hcmuaf.fit.model.ProductCartModel;
-import vn.edu.hcmuaf.fit.model.User;
+import vn.edu.hcmuaf.fit.model.UserModel;
 import vn.edu.hcmuaf.fit.service.CheckoutService;
 
 import javax.servlet.ServletException;
@@ -39,7 +39,7 @@ public class CheckoutController extends HttpServlet {
         String store = request.getParameter("store");
 
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("userlogin");
+        UserModel user = (UserModel) session.getAttribute("userlogin");
         CheckoutService checkoutService = new CheckoutService();
         BookingModel booking = new BookingModel();
         if (user != null) {

@@ -2,7 +2,7 @@ package vn.edu.hcmuaf.fit.controller.admin;
 
 import vn.edu.hcmuaf.fit.dao.BookingDAO;
 import vn.edu.hcmuaf.fit.model.BookingModel;
-import vn.edu.hcmuaf.fit.model.User;
+import vn.edu.hcmuaf.fit.model.UserModel;
 import vn.edu.hcmuaf.fit.service.BookingService;
 
 import javax.servlet.ServletException;
@@ -70,7 +70,7 @@ public class ManageOrderController extends HttpServlet {
             } else if (typeParam.equals("add")) {
                 String idBooking = request.getParameter("id-booking");
                 HttpSession session = request.getSession();
-                User user = (User) session.getAttribute("userlogin");
+                UserModel user = (UserModel) session.getAttribute("userlogin");
                 if (idBooking != null) {
                     String id = request.getParameter("id-booking");
                     String desc = request.getParameter("description");
@@ -88,7 +88,7 @@ public class ManageOrderController extends HttpServlet {
             } else if (typeParam.equals("list")) {
                 String idBooking = request.getParameter("id-booking");
                 HttpSession session = request.getSession();
-                User user = (User) session.getAttribute("userlogin");
+                UserModel user = (UserModel) session.getAttribute("userlogin");
                 if (idBooking != null) {
                     String id = request.getParameter("id-booking");
                     String desc = request.getParameter("description");

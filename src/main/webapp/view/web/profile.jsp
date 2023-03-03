@@ -57,7 +57,7 @@
                         } else {
                             out.print("Bạn chưa nhập");
                         }%></div>
-                        <div class="sex"><i class="fas fa-venus-mars"></i><% if (user.getSex() == 1) {
+                        <div class="sex"><i class="fas fa-venus-mars"></i><% if (user.getSex() == 0) {
                             out.print("Nam");
                         } else {
                             out.print("Nữ");
@@ -98,18 +98,18 @@
 
                                     <select id="sex" name="sex" class="form-control">
                                         <option value="<%out.print(user.getSex());%>" name="sex"
-                                                selected><% if (user.getSex() == 1) {
+                                                selected><% if (user.getSex() == 0) {
                                             out.print("Nam");
-                                        } else if (user.getSex() == 0) {
+                                        } else if (user.getSex() == 1) {
                                             out.print("Nữ");
                                         } else {
                                             out.print("Chưa chọn");
                                         }%></option>
                                         <option value="<% if(user.getSex()==1) {out.print("0");}else{out.print("1");}%>"
                                                 name="sex"><% if (user.getSex() == 1) {
-                                            out.print("Nữ");
-                                        } else {
                                             out.print("Nam");
+                                        } else {
+                                            out.print("Nữ");
                                         }%></option>
 
                                     </select>

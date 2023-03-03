@@ -2,10 +2,6 @@ package vn.edu.hcmuaf.fit.controller.admin;
 
 import vn.edu.hcmuaf.fit.constant.SystemConstant;
 import vn.edu.hcmuaf.fit.dao.ImageDAO;
-import vn.edu.hcmuaf.fit.dao.UserDAO;
-import vn.edu.hcmuaf.fit.model.ImageModel;
-import vn.edu.hcmuaf.fit.model.User;
-import vn.edu.hcmuaf.fit.service.CategorySevice;
 import vn.edu.hcmuaf.fit.service.ProductService;
 
 import javax.servlet.ServletException;

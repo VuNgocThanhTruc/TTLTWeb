@@ -7,6 +7,7 @@
     <%@include file="../../common/web/head.jsp" %>
     <link rel="stylesheet" href="././css/sign.css">
     <title>Đăng nhập | Phone Care</title>
+    <meta name="google-signin-scope" content="profile email">
 
 </head>
 
@@ -46,15 +47,17 @@
                     </div>
                     <br>
                     <div>
-<%--                                                <button type="button" class="btn btn-sm btn-outline-primary" onlogin="checkLoginState()";>Login with Facebook <i class="fa fa-facebook-square"></i></button>--%>
-                        <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">Login with Facebook
-                        </fb:login-button>
+                        <a href="https://www.facebook.com/v16.0/dialog/oauth?scope=email&client_id=5842543845823968&redirect_uri=http://localhost:8080/TTLTWeb_war_exploded/login-facebook">
+                            <button type="button" class="btn btn-sm btn-outline-primary">Đăng nhập với Facebook <i
+                                    class="fa fa-facebook-square"></i></button>
+                        </a>
+                        <a href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile&&redirect_uri=http://localhost:8080/TTLTWeb_war_exploded/login-google&response_type=code
+		&client_id=429868613240-b7ij0n2762it03pj9r5623l0a3qjlmnp.apps.googleusercontent.com&approval_prompt=force">
+                            <button type="button" class="btn btn-sm btn-outline-danger">Đăng nhập với Google <i
+                                    class="fa fa-google-plus-square"></i>
+                            </button>
+                        </a>
 
-                                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="login()"><i class="fa fa-google-plus-square"></i>Login with với Google </button>
-
-<%--                        <a style="text-decoration:none;" id="mySignin" onclick="login()"><span><img--%>
-<%--                                src="image/mangXH/g+.png" alt="google" width="30px" height="30px"/></span><strong--%>
-<%--                                style="margin-top:7px;color:red;margin-left:4px"> Google+</strong></a>--%>
                     </div>
 
                 </form>
@@ -68,123 +71,7 @@
 </div>
 
 <script>
-    function statusChangeCallback(response) {
-        console.log('statusChangeCallback');
-        console.log(response);
-        if (response.status === 'connected') {
-            testAPI();
-        } else {
-            document.getElementById('status').innerHTML = 'Please log ' +
-                'into this app.';
-        }
-    }
 
-    function checkLoginState() {
-        FB.getLoginStatus(function (response) {
-            statusChangeCallback(response);
-        });
-
-        FB.api('/me', {fields: ' name, email,birthday,gender'}, function (response) {
-            console.log(response);
-            window.location.href = 'login?action=Face&name=' + response.name + '&email=' + response.email + '&id=' + response.id;
-        });
-    }
-
-    window.fbAsyncInit = function () {
-        FB.init({
-            appId: '5842543845823968',
-            cookie: true,
-            xfbml: true,
-            version: 'v16.0'
-        });
-
-
-        FB.getLoginStatus(function (response) {
-            statusChangeCallback(response);
-        });
-
-    };
-
-    (function (d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-
-    function testAPI() {
-        console.log('Welcome!  Fetching your information.... ');
-        FB.api('/me', function (response) {
-            console.log('Successful login for: ' + response.name);
-            document.getElementById('status').innerHTML =
-                'Thanks for logging in, ' + response.name + '!';
-        });
-    }
-</script>
-
-<!-- Script google login  -->
-<script type="text/javascript">
-    function login() {
-        var myParams = {
-            'clientid': '766570468302-3r7u9mli21vjoc9ai0cauniujd89prbp.apps.googleusercontent.com',
-            'cookiepolicy': 'single_host_origin',
-            'callback': 'loginCallback',
-            'approvalprompt': 'force',
-            'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read'
-        };
-        gapi.auth.signIn(myParams);
-    }
-
-    function loginCallback(result) {
-        if (result['status']['signed_in']) {
-            var request = gapi.client.plus.people.get(
-                {
-                    'userId': 'me'
-                });
-            request.execute(function (resp) {
-                console.log(resp.emails[0].value);
-                console.log(resp.displayName);
-                console.log(resp.name.givenName);
-                console.log(resp.image.url);
-                console.log(resp.ageRange.max);
-                console.log(resp.id);
-                console.log(resp.etag);
-                console.log(resp);
-                if (resp != null) {
-                    window.location.href = 'login?action=Google&name=' + resp.name.givenName + '&email=' + resp.emails[0].value + '&id=' + resp.id + '&fullName=' + resp.displayName + '&image=' + resp.image.url + '&age=' + resp.ageRange.max + '&etag=' + resp.etag;
-                }
-                var email = '';
-                if (resp['emails']) {
-                    for (i = 0; i < resp['emails'].length; i++) {
-                        if (resp['emails'][i]['type'] == 'account') {
-                            email = resp['emails'][i]['value'];//here is required email id
-                        }
-                    }
-                }
-                var usersname = resp['displayName'];//required name
-            });
-        }
-    }
-
-    function onLoadCallback() {
-        gapi.client.setApiKey('AIzaSyBvKg3asprpxMgAVhaonZOjJ_O-bcEoGxw');
-        gapi.client.load('plus', 'v1', function () {
-        });
-    }
-
-</script>
-
-<script type="text/javascript">
-    (function () {
-        var po = document.createElement('script');
-        po.type = 'text/javascript';
-        po.async = true;
-        po.src = 'https://apis.google.com/js/client.js?onload=onLoadCallback';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(po, s);
-    })();
 </script>
 
 <%@include file="../../common/web/footer.jsp" %>
