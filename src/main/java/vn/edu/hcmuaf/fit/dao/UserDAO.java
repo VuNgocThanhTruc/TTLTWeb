@@ -33,8 +33,9 @@ public class UserDAO implements ObjectDAO {
                 String dob = rs.getString(9);
                 int sex = rs.getInt(10);
                 String address = rs.getString(11);
+                String idRole = rs.getString("id_role");
                 UserModel user = new UserModel(id, name, username, email, password, avatar, tel, id_type_user,
-                        dob, sex, address);
+                        dob, sex, address, idRole);
                 mapTemp.put(user.getUsername(), user);
             }
 

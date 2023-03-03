@@ -1,14 +1,16 @@
 package vn.edu.hcmuaf.fit.filter;
 
 import vn.edu.hcmuaf.fit.model.UserModel;
+import vn.edu.hcmuaf.fit.service.ProductService;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-
+@WebFilter("/*")
 public class AuthorizactionFilter implements Filter {
     private ServletContext context;
 
@@ -25,7 +27,11 @@ public class AuthorizactionFilter implements Filter {
         String url = request.getRequestURI();
         HttpSession session = request.getSession();
 
-        if (url.startsWith("/WebProgramming_war_exploded/admin/")) {
+        if(request.getServletContext().getAttribute("listBrand") == null){
+            request.getServletContext().setAttribute("listBrand", ProductService.getListBrand());
+        }
+
+        if (url.contains("admin")) {
             UserModel user = (UserModel) session.getAttribute("userlogin");
             if (user != null) {
                 if (user.getId_type_user() == 2) {
@@ -37,7 +43,6 @@ public class AuthorizactionFilter implements Filter {
                 response.sendRedirect(request.getContextPath() + "/signin");
             }
         } else {
-
             filterChain.doFilter(servletRequest, servletResponse);
         }
     }
