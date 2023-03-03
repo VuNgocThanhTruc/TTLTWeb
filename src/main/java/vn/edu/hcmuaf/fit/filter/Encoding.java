@@ -1,7 +1,5 @@
 package vn.edu.hcmuaf.fit.filter;
 
-import vn.edu.hcmuaf.fit.service.ProductService;
-
 import javax.servlet.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;

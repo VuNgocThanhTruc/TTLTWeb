@@ -41,6 +41,10 @@ public class DBConnect {
         }
     }
 
+    public Connection getConnection(){
+        return this.conn;
+    }
+
     public static void main(String[] args) {
         Statement statement = DBConnect.getInstall().get();
         if (statement!= null)

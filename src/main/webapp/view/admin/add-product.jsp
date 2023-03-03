@@ -388,9 +388,7 @@ MODAL
     });
 
     function save() {
-
         swal("Đã lưu thành công.!", {});
-
     }
 
 </script>
