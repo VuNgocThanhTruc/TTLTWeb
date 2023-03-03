@@ -442,7 +442,7 @@
         $.ajax({
             type: 'GET',
             data: {amountNext: lengthBoxProduct},
-            url: "<%=request.getContextPath()%>/LoadDataAJAX",
+                url: "<%=request.getContextPath()%>/LoadDataAJAX",
             success: function (data) {
                 listProduct.innerHTML += data
             }
