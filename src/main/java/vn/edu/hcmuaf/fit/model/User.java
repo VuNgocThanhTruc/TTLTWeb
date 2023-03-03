@@ -13,6 +13,8 @@ public class User {
     int sex;
     String address;
 
+    String idRole;
+
     public User(String id, String name, String username, String email, String password, String avatar, String tel,
                 int id_type_user, String dob, int sex, String address) {
         super();
@@ -27,6 +29,22 @@ public class User {
         this.dob = dob;
         this.sex = sex;
         this.address = address;
+    }
+
+    public User(String id, String name, String username, String email, String password, String avatar, String tel,
+                int id_type_user, String dob, int sex, String address, String idRole) {
+        this.id = id;
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.avatar = avatar;
+        this.tel = tel;
+        this.id_type_user = id_type_user;
+        this.dob = dob;
+        this.sex = sex;
+        this.address = address;
+        this.idRole = idRole;
     }
 
     public String getId() {
@@ -115,6 +133,14 @@ public class User {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getIdRole() {
+        return idRole;
+    }
+
+    public void setIdRole(String idRole) {
+        this.idRole = idRole;
     }
 
     @Override

@@ -10,6 +10,7 @@
 <head>
 </head>
 <body>
+<% String getPath = (String) request.getContextPath(); %>
 <header class="app-header">
     <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
                                     aria-label="Hide Sidebar"></a>
@@ -18,7 +19,7 @@
 
 
         <!-- User Menu-->
-        <li><a class="app-nav__item" href="/login"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+        <li><a class="app-nav__item" href="<%=getPath%>/signin"><i class='bx bx-log-out bx-rotate-180'></i> </a>
 
         </li>
     </ul>

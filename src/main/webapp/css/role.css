@@ -1,0 +1,19 @@
+input.cb-role{
+    width: 20px;
+    height: 20px;
+}
+input.cb-role:hover{
+    cursor: pointer;
+}
+.td-role:hover{
+    cursor: pointer;
+}
+
+.notify{
+    line-height: 32.7px;
+    background-color: #d4edda;
+    border-radius: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: max-content;
+}

@@ -13,7 +13,7 @@
 <html lang="en">
 
 <head>
-  <title>Quản lý sản phẩm | ADMIN</title>
+  <title>Quản lý tài khoản | ADMIN</title>
   <%@include file="../../common/admin/head.jsp" %>
 </head>
 
@@ -45,17 +45,12 @@
                 Tạo mới</a>
             </div>
 
-            <%--                        <div class="col-sm-2">--%>
-            <%--                            <a class="btn btn-delete btn-sm print-file" type="button" title="In"--%>
-            <%--                               onclick="myApp.printTable()"><i class="fas fa-print"></i> In dữ liệu</a>--%>
-            <%--                        </div>--%>
-
             <div class="col-sm-2">
               <a class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i
                       class="fas fa-trash-alt"></i> Xóa tất cả </a>
             </div>
           </div>
-          <%--       in ra tin tức--%>
+          <%--  danh sách người dùng --%>
           <% if (listAccount == null){
           %>
           <div>Chưa có tài khoản nào</div>
@@ -89,11 +84,11 @@
               <td><%=acc.getSex()%></td>
               <td><%=acc.getAddress()%></td>
               <td>
-                <%--xóa tin tức--%>
+                <%--chức năng xóa người dùng--%>
                 <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
                    href="manage-blog?action=delete&id=<%=acc.getId()%>"><i class="fas fa-trash-alt"></i></a>
 
-                <%-- sua tin tuc--%>
+                <%-- chức năng sửa thông tin người dùng--%>
                 <a href="manage-blog?action=edit-blog&id-blog=<%=acc.getId()%>               ">
                   <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
                           id="show-confirm"
@@ -108,74 +103,12 @@
           </table>
           <%
             }%>
-
         </div>
       </div>
     </div>
   </div>
 </main>
 
-<!--
-MODAL
--->
-<div class="modal fade" id="ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
-     data-keyboard="false">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-
-      <div class="modal-body">
-        <div class="row">
-          <div class="form-group  col-md-12">
-                            <span class="thong-tin-thanh-toan">
-                                <h5>Chỉnh sửa tin tức cơ bản</h5>
-                            </span>
-          </div>
-        </div>
-        <div class="row">
-          <div class="form-group col-md-6">
-            <label class="control-label">ID</label>
-            <input class="form-control" type="text" required value="1" disabled>
-          </div>
-          <div class="form-group col-md-6">
-            <label class="control-label">Tiêu đề tin</label>
-            <input class="form-control" type="text" required value="Thông tin liên quan về Iphone 14">
-          </div>
-          <div class="form-group  col-md-6">
-            <label class="control-label">Người đăng</label>
-            <input class="form-control" type="text" required value="Quản trị">
-          </div>
-          <div class="form-group col-md-6">
-            <label class="control-label">Ngày đăng</label>
-            <input class="form-control" type="date" value="15/10/2022">
-          </div>
-          <div class="form-group  col-md-6">
-            <label for="exampleSelect1" class="control-label">Người đăng</label>
-            <select class="form-control" id="exampleSelect1">
-              <option>Quản trị</option>
-              <option>Nhân viên</option>
-            </select>
-          </div>
-          <div class="form-group  col-md-6">
-            <label for="exampleSelect1" class="control-label">Loại tin</label>
-            <select class="form-control" id="">
-              <option>Công nghệ</option>
-              <option>Giải đáp</option>
-            </select>
-          </div>
-        </div>
-        <br>
-        <a href="edit-blog.jsp" style="float: right;font-weight: 600;color: #ea0000;">Chỉnh sửa nâng cao</a>
-        <br>
-        <br>
-        <button class="btn btn-save" type="button" onclick="save()">Lưu lại</button>
-        <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
-        <br>
-      </div>
-      <div class="modal-footer">
-      </div>
-    </div>
-  </div>
-</div>
 <!--
 <%@include file="../../common/admin/script.jsp" %>
 -->
@@ -219,47 +152,6 @@ MODAL
     e.stopImmediatePropagation();
   });
 
-  //time
-  function time() {
-    var today = new Date();
-    var weekday = new Array(7);
-    weekday[0] = "Chủ Nhật";
-    weekday[1] = "Thứ Hai";
-    weekday[2] = "Thứ Ba";
-    weekday[3] = "Thứ Tư";
-    weekday[4] = "Thứ Năm";
-    weekday[5] = "Thứ Sáu";
-    weekday[6] = "Thứ Bảy";
-    var day = weekday[today.getDay()];
-    var dd = today.getDate();
-    var mm = today.getMonth() + 1;
-    var yyyy = today.getFullYear();
-    var h = today.getHours();
-    var m = today.getMinutes();
-    var s = today.getSeconds();
-    m = checkTime(m);
-    s = checkTime(s);
-    nowTime = h + " giờ " + m + " phút " + s + " giây";
-    if (dd < 10) {
-      dd = '0' + dd
-    }
-    if (mm < 10) {
-      mm = '0' + mm
-    }
-    today = day + ', ' + dd + '/' + mm + '/' + yyyy;
-    tmp = '<span class="date"> ' + today + ' - ' + nowTime +
-            '</span>';
-    document.getElementById("clock").innerHTML = tmp;
-    clocktime = setTimeout("time()", "1000", "Javascript");
-
-    function checkTime(i) {
-      if (i < 10) {
-        i = "0" + i;
-      }
-      return i;
-    }
-  }
-
   // print data
   var myApp = new function () {
     this.printTable = function () {
@@ -271,16 +163,6 @@ MODAL
     }
   }
 
-  //Modal
-  $("#show-emp").on("click", function () {
-    $("#ModalUP").modal({backdrop: false, keyboard: false})
-  });
-
-  function save() {
-
-    swal("Đã lưu thành công.!", {});
-
-  }
 </script>
 
 </body>
