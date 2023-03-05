@@ -1,7 +1,7 @@
 package vn.edu.hcmuaf.fit.controller.web;
 
 import vn.edu.hcmuaf.fit.model.BookingModel;
-import vn.edu.hcmuaf.fit.model.DetailBookingModal;
+import vn.edu.hcmuaf.fit.model.DetailBookingModel;
 import vn.edu.hcmuaf.fit.model.ProductCartModel;
 import vn.edu.hcmuaf.fit.model.UserModel;
 import vn.edu.hcmuaf.fit.service.CheckoutService;
@@ -62,7 +62,7 @@ public class CheckoutController extends HttpServlet {
 
         boolean checkAddBooking = false;
         for (Map.Entry<Integer, ProductCartModel> productCart : cart.entrySet()) {
-            DetailBookingModal checkoutDetail = new DetailBookingModal(productCart.getKey(), productCart.getValue().getProductModel().getId(), productCart.getValue().getQuantity());
+            DetailBookingModel checkoutDetail = new DetailBookingModel(productCart.getKey(), productCart.getValue().getProductModel().getId(), productCart.getValue().getQuantity());
             checkAddBooking = CheckoutService.addDetailBooking(idInserted, checkoutDetail);
         }
 

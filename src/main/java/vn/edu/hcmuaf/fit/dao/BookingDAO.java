@@ -4,7 +4,7 @@ import vn.edu.hcmuaf.fit.db.ConnectToDatabase;
 import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.BookingModel;
 import vn.edu.hcmuaf.fit.model.CategoryModel;
-import vn.edu.hcmuaf.fit.model.DetailBookingModal;
+import vn.edu.hcmuaf.fit.model.DetailBookingModel;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -61,8 +61,8 @@ public class BookingDAO implements ObjectDAO {
         }
     }
 
-    public static List<DetailBookingModal> getListDetailBooking(String idBooking) {
-        List<DetailBookingModal> list = new LinkedList<>();
+    public static List<DetailBookingModel> getListDetailBooking(String idBooking) {
+        List<DetailBookingModel> list = new LinkedList<>();
 
         String sql = "SELECT d.id id, id_booking, id_product, name, price, d.quantity quantity " +
                 "FROM detail_bookings d join products on products.id = d.id_product " +
@@ -73,7 +73,7 @@ public class BookingDAO implements ObjectDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                DetailBookingModal detailBookingModal = new DetailBookingModal();
+                DetailBookingModel detailBookingModal = new DetailBookingModel();
                 detailBookingModal.setId_booking(rs.getInt("id_booking"));
                 detailBookingModal.setId_product(Integer.parseInt(rs.getString("id_product")));
                 detailBookingModal.setQuantity(Integer.parseInt(rs.getString("quantity")));
