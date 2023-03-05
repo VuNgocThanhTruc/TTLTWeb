@@ -1,6 +1,4 @@
 package vn.edu.hcmuaf.fit.dao;
-import java.util.Map;
-import vn.edu.hcmuaf.fit.model.User;
 
 public interface ObjectDAO {
     public boolean add(Object obj);

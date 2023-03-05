@@ -121,29 +121,7 @@ public class ManageProductController extends HttpServlet {
         int pidStore = Integer.parseInt("1");
         String id = request.getParameter("idProduct");
 
-//        update image from client path to server
-        Part file = request.getPart("ImageUpload");
-
-        String imageFileName = file.getSubmittedFileName();  // get selected image file name
-        System.out.println("Selected Image File Name : " + imageFileName);
-
-        String uploadPath = getServletContext().getRealPath("") + File.separator +"/images/product/" + imageFileName;  // upload path where we have to upload our actual image
-        System.out.println("Upload Path : " + uploadPath);
-
-        // Uploading our selected image into the images folder
-
-        try {
-            FileOutputStream fos = new FileOutputStream(uploadPath);
-            InputStream is = file.getInputStream();
-
-            byte[] data = new byte[is.available()];
-            is.read(data);
-            fos.write(data);
-            fos.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        String imageFileName = updateImageServer(request,"product");
 
         boolean checkUpdateProduct = ProductService.updateProduct(pid, pName, imageFileName, pidTypeProduct, pidStatus, pBrand, pPrice, pQuantity, pDescription, pidStore);
         request.setAttribute("message", checkUpdateProduct);
@@ -171,7 +149,6 @@ public class ManageProductController extends HttpServlet {
 
     protected void doPost_Add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        int pid = Integer.parseInt(request.getParameter("idProduct"));
         String pName = request.getParameter("name_product");
         String pAvatar = request.getParameter("ImageUpload");
         int pidTypeProduct = Integer.parseInt(request.getParameter("categoryTypeProduct"));
@@ -182,11 +159,41 @@ public class ManageProductController extends HttpServlet {
         String pDescription = request.getParameter("description");
         int pidStore = Integer.parseInt("1");
 
-        boolean checkAddNew = new ProductService().addNewProduct(pid, pName, pAvatar, pidTypeProduct, pidStatus, pBrand, pPrice, pQuantity, pDescription, pidStore);
+        String imageFileName = updateImageServer(request,"product");
+
+        boolean checkAddNew = new ProductService().addNewProduct(pName, imageFileName, pidTypeProduct, pidStatus, pBrand, pPrice, pQuantity, pDescription, pidStore);
         request.setAttribute("message", checkAddNew);
         request.setAttribute("categoryTypeProduct", CategorySevice.getListTypeProduct());
         request.setAttribute("categoryBrand", CategorySevice.getListBrand());
         request.setAttribute("listProduct", ProductService.getListProduct());
         request.getRequestDispatcher("/view/admin/manage-product.jsp").forward(request, response);
     }
+
+    //        update image from client path to server
+    protected String updateImageServer(HttpServletRequest request, String saveIntoPath) throws ServletException, IOException {
+        Part file = request.getPart("ImageUpload");
+
+        String imageFileName = file.getSubmittedFileName();  // get selected image file name
+        System.out.println("Selected Image File Name : " + imageFileName);
+
+        String uploadPath = getServletContext().getRealPath("") + File.separator +"/images/"+saveIntoPath+"/" + imageFileName;  // upload path where we have to upload our actual image
+        System.out.println("Upload Path : " + uploadPath);
+
+        // Uploading our selected image into the images folder
+
+        try {
+            FileOutputStream fos = new FileOutputStream(uploadPath);
+            InputStream is = file.getInputStream();
+
+            byte[] data = new byte[is.available()];
+            is.read(data);
+            fos.write(data);
+            fos.close();
+            return imageFileName;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }

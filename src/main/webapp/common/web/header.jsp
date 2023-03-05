@@ -1,6 +1,6 @@
 <%@ page import="vn.edu.hcmuaf.fit.model.CategoryModel" %>
 <%@ page import="java.util.List" %>
-<%@ page import="vn.edu.hcmuaf.fit.model.User" %>
+<%@ page import="vn.edu.hcmuaf.fit.model.UserModel" %>
 <%--
   Created by IntelliJ IDEA.
   User: vutru
@@ -25,7 +25,7 @@
 </head>
 
 <body>
-<% User user = (User) session.getAttribute("userlogin");
+<% UserModel user = (UserModel) session.getAttribute("userlogin");
     ServletContext servletContext = request.getServletContext();
     List<CategoryModel> listBrand = (List<CategoryModel>) servletContext.getAttribute("listBrand");
     String activeH = (String) request.getAttribute("activeH");
@@ -169,53 +169,21 @@
                 margin: 3px 0 30px 0;
                 font-weight: 500; letter-spacing: 2px;">Tìm kiếm</h3>
                 <div class="search-box wpo-wrapper-search">
-                    <form action="search" class="searchform searchform-categoris ultimate-search" method="post">
+                    <form action="list-product?search" class="searchform searchform-categoris ultimate-search"
+                          method="get">
                         <div class="wpo-search-inner" style="display:inline">
-                            <input type="hidden" name="type" value="product">
-                            <input required="" id="inputSearchAuto" name="q" maxlength="40" autocomplete="off"
+                            <input id="inputSearchAuto" name="search" maxlength="40" autocomplete="off"
                                    class="searchinput input-search search-input" type="text" size="20"
                                    placeholder="Tìm kiếm sản phẩm...">
                         </div>
                         <button type="submit" class="btn-search btn" id="search-header-btn">
                             <i style="font-weight:bold" class="fas fa-search"></i>
                         </button>
-                        <div class="search-item">
-                            <div class="search-item-left">
-                                <div class="item-name">Thay màn hình Iphone X</div>
-                                <div class="item-price">1,690,000₫</div>
-                            </div>
-                            <div class="search-item-right">
-                                <div class="img">
-                                    <img src="images/product/thay-man-hinh-iphone-x-fc.jpg" alt="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="search-item">
-                            <div class="search-item-left">
-                                <div class="item-name">Thay màn hình Iphone X</div>
-                                <div class="item-price">1,690,000₫</div>
-                            </div>
-                            <div class="search-item-right">
-                                <div class="img">
-                                    <img src="images/product/thay-man-hinh-iphone-x-fc.jpg" alt="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="search-item">
-                            <div class="search-item-left">
-                                <div class="item-name">Thay màn hình Iphone X</div>
-                                <div class="item-price">1,690,000₫</div>
-                            </div>
-                            <div class="search-item-right">
-                                <div class="img">
-                                    <img src="images/product/thay-man-hinh-iphone-x-fc.jpg" alt="">
-                                </div>
-                            </div>
+                        <div id="searchResultsWithAjax" >
                         </div>
                     </form>
-                    <div id="ajaxSearchResults" class="smart-search-wrapper ajaxSearchResults" style="display: none">
-                        <div class="resultsContent"></div>
-                    </div>
+<%--                    <div id="ajaxSearchResults" class="smart-search-wrapper ajaxSearchResults">--%>
+<%--                    </div>--%>
                 </div>
             </div>
         </div>
@@ -315,7 +283,7 @@
         <div class=" mr-4">
             <ul class="navbar-nav mx-2">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle aaaa" href="product.html" id="navbarDropdownUser"
+                    <a class="nav-link dropdown-toggle aaaa" href="list-product" id="navbarDropdownUser"
                        role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <p><%
                             if (user != null) {
@@ -342,6 +310,28 @@
 
 </nav>
 </body>
+<script src="plugins/jquery-3.4.1/jquery-3.4.1.min.js"></script>
+<script>
+    $(document).ready(() => {
+        $('#inputSearchAuto').on('change', (event) => {
+            event.preventDefault();
+            console.log("change search")
+            let inputSearchAuto = $('#inputSearchAuto').val()
+            let searchResultsWithAjax = document.querySelector("#searchResultsWithAjax")
+
+            $.ajax({
+                type: 'GET',
+                data: {search: inputSearchAuto},
+                url: "<%=request.getContextPath()%>/list-product",
+                success: function (data) {
+                    searchResultsWithAjax.innerHTML = data
+                    console.log(data)
+                }
+            });
+        })
+    })
+
+</script>
 
 </html>
 

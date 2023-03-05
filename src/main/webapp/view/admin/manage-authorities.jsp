@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 
-<%@ page import="vn.edu.hcmuaf.fit.model.User" %>
+<%@ page import="vn.edu.hcmuaf.fit.model.UserModel" %>
 <%@ page import="java.util.List" %>
 <%@ page import="vn.edu.hcmuaf.fit.service.AccountService" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
