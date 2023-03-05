@@ -1,6 +1,6 @@
 package vn.edu.hcmuaf.fit.model;
 
-public class DetailBookingModal {
+public class DetailBookingModel {
 
     private int id;
     private int id_booking;
@@ -10,10 +10,10 @@ public class DetailBookingModal {
     private String name;
     private String price;
 
-    public DetailBookingModal() {
+    public DetailBookingModel() {
     }
 
-    public DetailBookingModal(int id_booking, int id_product, int quantity) {
+    public DetailBookingModel(int id_booking, int id_product, int quantity) {
         this.id_booking = id_booking;
         this.id_product = id_product;
         this.quantity = quantity;

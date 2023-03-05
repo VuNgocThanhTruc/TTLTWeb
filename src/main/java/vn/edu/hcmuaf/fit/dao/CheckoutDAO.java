@@ -2,11 +2,10 @@ package vn.edu.hcmuaf.fit.dao;
 
 import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.BookingModel;
-import vn.edu.hcmuaf.fit.model.DetailBookingModal;
+import vn.edu.hcmuaf.fit.model.DetailBookingModel;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 
 public class CheckoutDAO implements ObjectDAO {
 
@@ -60,7 +59,7 @@ public class CheckoutDAO implements ObjectDAO {
 
     }
 
-    public boolean addDetailBooking(int idInserted, DetailBookingModal detailBookingModal) {
+    public boolean addDetailBooking(int idInserted, DetailBookingModel detailBookingModal) {
         String sql = "INSERT INTO detail_bookings " +
                 "VALUES (NULL, ?, ?, ?)";
         try {

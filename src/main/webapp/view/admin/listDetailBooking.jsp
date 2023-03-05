@@ -1,4 +1,4 @@
-<%@ page import="vn.edu.hcmuaf.fit.model.DetailBookingModal" %>
+<%@ page import="vn.edu.hcmuaf.fit.model.DetailBookingModel" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
@@ -14,7 +14,7 @@
 <!-- Navbar-->
 <%@include file="../../common/admin/header.jsp" %>
 <%
-    List<DetailBookingModal> listDetailBooking = (List<DetailBookingModal>) request.getAttribute("listDetailBooking");
+    List<DetailBookingModel> listDetailBooking = (List<DetailBookingModel>) request.getAttribute("listDetailBooking");
 %>
 <!-- Sidebar menu-->
 <%@include file="../../common/admin/sidebar.jsp" %>
@@ -61,7 +61,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <%for (DetailBookingModal detail : listDetailBooking) {%>
+                        <%for (DetailBookingModel detail : listDetailBooking) {%>
                         <tr class="booking-<%=detail.getId()%>">
                             <td width="10"><input type="checkbox" name="check1" value="1"></td>
                             <td name="id" class="id"><%=detail.getId()%>
