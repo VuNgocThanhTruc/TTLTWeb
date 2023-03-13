@@ -62,7 +62,7 @@
                                 <table style="font-size: 14px" class="table table-hover table-bordered" id="sampleTable">
                                     <thead>
                                     <tr>
-                                        <th>Thành phần</th>
+                                        <th>Thành phần\Chức năng</th>
                                         <c:forEach  items="${functions}" var="function">
                                             <th style="text-align: center">${function.name}</th>
                                         </c:forEach>
@@ -74,7 +74,7 @@
                                     <tr>
                                         <td width="100px">${component.name}</td>
                                         <c:forEach var="function" items="${functions}" >
-                                            <td width="40px" style="text-align: center"><input type="checkbox" name="cb_decentralize" value="${component.id}-${function.id}"></td>
+                                            <td width="40px" class="td-role" style="text-align: center"><input  class="cb-role" type="checkbox" name="cb_decentralize" value="${component.id}-${function.id}"></td>
                                         </c:forEach>
                                     </tr>
                                 </c:forEach>
@@ -101,6 +101,6 @@
 </main>
 
 <%@include file="../../common/admin/script.jsp" %>
-
+<script type="text/javascript" src="../js/role.js"></script>
 </body>
 </html>

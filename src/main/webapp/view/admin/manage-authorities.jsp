@@ -27,7 +27,7 @@
 <!-- Sidebar menu-->
 <%@include file="../../common/admin/sidebar.jsp" %>
 <%
-    String idComp = (String) request.getAttribute("id-component");
+    // Lấy ra quyền của từng chức năng
     Boolean isGrantAdd = false;
     Boolean isGrantEdit = false;
     Boolean isGrantDel = false;
@@ -40,6 +40,10 @@
             isGrantDel = auth.getDecentralizeFuncOfRole(idRole,"10",function.getId());
         }
     }
+
+    // Lấy ra toàn bộ quyền
+    List<RoleModel> roles =  auth.getAllRole();
+
 %>
 <main class="app-content">
     <div class="app-title">
@@ -104,6 +108,15 @@
                             <td>${role.name}</td>
                             <td>${role.describe}</td>
                             <td>
+                                <%--Nút xem phân quyền--%>
+                                    <button style="font-size: 12px;padding: 4px 7px;"
+                                            type="button"
+                                            class="btn btn-info btn-sm"
+                                            title="Xem phân quyền"
+                                            onclick="viewDecentralize(${role.id})">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+
                                 <%--Nút xóa nhóm quyền--%>
                                 <%if(isGrantDel == true) {%>
                                 <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
@@ -133,6 +146,7 @@
                                             type="button"
                                             title="Không có quyền này!"
                                             style="opacity: 0.5; cursor: not-allowed;"
+                                            disabled
                                     >
                                         <i class="fas fa-edit"></i>
                                     </button>
@@ -149,36 +163,86 @@
     </div>
 </main>
 
-<!--
-<%@include file="../../common/admin/script.jsp" %>
--->
+<%-- Modal View Decentralize--%>
+<%for(RoleModel roleModel : roles) { %>
+<div class="modal-decentralize" id="modal-<%=roleModel.getId()%>" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="header">
+                <div style="padding: 16px">Phân quyền cho nhóm quyền: <span style="color: var(--info)"><%=roleModel.getName()%></span></div>
+            </div>
+            <div class="modal-body">
+                <%--table role--%>
+                <table style="font-size: 14px" class="table table-hover table-bordered" id="sampleTable">
+                    <thead>
+                    <tr>
+                        <th width="70" style="min-width: 100px">Thành phần\Chức năng</th>
+                        <% for(FunctionModel function : functions) { %>
+                        <th style="text-align: center;width: 50px;max-width: 50px"><%=function.getName()%></th>
+                        <%}%>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% for(ComponentModel component : components) { %>
+                    <tr>
+                        <td><%= component.getName() %></td>
+                        <% for(FunctionModel function : functions) { %>
 
+                        <td class="td-role" width="50" style="text-align: center;max-width: 50px">
+                            <%
+                                String idComponent = component.getId();
+                                String idFunction = function.getId();
+                                Boolean isGrant = auth.getDecentralizeFuncOfRole(roleModel.getId(), idComponent, idFunction);
+                            %>
+                            <input
+                                <% if(isGrant == true) {%> checked <%}%>
+                                type="checkbox"
+                                class="cb-role"
+                                value="<%=component.getId()%>-<%=function.getId()%>"
+                                name="cb_decentralize"
+                            >
+                        </td>
+                        <%}%>
+                    </tr>
+                    <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" onclick="closeViewDecentralize(<%=roleModel.getId()%>)">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<%}%>
+
+
+<%-- end modal--%>
+
+<%@include file="../../common/admin/script.jsp" %>
 <!-- Essential javascripts for application to work-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="src/jquery.table2excel.js"></script>
-<script src="js/main.js"></script>
-<!-- The javascript plugin to display page loading on top-->
-<script src="../../admin/doc/js/plugins/pace.min.js"></script>
 <!-- Page specific javascripts-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <!-- Data table plugin-->
 <script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript">$('#sampleTable').DataTable();</script>
+<script type="text/javascript" src="../js/role.js"></script>
 <script>
-    // function deleteRow(r) {
-    //     var i = r.parentNode.parentNode.rowIndex;
-    //     document.getElementById("myTable").deleteRow(i);
-    // }
-    //
-    // oTable = $('#sampleTable').dataTable();
-    // $('#all').click(function (e) {
-    //     $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
-    //     e.stopImmediatePropagation();
-    // });
+    function viewDecentralize(idRole){
+        const modal = document.getElementById("modal-"+idRole);
+        modal.style.display = "block";
+    }
 
+    function closeViewDecentralize(idRole){
+        const modal = document.getElementById("modal-"+idRole);
+        modal.style.display = "none";
+    }
 </script>
-
 </body>
 
 </html>

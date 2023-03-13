@@ -12,14 +12,25 @@
 
 <body onload="time()" class="app sidebar-mini rtl">
 <!-- Navbar-->
-
 <%@include file="../../common/admin/header.jsp" %>
 <!-- Sidebar menu-->
+<%@include file="../../common/admin/sidebar.jsp" %>
 <%
     List<BlogModel> listBlog = (List<BlogModel>) request.getAttribute("listBlog");
-
+    Boolean isGrantAdd = false;
+    Boolean isGrantEdit = false;
+    Boolean isGrantDel = false;
+    for(FunctionModel function : functions){
+        if(function.getName().equals("Add")){
+            isGrantAdd = auth.getDecentralizeFuncOfRole(idRole,"10",function.getId());
+        }else if(function.getName().equals("Edit")){
+            isGrantEdit = auth.getDecentralizeFuncOfRole(idRole,"10",function.getId());
+        }else if(function.getName().equals("Delete")){
+            isGrantDel = auth.getDecentralizeFuncOfRole(idRole,"10",function.getId());
+        }
+    }
 %>
-<%@include file="../../common/admin/sidebar.jsp" %>
+
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
@@ -33,10 +44,23 @@
                 <div class="tile-body">
                     <div class="row element-button">
                         <div class="col-sm-2">
-
-                            <a class="btn btn-add btn-sm" href="manage-blog?action=add" title="Thêm"><i
-                                    class="fas fa-plus"></i>
-                                Tạo mới</a>
+                            <%--Tạo mới tin tức --%>
+                            <%if(isGrantAdd == true) {%>
+                                <a class="btn btn-add btn-sm" href="manage-blog?action=add" title="Thêm"><i
+                                        class="fas fa-plus"></i>
+                                    Tạo mới
+                                </a>
+                            <%} else {%>
+                                <button
+                                        class="btn btn-add btn-sm"
+                                        type="button"
+                                        title="Không có quyền này!"
+                                        style="opacity: 0.5; cursor: not-allowed;"
+                                        disabled
+                                >
+                                    <i class="fas fa-plus"></i> Tạo mới
+                                </button>
+                            <%}%>
                         </div>
 
 <%--                        <div class="col-sm-2">--%>
@@ -80,16 +104,39 @@
                             <td><%=blog.getUserCreated()%></td>
                             <td>
                                 <%--xóa tin tức--%>
-                                <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                   href="manage-blog?action=delete&id=<%=blog.getId()%>"><i class="fas fa-trash-alt"></i></a>
-
-                                    <%-- sua tin tuc--%>
+                                <%if(isGrantDel == true) {%>
+                                    <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
+                                       href="manage-blog?action=delete&id=<%=blog.getId()%>"><i class="fas fa-trash-alt"></i></a>
+                                <%} else {%>
+                                    <button
+                                            class="btn btn-primary btn-sm trash"
+                                            type="button"
+                                            title="Không có quyền này!"
+                                            style="opacity: 0.5; cursor: not-allowed;"
+                                            disabled
+                                    >
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                <%}%>
+                                <%-- sua tin tuc--%>
+                                <%if(isGrantEdit == true) {%>
                                     <a href="manage-blog?action=edit-blog&id-blog=<%=blog.getId()%>               ">
                                         <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
-                                                id="show-confirm"
-                                                data-toggle="modal" data-target="#ModalConfirm"><i class="fas fa-edit"></i>
+                                                    id="show-confirm"
+                                                    data-toggle="modal" data-target="#ModalConfirm"><i class="fas fa-edit"></i>
                                         </button>
                                     </a>
+                                <%} else {%>
+                                    <button
+                                            class="btn btn-primary btn-sm edit"
+                                            type="button"
+                                            title="Không có quyền này!"
+                                            style="opacity: 0.5; cursor: not-allowed;"
+                                            disabled
+                                    >
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                <%}%>
                             </td>
                         </tr>
                         <%

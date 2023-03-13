@@ -276,5 +276,34 @@ public class AuthoritiesDAO {
         }
         return role;
     }
+
+    public void updateRole(String idRole, String nameRole, String describeRole) {
+        String query = "update roles set name_role = ?, describe_role = ? where id_role = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, nameRole);
+            ps.setString(2, describeRole);
+            ps.setString(3, idRole);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    public String getNameRoleById(String id) {
+        String query = "select name_role from roles where id_role = ? ";
+        String nameRole = "Chưa cấp quyền";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()){
+                nameRole =  rs.getString("name_role");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return nameRole;
+    }
 }
 
