@@ -67,6 +67,12 @@ public class AuthoritiesService {
         authoritiesDAO.printDecentralizeOfRole(idRole);
     }
 
+    //Cập nhật nhóm quyền
+    public void updateRole(String idRole, String nameRole, String describeRole) {
+        authoritiesDAO.updateRole(idRole, nameRole, describeRole);
+    }
 
-
+    public String getNameRoleById(String id){
+        return authoritiesDAO.getNameRoleById(id);
+    }
 }

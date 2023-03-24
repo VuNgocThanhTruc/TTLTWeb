@@ -1,5 +1,7 @@
 package vn.edu.hcmuaf.fit.model;
 
+import vn.edu.hcmuaf.fit.service.AuthoritiesService;
+
 public class UserModel {
     String id;
     String name;
@@ -142,6 +144,12 @@ public class UserModel {
     public void setIdRole(String idRole) {
         this.idRole = idRole;
     }
+
+    public String getNameRole(){
+        AuthoritiesService auth = new AuthoritiesService();
+        return auth.getNameRoleById(this.idRole);
+    }
+
 
     @Override
     public String toString() {

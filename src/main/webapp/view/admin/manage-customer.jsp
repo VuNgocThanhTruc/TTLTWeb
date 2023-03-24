@@ -13,12 +13,23 @@
 <body onload="time()" class="app sidebar-mini rtl">
 <!-- Navbar-->
 <%@include file="../../common/admin/header.jsp" %>
-<%
-    List<CustomerModel> listCustomer = (List<CustomerModel>) request.getAttribute("listCustomer");
-
-%>
 <!-- Sidebar menu-->
 <%@include file="../../common/admin/sidebar.jsp" %>
+<%
+    List<CustomerModel> listCustomer = (List<CustomerModel>) request.getAttribute("listCustomer");
+    Boolean isGrantAdd = false;
+    Boolean isGrantEdit = false;
+    Boolean isGrantDel = false;
+    for(FunctionModel function : functions){
+        if(function.getName().equals("Add")){
+            isGrantAdd = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+        }else if(function.getName().equals("Edit")){
+            isGrantEdit = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+        }else if(function.getName().equals("Delete")){
+            isGrantDel = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+        }
+    }
+%>
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">

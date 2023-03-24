@@ -12,11 +12,25 @@
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
-<%List<BookingModel> listBooking = (List<BookingModel>) request.getAttribute("listBooking");%>
 <!-- Navbar-->
 <%@include file="../../common/admin/header.jsp" %>
 <!-- Sidebar menu-->
 <%@include file="../../common/admin/sidebar.jsp" %>
+<%
+    List<BookingModel> listBooking = (List<BookingModel>) request.getAttribute("listBooking");
+    Boolean isGrantAdd = false;
+    Boolean isGrantEdit = false;
+    Boolean isGrantDel = false;
+    for(FunctionModel function : functions){
+        if(function.getName().equals("Add")){
+            isGrantAdd = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+        }else if(function.getName().equals("Edit")){
+            isGrantEdit = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+        }else if(function.getName().equals("Delete")){
+            isGrantDel = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+        }
+    }
+%>
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
@@ -86,25 +100,44 @@
                                 </select>
                             </td>
                             <td name="description"><%=booking.getDescription()%></td><td>
-
-
                                 <%--sua booking--%>
-                                <a href="manage-confirm?type=edit-confirm&id-confirm=<%=booking.getId()%>
-                     ">
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
-                                            id="show-confirm"
-                                            data-toggle="modal" data-target="#ModalConfirm"><i class="fas fa-edit"></i>
+                                <%if(isGrantEdit == true) {%>
+                                    <a href="manage-confirm?type=edit-confirm&id-confirm=<%=booking.getId()%>">
+                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
+                                                id="show-confirm"
+                                                data-toggle="modal" data-target="#ModalConfirm"><i class="fas fa-edit"></i>
+                                        </button>
+                                    </a>
+                                <%} else {%>
+                                    <button
+                                            class="btn btn-primary btn-sm edit"
+                                            type="button"
+                                            title="Không có quyền này!"
+                                            style="opacity: 0.5; cursor: not-allowed;"
+                                            disabled
+                                    >
+                                        <i class="fas fa-edit"></i>
                                     </button>
-                                </a>
+                                <%}%>
                                 <%--                                    xóa--%>
-                                <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                   href="manage-booking?status=wait-accept&action=delete&id=<%=booking.getId()%>"><i
-                                        class="fas fa-trash-alt"></i></a>
+                                <%if(isGrantDel == true) {%>
+                                    <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
+                                       href="manage-booking?status=wait-accept&action=delete&id=<%=booking.getId()%>"><i
+                                            class="fas fa-trash-alt"></i></a>
+                                <%} else {%>
+                                    <button
+                                            class="btn btn-primary btn-sm trash"
+                                            type="button"
+                                            title="Không có quyền này!"
+                                            style="opacity: 0.5; cursor: not-allowed;"
+                                            disabled
+                                    >
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                <%}%>
                             </td>
-
                         </tr>
                         <%}%>
-
                         </tbody>
                     </table>
                 </div>
