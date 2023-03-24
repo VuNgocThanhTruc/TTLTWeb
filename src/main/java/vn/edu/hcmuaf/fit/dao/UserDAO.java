@@ -166,7 +166,7 @@ public class UserDAO implements ObjectDAO {
         }
     }
 
-    public void signupWithFb(String id, String name, String email, String tel, int sex, String dob) {
+    public void signupWithAPI(String id, String name, String email, String tel, int sex, String dob) {
         String sql = "insert into users(name,username,email,password,avatar,tel,id_type_user,dob,sex) values (?,?,?,?,?,?,?,?,?)";
         Connection connect = ConnectToDatabase.getConnect();
         try {
@@ -177,7 +177,7 @@ public class UserDAO implements ObjectDAO {
             ppstm.setString(4, id);
             ppstm.setString(5, "no-avatar.png");
             ppstm.setString(6, tel);
-            ppstm.setInt(7, 1);
+            ppstm.setInt(7, 3);
             ppstm.setString(8, dob);
             ppstm.setInt(9, sex);
 

@@ -72,7 +72,7 @@ public class LoginFacebookController extends HttpServlet {
 
             System.out.println(id + " " + name + " " + email + " " + tel + " " + sex + " " + dob);
             UserDAO userdao = new UserDAO();
-            userdao.signupWithFb(id, name, email, tel, sex, dob);
+            userdao.signupWithAPI(id, name, email, tel, sex, dob);
             UserModel user = UserDAO.loadUsername().get(id);
             session.setAttribute("userlogin", user);
             response.sendRedirect("home");
