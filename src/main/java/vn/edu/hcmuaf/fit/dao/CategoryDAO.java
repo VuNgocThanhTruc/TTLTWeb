@@ -14,7 +14,7 @@ public class CategoryDAO {
     public static List<CategoryModel> getListCategory() {
         LinkedList<CategoryModel> list = new LinkedList<CategoryModel>();
 
-        String sql = "select id,name from brand";
+        String sql = "select id,name from brands";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -57,7 +57,7 @@ public class CategoryDAO {
     public static List<CategoryModel> getListStatusProduct() {
         LinkedList<CategoryModel> list = new LinkedList<CategoryModel>();
 
-        String sql = "select id,status from status_device";
+        String sql = "select id,status from status_devices";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ResultSet rs = ps.executeQuery();

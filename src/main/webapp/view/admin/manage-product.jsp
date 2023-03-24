@@ -105,10 +105,13 @@
                             </td>
                             <td class="name"><%=product.getName()%>
                             </td>
-                            <td><img
-                                    src="../images/product/<%=product.getAvatar()%>"
-                                    alt="" width="100px;" class="avatar"></td>
-                            <td class="quantity"><%=product.getSumQuantity()%>
+                            <td>
+<%--                                <img--%>
+<%--                                    src="../images/product/<%=product.getAvatar()%>"--%>
+<%--                                    alt="" width="100px;" class="avatar">--%>
+                            </td>
+                            <td class="quantity">
+<%--                                <%=product.getSumQuantity()%>--%>
                             </td>
                             <td><span class="badge bg-success" class="status">Hoàn Thành</span></td>
                             <td class="price"><%=product.getPrice()%>

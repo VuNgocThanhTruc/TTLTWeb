@@ -13,7 +13,7 @@ public class ContactDAO {
     public static List<ContactModel> getListContact() {
         LinkedList<ContactModel> list = new LinkedList<ContactModel>();
 
-        String sql = "select * from contact";
+        String sql = "select * from contacts";
         Statement statement = DBConnect.getInstall().get();
         if (statement != null) try {
             ResultSet rs = statement.executeQuery(sql);
@@ -31,7 +31,7 @@ public class ContactDAO {
         return null;
     }
     public static void deleteContact(int id) {
-        String sql = "delete from contact where id = ? ";
+        String sql = "delete from contacts where id = ? ";
         Connection connection = new ConnectToDatabase().getConnect();
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -43,7 +43,7 @@ public class ContactDAO {
 
     }
     public void add(String username, String tel, String email, String content) {
-        String sql = "insert into contact(username,tel,email,content) values (?,?,?,?)";
+        String sql = "insert into contacts(username,tel,email,content) values (?,?,?,?)";
         Connection connect = ConnectToDatabase.getConnect();
         try {
             PreparedStatement ppstm = connect.prepareStatement(sql);

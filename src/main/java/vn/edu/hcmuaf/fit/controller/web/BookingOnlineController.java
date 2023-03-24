@@ -33,7 +33,7 @@ public class BookingOnlineController extends HttpServlet {
             System.out.println("Khong thuc hien duoc gi het");
             session.setAttribute("mess", null);
         } else if (action.equals("booking")) {
-//            System.out.println("update thanhcong " );
+//            System.out.println("update successfully " );
             String name = request.getParameter("username");
             String tel = request.getParameter("tel");
             String email = request.getParameter("email");
