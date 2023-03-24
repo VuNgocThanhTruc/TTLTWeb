@@ -56,8 +56,8 @@
                             %>
                             <div class="productSlides fade-checkout">
                                 <div class="img">
-                                    <img src="images/product/<%=item.getValue().getProductModel().getAvatar()%>"
-                                         class="img-fluid w-100">
+<%--                                    <img src="images/product/<%=item.getValue().getProductModel().getAvatar()%>"--%>
+<%--                                         class="img-fluid w-100">--%>
                                 </div>
                                 <h1 class="product-name">
                                     <%=item.getValue().getProductModel().getName()%>

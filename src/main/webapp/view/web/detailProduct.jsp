@@ -12,7 +12,7 @@
 </head>
 
 <body>
-<%List<ProductModel> pro = (List<ProductModel>)  request.getAttribute("pro");%>
+<%List<ProductModel> pro = (List<ProductModel>) request.getAttribute("pro");%>
 <%ProductModel product = (ProductModel) request.getAttribute("product");%>
 <%@include file="../../common/web/header.jsp" %>
 
@@ -64,32 +64,30 @@
                                     <div class="product-gallery__thumbs thumb-fix">
 
                                         <div class="product-gallery__thumb " id="imgg1">
-<%--                                            <a class="product-gallery__thumb-placeholder" href="javascript:void(0);"--%>
-<%--                                               data-image="images/product/<%=product.getAvatar()%>"--%>
-<%--                                               data-zoom-image="images/product/<%=product.getAvatar()%>">--%>
-<%--                                                <img src="images/product/<%=product.getAvatar()%>"--%>
-<%--                                                     data-image="images/product/<%=product.getAvatar()%>" alt=""--%>
-<%--                                                     grape="">--%>
-<%--                                            </a>--%>
+                                            <a class="product-gallery__thumb-placeholder" href="javascript:void(0);"
+                                               data-image="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>"
+                                               data-zoom-image="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>">
+                                                <img src="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>"
+                                                     data-image="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>"
+                                                     alt=""
+                                                     grape="">
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="product-image-detail box__product-gallery scroll hidden-xs">
                                     <ul id="sliderproduct" class="site-box-content slide_product">
-
+                                        <%
+                                            for (int image = 0; image < product.getListImage().size(); image++) {
+                                        %>
                                         <li class="product-gallery-item gallery-item current " id="imgg1a">
-<%--                                            <img class="product-image-feature "--%>
-<%--                                                 src="images/product/<%=product.getAvatar()%>" alt=""--%>
-<%--                                                 grape="">--%>
+                                            <img class="product-image-feature "
+                                                 src="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(image).getUrl():""%>"
+                                                 alt=""
+                                                 grape="">
                                         </li>
-
-                                        <li class="product-gallery-item gallery-item " id="imgg2a">
-<%--                                            <img class="product-image-feature"--%>
-<%--                                                 src="images/product/<%=product.getAvatar()%>" alt=""--%>
-<%--                                                 grape="">--%>
-                                        </li>
-
-
+                                        <%
+                                            }%>
                                     </ul>
                                     <div class="product-image__button">
                                         <div id="product-zoom-in" class="product-zoom icon-pr-fix" aria-label="Zoom in"
@@ -118,24 +116,26 @@
                                 <div class="owl-carousel owl-theme owl-product-gallery-slide">
                                     <div class=" item">
                                         <div class="product-gallery__thumb ">
-<%--                                            <a class=" product-gallery__thumb-placeholder" href="javascript:void(0);"--%>
-<%--                                               data-image="images/product/<%=product.getAvatar()%>"--%>
-<%--                                               data-zoom-image="images/sanpham/2.jpg">--%>
-<%--                                                <img src="images/product/<%=product.getAvatar()%>"--%>
-<%--                                                     data-image="images/product/<%=product.getAvatar()%>" alt=""--%>
-<%--                                                     grape="">--%>
-<%--                                            </a>--%>
+                                            <a class=" product-gallery__thumb-placeholder" href="javascript:void(0);"
+                                               data-image="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>"
+                                               data-zoom-image="images/sanpham/2.jpg">
+                                                <img src="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>"
+                                                     data-image="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>"
+                                                     alt=""
+                                                     grape="">
+                                            </a>
                                         </div>
                                     </div>
                                     <div class="item">
                                         <div class="product-gallery__thumb ">
-<%--                                            <a class=" product-gallery__thumb-placeholder" href="javascript:void(0);"--%>
-<%--                                               data-image="images/product/<%=product.getAvatar()%>"--%>
-<%--                                               data-zoom-image="images/product/<%=product.getAvatar()%>">--%>
-<%--                                                <img src="images/product/<%=product.getAvatar()%>"--%>
-<%--                                                     data-image="images/product/<%=product.getAvatar()%>" alt=""--%>
-<%--                                                     grape="">--%>
-<%--                                            </a>--%>
+                                            <a class=" product-gallery__thumb-placeholder" href="javascript:void(0);"
+                                               data-image="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>"
+                                               data-zoom-image="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>">
+                                                <img src="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>"
+                                                     data-image="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>"
+                                                     alt=""
+                                                     grape="">
+                                            </a>
                                         </div>
                                     </div>
 
@@ -279,8 +279,8 @@
                                                                 <input type="hidden" name="cmd" value="_cart">
                                                                 <input type="hidden" name="add" value="1">
                                                                 <input type="hidden" name="business" value=" ">
-<%--                                                                <input type="hidden" name="image"--%>
-<%--                                                                       value="<%=product.getAvatar()%>">--%>
+                                                                <input type="hidden" name="image"
+                                                                       value="<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>">
                                                                 <input type="hidden" name="item_name"
                                                                        value="<%=product.getName()%>">
                                                                 <input type="hidden" name="amount"
@@ -338,34 +338,37 @@
                             <h2>Sản phẩm khác</h2>
                         </div>
                         <div class="container">
-<%--                            Sản phâm--%>
+                            <%--                            Sản phâm--%>
                             <div class="row">
                                 <%
-                                    for (ProductModel p:pro
-                                         ) {%>
+                                    for (ProductModel p : pro
+                                    ) {%>
                                 <div class="col-md-3 col-sm-6 col-xs-6 col-6">
                                     <div class="block-banner-category">
                                         <div class="product-img fade-box">
-                                            <a  href="detail-product?id-product=<%=p.getId()%>?id-product=<%=p.getId()%>">
-<%--                                                <img src="images/product/<%=p.getAvatar()%>" alt=""--%>
-<%--                                                     class="lazyloaded">--%>
+                                            <a href="detail-product?id-product=<%=p.getId()%>">
+                                                <img src="images/product/<%=!p.getListImage().isEmpty()?p.getListImage().get(0).getUrl():""%>"
+                                                     alt=""
+                                                     class="lazyloaded">
                                             </a>
 
                                         </div>
                                         <div class="product-detail clearfix">
                                             <div class="pro-text">
                                                 <a style=" color: black;
-                                                  font-size: 14px;text-decoration: none;" href="detail-product?id-product=<%=p.getId()%>?id-product=<%=p.getId()%>"
+                                                  font-size: 14px;text-decoration: none;"
+                                                   href="detail-product?id-product=<%=p.getId()%>?id-product=<%=p.getId()%>"
                                                    title="" inspiration pack>
                                                 </a>
                                             </div>
                                             <div class="pro-price">
-                                                <p class=""><%=p.getPrice()%></p>
+                                                <p class=""><%=p.getPrice()%>
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-<%}%>
+                                <%}%>
                             </div>
                         </div>
                     </div>
@@ -384,11 +387,15 @@
                 <i class="fa fa-times-circle"></i>
             </div>
             <div class="owl-carousel owl-theme owl-product1">
-
-<%--                <div class="item"><img src="images/product/<%=product.getAvatar()%>" alt="">--%>
-<%--                </div>--%>
-<%--                <div class="item"><img src="images/product/<%=product.getAvatar()%>" alt="">--%>
-<%--                </div>--%>
+                <%
+                    for (int image = 0; image < product.getListImage().size(); image++) {
+                %>
+                <div class="item"><img
+                        src="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(image).getUrl():""%>"
+                        alt="">
+                </div>
+                <%
+                    }%>
 
 
             </div>
