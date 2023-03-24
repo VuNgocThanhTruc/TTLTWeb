@@ -3,43 +3,23 @@ package vn.edu.hcmuaf.fit.model;
 public class ProductModel {
     private int id;
     private String name;
-    private String avatar;
-    private long price;
-
-    private int idBrand;
-
     private int idTypeProduct;
-
     private int idStatusDevice;
-
-    private int sumQuantity;
-
+    private int idBrand;
+    private long price;
     private String describe;
-
-    private int idStore;
-
+    //    private String avatar;
     public ProductModel() {
     }
 
-    public ProductModel(int id, String name,String avatar,int idTypeProduct,int idStatusDevice, int idBrand, long price,int sumQuantity,String describe, int idStore) {
+    public ProductModel(int id, String name, int idTypeProduct, int idStatusDevice, int idBrand, long price, String describe) {
         this.id = id;
         this.name = name;
-        this.avatar = avatar;
         this.price = price;
         this.idBrand = idBrand;
         this.idTypeProduct = idTypeProduct;
         this.idStatusDevice = idStatusDevice;
-        this.sumQuantity = sumQuantity;
         this.describe = describe;
-        this.idStore = idStore;
-    }
-
-    public ProductModel(int id, String name, String avatar, long price, int sumQuantity) {
-        this.id = id;
-        this.name = name;
-        this.avatar = avatar;
-        this.price = price;
-        this.sumQuantity = sumQuantity;
     }
 
     public int getId() {
@@ -50,9 +30,6 @@ public class ProductModel {
         return name;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
 
     public long getPrice() {
         return price;
@@ -70,17 +47,11 @@ public class ProductModel {
         return idStatusDevice;
     }
 
-    public int getSumQuantity() {
-        return sumQuantity;
-    }
 
     public String getDescribe() {
         return describe;
     }
 
-    public int getIdStore() {
-        return idStore;
-    }
 
     public void setId(int id) {
         this.id = id;
@@ -88,10 +59,6 @@ public class ProductModel {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
     }
 
     public void setPrice(long price) {
@@ -110,16 +77,8 @@ public class ProductModel {
         this.idStatusDevice = idStatusDevice;
     }
 
-    public void setSumQuantity(int sumQuantity) {
-        this.sumQuantity = sumQuantity;
-    }
-
     public void setDescribe(String describe) {
         this.describe = describe;
-    }
-
-    public void setIdStore(int idStore) {
-        this.idStore = idStore;
     }
 
     @Override
@@ -127,14 +86,11 @@ public class ProductModel {
         return "ProductModel{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", avatar='" + avatar + '\'' +
                 ", price=" + price +
                 ", idBrand=" + idBrand +
                 ", idTypeProduct=" + idTypeProduct +
                 ", idStatusDevice=" + idStatusDevice +
-                ", sumQuantity=" + sumQuantity +
                 ", describe='" + describe + '\'' +
-                ", idStore=" + idStore +
                 '}';
     }
 }
