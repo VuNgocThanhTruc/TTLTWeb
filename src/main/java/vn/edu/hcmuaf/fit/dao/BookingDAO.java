@@ -20,8 +20,8 @@ public class BookingDAO implements ObjectDAO {
     public static List<BookingModel> getListBooking(int status) {
         LinkedList<BookingModel> list = new LinkedList<>();
 
-        String sql = "SELECT booking.id id,date_booking, id_user ,username, id_payment, t.name nameTypePayment,description, status_booking,tel " +
-                "FROM booking join type_payments t on t.id = booking.id_payment " +
+        String sql = "SELECT b.id id,date_booking, id_user ,username, id_payment, t.name nameTypePayment,description, status_booking,tel " +
+                "FROM bookings b join type_payments t on t.id = b.id_payment " +
                 "WHERE status_booking=?" + "order by id desc ";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -49,7 +49,7 @@ public class BookingDAO implements ObjectDAO {
     }
 
     public static boolean updateStatusBooking(String idBookingParam) {
-        String sql = "Update booking set status_booking=1 where id=?";
+        String sql = "Update bookings set status_booking=1 where id=?";
         try {
 
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -92,7 +92,7 @@ public class BookingDAO implements ObjectDAO {
 
     public static void insertBooking(String id, String id_user, String id_payment, String date, String desc, int status, String username, String email, String tel, String address) {
         date += ":00";
-        String sql = "INSERT INTO `booking`(`id`, `date_booking`, `id_user`, `id_payment`, `description`, `status_booking`, `username`, `email`, `tel`, `address`) " +
+        String sql = "INSERT INTO `bookings`(`id`, `date_booking`, `id_user`, `id_payment`, `description`, `status_booking`, `username`, `email`, `tel`, `address`) " +
                 "VALUES(NULL,date_booking = ?, id_user=?, id_payment=?,description = ?, status_booking=?, username=?,email=?,tel=?, address=?";
 
         try {
@@ -140,7 +140,7 @@ public class BookingDAO implements ObjectDAO {
 //    }
 
     public void addBooking(String date_booking, String time_booking, String id_user, String id_payment, String description) {
-        String sql = "insert into booking(date_booking,id_user,id_payment,description,status_booking) values (?,?,?,?,?)";
+        String sql = "insert into bookings(date_booking,id_user,id_payment,description,status_booking) values (?,?,?,?,?)";
         Connection connect = ConnectToDatabase.getConnect();
         try {
             PreparedStatement ppstm = connect.prepareStatement(sql);
@@ -162,7 +162,7 @@ public class BookingDAO implements ObjectDAO {
     public String selectIdNew() {
         String a = "";
         try {
-            ResultSet rs = new ConnectToDatabase().selectData("select  id from customer order by id DESC LIMIT 1");
+            ResultSet rs = new ConnectToDatabase().selectData("select  id from customers order by id DESC LIMIT 1");
             while (rs.next()) {
                 System.out.println("success");
                 a = rs.getString(1);
@@ -198,7 +198,7 @@ public class BookingDAO implements ObjectDAO {
 
     public static void deleteConfirm(int id) {
         String sql1 = "delete from detail_bookings where id_booking = ?";
-        String sql = "delete from booking where id = ? ";
+        String sql = "delete from bookings where id = ? ";
         Connection connection = new ConnectToDatabase().getConnect();
         try {
             statement = connection.prepareStatement(sql1);
@@ -216,9 +216,9 @@ public class BookingDAO implements ObjectDAO {
 
 
     public static BookingModel getBooking(String id) {
-        String sql = "SELECT booking.id id,date_booking, id_user ,username, id_payment, t.name nameTypePayment,description, status_booking,tel,email,address " +
-                "FROM booking join type_payments t on t.id = booking.id_payment " +
-                "WHERE booking.id= ?";
+        String sql = "SELECT b.id id,date_booking, id_user ,username, id_payment, t.name nameTypePayment,description, status_booking,tel,email,address " +
+                "FROM bookings b join type_payments t on t.id = b.id_payment " +
+                "WHERE b.id= ?";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ps.setString(1, id);
@@ -248,7 +248,7 @@ public class BookingDAO implements ObjectDAO {
 
     public static void updateBooking(String id, String date, String desc, int status, String username, String email, String tel, String address) {
         date += ":00";
-        String sql = "update booking set date_booking = ?, description = ?, status_booking=?, username=?,email=?,tel=?, address=? where id = ?";
+        String sql = "update bookings set date_booking = ?, description = ?, status_booking=?, username=?,email=?,tel=?, address=? where id = ?";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ps.setTimestamp(1, Timestamp.valueOf(date.replace("T", " ")));
@@ -268,8 +268,8 @@ public class BookingDAO implements ObjectDAO {
     public static List<BookingModel> getListBooking() {
         LinkedList<BookingModel> list = new LinkedList<>();
 
-        String sql = "SELECT booking.id id,date_booking, id_user ,username, id_payment, t.name nameTypePayment,description, status_booking,tel,email " +
-                "FROM booking join type_payments t on t.id = booking.id_payment " +
+        String sql = "SELECT b.id id,date_booking, id_user ,username, id_payment, t.name nameTypePayment,description, status_booking,tel,email " +
+                "FROM bookings b join type_payments t on t.id = b.id_payment " +
                 "order by id desc ";
         try {
 
@@ -300,10 +300,10 @@ public class BookingDAO implements ObjectDAO {
         LinkedList<BookingModel> list = new LinkedList<>();
 
 
-        String sql = "SELECT d.id id, id_booking, id_product, name, price, d.quantity quantity,avatar ,booking.date_booking ,booking.status_booking " +
-                "FROM booking join detail_bookings d on d.id_booking = booking.id " +
-                "join products on products.id = d.id_product " +
-                "WHERE booking.id_user=? " +
+        String sql = "SELECT d.id id, id_booking, id_product, name, price, d.quantity quantity,avatar ,b.date_booking ,b.status_booking " +
+                "FROM bookings b join detail_bookings d on d.id_booking = b.id " +
+                "join products p on p.id = d.id_product " +
+                "WHERE b.id_user=? " +
                 "order by id desc ";
         try {
 

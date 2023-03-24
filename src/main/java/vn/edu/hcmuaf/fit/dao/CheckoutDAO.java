@@ -11,7 +11,7 @@ public class CheckoutDAO implements ObjectDAO {
 
     public int addBooking(Object obj) {
         BookingModel booking = (BookingModel) obj;
-        String sql = "INSERT INTO booking " +
+        String sql = "INSERT INTO bookings " +
                 "VALUES (NULL, ?, ?, ?,?,?,?,?,?,?)";
         PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
         try {

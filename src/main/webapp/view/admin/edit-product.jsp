@@ -119,7 +119,7 @@
                             <div class="form-group  col-md-3">
                                 <label class="control-label">Số lượng</label>
                                 <input class="form-control" type="number" name="quantity"
-                                       value="<%=product==null?"":product.getSumQuantity()%>">
+                                       value="<%=product==null?"":"product.getSumQuantity()"%>">
                             </div>
                             <div class="form-group col-md-3 ">
                                 <label for="statusProduct" class="control-label">Tình trạng</label>
@@ -192,11 +192,11 @@
                                 <label class="control-label">Ảnh sản phẩm</label>
                                 <div id="myfileupload">
                                     <input type="file" id="uploadfile" name="ImageUpload" onchange="readURL(this)"
-                                           value="<%=product.getAvatar()%>"/>
+                                           value="<%="product.getAvatar()"%>"/>
                                 </div>
                                 <div id="thumbbox">
                                     <img height="450" width="400" alt="Thumb image" id="thumbimage"
-                                         src="../images/product/<%=product.getAvatar()%>"/>
+                                         src="../images/product/<%="product.getAvatar()"%>"/>
                                     <a class="removeimg" href="javascript:"></a>
                                 </div>
                                 <div id="boxchoice">
