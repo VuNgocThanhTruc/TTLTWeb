@@ -26,7 +26,7 @@ public class LoadDataAJAX extends HttpServlet {
                             "                    <div class=\"block-banner-category\">\n" +
                             "                        <div class=\"product-img fade-box\">\n" +
                             "                            <a href=\"detail-product?id-product=" + p.getId() + "\" title=\"\" class=\"img-resize\">\n" +
-                            "                                <img src=\"images/product/" + p.getAvatar() + "\" alt=\"\" class=\"lazyloaded\">\n" +
+//                            "                                <img src=\"images/product/" + p.getAvatar() + "\" alt=\"\" class=\"lazyloaded\">\n" +
                             "                            </a>\n" +
                             "                        </div>\n" +
                             "                        <div class=\"product-detail clearfix\">\n" +
@@ -36,7 +36,7 @@ public class LoadDataAJAX extends HttpServlet {
                             "                                    <input type=\"hidden\" name=\"cmd\" value=\"_cart\">\n" +
                             "                                    <input type=\"hidden\" name=\"add\" value=\"1\">\n" +
                             "                                    <input type=\"hidden\" name=\"business\" value=\"\">\n" +
-                            "                                    <input type=\"hidden\" name=\"image\" value=\"" + p.getAvatar() + "\">\n" +
+//                            "                                    <input type=\"hidden\" name=\"image\" value=\"" + p.getAvatar() + "\">\n" +
                             "                                    <input type=\"hidden\" name=\"item_name\" value=\"" + p.getName() + "\">\n" +
                             "                                    <input type=\"hidden\" name=\"amount\" value=" + p.getPrice() + ">\n" +
                             "                                    <input type=\"hidden\" name=\"discount_amount\" value=\"10000\">\n" +

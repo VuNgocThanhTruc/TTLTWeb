@@ -20,7 +20,7 @@ public class ProductDAO {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
             while (rs.next()) {
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getLong(7), rs.getInt(8), rs.getString(9), rs.getInt(10)));
+                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7)));
             }
             return list;
         } catch (Exception ex) {
@@ -37,7 +37,7 @@ public class ProductDAO {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
             while (rs.next()) {
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getLong(7), rs.getInt(8), rs.getString(9), rs.getInt(10)));
+                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7)));
             }
             return list;
         } catch (Exception ex) {
@@ -56,7 +56,7 @@ public class ProductDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getLong(7), rs.getInt(8), rs.getString(9), rs.getInt(10)));
+                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7)));
             }
             return list;
         } catch (Exception ex) {
@@ -78,7 +78,7 @@ public class ProductDAO {
             }
             try {
                 while (rs.next()) {
-                    list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getLong(7), rs.getInt(8), rs.getString(9), rs.getInt(10)));
+                    list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7)));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -127,7 +127,7 @@ public class ProductDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                return new ProductModel(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getLong(7), rs.getInt(8), rs.getString(9), rs.getInt(10));
+                return new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -139,7 +139,7 @@ public class ProductDAO {
     public static List<CategoryModel> getListBrand() {
         LinkedList<CategoryModel> list = new LinkedList<>();
 
-        String sql = "select id, name from brand";
+        String sql = "select id, name from brands";
 
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -156,7 +156,7 @@ public class ProductDAO {
     public static List<ProductModel> getlistProductForBrand(String brandPram) {
         LinkedList<ProductModel> list = new LinkedList<>();
 
-        String sql = "select * from products " + "join brand on brand.id = products.id_brand " + "where brand.name=?";
+        String sql = "select * from products " + "join brand on brand.id = products.id_s" + "where brand.name=?";
 
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -164,7 +164,7 @@ public class ProductDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getLong(4), rs.getInt(5)));
+                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7)));
             }
             return list;
         } catch (Exception e) {
@@ -183,7 +183,7 @@ public class ProductDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getLong(4), rs.getInt(5)));
+                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7)));
             }
             return list;
         } catch (Exception e) {
@@ -193,7 +193,7 @@ public class ProductDAO {
 //    INSERT INTO `products` (`id`, `name`, `avatar`, `id_type_product`, `id_status_device`, `id_brand`, `price`, `sum_quantity`, `describe`, `id_store`)
 //    VALUES (NULL, 'Test2', 'thay-cam-ung-asus-zenfone-max-plus-m1-zb570tl_1667468452.png\r\n', '3', '1', '5', '350000', '44', '', '2');
 
-    public static boolean addNewProduct( String name, String avatar, int id_type_product, int id_status_device, int id_brand, int price, int sum_quantity, String describe, int id_store) {
+    public static boolean addNewProduct(String name, String avatar, int id_type_product, int id_status_device, int id_brand, int price, int sum_quantity, String describe, int id_store) {
         String sql = "INSERT INTO products (`id`, `name`, `avatar`, `id_type_product`, `id_status_device`, `id_brand`, `price`, `sum_quantity`, `describe`, `id_store`, `created_by`) " + "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -267,7 +267,7 @@ public class ProductDAO {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
             while (rs.next()) {
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getLong(7), rs.getInt(8), rs.getString(9), rs.getInt(10)));
+                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7)));
             }
             return list;
         } catch (Exception ex) {
@@ -278,7 +278,7 @@ public class ProductDAO {
     public static boolean insertBrand(String name) {
         LinkedList<ProductModel> list = new LinkedList<ProductModel>();
 
-        String sql = "Insert into brand values (null,?)";
+        String sql = "Insert into brands values (null,?)";
 
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
