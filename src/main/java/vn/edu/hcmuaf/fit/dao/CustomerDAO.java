@@ -14,7 +14,7 @@ public class CustomerDAO {
     public static List<CustomerModel> getCustomer() {
         LinkedList<CustomerModel> list = new LinkedList<CustomerModel>();
 
-        String sql = "select * from customer";
+        String sql = "select * from customers";
         Statement statement = DBConnect.getInstall().get();
         if (statement != null) try {
             ResultSet rs = statement.executeQuery(sql);
@@ -37,7 +37,7 @@ public class CustomerDAO {
     public static CustomerModel getCustomerById(String id) {
         CustomerModel cus = null;
 
-        String sql = "select * from customer where id = ?";
+        String sql = "select * from customers where id = ?";
         Connection connection = new ConnectToDatabase().getConnect();
         if (connection != null) try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -59,7 +59,7 @@ public class CustomerDAO {
 
     // xóa khách hàng
     public static void deleteCustomer(int id) {
-        String sql = "delete from customer where id = ? ";
+        String sql = "delete from customers where id = ? ";
         Connection connection = new ConnectToDatabase().getConnect();
         try {
             PreparedStatement statement = connection.prepareStatement(sql);

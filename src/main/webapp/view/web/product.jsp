@@ -339,7 +339,7 @@
                     <div class="block-banner-category">
                         <div class="product-img fade-box">
                             <a href="detail-product?id-product=<%=product.getId()%>" title="" class="img-resize">
-                                <img src="images/product/<%=product.getAvatar()%>" alt="" class="lazyloaded">
+<%--                                <img src="images/product/<%=product.getAvatar()%>" alt="" class="lazyloaded">--%>
                             </a>
                         </div>
                         <div class="product-detail clearfix">
@@ -349,7 +349,7 @@
                                     <input type="hidden" name="cmd" value="_cart">
                                     <input type="hidden" name="add" value="1">
                                     <input type="hidden" name="business" value="">
-                                    <input type="hidden" name="image" value="<%=product.getAvatar()%>">
+<%--                                    <input type="hidden" name="image" value="<%=product.getAvatar()%>">--%>
                                     <input type="hidden" name="item_name" value="<%=product.getName()%>">
                                     <input type="hidden" name="amount" value="<%=product.getPrice()%>">
                                     <input type="hidden" name="discount_amount" value="10000">

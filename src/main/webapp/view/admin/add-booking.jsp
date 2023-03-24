@@ -136,7 +136,7 @@
                             <div class="form-group  col-md-3">
                                 <label class="control-label">Email</label>
                                 <input class="form-control" type="email" name="email"
-                                       value="<%=booking.getEmail()%>">
+                                       value="<%=booking==null?"":booking.getEmail()%>">
                             </div>
                             <div class="form-group  col-md-3">
                                 <label class="control-label">Tel</label>

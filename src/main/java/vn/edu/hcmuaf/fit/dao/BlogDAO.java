@@ -14,7 +14,7 @@ public class BlogDAO extends AbstractDAO {
 
 
     public static void insertBlog(String title, String brief, String detail, String imageFileName) {
-        String sql = "INSERT INTO blog (id, title, briefContent, detail_content, status, avatar, id_type_blog, create_date, id_user_create) " +
+        String sql = "INSERT INTO blogs (id, title, briefContent, detail_content, status, avatar, id_type_blog, create_date, id_user_create) " +
                 "VALUES (NULL, ?, ?, ?, ?, ?, ? ,?, ? )";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -35,8 +35,8 @@ public class BlogDAO extends AbstractDAO {
     public List<BlogModel> findAll() {
         LinkedList<BlogModel> list = new LinkedList<BlogModel>();
 
-        String sql = "select blog.id, title, briefContent, blog.avatar,users.name, create_date " +
-                "from blog join users on blog.id_user_create = users.id";
+        String sql = "select blogs.id, title, briefContent, blogs.avatar,users.name, create_date " +
+                "from blogs join users on blogs.id_user_create = users.id";
 
         conn = getConnection();
 
@@ -74,8 +74,8 @@ public class BlogDAO extends AbstractDAO {
     public List<BlogModel> getNewBlog() {
         LinkedList<BlogModel> list = new LinkedList<BlogModel>();
 
-        String sql = "select blog.id, title, briefContent,blog.avatar, users.name, create_date " +
-                "from blog join users on blog.id_user_create = users.id " +
+        String sql = "select blogs.id, title, briefContent,blogs.avatar, users.name, create_date " +
+                "from blogs join users on blogs.id_user_create = users.id " +
                 "order by id desc limit 3";
 
         conn = getConnection();
@@ -113,10 +113,10 @@ public class BlogDAO extends AbstractDAO {
 
     public static BlogModel getDetailBlogForId(String idBlogPram) {
 
-        String sql = "select blog.id, title, briefContent, detail_content, status, blog.avatar,id_type_blog, type_blog.name_type_blog, create_date, users.name " +
-                "from blog join users on blog.id_user_create = users.id " +
-                "join type_blog on blog.id_type_blog = type_blog.id " +
-                "where blog.id=?";
+        String sql = "select blogs.id, title, briefContent, detail_content, status, blogs.avatar,id_type_blog, type_blogs.name_type_blog, create_date, users.name " +
+                "from blogs join users on blogs.id_user_create = users.id " +
+                "join type_blogs on blogs.id_type_blog = type_blogs.id " +
+                "where blogs.id=?";
 
         conn = getConnection();
 
@@ -157,9 +157,9 @@ public class BlogDAO extends AbstractDAO {
     public static List<BlogModel> getBlogAdmin() {
         LinkedList<BlogModel> list = new LinkedList<BlogModel>();
 
-        String sql = "select blog.id, title, briefContent, detail_content, status, blog.avatar,id_type_blog, type_blog.name_type_blog, create_date, users.name " +
-                "from blog join users on blog.id_user_create = users.id " +
-                "join type_blog on blog.id_type_blog = type_blog.id "+
+        String sql = "select blogs.id, title, briefContent, detail_content, status, blogs.avatar,id_type_blog, type_blogs.name_type_blog, create_date, users.name " +
+                "from blogs join users on blogs.id_user_create = users.id " +
+                "join type_blogs on blogs.id_type_blog = type_blogs.id "+
                 "order by id desc limit 4";
 
         conn = getConnection();
@@ -200,7 +200,7 @@ public class BlogDAO extends AbstractDAO {
     }
     //  Xóa tin tức
     public static void deleteBlog(int id) {
-        String sql = "delete from blog where id = ? ";
+        String sql = "delete from blogs where id = ? ";
         Connection connection = new ConnectToDatabase().getConnect();
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -213,7 +213,7 @@ public class BlogDAO extends AbstractDAO {
     }
 
     public static void update(String id, String title, String brief, String detail,String avatar){
-        String sql = "update blog set title = ?, briefContent = ?,detail_content = ?,avatar=? where id = ?";
+        String sql = "update blogs set title = ?, briefContent = ?,detail_content = ?,avatar=? where id = ?";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ps.setString(1, title);

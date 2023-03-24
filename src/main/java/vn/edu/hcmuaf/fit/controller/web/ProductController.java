@@ -33,7 +33,7 @@ public class ProductController extends HttpServlet {
                         "   </div>\n" +
                         "   <div class=\"search-item-right\">\n" +
                         "       <div class=\"img\">\n" +
-                        "           <img src=\"images/product/" + p.getAvatar() + "\" alt=\"\">\n" +
+//                        "           <img src=\"images/product/" + p.getAvatar() + "\" alt=\"\">\n" +
                         "       </div>\n" +
                         "    </div>\n" +
                         " </div>"
