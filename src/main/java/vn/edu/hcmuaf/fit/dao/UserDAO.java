@@ -115,6 +115,8 @@ public class UserDAO implements ObjectDAO {
                 return 1;
             } else if (user.getPassword().equals(pass) && id == 2) {
                 return 2;
+            } else if (user.getPassword().equals(pass) && id == 3) {
+                return 3;
             } else {
                 return 0;
             }

@@ -42,7 +42,7 @@ public class LoginGoogleController extends HttpServlet {
             request.setAttribute("login", "google");
 
             int checkUserName = new UserDAO().checkLogin(googlePojo.getId(), googlePojo.getId());
-            if (checkUserName == 1) {
+            if (checkUserName == 3) {
                 UserModel usermodel = UserDAO.loadUsername().get(googlePojo.getId());
                 session.setAttribute("userlogin", usermodel);
                 response.sendRedirect("home");
