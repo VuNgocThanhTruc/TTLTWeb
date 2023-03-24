@@ -8,22 +8,35 @@
 <html lang="en">
 
 <head>
-    <title>Quản lý Image | ADMIN</title>
+    <title>Quản lý Hình Ảnh | ADMIN</title>
     <%@include file="../../common/admin/head.jsp" %>
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
 <!-- Navbar-->
-
 <%@include file="../../common/admin/header.jsp" %>
 <!-- Sidebar menu-->
-<% List<ImageModel> listImage = (List<ImageModel>) ImageDAO.loadAllImage();%>
-<%--<% List<ImageModel> imageFooter = (List<ImageModel>) ImageDAO.loadAllImage();%>--%>
 <%@include file="../../common/admin/sidebar.jsp" %>
+<%--<% List<ImageModel> imageFooter = (List<ImageModel>) ImageDAO.loadAllImage();%>--%>
+<%
+    List<ImageModel> listImage = (List<ImageModel>) ImageDAO.loadAllImage();
+    Boolean isGrantAdd = false;
+    Boolean isGrantEdit = false;
+    Boolean isGrantDel = false;
+    for(FunctionModel function : functions){
+        if(function.getName().equals("Add")){
+            isGrantAdd = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+        }else if(function.getName().equals("Edit")){
+            isGrantEdit = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+        }else if(function.getName().equals("Delete")){
+            isGrantDel = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+        }
+    }
+%>
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
-            <li class="breadcrumb-item active"><a href="manage-blog.jsp"><b>Quản lý tin tức</b></a></li>
+            <li class="breadcrumb-item active"><a href="manage-blog.jsp"><b>Quản lý hình ảnh</b></a></li>
         </ul>
         <div id="clock"></div>
     </div>
@@ -33,10 +46,22 @@
                 <div class="tile-body">
                     <div class="row element-button">
                         <div class="col-sm-2">
-
-                            <a class="btn btn-add btn-sm" href="manage-image?type=add" title="Thêm"><i
-                                    class="fas fa-plus"></i>
-                                Tạo mới</a>
+                            <%--Tạo mới--%>
+                            <%if(isGrantAdd == true) {%>
+                                <a class="btn btn-add btn-sm" href="manage-image?type=add" title="Thêm"><i
+                                        class="fas fa-plus"></i>
+                                    Tạo mới</a>
+                            <%} else {%>
+                                <button
+                                        class="btn btn-add btn-sm"
+                                        type="button"
+                                        title="Không có quyền này!"
+                                        style="opacity: 0.5; cursor: not-allowed;"
+                                        disabled
+                                >
+                                    <i class="fas fa-plus"></i> Tạo mới
+                                </button>
+                            <%}%>
                         </div>
 
                         <div class="col-sm-2">
@@ -93,36 +118,55 @@
                                 }
                             %></td>
                             <td>
-
-                                <a href="manage-image?type=del&id=<%=list.getId()%>">
-                                    <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i
-                                            class="fas fa-trash-alt"> </i></button>
-                                </a>
-                                <a href="manage-image?type=edit&id-image=<%=list.getId()%>">
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
-                                            id="show-emp" data-toggle="modal" data-target="#ModalUP"><i
-                                            class="fas fa-edit"></i>
+                                <%--Xóa--%>
+                                <%if(isGrantDel == true) {%>
+                                    <a href="manage-image?type=del&id=<%=list.getId()%>">
+                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa">
+                                            <i class="fas fa-trash-alt"> </i>
+                                        </button>
+                                    </a>
+                                <%} else {%>
+                                    <button
+                                            class="btn btn-primary btn-sm trash"
+                                            type="button"
+                                            title="Không có quyền này!"
+                                            style="opacity: 0.5; cursor: not-allowed;"
+                                            disabled
+                                    >
+                                        <i class="fas fa-trash-alt"></i>
                                     </button>
-                                </a>
+                                <%}%>
+                                <%--Sửa--%>
+                                <%if(isGrantEdit == true) {%>
+                                    <a href="manage-image?type=edit&id-image=<%=list.getId()%>">
+                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
+                                                id="show-emp" data-toggle="modal" data-target="#ModalUP">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </a>
+                                <%} else {%>
+                                    <button
+                                            class="btn btn-primary btn-sm edit"
+                                            type="button"
+                                            title="Không có quyền này!"
+                                            style="opacity: 0.5; cursor: not-allowed;"
+                                            disabled
+                                    >
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                <%}%>
                             </td>
                         </tr>
-
                         <%}%>
-
                         </tbody>
                     </table>
                     <%}%>
-
                 </div>
             </div>
         </div>
     </div>
 </main>
-
-
 <%@include file="../../common/admin/script.jsp" %>
--->
-
 <!-- Essential javascripts for application to work-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="src/jquery.table2excel.js"></script>
@@ -184,7 +228,5 @@
 
     }
 </script>
-
 </body>
-
 </html>

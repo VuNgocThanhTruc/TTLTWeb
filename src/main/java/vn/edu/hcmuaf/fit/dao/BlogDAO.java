@@ -113,9 +113,9 @@ public class BlogDAO extends AbstractDAO {
 
     public static BlogModel getDetailBlogForId(String idBlogPram) {
 
-        String sql = "select blogs.id, title, briefContent, detail_content, status, blogs.avatar,id_type_blog, type_blog.name_type_blog, create_date, users.name " +
+        String sql = "select blogs.id, title, briefContent, detail_content, status, blogs.avatar,id_type_blog, type_blogs.name_type_blog, create_date, users.name " +
                 "from blogs join users on blogs.id_user_create = users.id " +
-                "join type_blog on blogs.id_type_blog = type_blog.id " +
+                "join type_blogs on blogs.id_type_blog = type_blogs.id " +
                 "where blogs.id=?";
 
         conn = getConnection();
@@ -157,9 +157,9 @@ public class BlogDAO extends AbstractDAO {
     public static List<BlogModel> getBlogAdmin() {
         LinkedList<BlogModel> list = new LinkedList<BlogModel>();
 
-        String sql = "select blogs.id, title, briefContent, detail_content, status, blogs.avatar,id_type_blog, type_blog.name_type_blog, create_date, users.name " +
+        String sql = "select blogs.id, title, briefContent, detail_content, status, blogs.avatar,id_type_blog, type_blogs.name_type_blog, create_date, users.name " +
                 "from blogs join users on blogs.id_user_create = users.id " +
-                "join type_blog on blogs.id_type_blog = type_blog.id "+
+                "join type_blogs on blogs.id_type_blog = type_blogs.id "+
                 "order by id desc limit 4";
 
         conn = getConnection();

@@ -13,14 +13,15 @@ import vn.edu.hcmuaf.fit.model.UserModel;
 public class ManageAccountController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
-        //Gọi danh sách tài khoản
-
         AccountService accountService = new AccountService();
-        List<UserModel> listAcc = accountService.getAllUser();
-        request.setAttribute("listAcc", listAcc);
+        //Gọi danh sách tài khoản người dùng
+        List<UserModel> listAccUser = accountService.getListAccountUser();
 
+        //Gọi danh sách tài khoản admin
+        List<UserModel> listAccAdmin = accountService.getListAccountAdmin();
+
+        request.setAttribute("listAccUser", listAccUser);
+        request.setAttribute("listAccAdmin", listAccAdmin);
         request.getRequestDispatcher("/view/admin/manage-account.jsp").forward(request,response);
     }
 

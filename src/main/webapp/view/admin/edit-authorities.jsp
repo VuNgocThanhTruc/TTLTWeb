@@ -73,7 +73,7 @@
                             <table style="font-size: 14px" class="table table-hover table-bordered" id="sampleTable">
                                 <thead>
                                     <tr>
-                                        <th width="70">Thành phần</th>
+                                        <th width="70">Thành phần\Chức năng</th>
                                         <% for(FunctionModel function : functions) { %>
                                             <th style="text-align: center"><%=function.getName()%></th>
                                         <%}%>

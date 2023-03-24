@@ -14,13 +14,28 @@
 <body onload="time()" class="app sidebar-mini rtl">
 <!-- Navbar-->
 <%@include file="../../common/admin/header.jsp" %>
+
+<!-- Sidebar menu-->
+<%@include file="../../common/admin/sidebar.jsp" %>
+
 <%
     List<ProductModel> listProduct = (List<ProductModel>) request.getAttribute("listProduct");
     String pageContextPath = (String) request.getContextPath();
     List<CategoryModel> categoryTypeProduct = (List<CategoryModel>) request.getAttribute("categoryTypeProduct");
+
+    Boolean isGrantAdd = false;
+    Boolean isGrantEdit = false;
+    Boolean isGrantDel = false;
+    for(FunctionModel function : functions){
+        if(function.getName().equals("Add")){
+            isGrantAdd = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+        }else if(function.getName().equals("Edit")){
+            isGrantEdit = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+        }else if(function.getName().equals("Delete")){
+            isGrantDel = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+        }
+    }
 %>
-<!-- Sidebar menu-->
-<%@include file="../../common/admin/sidebar.jsp" %>
 
 <main class="app-content">
     <div class="app-title">
@@ -36,9 +51,21 @@
                 <div class="tile-body">
                     <div class="row element-button">
                         <div class="col-sm-2">
+                            <%if(isGrantAdd == true) {%>
                             <a class="btn btn-add btn-sm" href="manage-product?type=add" title="Thêm"><i
                                     class="fas fa-plus"></i>
                                 Tạo mới sản phẩm</a>
+                            <%} else {%>
+                            <button
+                                    class="btn btn-add btn-sm"
+                                    type="button"
+                                    title="Không có quyền này!"
+                                    style="opacity: 0.5; cursor: not-allowed;"
+                                    disabled
+                            >
+                                <i class="fas fa-plus"></i> Tạo mới sản phẩm
+                            </button>
+                            <%}%>
                         </div>
 
 
@@ -78,10 +105,13 @@
                             </td>
                             <td class="name"><%=product.getName()%>
                             </td>
-                            <td><img
-                                    src="../images/product/<%=product.getAvatar()%>"
-                                    alt="" width="100px;" class="avatar"></td>
-                            <td class="quantity"><%=product.getSumQuantity()%>
+                            <td>
+<%--                                <img--%>
+<%--                                    src="../images/product/<%=product.getAvatar()%>"--%>
+<%--                                    alt="" width="100px;" class="avatar">--%>
+                            </td>
+                            <td class="quantity">
+<%--                                <%=product.getSumQuantity()%>--%>
                             </td>
                             <td><span class="badge bg-success" class="status">Hoàn Thành</span></td>
                             <td class="price"><%=product.getPrice()%>
@@ -100,11 +130,37 @@
                             </td>
 
                             <td>
+                                <%--Xóa product--%>
+                                <%if(isGrantDel == true) {%>
                                 <a class="btn btn-primary btn-sm trash" type="button" title="Xóa" href="manage-product?type=delete&id-product=<%=product.getId()%>"><i class="fas fa-trash-alt"></i></a>
-                                <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp"
-                                        data-toggle="modal" data-target="#ModalEditProduct"
-                                        onclick="editProductBasic(<%=product.getId()%>)"><i class="fas fa-edit"></i>
-                                </button>
+                                <%} else {%>
+                                    <button
+                                            class="btn btn-primary btn-sm trash"
+                                            type="button"
+                                            title="Không có quyền này!"
+                                            style="opacity: 0.5; cursor: not-allowed;"
+                                            disabled
+                                    >
+                                    <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                <%}%>
+                                <%--Sửa product--%>
+                                <%if(isGrantEdit == true) {%>
+                                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp"
+                                            data-toggle="modal" data-target="#ModalEditProduct"
+                                            onclick="editProductBasic(<%=product.getId()%>)"><i class="fas fa-edit"></i>
+                                    </button>
+                                <%} else {%>
+                                    <button
+                                            class="btn btn-primary btn-sm edit"
+                                            type="button"
+                                            title="Không có quyền này!"
+                                            style="opacity: 0.5; cursor: not-allowed;"
+                                            disabled
+                                    >
+                                    <i class="fas fa-edit"></i>
+                                    </button>
+                                <%}%>
                             </td>
                         </tr>
                         <%

@@ -64,13 +64,13 @@
                                     <div class="product-gallery__thumbs thumb-fix">
 
                                         <div class="product-gallery__thumb " id="imgg1">
-                                            <a class="product-gallery__thumb-placeholder" href="javascript:void(0);"
-                                               data-image="images/product/<%=product.getAvatar()%>"
-                                               data-zoom-image="images/product/<%=product.getAvatar()%>">
-                                                <img src="images/product/<%=product.getAvatar()%>"
-                                                     data-image="images/product/<%=product.getAvatar()%>" alt=""
-                                                     grape="">
-                                            </a>
+<%--                                            <a class="product-gallery__thumb-placeholder" href="javascript:void(0);"--%>
+<%--                                               data-image="images/product/<%=product.getAvatar()%>"--%>
+<%--                                               data-zoom-image="images/product/<%=product.getAvatar()%>">--%>
+<%--                                                <img src="images/product/<%=product.getAvatar()%>"--%>
+<%--                                                     data-image="images/product/<%=product.getAvatar()%>" alt=""--%>
+<%--                                                     grape="">--%>
+<%--                                            </a>--%>
                                         </div>
                                     </div>
                                 </div>
@@ -78,15 +78,15 @@
                                     <ul id="sliderproduct" class="site-box-content slide_product">
 
                                         <li class="product-gallery-item gallery-item current " id="imgg1a">
-                                            <img class="product-image-feature "
-                                                 src="images/product/<%=product.getAvatar()%>" alt=""
-                                                 grape="">
+<%--                                            <img class="product-image-feature "--%>
+<%--                                                 src="images/product/<%=product.getAvatar()%>" alt=""--%>
+<%--                                                 grape="">--%>
                                         </li>
 
                                         <li class="product-gallery-item gallery-item " id="imgg2a">
-                                            <img class="product-image-feature"
-                                                 src="images/product/<%=product.getAvatar()%>" alt=""
-                                                 grape="">
+<%--                                            <img class="product-image-feature"--%>
+<%--                                                 src="images/product/<%=product.getAvatar()%>" alt=""--%>
+<%--                                                 grape="">--%>
                                         </li>
 
 
@@ -118,24 +118,24 @@
                                 <div class="owl-carousel owl-theme owl-product-gallery-slide">
                                     <div class=" item">
                                         <div class="product-gallery__thumb ">
-                                            <a class=" product-gallery__thumb-placeholder" href="javascript:void(0);"
-                                               data-image="images/product/<%=product.getAvatar()%>"
-                                               data-zoom-image="images/sanpham/2.jpg">
-                                                <img src="images/product/<%=product.getAvatar()%>"
-                                                     data-image="images/product/<%=product.getAvatar()%>" alt=""
-                                                     grape="">
-                                            </a>
+<%--                                            <a class=" product-gallery__thumb-placeholder" href="javascript:void(0);"--%>
+<%--                                               data-image="images/product/<%=product.getAvatar()%>"--%>
+<%--                                               data-zoom-image="images/sanpham/2.jpg">--%>
+<%--                                                <img src="images/product/<%=product.getAvatar()%>"--%>
+<%--                                                     data-image="images/product/<%=product.getAvatar()%>" alt=""--%>
+<%--                                                     grape="">--%>
+<%--                                            </a>--%>
                                         </div>
                                     </div>
                                     <div class="item">
                                         <div class="product-gallery__thumb ">
-                                            <a class=" product-gallery__thumb-placeholder" href="javascript:void(0);"
-                                               data-image="images/product/<%=product.getAvatar()%>"
-                                               data-zoom-image="images/product/<%=product.getAvatar()%>">
-                                                <img src="images/product/<%=product.getAvatar()%>"
-                                                     data-image="images/product/<%=product.getAvatar()%>" alt=""
-                                                     grape="">
-                                            </a>
+<%--                                            <a class=" product-gallery__thumb-placeholder" href="javascript:void(0);"--%>
+<%--                                               data-image="images/product/<%=product.getAvatar()%>"--%>
+<%--                                               data-zoom-image="images/product/<%=product.getAvatar()%>">--%>
+<%--                                                <img src="images/product/<%=product.getAvatar()%>"--%>
+<%--                                                     data-image="images/product/<%=product.getAvatar()%>" alt=""--%>
+<%--                                                     grape="">--%>
+<%--                                            </a>--%>
                                         </div>
                                     </div>
 
@@ -279,8 +279,8 @@
                                                                 <input type="hidden" name="cmd" value="_cart">
                                                                 <input type="hidden" name="add" value="1">
                                                                 <input type="hidden" name="business" value=" ">
-                                                                <input type="hidden" name="image"
-                                                                       value="<%=product.getAvatar()%>">
+<%--                                                                <input type="hidden" name="image"--%>
+<%--                                                                       value="<%=product.getAvatar()%>">--%>
                                                                 <input type="hidden" name="item_name"
                                                                        value="<%=product.getName()%>">
                                                                 <input type="hidden" name="amount"
@@ -347,8 +347,8 @@
                                     <div class="block-banner-category">
                                         <div class="product-img fade-box">
                                             <a  href="detail-product?id-product=<%=p.getId()%>?id-product=<%=p.getId()%>">
-                                                <img src="images/product/<%=p.getAvatar()%>" alt=""
-                                                     class="lazyloaded">
+<%--                                                <img src="images/product/<%=p.getAvatar()%>" alt=""--%>
+<%--                                                     class="lazyloaded">--%>
                                             </a>
 
                                         </div>
@@ -385,10 +385,10 @@
             </div>
             <div class="owl-carousel owl-theme owl-product1">
 
-                <div class="item"><img src="images/product/<%=product.getAvatar()%>" alt="">
-                </div>
-                <div class="item"><img src="images/product/<%=product.getAvatar()%>" alt="">
-                </div>
+<%--                <div class="item"><img src="images/product/<%=product.getAvatar()%>" alt="">--%>
+<%--                </div>--%>
+<%--                <div class="item"><img src="images/product/<%=product.getAvatar()%>" alt="">--%>
+<%--                </div>--%>
 
 
             </div>

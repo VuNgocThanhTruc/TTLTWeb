@@ -13,11 +13,23 @@
 <body onload="time()" class="app sidebar-mini rtl">
 <!-- Navbar-->
 <%@include file="../../common/admin/header.jsp" %>
-<%
-    List<DetailBookingModel> listDetailBooking = (List<DetailBookingModel>) request.getAttribute("listDetailBooking");
-%>
 <!-- Sidebar menu-->
 <%@include file="../../common/admin/sidebar.jsp" %>
+<%
+    List<DetailBookingModel> listDetailBooking = (List<DetailBookingModel>) request.getAttribute("listDetailBooking");
+    Boolean isGrantAdd = false;
+    Boolean isGrantEdit = false;
+    Boolean isGrantDel = false;
+    for(FunctionModel function : functions){
+        if(function.getName().equals("Add")){
+            isGrantAdd = auth.getDecentralizeFuncOfRole(idRole,"10",function.getId());
+        }else if(function.getName().equals("Edit")){
+            isGrantEdit = auth.getDecentralizeFuncOfRole(idRole,"10",function.getId());
+        }else if(function.getName().equals("Delete")){
+            isGrantDel = auth.getDecentralizeFuncOfRole(idRole,"10",function.getId());
+        }
+    }
+%>
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
@@ -32,9 +44,20 @@
                 <div class="tile-body">
                     <div class="row element-button">
                         <div class="col-sm-2">
-
+                            <%if(isGrantAdd == true) {%>
                             <a class="btn btn-add btn-sm" href="add-order.jsp" title="Thêm"><i class="fas fa-plus"></i>
                                 Thêm mới </a>
+                            <%} else {%>
+                            <button
+                                    class="btn btn-add btn-sm"
+                                    type="button"
+                                    title="Không có quyền này!"
+                                    style="opacity: 0.5; cursor: not-allowed;"
+                                    disabled
+                            >
+                                <i class="fas fa-plus"></i> Tạo mới
+                            </button>
+                            <%}%>
                         </div>
 
                         <%--                        <div class="col-sm-2">--%>
@@ -79,7 +102,7 @@
                                 <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
                                    href="manage-order?type=list&action=delete&id=<%=detail.getId()%>"><i
                                         class="fas fa-trash-alt"></i></a>
-
+                                <%-- --%>
                                 <button class="btn btn-primary btn-sm trash" type="button" title="Sửa"
                                         data-toggle="modal" data-target="#ModalUP"><i
                                         class="fas fa-edit" onclick="editModal(<%=detail.getId()%>)">></i></button>

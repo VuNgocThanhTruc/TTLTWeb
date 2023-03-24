@@ -14,7 +14,6 @@ import java.io.IOException;
 public class AuthorizactionFilter implements Filter {
     private ServletContext context;
 
-
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         this.context = filterConfig.getServletContext();

@@ -156,7 +156,7 @@ public class ProductDAO {
     public static List<ProductModel> getlistProductForBrand(String brandPram) {
         LinkedList<ProductModel> list = new LinkedList<>();
 
-        String sql = "select * from products " + "join brand on brand.id = products.id_s" + "where brand.name=?";
+        String sql = "select * from products " + "join brands on brands.id = products.id_brand " + "where brands.name=?";
 
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);

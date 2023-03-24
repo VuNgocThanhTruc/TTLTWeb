@@ -96,7 +96,8 @@
         <li><a class="app-menu__item" href="manage-customer.jsp"><i class='app-menu__icon bx bx-user-voice'></i><span
                 class="app-menu__label">Quản lý khách hàng</span></a></li>
         <li><a class="app-menu__item" href="manage-product.jsp"><i
-                class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a></li>
+                class='app-menu__icon bx bx-purchase-tag-alt'></i><span class="app-menu__label">Quản lý sản phẩm</span></a>
+        </li>
         <li><a class="app-menu__item" href="manage-order.jsp"><i class='app-menu__icon bx bx-task'></i><span
                 class="app-menu__label">Quản lý đơn hàng</span></a></li>
         <li><a class="app-menu__item" href="manage-booked.jsp"><i class='app-menu__icon bx bx-calendar-check'></i><span
@@ -119,20 +120,20 @@
             <div class="tile">
                 <h3 class="tile-title">Tạo mới đặt lịch</h3>
                 <div class="tile-body">
-<%--                    <div class="row element-button">--%>
-<%--                        <div class="col-sm-2">--%>
-<%--                            <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#exampleModalCenter"><i--%>
-<%--                                    class="fas fa-folder-plus"></i> Thêm thương hiệu</a>--%>
-<%--                        </div>--%>
-<%--                        <div class="col-sm-2">--%>
-<%--                            <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#adddanhmuc"><i--%>
-<%--                                    class="fas fa-folder-plus"></i> Thêm danh mục</a>--%>
-<%--                        </div>--%>
-<%--                        <div class="col-sm-2">--%>
-<%--                            <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#addtinhtrang"><i--%>
-<%--                                    class="fas fa-folder-plus"></i> Thêm tình trạng</a>--%>
-<%--                        </div>--%>
-<%--                    </div>--%>
+                    <%--                    <div class="row element-button">--%>
+                    <%--                        <div class="col-sm-2">--%>
+                    <%--                            <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#exampleModalCenter"><i--%>
+                    <%--                                    class="fas fa-folder-plus"></i> Thêm thương hiệu</a>--%>
+                    <%--                        </div>--%>
+                    <%--                        <div class="col-sm-2">--%>
+                    <%--                            <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#adddanhmuc"><i--%>
+                    <%--                                    class="fas fa-folder-plus"></i> Thêm danh mục</a>--%>
+                    <%--                        </div>--%>
+                    <%--                        <div class="col-sm-2">--%>
+                    <%--                            <a class="btn btn-add btn-sm" data-toggle="modal" data-target="#addtinhtrang"><i--%>
+                    <%--                                    class="fas fa-folder-plus"></i> Thêm tình trạng</a>--%>
+                    <%--                        </div>--%>
+                    <%--                    </div>--%>
                     <form class="row">
                         <div class="form-group col-md-3">
                             <label class="control-label">ID </label>
@@ -166,11 +167,13 @@
                             <textarea class="form-control" name="mota" id="mota"></textarea>
                             <script>CKEDITOR.replace('mota');</script>
                         </div>
-
+                    </form>
                 </div>
-                <button class="btn btn-save" type="button" onclick="save()">Lưu lại</button>
-                <a class="btn btn-cancel" href="manage-booked.jsp">Hủy bỏ</a>
             </div>
+        </div>
+        <button class="btn btn-save" type="button" onclick="save()">Lưu lại</button>
+        <a class="btn btn-cancel" href="manage-booked.jsp">Hủy bỏ</a>
+    </div>
 </main>
 
 
@@ -239,7 +242,7 @@ MODAL DANH MỤC
                     </div>
                 </div>
                 <BR>
-                <button class="btn btn-save" type="button"onclick="save()">Lưu lại</button>
+                <button class="btn btn-save" type="button" onclick="save()">Lưu lại</button>
                 <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
                 <BR>
             </div>
