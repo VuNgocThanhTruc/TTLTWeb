@@ -14,18 +14,29 @@
 
 <body onload="time()" class="app sidebar-mini rtl">
 <!-- Navbar-->
-
 <%@include file="../../common/admin/header.jsp" %>
 <!-- Sidebar menu-->
+<%@include file="../../common/admin/sidebar.jsp" %>
 <%
   List<ContactModel> listContact = (List<ContactModel>) request.getAttribute("listContact");
-
+  Boolean isGrantAdd = false;
+  Boolean isGrantEdit = false;
+  Boolean isGrantDel = false;
+  for(FunctionModel function : functions){
+    if(function.getName().equals("Add")){
+      isGrantAdd = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+    }else if(function.getName().equals("Edit")){
+      isGrantEdit = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+    }else if(function.getName().equals("Delete")){
+      isGrantDel = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+    }
+  }
 %>
-<%@include file="../../common/admin/sidebar.jsp" %>
+
 <main class="app-content">
   <div class="app-title">
     <ul class="app-breadcrumb breadcrumb side">
-      <li class="breadcrumb-item active"><a href="manage-blog.jsp"><b>Quản lý tin tức</b></a></li>
+      <li class="breadcrumb-item active"><a href="manage-blog.jsp"><b>Quản lý liên hệ</b></a></li>
     </ul>
     <div id="clock"></div>
   </div>
@@ -35,10 +46,22 @@
         <div class="tile-body">
           <div class="row element-button">
             <div class="col-sm-2">
-
+              <%--Tạo mới--%>
+                <%if(isGrantAdd == true) {%>
               <a class="btn btn-add btn-sm" href="manage-blog?action=add" title="Thêm"><i
                       class="fas fa-plus"></i>
                 Tạo mới</a>
+                <%} else {%>
+                <button
+                        class="btn btn-add btn-sm"
+                        type="button"
+                        title="Không có quyền này!"
+                        style="opacity: 0.5; cursor: not-allowed;"
+                        disabled
+                >
+                  <i class="fas fa-plus"></i> Tạo mới
+                </button>
+                <%}%>
             </div>
 
             <%--                        <div class="col-sm-2">--%>

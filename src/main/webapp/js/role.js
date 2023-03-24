@@ -1,5 +1,3 @@
-console.log("role")
-
 // click vào thẻ td => focus vào ckeckbox(checked)
 const tds = document.querySelectorAll(".td-role");
 const cbs = document.querySelectorAll(".cb-role");
@@ -16,3 +14,4 @@ cbs.forEach((e) => {
         e.checked = !e.checked;
     })
 })
+

@@ -312,7 +312,8 @@ public class UserDAO implements ObjectDAO {
     public static List<UserModel> getAllUser() {
         List<UserModel> listAllUser = new ArrayList<UserModel>();
         try {
-            ResultSet rs = new ConnectToDatabase().selectData("select * from users");
+            ResultSet rs = new ConnectToDatabase().selectData("select id, name, username,email, password, avatar, tel, id_type_user,\n" +
+                    "                        dob, sex, address from users");
             while (rs.next()) {
                 String id = rs.getString(1);
                 String name = rs.getString(2);
@@ -339,5 +340,63 @@ public class UserDAO implements ObjectDAO {
 
     public static void main(String[] args) {
         UserDAO user = new UserDAO();
+    }
+
+    //Lấy ra toàn bộ tài khoản người dùng
+    public List<UserModel> getListAccountUser() {
+        List<UserModel> listAccountUser = new ArrayList<UserModel>();
+        try {
+            ResultSet rs = new ConnectToDatabase().selectData("select id, name, username,email, password, avatar, tel, id_type_user, dob, sex, address, id_role from users where id_type_user = 1");
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String name = rs.getString("name");
+                String username = rs.getString("username");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String avatar = rs.getString("avatar");
+                String tel = rs.getString("tel");
+                int id_type_user = rs.getInt("id_type_user");
+                String dob = rs.getString("dob");
+                int sex = rs.getInt("sex");
+                String address = rs.getString("address");
+                String idRole = rs.getString("id_role");
+                UserModel user = new UserModel(id, name, username, email, password, avatar, tel, id_type_user,
+                        dob, sex, address, idRole);
+                listAccountUser.add(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("error in UserDAO:" + e.getMessage());
+        }
+        return listAccountUser;
+    }
+
+    //Lấy ra toàn bộ tài khoản admin
+    public List<UserModel> getListAccountAdmin() {
+        List<UserModel> listAccountAdmin = new ArrayList<UserModel>();
+        try {
+            ResultSet rs = new ConnectToDatabase().selectData("select id, name, username,email, password, avatar, tel, id_type_user, dob, sex, address, id_role from users where id_type_user = 2");
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String name = rs.getString("name");
+                String username = rs.getString("username");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String avatar = rs.getString("avatar");
+                String tel = rs.getString("tel");
+                int id_type_user = rs.getInt("id_type_user");
+                String dob = rs.getString("dob");
+                int sex = rs.getInt("sex");
+                String address = rs.getString("address");
+                String idRole = rs.getString("id_role");
+                UserModel user = new UserModel(id, name, username, email, password, avatar, tel, id_type_user,
+                        dob, sex, address, idRole);
+                listAccountAdmin.add(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("error in UserDAO:" + e.getMessage());
+        }
+        return listAccountAdmin;
     }
 }

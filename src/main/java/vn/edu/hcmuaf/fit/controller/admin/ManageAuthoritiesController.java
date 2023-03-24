@@ -87,6 +87,8 @@ public class ManageAuthoritiesController extends HttpServlet {
             String idRole = request.getParameter("id-role");
             String nameRole = request.getParameter("name-role");
             String describeRole = request.getParameter("describe-role");
+            //Cài lại tên và mô tả cho nhóm quyền
+            authoritiesService.updateRole(idRole, nameRole, describeRole);
             //cài lại quyền mặc định cho nhóm quyền
             authoritiesService.resetRole(idRole);
             authoritiesService.print(idRole);

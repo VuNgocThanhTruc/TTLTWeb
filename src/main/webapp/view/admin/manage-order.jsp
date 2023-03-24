@@ -13,9 +13,23 @@
 <body onload="time()" class="app sidebar-mini rtl">
 <!-- Navbar-->
 <%@include file="../../common/admin/header.jsp" %>
-<%List<BookingModel> listBooking = (List<BookingModel>) request.getAttribute("listBooking1");%>
 <!-- Sidebar menu-->
 <%@include file="../../common/admin/sidebar.jsp" %>
+<%
+    List<BookingModel> listBooking = (List<BookingModel>) request.getAttribute("listBooking1");
+    Boolean isGrantAdd = false;
+    Boolean isGrantEdit = false;
+    Boolean isGrantDel = false;
+    for(FunctionModel function : functions){
+        if(function.getName().equals("Add")){
+            isGrantAdd = auth.getDecentralizeFuncOfRole(idRole,"10",function.getId());
+        }else if(function.getName().equals("Edit")){
+            isGrantEdit = auth.getDecentralizeFuncOfRole(idRole,"10",function.getId());
+        }else if(function.getName().equals("Delete")){
+            isGrantDel = auth.getDecentralizeFuncOfRole(idRole,"10",function.getId());
+        }
+    }
+%>
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
@@ -32,9 +46,22 @@
                 <div class="tile-body">
                     <div class="row element-button">
                         <div class="col-sm-2">
-                            <a class="btn btn-add btn-sm" href="manage-order?type=add" title="Thêm"><i
-                                    class="fas fa-plus"></i>
-                                Tạo mới đơn hàng</a>
+                            <%--Tạo đơn hàng--%>
+                            <%if(isGrantAdd == true) {%>
+                                <a class="btn btn-add btn-sm" href="manage-order?type=add" title="Thêm"><i
+                                        class="fas fa-plus"></i>
+                                    Tạo mới đơn hàng</a>
+                            <%} else {%>
+                                <button
+                                        class="btn btn-add btn-sm"
+                                        type="button"
+                                        title="Không có quyền này!"
+                                        style="opacity: 0.5; cursor: not-allowed;"
+                                        disabled
+                                >
+                                    <i class="fas fa-plus"></i> Tạo mới đơn hàng
+                                </button>
+                            <%}%>
                         </div>
 
 
@@ -96,12 +123,38 @@
                                 <a class="btn btn-primary btn-sm warning" type="button" title="Danh sách"
                                    href="manage-order?type=list&id-booking=<%=booking.getId()%>"><i
                                         class="fas fa-folder"></i></a>
-                                <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                   href="manage-order?type=delete&id-booking=<%=booking.getId()%>"><i
-                                        class="fas fa-trash-alt"></i></a>
-                                <a class="btn btn-primary btn-sm edit" type="button" title="Sửa"
-                                   href="manage-order?type=edit&id-booking=<%=booking.getId()%>"><i class="fas fa-edit"></i>
-                                </a>
+                                <%-- Xóa đơn hàng  --%>
+                                <%if(isGrantDel == true) {%>
+                                    <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
+                                       href="manage-order?type=delete&id-booking=<%=booking.getId()%>"><i
+                                            class="fas fa-trash-alt"></i></a>
+                                <%} else {%>
+                                    <button
+                                            class="btn btn-primary btn-sm trash"
+                                            type="button"
+                                            title="Không có quyền này!"
+                                            style="opacity: 0.5; cursor: not-allowed;"
+                                            disabled
+                                    >
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                <%}%>
+                                <%--  Sửa đơn hàng  --%>
+                                <%if(isGrantEdit == true) {%>
+                                    <a class="btn btn-primary btn-sm edit" type="button" title="Sửa"
+                                       href="manage-order?type=edit&id-booking=<%=booking.getId()%>"><i class="fas fa-edit"></i>
+                                    </a>
+                                <%} else {%>
+                                    <button
+                                            class="btn btn-primary btn-sm edit"
+                                            type="button"
+                                            title="Không có quyền này!"
+                                            style="opacity: 0.5; cursor: not-allowed;"
+                                            disabled
+                                    >
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                <%}%>
                             </td>
                         </tr>
                         <%}%>
