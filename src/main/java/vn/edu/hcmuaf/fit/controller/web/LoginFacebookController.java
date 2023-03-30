@@ -42,7 +42,7 @@ public class LoginFacebookController extends HttpServlet {
             request.setAttribute("login", "facebook");
 //            request.setAttribute("avatar", user.getPicture());
             int checkUserName = new UserDAO().checkLogin(user.getId(), user.getId());
-            if (checkUserName == 1) {
+            if (checkUserName == 3) {
                 UserModel usermodel = UserDAO.loadUsername().get(user.getId());
                 session.setAttribute("userlogin", usermodel);
                 response.sendRedirect("home");
@@ -72,7 +72,7 @@ public class LoginFacebookController extends HttpServlet {
 
             System.out.println(id + " " + name + " " + email + " " + tel + " " + sex + " " + dob);
             UserDAO userdao = new UserDAO();
-            userdao.signupWithFb(id, name, email, tel, sex, dob);
+            userdao.signupWithAPI(id, name, email, tel, sex, dob);
             UserModel user = UserDAO.loadUsername().get(id);
             session.setAttribute("userlogin", user);
             response.sendRedirect("home");

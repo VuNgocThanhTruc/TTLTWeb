@@ -2,6 +2,7 @@ package vn.edu.hcmuaf.fit.controller.web;
 
 import vn.edu.hcmuaf.fit.dao.UserDAO;
 import vn.edu.hcmuaf.fit.model.UserModel;
+import vn.edu.hcmuaf.fit.util.Encode;
 
 
 import javax.servlet.ServletException;
@@ -28,8 +29,9 @@ public class LoginController extends HttpServlet {
         HttpSession session = request.getSession();
 
         String action = request.getParameter("action");
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
+//        String username = request.getParameter("username");
+//        String password = request.getParameter("password");
+//        password = Encode.toSHA1(password);
         System.out.println("doget: " + action);
         if (action == null) {
 
@@ -61,6 +63,7 @@ public class LoginController extends HttpServlet {
         } else if (action.equals("login")) {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
+            password = Encode.toSHA1(password);
 
             int checkUserName = new UserDAO().checkLogin(username, password);
             int checkEmail = new UserDAO().checkLoginbyEmail(username, password);
@@ -97,6 +100,7 @@ public class LoginController extends HttpServlet {
         } else if (action.equals("logout")) {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
+            password = Encode.toSHA1(password);
             String hovaten = request.getParameter("hovaten");
             String email = request.getParameter("email");
             String dob = request.getParameter("dob");
