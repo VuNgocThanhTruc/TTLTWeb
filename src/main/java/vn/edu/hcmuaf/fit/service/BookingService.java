@@ -7,6 +7,10 @@ import vn.edu.hcmuaf.fit.model.DetailBookingModel;
 import java.util.List;
 
 public class BookingService {
+
+    public static List<BookingModel> getListBookedByIdUser(int idUser) {
+        return BookingDAO.getListBookedByIDUser(idUser);
+    }
     public static List<BookingModel> getListBooking(int status) {
         return BookingDAO.getListBooking(status);
     }
