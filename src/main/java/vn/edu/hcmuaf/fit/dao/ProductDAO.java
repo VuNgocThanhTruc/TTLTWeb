@@ -2,9 +2,7 @@ package vn.edu.hcmuaf.fit.dao;
 
 import vn.edu.hcmuaf.fit.db.ConnectToDatabase;
 import vn.edu.hcmuaf.fit.db.DBConnect;
-import vn.edu.hcmuaf.fit.model.CategoryModel;
-import vn.edu.hcmuaf.fit.model.LibraryImageModel;
-import vn.edu.hcmuaf.fit.model.ProductModel;
+import vn.edu.hcmuaf.fit.model.*;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -327,9 +325,7 @@ public class ProductDAO {
     public static List<ProductModel> getDifferentProduct() {
         LinkedList<ProductModel> list = new LinkedList<ProductModel>();
 
-        String sql = "select * from products " +
-                "ORDER BY RAND() " +
-                "limit 4 ";
+        String sql = "select * from products " + "ORDER BY RAND() " + "limit 4 ";
 
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -376,6 +372,37 @@ public class ProductDAO {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ps.setString(1, name);
             ps.executeUpdate();
+            return true;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    //    rate & review product
+    public static boolean insertRateReview(int idProduct, int rate, int idUser, String content) {
+
+        String sql = "Insert into rate_products(`id_product`,`rate`,`id_user`) " + "values (?,?,?)";
+        try {
+            PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
+            ps.setInt(1, idProduct);
+            ps.setInt(2, rate);
+            ps.setInt(3, idUser);
+            ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            int lastInsertId = 0;
+            if (rs.next()) {
+                lastInsertId = rs.getInt(1);
+            }
+
+            sql = "Insert into comments(`id_rate_product`,`content`,`create_by`) " + "values (?,?,?)";
+
+            ps = DBConnect.getInstall().preStatement(sql);
+            ps.setInt(1, lastInsertId);
+            ps.setString(2, content);
+            ps.setInt(3, idUser);
+            ps.executeUpdate();
+
             return true;
         } catch (Exception ex) {
             throw new RuntimeException(ex);

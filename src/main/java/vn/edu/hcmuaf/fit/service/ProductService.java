@@ -14,6 +14,7 @@ public class ProductService {
     public static List<ProductModel> getListProduct() {
         return ProductDAO.findAll();
     }
+
     public static List<ProductModel> getTop8() {
         return ProductDAO.getTop8();
     }
@@ -43,8 +44,8 @@ public class ProductService {
         return ProductDAO.getListProductBySearch(searchPram);
     }
 
-    public boolean addNewProduct( String name, String avatar, int id_type_product, int id_status_device, int id_brand, int price, int sum_quantity, String describe, int id_store) {
-        return ProductDAO.addNewProduct( name, avatar, id_type_product, id_status_device, id_brand, price, sum_quantity, describe, id_store);
+    public boolean addNewProduct(String name, String avatar, int id_type_product, int id_status_device, int id_brand, int price, int sum_quantity, String describe, int id_store) {
+        return ProductDAO.addNewProduct(name, avatar, id_type_product, id_status_device, id_brand, price, sum_quantity, describe, id_store);
     }
 
     public static boolean updateProductBasic(int id, String name, int sumQuantity, int id_status_device, int price, int id_type_product) {
@@ -61,6 +62,10 @@ public class ProductService {
 
     public static boolean insertBrand(String name) {
         return ProductDAO.insertBrand(name);
+    }
+
+    public static boolean insertRateReview(int idProduct, int rate, int idUser, String content) {
+        return ProductDAO.insertRateReview(idProduct, rate, idUser, content);
     }
 
     public static void main(String[] args) {
