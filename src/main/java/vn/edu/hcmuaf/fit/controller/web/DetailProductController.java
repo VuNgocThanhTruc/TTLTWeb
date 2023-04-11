@@ -30,6 +30,9 @@ public class DetailProductController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int idProduct = Integer.parseInt(request.getParameter("id-product"));
+
+
 
     }
 }

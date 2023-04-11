@@ -382,6 +382,7 @@ public class ProductDAO {
         }
     }
 
+
     public static void main(String[] args) {
         System.out.println(ProductDAO.getDifferentProduct());
 //        System.out.println(ProductDAO.updateProduct(2, "Thay cụm đuôi sạc Samsung Galaxy A02 A022F","thay-cum-duoi-sac-samsung-galaxy-a02-a022f_1667623123.png",4,1,1,  500000,100,"test", 1));
