@@ -3,6 +3,7 @@ package vn.edu.hcmuaf.fit.service;
 import vn.edu.hcmuaf.fit.dao.ProductDAO;
 import vn.edu.hcmuaf.fit.model.CategoryModel;
 import vn.edu.hcmuaf.fit.model.ProductModel;
+import vn.edu.hcmuaf.fit.model.RateReviewModel;
 
 import java.util.List;
 
@@ -66,6 +67,9 @@ public class ProductService {
 
     public static boolean insertRateReview(int idProduct, int rate, int idUser, String content) {
         return ProductDAO.insertRateReview(idProduct, rate, idUser, content);
+    }
+    public static List<RateReviewModel> getListCommentByIdProduct(int idProduct) {
+        return ProductDAO.getListCommentByIdProduct(idProduct);
     }
 
     public static void main(String[] args) {

@@ -12,7 +12,9 @@
 </head>
 
 <body>
-<%List<ProductModel> pro = (List<ProductModel>) request.getAttribute("pro");%>
+<%List<ProductModel> pro = (List<ProductModel>) request.getAttribute("pro");
+    List<RateReviewModel> listRate = (List<RateReviewModel>) request.getAttribute("listRate");
+%>
 <%ProductModel product = (ProductModel) request.getAttribute("product");%>
 <%@include file="../../common/web/header.jsp" %>
 
@@ -419,14 +421,19 @@
                             </div>
                         </form>
 
+
+                        <%
+                            for (RateReviewModel rate : listRate) {%>
                         <div class="product-list-comment">
                             <div class="info-user">
-                                <img src="images/user/no-avatar.jpg">
-                                <p>No name</p>
-                                <div class="rated">*****</div>
-                                <div class="content-comment">Test</div>
+                                <img width="50px" height="50px" src="images/user/<%=rate.getUser().getAvatar()%>">
+                                <p><%=rate.getUser().getName()%></p>
+                                <div class="rated"><%=rate.getRate()%></div>
+                                <div class="content-comment"><%=rate.getCommentModel().getContent()%></div>
+                                <div class="create-at"><%=rate.getCommentModel().getCreateAt()%></div>
                             </div>
                         </div>
+                        <%}%>
                     </div>
 
                     <div class="list-productRelated clearfix">

@@ -1,6 +1,7 @@
 package vn.edu.hcmuaf.fit.controller.web;
 
 import vn.edu.hcmuaf.fit.model.ProductModel;
+import vn.edu.hcmuaf.fit.model.RateReviewModel;
 import vn.edu.hcmuaf.fit.model.UserModel;
 import vn.edu.hcmuaf.fit.service.ProductService;
 
@@ -23,9 +24,12 @@ public class DetailProductController extends HttpServlet {
         ProductService productService = new ProductService();
         ProductModel product = productService.getDetailProduct(idProduct);
         List<ProductModel> pro = ProductService.getDifferentProduct();
+        List<RateReviewModel> listRate = ProductService.getListCommentByIdProduct(idProduct);
+
 
         request.setAttribute("pro", pro);
         request.setAttribute("product", product);
+        request.setAttribute("listRate", listRate);
 
         request.getRequestDispatcher("view/web/detailProduct.jsp").forward(request, response);
     }
@@ -35,9 +39,11 @@ public class DetailProductController extends HttpServlet {
         int idProduct = Integer.parseInt(request.getParameter("id-product"));
         ProductService productService = new ProductService();
         ProductModel product = productService.getDetailProduct(idProduct);
+        List<RateReviewModel> listRate = ProductService.getListCommentByIdProduct(idProduct);
         List<ProductModel> pro = ProductService.getDifferentProduct();
         int rate = Integer.parseInt(request.getParameter("rate_value"));
         String content = request.getParameter("comment");
+
 
         HttpSession session = request.getSession();
         UserModel userModel = (UserModel) session.getAttribute("userlogin");
@@ -46,6 +52,7 @@ public class DetailProductController extends HttpServlet {
         boolean isInsertRateReview = ProductService.insertRateReview(idProduct, rate, idUser, content);
         session.setAttribute("isInsertRateReview", isInsertRateReview);
 
+        request.setAttribute("listRate", listRate);
         request.setAttribute("pro", pro);
         request.setAttribute("product", product);
         request.getRequestDispatcher("view/web/detailProduct.jsp").forward(request, response);

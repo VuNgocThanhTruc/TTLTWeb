@@ -378,6 +378,43 @@ public class ProductDAO {
         }
     }
 
+    public static List<RateReviewModel> getListCommentByIdProduct(int idProduct) {
+        LinkedList<RateReviewModel> list = new LinkedList<>();
+
+        String sql = "select u.avatar avatar, u.name name, r.rate rate, c.content content, c.create_at createAt from " +
+                    "rate_products r join users u on r.id_user=u.id " +
+                    "join comments c on c.id_rate_product=r.id " +
+                    "where r.id_product="+ idProduct+
+                    " order by r.id desc";
+
+        try {
+            PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
+//            ps.setInt(1,idProduct);
+            ResultSet rs = ps.executeQuery(sql);
+            while (rs.next()) {
+
+                UserModel user = new UserModel();
+                user.setAvatar(rs.getString("avatar"));
+                user.setName(rs.getString("name"));
+
+                CommentModel comment = new CommentModel();
+                comment.setContent(rs.getString("content"));
+                comment.setCreateAt(rs.getTimestamp("createAt"));
+
+                RateReviewModel rateReviewModel = new RateReviewModel();
+                rateReviewModel.setRate(rs.getInt("rate"));
+                rateReviewModel.setUser(user);
+                rateReviewModel.setIdProduct(idProduct);
+                rateReviewModel.setCommentModel(comment);
+
+                list.add(rateReviewModel);
+            }
+            return list;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     //    rate & review product
     public static boolean insertRateReview(int idProduct, int rate, int idUser, String content) {
 
