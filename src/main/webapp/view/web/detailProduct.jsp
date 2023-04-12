@@ -1,5 +1,6 @@
 <%@ page import="vn.edu.hcmuaf.fit.model.ProductModel" %>
 <%@ page import="vn.edu.hcmuaf.fit.service.ProductService" %>
+<%@ page import="vn.edu.hcmuaf.fit.constant.APIConstants" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="../../common/taglib.jsp" %>
 
@@ -12,7 +13,8 @@
 </head>
 
 <body>
-<%List<ProductModel> pro = (List<ProductModel>) request.getAttribute("pro");
+<%
+    List<ProductModel> pro = (List<ProductModel>) request.getAttribute("pro");
     List<RateReviewModel> listRate = (List<RateReviewModel>) request.getAttribute("listRate");
 %>
 <%ProductModel product = (ProductModel) request.getAttribute("product");%>
@@ -144,34 +146,6 @@
 
                                 </div>
                             </div>
-                            <!-- Flickity HTML init -->
-
-                            <!--                            <div id="product-zoom-in1" class="product-zoom icon-pr-fix-->
-                            <!--                  hidden-md hidden-sm" style="padding-top:2rem;"-->
-                            <!--                                 aria-label="Zoom in" title="Zoom in">-->
-                            <!--                  <span class="zoom-in" aria-hidden="true">-->
-                            <!--                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg"-->
-                            <!--                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"-->
-                            <!--                         y="0px"-->
-                            <!--                         viewBox="0 0 36 36"-->
-                            <!--                         style="enable-background:new 0 0 36 36; width: 40px;-->
-                            <!--                      height: 40px;"-->
-                            <!--                         xml:space="preserve">-->
-                            <!--                      <polyline points="6,14 9,11 14,16 16,14 11,9 14,6-->
-                            <!--                        6,6">-->
-                            <!--                      </polyline>-->
-                            <!--                      <polyline points="22,6 25,9 20,14 22,16 27,11 30,14-->
-                            <!--                        30,6">-->
-                            <!--                      </polyline>-->
-                            <!--                      <polyline points="30,22 27,25 22,20 20,22 25,27-->
-                            <!--                        22,30 30,30">-->
-                            <!--                      </polyline>-->
-                            <!--                      <polyline points="14,30 11,27 16,22 14,20 9,25 6,22-->
-                            <!--                        6,30">-->
-                            <!--                      </polyline>-->
-                            <!--                    </svg>-->
-                            <!--                  </span>-->
-                            <!--                            </div>-->
                         </div>
                         <div class="col-md-5 col-sm-12 col-xs-12
                 product-content-desc" id="detail-product">
@@ -184,6 +158,16 @@
                                 <div class="product-price" id="price-preview"><span
                                         class="pro-price"><%=product.getPrice()%>₫</span>
                                 </div>
+                                <div class="product-price" id="delivery">
+                                    <span>Giao đến: </span>
+                                    <span class="address">Q. 3, P. 01, Hồ Chí Minh</span>
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-primary"
+                                            data-toggle="modal" data-target="#modalGetAddress">
+                                        Đổi địa chỉ
+                                    </button>
+                                </div>
+
                                 <form id="add-item-form" action="" method="post" class="variants clearfix">
                                     <div class="select clearfix">
                                         <div class="selector-wrapper"><label for="product-select-option-0">Màu
@@ -225,11 +209,9 @@
                                                     <input class="variant-1" id="swatch-1-Zin" type="radio"
                                                            name="option2" value="Zin"
                                                            data-vhandle="Zin" checked="">
-
                                                     <label for="swatch-1-Zin" class="sd">
                                                         <span>Zin</span>
                                                     </label>
-
                                                 </div>
                                                 <!--                                                <div data-value="L" class="n-sd swatch-element L">-->
                                                 <!--                                                    <input class="variant-1" id="swatch-1-L" type="radio" name="option2"-->
@@ -427,10 +409,14 @@
                         <div class="product-list-comment">
                             <div class="info-user">
                                 <img width="50px" height="50px" src="images/user/<%=rate.getUser().getAvatar()%>">
-                                <p><%=rate.getUser().getName()%></p>
-                                <div class="rated"><%=rate.getRate()%></div>
-                                <div class="content-comment"><%=rate.getCommentModel().getContent()%></div>
-                                <div class="create-at"><%=rate.getCommentModel().getCreateAt()%></div>
+                                <p><%=rate.getUser().getName()%>
+                                </p>
+                                <div class="rated"><%=rate.getRate()%>
+                                </div>
+                                <div class="content-comment"><%=rate.getCommentModel().getContent()%>
+                                </div>
+                                <div class="create-at"><%=rate.getCommentModel().getCreateAt()%>
+                                </div>
                             </div>
                         </div>
                         <%}%>
@@ -505,12 +491,94 @@
         </div>
     </div>
 
+    <!-- Modal address API -->
+    <div class="modal fade" id="modalGetAddress" tabindex="-1" role="dialog" aria-labelledby="modalGetAddressTitle"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalGetAddressTitle">Địa chỉ giao hàng</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <p>Tỉnh/Thành phố</p>
+                        <select class="select-province form-select" aria-label="Default select example">
+                            <option selected>Vui lòng chọn Tỉnh/Thành phố</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary getAPIAddress">Giao đến địa chỉ này</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </main>
 
 <%@include file="../../common/web/footer.jsp" %>
 
 <script src="js/divzoom.js"></script>
 <script src="js/rate&review.js"></script>
+<script>
+
+    var logisticIDToken = "";
+
+    function autoLoginLogisticAPI() {
+        $.ajax({
+            url: "<%=APIConstants.LOGISTIC_HOST_API%>/auth/login",
+            type: "POST",
+            dataType: "json",
+            data: {
+                'email': '<%=APIConstants.LOGISTIC_EMAIL_LOGIN%>',
+                'password': '<%=APIConstants.LOGISTIC_PASSWORD_LOGIN%>'
+            },
+            success: function (data) {
+                // Xử lý dữ liệu trả về ở đây
+                console.log(data);
+                logisticIDToken = data.access_token
+                console.log(logisticIDToken);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $(".getAPIAddress").click(function () {
+            autoLoginLogisticAPI()
+            console.log(logisticIDToken)
+            let tagSelectModalGetProvince = document.querySelector('.select-province')
+            $.ajax({
+                url: "<%=APIConstants.LOGISTIC_HOST_API%>/province",
+                type: "GET",
+                dataType: "json",
+                headers: {
+                    'Authorization': 'Bearer ' + logisticIDToken
+                },
+                success: function (data) {
+                    // Xử lý dữ liệu trả về ở đây
+                    console.log(data.original.data);
+
+                    for (let i = 0; i < data.original.data.length; i++) {
+                        let option = document.createElement("option");
+                        option.value = `${data.original.data[i].ProvinceID}`;
+                        option.text = `${data.original.data[i].ProvinceName}`;
+                        tagSelectModalGetProvince.appendChild(option);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        });
+    });
+</script>
 
 </body>
 </html>
