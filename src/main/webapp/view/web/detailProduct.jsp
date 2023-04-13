@@ -509,6 +509,18 @@
                             <option selected>Vui lòng chọn Tỉnh/Thành phố</option>
                         </select>
                     </div>
+                    <div class="row">
+                        <p>Quận/Huyện</p>
+                        <select class="select-district form-select" aria-label="Default select example">
+                            <option selected>Vui lòng chọn Quận/Huyện</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <p>Phường/Xã</p>
+                        <select class="select-ward form-select" aria-label="Default select example">
+                            <option selected>Vui lòng chọn Phường/Xã</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
@@ -528,7 +540,7 @@
 
     var logisticIDToken = "";
 
-    function autoLoginLogisticAPI() {
+    async function autoLoginLogisticAPI() {
         $.ajax({
             url: "<%=APIConstants.LOGISTIC_HOST_API%>/auth/login",
             type: "POST",
@@ -539,9 +551,8 @@
             },
             success: function (data) {
                 // Xử lý dữ liệu trả về ở đây
-                console.log(data);
                 logisticIDToken = data.access_token
-                console.log(logisticIDToken);
+                // return data.access_token
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
@@ -550,8 +561,8 @@
     }
 
     $(document).ready(function () {
-        $(".getAPIAddress").click(function () {
-            autoLoginLogisticAPI()
+        $(".getAPIAddress").click(async function () {
+            await autoLoginLogisticAPI()
             console.log(logisticIDToken)
             let tagSelectModalGetProvince = document.querySelector('.select-province')
             $.ajax({
@@ -577,7 +588,70 @@
                 }
             });
         });
+
+        $(".getAPIAddress").click(async function () {
+            await autoLoginLogisticAPI()
+            console.log(logisticIDToken)
+            let tagSelectModalGetDistrict = document.querySelector('.select-district')
+            $.ajax({
+                url: "<%=APIConstants.LOGISTIC_HOST_API%>/district",
+                type: "GET",
+                dataType: "json",
+                headers: {
+                    'Authorization': 'Bearer ' + logisticIDToken
+                },data: {
+                    provinceID: 269
+                },
+                success: function (data) {
+                    // Xử lý dữ liệu trả về ở đây
+                    console.log(data);
+
+                    for (let i = 0; i < data.original.data.length; i++) {
+                        let option = document.createElement("option");
+                        option.value = `${data.original.data[i].DistrictID}`;
+                        option.text = `${data.original.data[i].DistrictName}`;
+                        tagSelectModalGetDistrict.appendChild(option);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        });
+
+        $(".getAPIAddress").click(async function () {
+            await autoLoginLogisticAPI()
+            console.log(logisticIDToken)
+            let tagSelectModalGetWard = document.querySelector('.select-ward')
+            $.ajax({
+                url: "<%=APIConstants.LOGISTIC_HOST_API%>/ward",
+                type: "GET",
+                dataType: "json",
+                headers: {
+                    'Authorization': 'Bearer ' + logisticIDToken
+                },data: {
+                    districtID: 2264
+                },
+                success: function (data) {
+                    // Xử lý dữ liệu trả về ở đây
+                    console.log(data);
+
+                    for (let i = 0; i < data.original.data.length; i++) {
+                        let option = document.createElement("option");
+                        option.value = `${data.original.data[i].WardID}`;
+                        option.text = `${data.original.data[i].WardName}`;
+                        tagSelectModalGetWard.appendChild(option);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        });
     });
+
+
+
 </script>
 
 </body>
