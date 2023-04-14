@@ -17,6 +17,7 @@
 <%@include file="../../common/admin/sidebar.jsp" %>
 <%
     List<DetailBookingModel> listDetailBooking = (List<DetailBookingModel>) request.getAttribute("listDetailBooking");
+    String idBooking =(String) request.getAttribute("idBooking");
     Boolean isGrantAdd = false;
     Boolean isGrantEdit = false;
     Boolean isGrantDel = false;
@@ -70,6 +71,11 @@
                             <a class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i
                                     class="fas fa-trash-alt"></i> Xóa tất cả </a>
                         </div>
+
+                        <div class="col-sm-2">
+                            <a href="manage-order?type=exportExcelDetail&idBooking=<%=idBooking%>" class="btn" type="button" title="Xuất dữ liệu" style="line-height: 0px;border: 1px solid #000000; font-size: 13px; padding: 5px 10px"
+                            ><i class='bx bxs-file-export'></i> Xuất Excel</a>
+                        </div>
                     </div>
                     <table class="table table-hover table-bordered" id="sampleTable">
                         <thead>
@@ -105,7 +111,7 @@
                                 <%-- --%>
                                 <button class="btn btn-primary btn-sm trash" type="button" title="Sửa"
                                         data-toggle="modal" data-target="#ModalUP"><i
-                                        class="fas fa-edit" onclick="editModal(<%=detail.getId()%>)">></i></button>
+                                        class="fas fa-edit" onclick="editModal(<%=detail.getId()%>)"></i></button>
 
                                 <a class="btn btn-primary btn-sm edit" type="button" title="Sửa"
                                    href="manage-order?type=list&action=edit&id=<%=detail.getId()%>"><i

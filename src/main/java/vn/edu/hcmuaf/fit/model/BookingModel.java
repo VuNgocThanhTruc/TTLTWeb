@@ -91,6 +91,16 @@ public class BookingModel {
         return status_booking;
     }
 
+    public String getString_Status_booking(){
+        if(this.getStatus_booking() == 1){
+            return "Đã xác nhận";
+        }else if(this.getStatus_booking() == -1){
+            return "Đã hủy";
+        }else{
+            return "Chưa xác nhận";
+        }
+    }
+
     public void setStatus_booking(int status_booking) {
         this.status_booking = status_booking;
     }
