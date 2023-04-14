@@ -2,6 +2,7 @@ package vn.edu.hcmuaf.fit.service;
 
 import vn.edu.hcmuaf.fit.dao.ProductDAO;
 import vn.edu.hcmuaf.fit.model.CategoryModel;
+import vn.edu.hcmuaf.fit.model.InventoriesModel;
 import vn.edu.hcmuaf.fit.model.ProductModel;
 import vn.edu.hcmuaf.fit.model.RateReviewModel;
 
@@ -35,6 +36,9 @@ public class ProductService {
 
     public static ProductModel getDetailProduct(int idProduct) {
         return ProductDAO.getDetailProduct(idProduct);
+    }
+    public static InventoriesModel getInventores(int idProduct) {
+        return ProductDAO.getInventoriesByID(idProduct);
     }
 
     public List<ProductModel> getListProductForBrand(String brandPram) {

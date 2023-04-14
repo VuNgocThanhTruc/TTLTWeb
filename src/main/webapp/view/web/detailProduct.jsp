@@ -16,15 +16,17 @@
 <%
     List<ProductModel> pro = (List<ProductModel>) request.getAttribute("pro");
     List<RateReviewModel> listRate = (List<RateReviewModel>) request.getAttribute("listRate");
+
 %>
-<%ProductModel product = (ProductModel) request.getAttribute("product");%>
+<%ProductModel product = (ProductModel) request.getAttribute("product");
+InventoriesModel inventories = (InventoriesModel) request.getAttribute("inventoriesList");%>
+
 <%@include file="../../common/web/header.jsp" %>
 
 <!--  detail product -->
 <main class="">
 
     <div id="product" class="productDetail-page">
-
         <!--  menu header seo -->
         <div class="breadcrumb-shop">
             <div class="container">
@@ -153,7 +155,8 @@
                                 <div class="product-title">
                                     <h1><%=product.getName()%>
                                     </h1>
-                                    <span id="pro_sku">ID: <%=product.getId()%></span>
+<%--                                    <span id="pro_sku">ID: <%=product.getId()%></span>--%>
+                                    <span id="pro_sku">SL: <%= inventories.getQuantity()%></span>
                                 </div>
                                 <div class="product-price" id="price-preview"><span
                                         class="pro-price"><%=product.getPrice()%>₫</span>
