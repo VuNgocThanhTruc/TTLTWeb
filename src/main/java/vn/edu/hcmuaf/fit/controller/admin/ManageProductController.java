@@ -5,9 +5,15 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import vn.edu.hcmuaf.fit.constant.SystemConstant;
 import vn.edu.hcmuaf.fit.dao.ProductDAO;
+import vn.edu.hcmuaf.fit.model.ProductModel;
 import vn.edu.hcmuaf.fit.service.CategorySevice;
+import vn.edu.hcmuaf.fit.service.ExportService;
 import vn.edu.hcmuaf.fit.service.ProductService;
 
 import javax.servlet.ServletException;
@@ -59,7 +65,12 @@ public class ManageProductController extends HttpServlet {
             }
             request.setAttribute("listProduct", ProductService.getListProduct());
             view = "/view/admin/manage-product.jsp";
-        } else if (typeParam == null) {
+        } else if(SystemConstant.EXPORT.equals(typeParam)){
+            //Export Data
+            ExportService exportService = new ExportService();
+            exportService.exportProduct(request, response);
+            view = "/view/admin/manage-product.jsp";
+        }else if (typeParam == null) {
             view = "/view/admin/manage-product.jsp";
             request.setAttribute("listProduct", ProductService.getListProduct());
         }
@@ -195,5 +206,4 @@ public class ManageProductController extends HttpServlet {
             return null;
         }
     }
-
 }

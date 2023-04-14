@@ -4,6 +4,7 @@ import vn.edu.hcmuaf.fit.dao.BookingDAO;
 import vn.edu.hcmuaf.fit.model.BookingModel;
 import vn.edu.hcmuaf.fit.model.UserModel;
 import vn.edu.hcmuaf.fit.service.BookingService;
+import vn.edu.hcmuaf.fit.service.ExportService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,6 +28,7 @@ public class ManageOrderController extends HttpServlet {
             } else if (typeParam.equals("list")) {
                 String idBooking = request.getParameter("id-booking");
                 if (idBooking != null) {
+                    request.setAttribute("idBooking", idBooking);
                     request.setAttribute("listDetailBooking", BookingService.getListDetailBooking(idBooking));
                     view = "/view/admin/listDetailBooking.jsp";
                 }
@@ -38,6 +40,11 @@ public class ManageOrderController extends HttpServlet {
                 }
             } else if (typeParam.equals("add")) {
                 view = "/view/admin/add-booking.jsp";
+            }else if (typeParam.equals("exportExcel")) {
+                ExportService.exportOrder(request,response);
+            } else if(typeParam.equals("exportExcelDetail")){
+                String idBooking = request.getParameter("idBooking");
+                ExportService.exportOrderDetail(idBooking, request, response);
             }
         }
 

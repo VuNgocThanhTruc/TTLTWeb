@@ -1,5 +1,5 @@
 package vn.edu.hcmuaf.fit.model;
-
+import vn.edu.hcmuaf.fit.service.CategorySevice;
 import java.util.List;
 
 public class ProductModel {
@@ -94,6 +94,19 @@ public class ProductModel {
         this.describe = describe;
     }
 
+    public String getCategory(int idTypeProduct){
+        String result = "";
+        List<CategoryModel>  listBrand = CategorySevice.getListTypeProduct();
+        for (CategoryModel category: listBrand) {
+            System.out.println("category: " + category + ", idTypeProduct: " +idTypeProduct);
+            if(category.getId() == idTypeProduct){
+                System.out.println("category true: " + category + ", idTypeProduct: " +idTypeProduct);
+                result = category.getName();
+                break;
+            }
+        }
+        return result;
+    }
     @Override
     public String toString() {
         return "ProductModel{" + "id=" + id + ", name='" + name + '\'' + ", price=" + price + ", idBrand=" + idBrand + ", idTypeProduct=" + idTypeProduct + ", idStatusDevice=" + idStatusDevice + ", describe='" + describe + '\'' + '}';
