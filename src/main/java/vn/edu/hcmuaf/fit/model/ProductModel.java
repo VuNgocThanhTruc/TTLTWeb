@@ -1,7 +1,5 @@
 package vn.edu.hcmuaf.fit.model;
-
 import vn.edu.hcmuaf.fit.service.CategorySevice;
-
 import java.util.List;
 
 public class ProductModel {
@@ -12,11 +10,21 @@ public class ProductModel {
     private int idBrand;
     private long price;
     private String describe;
-    //    private String avatar;
+
+    public List<LibraryImageModel> getListImage() {
+        return listImage;
+    }
+
+    public void setListImage(List<LibraryImageModel> listImage) {
+        this.listImage = listImage;
+    }
+
+    private List<LibraryImageModel> listImage;
+
     public ProductModel() {
     }
 
-    public ProductModel(int id, String name, int idTypeProduct, int idStatusDevice, int idBrand, long price, String describe) {
+    public ProductModel(int id, String name, int idTypeProduct, int idStatusDevice, int idBrand, long price, String describe,List<LibraryImageModel> listImage) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -24,6 +32,7 @@ public class ProductModel {
         this.idTypeProduct = idTypeProduct;
         this.idStatusDevice = idStatusDevice;
         this.describe = describe;
+        this.listImage = listImage;
     }
 
     public int getId() {
@@ -100,14 +109,6 @@ public class ProductModel {
     }
     @Override
     public String toString() {
-        return "ProductModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", price=" + price +
-                ", idBrand=" + idBrand +
-                ", idTypeProduct=" + idTypeProduct +
-                ", idStatusDevice=" + idStatusDevice +
-                ", describe='" + describe + '\'' +
-                '}';
+        return "ProductModel{" + "id=" + id + ", name='" + name + '\'' + ", price=" + price + ", idBrand=" + idBrand + ", idTypeProduct=" + idTypeProduct + ", idStatusDevice=" + idStatusDevice + ", describe='" + describe + '\'' + '}';
     }
 }

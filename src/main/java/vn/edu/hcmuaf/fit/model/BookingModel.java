@@ -8,7 +8,7 @@ public class BookingModel {
     private String id_user;
     private String id_payment;
     private String description;
-    private int status_booking;
+    private StatusBooking statusBooking;
     private String username;
     private String nameTypePayment;
     private String tel;
@@ -24,13 +24,13 @@ public class BookingModel {
     private String address;
     private String email;
 
-    public BookingModel(String id, String date_booking, String id_user, String id_payment, String description, int status_booking, String username, String nameTypePayment, String tel, int id_product, String name, int price, int quantity, String avatar, String address, String email) {
+    public BookingModel(String id, String date_booking, String id_user, String id_payment, String description, StatusBooking statusBooking, String username, String nameTypePayment, String tel, int id_product, String name, int price, int quantity, String avatar, String address, String email) {
         this.id = id;
         this.date_booking = date_booking;
         this.id_user = id_user;
         this.id_payment = id_payment;
         this.description = description;
-        this.status_booking = status_booking;
+        this.statusBooking = statusBooking;
         this.username = username;
         this.nameTypePayment = nameTypePayment;
         this.tel = tel;
@@ -87,12 +87,12 @@ public class BookingModel {
         this.description = description;
     }
 
-    public int getStatus_booking() {
-        return status_booking;
+    public StatusBooking getStatusBooking() {
+        return statusBooking;
     }
 
-    public void setStatus_booking(int status_booking) {
-        this.status_booking = status_booking;
+    public void setStatusBooking(StatusBooking status_booking) {
+        this.statusBooking = status_booking;
     }
 
     public String getUsername() {
@@ -183,7 +183,7 @@ public class BookingModel {
                 ", id_user='" + id_user + '\'' +
                 ", id_payment='" + id_payment + '\'' +
                 ", description='" + description + '\'' +
-                ", status_booking=" + status_booking +
+                ", statusBooking=" + statusBooking +
                 ", username='" + username + '\'' +
                 ", nameTypePayment='" + nameTypePayment + '\'' +
                 ", tel='" + tel + '\'' +
