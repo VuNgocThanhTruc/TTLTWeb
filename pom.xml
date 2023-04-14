@@ -94,8 +94,25 @@
       <artifactId>tomcat-util</artifactId>
       <version>9.0.16</version>
     </dependency>
-    <!-- Thanks for using https://jar-download.com -->
 
+<!--    json  -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>2.12.5</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.12.5</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>2.12.5</version>
+    </dependency>
 
   </dependencies>
   <build>
