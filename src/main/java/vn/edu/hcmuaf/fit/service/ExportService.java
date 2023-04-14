@@ -57,16 +57,6 @@ public class ExportService {
         workbook.write(outputStream);
         workbook.close();
         outputStream.close();
-
-
-
-        // ghi dữ liệu vào OutputStream để truyền dữ liệu về phía client để người dùng có thể download
-        OutputStream outputStream = response.getOutputStream();
-        workbook.write(outputStream);
-        response.flushBuffer();
-        workbook.close();
-        outputStream.close();
-
     }
 
 
@@ -91,7 +81,7 @@ public class ExportService {
             row.createCell(1).setCellValue(book.getUsername());
             row.createCell(2).setCellValue(book.getTel());
             row.createCell(3).setCellValue(book.getDate_booking());
-            row.createCell(4).setCellValue(book.getString_Status_booking());
+            row.createCell(4).setCellValue(book.getStatusBooking().getName());
             row.createCell(5).setCellValue(book.getDescription());
         }
 
