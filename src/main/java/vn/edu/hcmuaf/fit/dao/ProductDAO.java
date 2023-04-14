@@ -2,8 +2,7 @@ package vn.edu.hcmuaf.fit.dao;
 
 import vn.edu.hcmuaf.fit.db.ConnectToDatabase;
 import vn.edu.hcmuaf.fit.db.DBConnect;
-import vn.edu.hcmuaf.fit.model.CategoryModel;
-import vn.edu.hcmuaf.fit.model.ProductModel;
+import vn.edu.hcmuaf.fit.model.*;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -14,13 +13,24 @@ public class ProductDAO {
     public static List<ProductModel> findAll() {
         LinkedList<ProductModel> list = new LinkedList<ProductModel>();
 
-        String sql = "select * from products";
+        String sql = "select p.id,name,id_type-product, id_status_device,id_brand,price, p.describe,l.url from products p";
+
 
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
             while (rs.next()) {
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7)));
+                String sql2 = "select url from library_images l where id_product=" + rs.getInt(1);
+                PreparedStatement ps2 = DBConnect.getInstall().preStatement(sql2);
+                ResultSet rs2 = ps2.executeQuery(sql2);
+                LinkedList<LibraryImageModel> listImage = new LinkedList<>();
+
+
+                while (rs2.next()) {
+                    listImage.add(new LibraryImageModel(rs2.getString(1)));
+                }
+                System.out.println(list.toString());
+                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), listImage));
             }
             return list;
         } catch (Exception ex) {
@@ -37,7 +47,16 @@ public class ProductDAO {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
             while (rs.next()) {
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7)));
+                String sql2 = "select url from library_images l where id_product=" + rs.getInt(1);
+                PreparedStatement ps2 = DBConnect.getInstall().preStatement(sql2);
+                ResultSet rs2 = ps2.executeQuery(sql2);
+                LinkedList<LibraryImageModel> listImage = new LinkedList<>();
+
+
+                while (rs2.next()) {
+                    listImage.add(new LibraryImageModel(rs2.getString(1)));
+                }
+                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), listImage));
             }
             return list;
         } catch (Exception ex) {
@@ -56,7 +75,16 @@ public class ProductDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7)));
+                String sql2 = "select url from library_images l where id_product=" + rs.getInt(1);
+                PreparedStatement ps2 = DBConnect.getInstall().preStatement(sql2);
+                ResultSet rs2 = ps2.executeQuery(sql2);
+                LinkedList<LibraryImageModel> listImage = new LinkedList<>();
+
+
+                while (rs2.next()) {
+                    listImage.add(new LibraryImageModel(rs2.getString(1)));
+                }
+                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), listImage));
             }
             return list;
         } catch (Exception ex) {
@@ -78,7 +106,17 @@ public class ProductDAO {
             }
             try {
                 while (rs.next()) {
-                    list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7)));
+                    String sql2 = "select url from library_images l where id_product=" + rs.getInt(1);
+                    PreparedStatement ps2 = DBConnect.getInstall().preStatement(sql2);
+                    ResultSet rs2 = ps2.executeQuery(sql2);
+                    LinkedList<LibraryImageModel> listImage = new LinkedList<>();
+
+
+                    while (rs2.next()) {
+                        System.out.println(rs2.getString(1));
+                        listImage.add(new LibraryImageModel(rs2.getString(1)));
+                    }
+                    list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), listImage));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -127,7 +165,16 @@ public class ProductDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                return new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7));
+                String sql2 = "select url from library_images l where id_product=" + rs.getInt(1);
+                PreparedStatement ps2 = DBConnect.getInstall().preStatement(sql2);
+                ResultSet rs2 = ps2.executeQuery(sql2);
+                LinkedList<LibraryImageModel> listImage = new LinkedList<>();
+
+
+                while (rs2.next()) {
+                    listImage.add(new LibraryImageModel(rs2.getString(1)));
+                }
+                return new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), listImage);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -164,7 +211,17 @@ public class ProductDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7)));
+                String sql2 = "select url from library_images l where id_product=" + rs.getInt(1);
+                PreparedStatement ps2 = DBConnect.getInstall().preStatement(sql2);
+                ResultSet rs2 = ps2.executeQuery(sql2);
+                LinkedList<LibraryImageModel> listImage = new LinkedList<>();
+
+
+                while (rs2.next()) {
+                    listImage.add(new LibraryImageModel(rs2.getString(1)));
+                }
+
+                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), listImage));
             }
             return list;
         } catch (Exception e) {
@@ -183,7 +240,16 @@ public class ProductDAO {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7)));
+                String sql2 = "select url from library_images l where id_product=" + rs.getInt(1);
+                PreparedStatement ps2 = DBConnect.getInstall().preStatement(sql2);
+                ResultSet rs2 = ps2.executeQuery(sql2);
+                LinkedList<LibraryImageModel> listImage = new LinkedList<>();
+
+
+                while (rs2.next()) {
+                    listImage.add(new LibraryImageModel(rs2.getString(1)));
+                }
+                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), listImage));
             }
             return list;
         } catch (Exception e) {
@@ -259,15 +325,22 @@ public class ProductDAO {
     public static List<ProductModel> getDifferentProduct() {
         LinkedList<ProductModel> list = new LinkedList<ProductModel>();
 
-        String sql = "select * from products " +
-                "ORDER BY RAND() " +
-                "limit 4 ";
+        String sql = "select * from products " + "ORDER BY RAND() " + "limit 4 ";
 
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ResultSet rs = ps.executeQuery(sql);
             while (rs.next()) {
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7)));
+                String sql2 = "select url from library_images l where id_product=" + rs.getInt(1);
+                PreparedStatement ps2 = DBConnect.getInstall().preStatement(sql2);
+                ResultSet rs2 = ps2.executeQuery(sql2);
+                LinkedList<LibraryImageModel> listImage = new LinkedList<>();
+
+
+                while (rs2.next()) {
+                    listImage.add(new LibraryImageModel(rs2.getString(1)));
+                }
+                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), listImage));
             }
             return list;
         } catch (Exception ex) {
@@ -304,6 +377,75 @@ public class ProductDAO {
             throw new RuntimeException(ex);
         }
     }
+
+    public static List<RateReviewModel> getListCommentByIdProduct(int idProduct) {
+        LinkedList<RateReviewModel> list = new LinkedList<>();
+
+        String sql = "select u.avatar avatar, u.name name, r.rate rate, c.content content, c.create_at createAt from " +
+                    "rate_products r join users u on r.id_user=u.id " +
+                    "join comments c on c.id_rate_product=r.id " +
+                    "where r.id_product="+ idProduct+
+                    " order by r.id desc";
+
+        try {
+            PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
+//            ps.setInt(1,idProduct);
+            ResultSet rs = ps.executeQuery(sql);
+            while (rs.next()) {
+
+                UserModel user = new UserModel();
+                user.setAvatar(rs.getString("avatar"));
+                user.setName(rs.getString("name"));
+
+                CommentModel comment = new CommentModel();
+                comment.setContent(rs.getString("content"));
+                comment.setCreateAt(rs.getTimestamp("createAt"));
+
+                RateReviewModel rateReviewModel = new RateReviewModel();
+                rateReviewModel.setRate(rs.getInt("rate"));
+                rateReviewModel.setUser(user);
+                rateReviewModel.setIdProduct(idProduct);
+                rateReviewModel.setCommentModel(comment);
+
+                list.add(rateReviewModel);
+            }
+            return list;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    //    rate & review product
+    public static boolean insertRateReview(int idProduct, int rate, int idUser, String content) {
+
+        String sql = "Insert into rate_products(`id_product`,`rate`,`id_user`) " + "values (?,?,?)";
+        try {
+            PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
+            ps.setInt(1, idProduct);
+            ps.setInt(2, rate);
+            ps.setInt(3, idUser);
+            ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            int lastInsertId = 0;
+            if (rs.next()) {
+                lastInsertId = rs.getInt(1);
+            }
+
+            sql = "Insert into comments(`id_rate_product`,`content`,`create_by`) " + "values (?,?,?)";
+
+            ps = DBConnect.getInstall().preStatement(sql);
+            ps.setInt(1, lastInsertId);
+            ps.setString(2, content);
+            ps.setInt(3, idUser);
+            ps.executeUpdate();
+
+            return true;
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
 
     public static void main(String[] args) {
         System.out.println(ProductDAO.getDifferentProduct());

@@ -48,9 +48,9 @@
                                     <!-- Image -->
                                     <div class="bg-image hover-overlay hover-zoom ripple rounded"
                                          data-mdb-ripple-color="light">
-                                        <img src="images/product/<%=item.getValue().getProductModel().getAvatar()%>"
-                                             class="w-100"
-                                             alt=""/>
+<%--                                        <img src="images/product/<%=item.getValue().getProductModel().getAvatar()%>"--%>
+<%--                                             class="w-100"--%>
+<%--                                             alt=""/>--%>
 
                                     </div>
                                     <!-- Image -->

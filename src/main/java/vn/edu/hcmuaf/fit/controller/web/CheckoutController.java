@@ -1,9 +1,6 @@
 package vn.edu.hcmuaf.fit.controller.web;
 
-import vn.edu.hcmuaf.fit.model.BookingModel;
-import vn.edu.hcmuaf.fit.model.DetailBookingModel;
-import vn.edu.hcmuaf.fit.model.ProductCartModel;
-import vn.edu.hcmuaf.fit.model.UserModel;
+import vn.edu.hcmuaf.fit.model.*;
 import vn.edu.hcmuaf.fit.service.CheckoutService;
 
 import javax.servlet.ServletException;
@@ -45,7 +42,11 @@ public class CheckoutController extends HttpServlet {
         if (user != null) {
             booking.setId_user("1");
         }
-        booking.setStatus_booking(0);
+
+        StatusBooking statusBooking = new StatusBooking();
+        statusBooking.setId(1);
+
+        booking.setStatusBooking(statusBooking);
         booking.setUsername(name);
         booking.setEmail(email);
         booking.setTel(tel);
