@@ -17,6 +17,8 @@ public class UserModel {
 
     String idRole;
 
+    public UserModel() {
+    }
     public UserModel(String id, String name, String username, String email, String password, String avatar, String tel,
                      int id_type_user, String dob, int sex, String address) {
         super();

@@ -51,6 +51,14 @@ public class ExportService {
 
         // hiện thị thông báo download và set tên file download
         response.setHeader("Content-Disposition", "attachment; filename=\"products.xlsx\"");
+        
+        // ghi dữ liệu vào OutputStream để truyền dữ liệu về phía client để người dùng có thể download
+        OutputStream outputStream = response.getOutputStream();
+        workbook.write(outputStream);
+        workbook.close();
+        outputStream.close();
+
+
 
         // ghi dữ liệu vào OutputStream để truyền dữ liệu về phía client để người dùng có thể download
         OutputStream outputStream = response.getOutputStream();

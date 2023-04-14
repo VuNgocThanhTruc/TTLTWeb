@@ -55,7 +55,7 @@
                 <div class="block-banner-category">
                     <div class="product-img fade-box">
                         <a href="detail-product?id-product=<%=product.getId()%>" title="" class="img-resize">
-<%--                            <img src="images/product/<%=product.getAvatar()%>" alt="" class="lazyloaded">--%>
+                            <img src="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>" alt="" class="lazyloaded">
                         </a>
 
                     </div>
@@ -155,7 +155,7 @@
                         <div class="product-img fade-box">
                             <a href="detail-product?id-product=<%=product.getId()%>?id-product=<%=product.getId()%>"
                                title="" class="img-resize">
-<%--                                <img src="images/product/<%=product.getAvatar()%>" alt="" class="lazyloaded">--%>
+                                <img src="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>" alt="" class="lazyloaded">
                             </a>
 
                         </div>

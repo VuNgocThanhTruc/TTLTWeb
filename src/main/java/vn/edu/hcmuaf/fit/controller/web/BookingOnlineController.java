@@ -1,6 +1,7 @@
 package vn.edu.hcmuaf.fit.controller.web;
 
 import vn.edu.hcmuaf.fit.model.BookingModel;
+import vn.edu.hcmuaf.fit.model.StatusBooking;
 import vn.edu.hcmuaf.fit.model.UserModel;
 import vn.edu.hcmuaf.fit.service.CheckoutService;
 
@@ -52,7 +53,10 @@ public class BookingOnlineController extends HttpServlet {
             }else {
                 booking.setId_user(null);
             }
-            booking.setStatus_booking(0);
+            StatusBooking statusBooking = new StatusBooking();
+            statusBooking.setId(1);
+
+            booking.setStatusBooking(statusBooking);
             booking.setUsername(name);
             booking.setEmail(email);
             booking.setTel(tel);

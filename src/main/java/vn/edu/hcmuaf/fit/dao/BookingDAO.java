@@ -5,6 +5,7 @@ import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.BookingModel;
 import vn.edu.hcmuaf.fit.model.CategoryModel;
 import vn.edu.hcmuaf.fit.model.DetailBookingModel;
+import vn.edu.hcmuaf.fit.model.StatusBooking;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -20,8 +21,9 @@ public class BookingDAO implements ObjectDAO {
     public static List<BookingModel> getListBooking(int status) {
         LinkedList<BookingModel> list = new LinkedList<>();
 
-        String sql = "SELECT b.id id,date_booking, id_user ,username, id_payment, t.name nameTypePayment,description, status_booking,tel " +
+        String sql = "SELECT b.id id,date_booking, id_user ,username, id_payment, t.name nameTypePayment,description, b.status_booking id_status_booking, s.name name_status_booking,tel " +
                 "FROM bookings b join type_payments t on t.id = b.id_payment " +
+                "join status_bookings s on s.id = b.status_booking " +
                 "WHERE status_booking=?" + "order by id desc ";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -36,7 +38,12 @@ public class BookingDAO implements ObjectDAO {
                 booking.setUsername(rs.getString("username"));
                 booking.setId_payment(rs.getString("id_payment"));
                 booking.setNameTypePayment(rs.getString("nameTypePayment"));
-                booking.setStatus_booking(rs.getInt("status_booking"));
+
+                StatusBooking statusBooking = new StatusBooking();
+                statusBooking.setId(rs.getInt("id_status_booking"));
+                statusBooking.setName(rs.getString("name_status_booking"));
+
+                booking.setStatusBooking(statusBooking);
                 booking.setDescription(rs.getString("description"));
                 booking.setTel(rs.getString("tel"));
 
@@ -216,8 +223,9 @@ public class BookingDAO implements ObjectDAO {
 
 
     public static BookingModel getBooking(String id) {
-        String sql = "SELECT b.id id,date_booking, id_user ,username, id_payment, t.name nameTypePayment,description, status_booking,tel,email,address " +
+        String sql = "SELECT b.id id,date_booking, id_user ,username, id_payment, t.name nameTypePayment,description, b.status_booking id_status_booking, s.name name_status_booking,tel,email,address " +
                 "FROM bookings b join type_payments t on t.id = b.id_payment " +
+                "join status_bookings s on s.id = b.status_booking " +
                 "WHERE b.id= ?";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -232,7 +240,12 @@ public class BookingDAO implements ObjectDAO {
                 booking.setUsername(rs.getString("username"));
                 booking.setId_payment(rs.getString("id_payment"));
                 booking.setNameTypePayment(rs.getString("nameTypePayment"));
-                booking.setStatus_booking(rs.getInt("status_booking"));
+
+                StatusBooking statusBooking = new StatusBooking();
+                statusBooking.setId(rs.getInt("id_status_booking"));
+                statusBooking.setName(rs.getString("name_status_booking"));
+
+                booking.setStatusBooking(statusBooking);
                 booking.setDescription(rs.getString("description"));
                 booking.setTel(rs.getString("tel"));
                 booking.setAddress(rs.getString("address"));
@@ -268,8 +281,9 @@ public class BookingDAO implements ObjectDAO {
     public static List<BookingModel> getListBooking() {
         LinkedList<BookingModel> list = new LinkedList<>();
 
-        String sql = "SELECT b.id id,date_booking, id_user ,username, id_payment, t.name nameTypePayment,description, status_booking,tel,email " +
+        String sql = "SELECT b.id id,date_booking, id_user ,username, id_payment, t.name nameTypePayment,description, b.status_booking id_status_booking, s.name name_status_booking,tel,email " +
                 "FROM bookings b join type_payments t on t.id = b.id_payment " +
+                "join status_bookings s on s.id = b.status_booking " +
                 "order by id desc ";
         try {
 
@@ -284,7 +298,14 @@ public class BookingDAO implements ObjectDAO {
                 booking.setUsername(rs.getString("username"));
                 booking.setId_payment(rs.getString("id_payment"));
                 booking.setNameTypePayment(rs.getString("nameTypePayment"));
-                booking.setStatus_booking(rs.getInt("status_booking"));
+
+
+              StatusBooking statusBooking = new StatusBooking();
+                statusBooking.setId(rs.getInt("id_status_booking"));
+                statusBooking.setName(rs.getString("name_status_booking"));
+
+
+                booking.setStatusBooking(statusBooking);
                 booking.setDescription(rs.getString("description"));
                 booking.setTel(rs.getString("tel"));
 
@@ -296,20 +317,21 @@ public class BookingDAO implements ObjectDAO {
         }
     }
 
-    public static List<BookingModel> getListBookingByStatus(String id_user) {
+    public static List<BookingModel> getListBookedByIDUser(int idUser) {
         LinkedList<BookingModel> list = new LinkedList<>();
 
 
-        String sql = "SELECT d.id id, id_booking, id_product, name, price, d.quantity quantity,avatar ,b.date_booking ,b.status_booking " +
+        String sql = "SELECT d.id id, id_booking, id_product, p.name name_product, price, d.quantity quantity,b.date_booking ,b.status_booking id_status_booking, s.name name_status_booking " +
                 "FROM bookings b join detail_bookings d on d.id_booking = b.id " +
                 "join products p on p.id = d.id_product " +
+                "join status_bookings s on s.id = b.status_booking " +
                 "WHERE b.id_user=? " +
                 "order by id desc ";
         try {
 
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
 
-            ps.setString(1, id_user);
+            ps.setInt(1, idUser);
 
             ResultSet rs = ps.executeQuery();
 
@@ -319,13 +341,17 @@ public class BookingDAO implements ObjectDAO {
                 booking.setId(rs.getString("id"));
                 booking.setDate_booking(rs.getString("id_booking"));
                 booking.setId_product(rs.getInt("id_product"));
-                booking.setName(rs.getString("name"));
+                booking.setName(rs.getString("name_product"));
                 booking.setPrice(rs.getInt("price"));
                 booking.setQuantity(rs.getInt("quantity"));
-                booking.setAvatar(rs.getString("avatar"));
+//                booking.setAvatar(rs.getString("avatar"));
                 booking.setDate_booking(rs.getString("date_booking"));
-                booking.setStatus_booking(rs.getInt("status_booking"));
 
+                StatusBooking statusBooking = new StatusBooking();
+                statusBooking.setId(rs.getInt("id_status_booking"));
+                statusBooking.setName(rs.getString("name_status_booking"));
+
+                booking.setStatusBooking(statusBooking);
 
                 list.add(booking);
             }
