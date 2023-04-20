@@ -168,6 +168,10 @@
                                     </button>
                                 </div>
 
+                                <div class="service-fee">
+                                    Phí vận chuyển: <span>0</span>đ
+                                </div>
+
                                 <form id="add-item-form" action="" method="post" class="variants clearfix">
                                     <div class="select clearfix">
                                         <div class="selector-wrapper"><label for="product-select-option-0">Màu
@@ -569,12 +573,58 @@
         let tagSelectModalGetDistrict = document.querySelector('.select-district')
         let tagSelectModalGetWard = document.querySelector('.select-ward')
 
+        let height = 100
+        let length = 100
+        let width = 100
+        let weight = 100
+
         let valueProvince = 0
         let valueDistrict = 0
         let valueWard = 0
 
-        $('.getAPIAddress').click(() => {
-            $('.address').text(`${tagSelectModalGetWard.options[tagSelectModalGetWard.selectedIndex].textContent}, ${tagSelectModalGetDistrict.options[tagSelectModalGetDistrict.selectedIndex].textContent}, ${tagSelectModalGetProvince.options[tagSelectModalGetProvince.selectedIndex].textContent}`)
+        $('.getAPIAddress').click(async () => {
+            let serviceFee = $('.service-fee span')
+
+            if (valueProvince > 0 && valueDistrict > 0 && valueWard > 0) {
+                $('.address').text(`${tagSelectModalGetWard.options[tagSelectModalGetWard.selectedIndex].textContent},
+                                    ${tagSelectModalGetDistrict.options[tagSelectModalGetDistrict.selectedIndex].textContent},
+                                    ${tagSelectModalGetProvince.options[tagSelectModalGetProvince.selectedIndex].textContent}`)
+
+                //display service fee
+                await autoLoginLogisticAPI()
+
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + logisticIDToken
+                    },
+                    body: JSON.stringify({
+                        'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,
+                        'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,
+                        'to_district_id': valueDistrict,
+                        'to_ward_id': valueWard,
+                        'height': height,
+                        'length': length,
+                        'width': width,
+                        'weight': weight,
+                    })
+                };
+
+                await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/calculateFee`, options)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 200) {
+                            serviceFee.text(data.data[0].service_fee)
+                        }
+                    })
+                    .catch(error => {
+                        // xử lý lỗi
+                        console.log(error)
+                    });
+
+
+            }
         })
 
         $(".select-province").focus(async function () {
@@ -615,7 +665,6 @@
                 valueProvince = tagSelectModalGetProvince.value * 1
                 tagSelectModalGetDistrict.innerHTML = ''
                 // await autoLoginLogisticAPI()
-                console.log(valueProvince)
 
                 if (valueProvince > 0) {
                     tagSelectModalGetDistrict.disabled = false;
@@ -673,6 +722,10 @@
                             }
                             valueWard = tagSelectModalGetWard.value * 1
 
+                            console.log(valueDistrict)
+                            console.log(valueWard)
+
+
                         })
                         .catch(error => {
                             // xử lý lỗi
@@ -681,9 +734,10 @@
                 }
             });
         }
+
         handleEventSelectProvinceChange()
         handleEventSelectDistrictChange()
-  });
+    });
 
 
 </script>
