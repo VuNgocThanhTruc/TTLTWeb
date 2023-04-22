@@ -1,10 +1,7 @@
 package vn.edu.hcmuaf.fit.service;
 
 import vn.edu.hcmuaf.fit.dao.ProductDAO;
-import vn.edu.hcmuaf.fit.model.CategoryModel;
-import vn.edu.hcmuaf.fit.model.InventoriesModel;
-import vn.edu.hcmuaf.fit.model.ProductModel;
-import vn.edu.hcmuaf.fit.model.RateReviewModel;
+import vn.edu.hcmuaf.fit.model.*;
 
 import java.util.List;
 
@@ -37,8 +34,13 @@ public class ProductService {
     public static ProductModel getDetailProduct(int idProduct) {
         return ProductDAO.getDetailProduct(idProduct);
     }
+
     public static InventoriesModel getInventores(int idProduct) {
         return ProductDAO.getInventoriesByID(idProduct);
+    }
+
+    public static DiscountModel getDiscounts(int idProduct) {
+        return ProductDAO.getDicount(idProduct);
     }
 
     public List<ProductModel> getListProductForBrand(String brandPram) {
@@ -72,6 +74,7 @@ public class ProductService {
     public static boolean insertRateReview(int idProduct, int rate, int idUser, String content) {
         return ProductDAO.insertRateReview(idProduct, rate, idUser, content);
     }
+
     public static List<RateReviewModel> getListCommentByIdProduct(int idProduct) {
         return ProductDAO.getListCommentByIdProduct(idProduct);
     }

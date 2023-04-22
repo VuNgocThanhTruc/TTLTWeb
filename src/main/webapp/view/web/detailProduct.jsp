@@ -1,6 +1,8 @@
 <%@ page import="vn.edu.hcmuaf.fit.model.ProductModel" %>
 <%@ page import="vn.edu.hcmuaf.fit.service.ProductService" %>
 <%@ page import="vn.edu.hcmuaf.fit.constant.APIConstants" %>
+<%@page import="java.util.Date" %>
+<%@page import="java.sql.Timestamp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="../../common/taglib.jsp" %>
 
@@ -18,8 +20,15 @@
     List<RateReviewModel> listRate = (List<RateReviewModel>) request.getAttribute("listRate");
 
 %>
-<%ProductModel product = (ProductModel) request.getAttribute("product");
-InventoriesModel inventories = (InventoriesModel) request.getAttribute("inventoriesList");%>
+<%
+    ProductModel product = (ProductModel) request.getAttribute("product");
+    InventoriesModel inventories = (InventoriesModel) request.getAttribute("inventoriesList");
+    DiscountModel discount = (DiscountModel) request.getAttribute("discount");
+    Date serverTime = new Date();
+    Timestamp timestamp = new Timestamp(serverTime.getTime());
+    Timestamp dateStart = Timestamp.valueOf(discount.getDateStart());
+    Timestamp dateEnd = Timestamp.valueOf(discount.getDateEnd());
+%>
 
 <%@include file="../../common/web/header.jsp" %>
 
@@ -155,12 +164,29 @@ InventoriesModel inventories = (InventoriesModel) request.getAttribute("inventor
                                 <div class="product-title">
                                     <h1><%=product.getName()%>
                                     </h1>
-<%--                                    <span id="pro_sku">ID: <%=product.getId()%></span>--%>
+                                    <p>Server time: <%=serverTime.toString()%>
+                                    </p>
+                                    <p>Server time: <%=timestamp.toString()%>
+                                    </p>
+                                    <p>date start: <%=dateStart.toString()%>
+                                    </p>
+                                    <p>date end: <%=dateEnd.toString()%>
+                                    </p>
+                                    <%-- <span id="pro_sku">ID: <%=product.getId()%></span>--%>
                                     <span id="pro_sku">SL: <%= inventories.getQuantity()%></span>
                                 </div>
-                                <div class="product-price" id="price-preview"><span
-                                        class="pro-price"><%=product.getPrice()%>₫</span>
+                                <% if (discount == null || dateEnd.getTime() < timestamp.getTime() && dateStart.getTime() > timestamp.getTime()) {%>
+                                <div class="product-price" id="price-preview">
+                                    <span class="pro-price"><%=product.getPrice()%>₫</span>
                                 </div>
+                                <%} else {%>
+                                <div class="product-price" id="price-preview">
+                                    <span class=""
+                                          style="text-decoration: line-through;"><%=product.getPrice()%>₫</span>
+                                    <span class="pro-price"><%=product.getPrice() * discount.getPercentDiscount() / 100 %>₫</span>
+                                    <span class="pro-sale" style="background-color: #ff6600;color: white;border: dashed;border-radius: 8px; "> -<%=discount.getPercentDiscount()%>%</span>
+                                </div>
+                                <%}%>
                                 <div class="product-price" id="delivery">
                                     <span>Giao đến: </span>
                                     <span class="address">Q. 3, P. 01, Hồ Chí Minh</span>
@@ -602,7 +628,7 @@ InventoriesModel inventories = (InventoriesModel) request.getAttribute("inventor
                 dataType: "json",
                 headers: {
                     'Authorization': 'Bearer ' + logisticIDToken
-                },data: {
+                }, data: {
                     provinceID: 269
                 },
                 success: function (data) {
@@ -632,7 +658,7 @@ InventoriesModel inventories = (InventoriesModel) request.getAttribute("inventor
                 dataType: "json",
                 headers: {
                     'Authorization': 'Bearer ' + logisticIDToken
-                },data: {
+                }, data: {
                     districtID: 2264
                 },
                 success: function (data) {
@@ -652,7 +678,6 @@ InventoriesModel inventories = (InventoriesModel) request.getAttribute("inventor
             });
         });
     });
-
 
 
 </script>

@@ -20,6 +20,7 @@ public class AuthoritiesDAO {
     ResultSet rs = null;
     public AuthoritiesDAO(){
         connection = DBConnect.getInstall().getConnection();
+
     }
 
     //Lấy ra toàn bộ nhóm quyền
@@ -74,7 +75,7 @@ public class AuthoritiesDAO {
     }
 
     //tạo và cấp quyền mặc định cho nhóm quyền
-    public void createRoleDecDefault(String id_role){
+    public  void createRoleDecDefault(String id_role){
         List<ComponentModel> components = getAllComponent();
         List<FunctionModel> functions = getAllFunction();
 
@@ -222,7 +223,7 @@ public class AuthoritiesDAO {
     }
     public static void main(String[] args) {
         AuthoritiesDAO ad = new AuthoritiesDAO();
-        //System.out.println(ad.getAllComponent());
+        System.out.println(ad.getAllComponent());
         //System.out.println(ad.getAllFunction());
         //ad.getAuthoritiesOfComponent(1,1);
         //System.out.println(ad.createIdRoleRamdom());
@@ -233,7 +234,7 @@ public class AuthoritiesDAO {
         //ad.createRoleDecDefault("1");
         //ad.deleteDecentralizeRole("1");
         //ad.printDecentralizeOfRole("1");
-        System.out.println(ad.getRoleById("1"));
+//        System.out.println(ad.getRoleById("1"));
     }
 
     public void resetRoleById(String idRole) {
@@ -305,5 +306,9 @@ public class AuthoritiesDAO {
         }
         return nameRole;
     }
+
 }
+
+
+
 
