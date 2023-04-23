@@ -103,7 +103,7 @@
                         <%
 //                            for (ImageModel list : listImage) {
                             for (DiscountModel list : discountList) {
-                                int priceDiscount= (int) Math.ceil(list.getPrice()*list.getPercentDiscount()/100);
+                                int priceDiscount= (int) Math.ceil(list.getPrice()*(100-list.getPercentDiscount())/100);
                         %>
                         <tr>
                             <td width="10"><input type="checkbox" name="check1" value="1"></td>
@@ -135,7 +135,7 @@
                             <td>
                                 <%--Xóa--%>
                                 <%if (isGrantDel == true) {%>
-                                <a href="manage-image?type=del&id=<%=list.getIdDiscount()%>">
+                                <a href="manage-discount?type=del&id=<%=list.getIdDiscount()%>">
                                     <button class="btn btn-primary btn-sm trash" type="button" title="Xóa">
                                         <i class="fas fa-trash-alt"> </i>
                                     </button>

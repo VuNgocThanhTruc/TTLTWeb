@@ -180,7 +180,7 @@
                                     Timestamp dateStart = Timestamp.valueOf(discount.getDateStart());
                                     Timestamp dateEnd = Timestamp.valueOf(discount.getDateEnd());
                                     if (dateEnd.getTime() > timestamp.getTime() && dateStart.getTime() <timestamp.getTime()) {
-                                        int priceDiscount = (int) Math.ceil(product.getPrice() * discount.getPercentDiscount() / 100);%>
+                                        int priceDiscount = (int) Math.ceil(product.getPrice() * (100-discount.getPercentDiscount()) / 100);%>
                                 <div class="product-price" id="price-preview">
                                     <span class="pro-price"><%=priceDiscount%>₫</span>
                                     <span class=""
