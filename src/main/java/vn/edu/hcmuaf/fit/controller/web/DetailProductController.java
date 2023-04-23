@@ -2,6 +2,7 @@ package vn.edu.hcmuaf.fit.controller.web;
 
 import vn.edu.hcmuaf.fit.dao.ProductDAO;
 import vn.edu.hcmuaf.fit.model.*;
+import vn.edu.hcmuaf.fit.service.DiscountService;
 import vn.edu.hcmuaf.fit.service.ProductService;
 
 import javax.servlet.ServletException;
@@ -21,6 +22,7 @@ public class DetailProductController extends HttpServlet {
         int idProduct = Integer.parseInt(request.getParameter("id-product"));
 
         ProductService productService = new ProductService();
+        DiscountService discountService = new DiscountService();
         ProductModel product = productService.getDetailProduct(idProduct);
 
         List<ProductModel> pro = ProductService.getDifferentProduct();
@@ -28,7 +30,7 @@ public class DetailProductController extends HttpServlet {
         // danh sach ton kho
         InventoriesModel inventoriesList = productService.getInventores(idProduct);
         // giảm giá
-        DiscountModel discount = productService.getDiscounts(idProduct);
+        DiscountModel discount = discountService.getDiscounts(idProduct);
 
 
         request.setAttribute("pro", pro);

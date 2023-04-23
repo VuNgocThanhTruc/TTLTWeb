@@ -24,11 +24,8 @@
     ProductModel product = (ProductModel) request.getAttribute("product");
     InventoriesModel inventories = (InventoriesModel) request.getAttribute("inventoriesList");
     DiscountModel discount = (DiscountModel) request.getAttribute("discount");
-    Date serverTime = new Date();
-    Timestamp timestamp = new Timestamp(serverTime.getTime());
-    Timestamp dateStart = Timestamp.valueOf(discount.getDateStart());
-    Timestamp dateEnd = Timestamp.valueOf(discount.getDateEnd());
-    int priceSale= (int) Math.ceil(product.getPrice() * discount.getPercentDiscount() / 100);
+
+
 %>
 
 <%@include file="../../common/web/header.jsp" %>
@@ -165,28 +162,44 @@
                                 <div class="product-title">
                                     <h1><%=product.getName()%>
                                     </h1>
-                                    <p>Server time: <%=serverTime.toString()%>
-                                    </p>
-                                    <p>Server time: <%=timestamp.toString()%>
-                                    </p>
-                                    <p>date start: <%=dateStart.toString()%>
-                                    </p>
-                                    <p>date end: <%=dateEnd.toString()%>
-                                    </p>
+                                    <%--                                    <p>Server time: <%=serverTime.toString()%>--%>
+                                    <%--                                    </p>--%>
+                                    <%--                                    <p>Server time: <%=timestamp.toString()%>--%>
+                                    <%--                                    </p>--%>
+                                    <%--                                    <p>date start: <%=dateStart.toString()%>--%>
+                                    <%--                                    </p>--%>
+                                    <%--                                    <p>date end: <%=dateEnd.toString()%>--%>
+                                    <%--                                    </p>--%>
                                     <%-- <span id="pro_sku">ID: <%=product.getId()%></span>--%>
                                     <span id="pro_sku">SL: <%= inventories.getQuantity()%></span>
                                 </div>
-                                <% if (discount == null || (dateEnd.getTime() < timestamp.getTime() && dateStart.getTime() > timestamp.getTime()) ) {%>
-                                <div class="product-price" id="price-preview">
-                                    <span class="pro-price"><%=product.getPrice()%>₫</span>
-                                </div>
-                                <%} else {%>
+
+                                <% if (discount != null&& discount.getIdProduct()!=0) {
+                                    Date serverTime = new Date();
+                                    Timestamp timestamp = new Timestamp(serverTime.getTime());
+                                    Timestamp dateStart = Timestamp.valueOf(discount.getDateStart());
+                                    Timestamp dateEnd = Timestamp.valueOf(discount.getDateEnd());
+                                    if (dateEnd.getTime() > timestamp.getTime() && dateStart.getTime() <timestamp.getTime()) {
+                                        int priceSale = (int) Math.ceil(product.getPrice() * discount.getPercentDiscount() / 100);%>
                                 <div class="product-price" id="price-preview">
                                     <span class="pro-price"><%=priceSale%>₫</span>
                                     <span class=""
                                           style="text-decoration: line-through;"><%=product.getPrice()%>₫</span>
 
-                                    <span class="pro-sale" style="background-color: #ff6600;color: white;border: dashed;border-radius: 8px; "> -<%=discount.getPercentDiscount()%>%</span>
+                                    <span class="pro-sale"
+                                          style="background-color: #ff6600;color: white;border: dashed;border-radius: 8px; "> -<%=discount.getPercentDiscount()%>%</span>
+
+                                </div>
+                                <%} else { %>
+                                <div class="product-price" id="price-preview">
+                                    <span class="pro-price"><%=product.getPrice()%>₫</span>
+                                </div>
+                                <%
+                                    }
+                                } else {
+                                %>
+                                <div class="product-price" id="price-preview">
+                                    <span class="pro-price"><%=product.getPrice()%>₫</span>
                                 </div>
                                 <%}%>
                                 <div class="product-price" id="delivery">

@@ -39,9 +39,7 @@ public class ProductService {
         return ProductDAO.getInventoriesByID(idProduct);
     }
 
-    public static DiscountModel getDiscounts(int idProduct) {
-        return ProductDAO.getDicount(idProduct);
-    }
+
 
     public List<ProductModel> getListProductForBrand(String brandPram) {
         return ProductDAO.getlistProductForBrand(brandPram);
