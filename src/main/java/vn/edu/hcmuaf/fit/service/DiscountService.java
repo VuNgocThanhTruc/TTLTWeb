@@ -6,6 +6,6 @@ import vn.edu.hcmuaf.fit.model.DiscountModel;
 
 public class DiscountService {
     public static DiscountModel getDiscounts(int idProduct) {
-        return DiscountDAO.getDicount(idProduct);
+        return DiscountDAO.getDiscount(idProduct);
     }
 }

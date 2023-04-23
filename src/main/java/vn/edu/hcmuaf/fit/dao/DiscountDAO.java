@@ -10,7 +10,7 @@ public class DiscountDAO {
 
 
     // Lấy giảm giá
-    public static DiscountModel getDicount(int id) {
+    public static DiscountModel getDiscount(int id) {
 
         DiscountModel discounts = new DiscountModel();
 
