@@ -7,6 +7,12 @@ public class DiscountModel {
     private String dateStart;
     private String dateEnd;
     private int percentDiscount;
+
+    private String nameTypeProduct;
+    private String nameProduct;
+    private String avatar;
+    private int price;
+
     public DiscountModel() {
 
     }
@@ -18,6 +24,19 @@ public class DiscountModel {
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.percentDiscount = percentDiscount;
+    }
+
+    public DiscountModel(int idDiscount, int idTypeProduct, int idProduct, String dateStart, String dateEnd, int percentDiscount, String nameTypeProduct, String nameProduct, String avatar, int price) {
+        this.idDiscount = idDiscount;
+        this.idTypeProduct = idTypeProduct;
+        this.idProduct = idProduct;
+        this.dateStart = dateStart;
+        this.dateEnd = dateEnd;
+        this.percentDiscount = percentDiscount;
+        this.nameTypeProduct = nameTypeProduct;
+        this.nameProduct = nameProduct;
+        this.avatar = avatar;
+        this.price = price;
     }
 
     public int getIdDiscount() {
@@ -68,6 +87,38 @@ public class DiscountModel {
         this.percentDiscount = percentDiscount;
     }
 
+    public String getNameTypeProduct() {
+        return nameTypeProduct;
+    }
+
+    public void setNameTypeProduct(String nameTypeProduct) {
+        this.nameTypeProduct = nameTypeProduct;
+    }
+
+    public String getNameProduct() {
+        return nameProduct;
+    }
+
+    public void setNameProduct(String nameProduct) {
+        this.nameProduct = nameProduct;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
         return "DiscountModel{" +
@@ -77,6 +128,10 @@ public class DiscountModel {
                 ", dateStart='" + dateStart + '\'' +
                 ", dateEnd='" + dateEnd + '\'' +
                 ", percentDiscount=" + percentDiscount +
+                ", nameTypeProduct='" + nameTypeProduct + '\'' +
+                ", nameProduct='" + nameProduct + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", price=" + price +
                 '}';
     }
 }
