@@ -28,6 +28,7 @@
     Timestamp timestamp = new Timestamp(serverTime.getTime());
     Timestamp dateStart = Timestamp.valueOf(discount.getDateStart());
     Timestamp dateEnd = Timestamp.valueOf(discount.getDateEnd());
+    int priceSale= (int) Math.ceil(product.getPrice() * discount.getPercentDiscount() / 100);
 %>
 
 <%@include file="../../common/web/header.jsp" %>
@@ -175,15 +176,16 @@
                                     <%-- <span id="pro_sku">ID: <%=product.getId()%></span>--%>
                                     <span id="pro_sku">SL: <%= inventories.getQuantity()%></span>
                                 </div>
-                                <% if (discount == null || dateEnd.getTime() < timestamp.getTime() && dateStart.getTime() > timestamp.getTime()) {%>
+                                <% if (discount == null || (dateEnd.getTime() < timestamp.getTime() && dateStart.getTime() > timestamp.getTime()) ) {%>
                                 <div class="product-price" id="price-preview">
                                     <span class="pro-price"><%=product.getPrice()%>₫</span>
                                 </div>
                                 <%} else {%>
                                 <div class="product-price" id="price-preview">
+                                    <span class="pro-price"><%=priceSale%>₫</span>
                                     <span class=""
                                           style="text-decoration: line-through;"><%=product.getPrice()%>₫</span>
-                                    <span class="pro-price"><%=product.getPrice() * discount.getPercentDiscount() / 100 %>₫</span>
+
                                     <span class="pro-sale" style="background-color: #ff6600;color: white;border: dashed;border-radius: 8px; "> -<%=discount.getPercentDiscount()%>%</span>
                                 </div>
                                 <%}%>
