@@ -8,4 +8,7 @@ public class SystemConstant {
     public static final String FIND = "find";
 
     public static final String DELETE = "delete";
+
+    public static final String EXPORT = "exportExcel";
+
 }

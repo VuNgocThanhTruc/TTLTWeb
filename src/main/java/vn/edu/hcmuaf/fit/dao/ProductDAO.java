@@ -55,7 +55,8 @@ public class ProductDAO {
     public static List<ProductModel> getTop8() {
         LinkedList<ProductModel> list = new LinkedList<ProductModel>();
 
-        String sql = "select * from products ORDER BY id desc LIMIT 0,4";
+        String sql = "select p.id ,`name`,id_type_product,id_status_device,id_brand,price,avatar,`describe`,created_by,created_date,modified_date,modified_by from products p \n" +
+                "WHERE p.id_status_device =1 ORDER BY id desc LIMIT 0,4";
 
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -95,7 +96,8 @@ public class ProductDAO {
     public static List<ProductModel> getNextListProduct(int amount) {
         LinkedList<ProductModel> list = new LinkedList<ProductModel>();
 
-        String sql = "select * from products ORDER BY id desc LIMIT ?,4";
+        String sql = "select p.id ,`name`,id_type_product,id_status_device,id_brand,price,avatar,`describe`,created_by,created_date,modified_date,modified_by from products p \n" +
+                "WHERE p.id_status_device =1 ORDER BY id desc LIMIT ?,4";
 
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -529,7 +531,6 @@ public class ProductDAO {
 
     //    rate & review product
     public static boolean insertRateReview(int idProduct, int rate, int idUser, String content) {
-
         String sql = "Insert into rate_products(`id_product`,`rate`,`id_user`) " + "values (?,?,?)";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -557,10 +558,61 @@ public class ProductDAO {
             throw new RuntimeException(ex);
         }
     }
+    // Lấy tồn kho
+    public static InventoriesModel getInventoriesByID(int id) {
+
+        InventoriesModel inventories =new InventoriesModel();
+
+        String sql = "select id_product,quantity,modified_date,modified_by from inventories " +
+                "where id_product="+id;
+        try {
+
+            PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int idProduct = Integer.parseInt(rs.getString(1));
+                int quantity = Integer.parseInt(rs.getString(2));
+                String modifiedDate = rs.getString(3);
+                String modifiedBy = rs.getString(4);
+                inventories = new InventoriesModel( idProduct,  quantity, modifiedDate,  modifiedBy);
+            }
+            return inventories;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+//    // Lấy giảm giá
+//    public static DiscountModel getDicount(int id) {
+//
+//        DiscountModel discounts =new DiscountModel();
+//
+//        String sql = "select id,id_type_product,id_product,date_start,date_end,percent_discount from discounts " +
+//                "where id_product="+id;
+//        try {
+//
+//            PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
+//
+//            ResultSet rs = ps.executeQuery();
+//            while (rs.next()) {
+//                int idDiscount = Integer.parseInt(rs.getString(1));
+//                int idTypeProduct = Integer.parseInt(rs.getString(2));
+//                int idProduct = Integer.parseInt(rs.getString(3));
+//                String dateStart= rs.getString(4);
+//                String dateEnd= rs.getString(5);
+//                int percentDiscount = Integer.parseInt(rs.getString(6));
+//                discounts = new DiscountModel( idDiscount,idTypeProduct,idProduct,dateStart,dateEnd,percentDiscount);
+//            }
+//            return discounts;
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
 
     public static void main(String[] args) {
-        System.out.println(ProductDAO.getDifferentProduct());
+//        System.out.println(ProductDAO.getDifferentProduct());
+//        System.out.println(ProductDAO.getDicount(10));
 //        System.out.println(ProductDAO.updateProduct(2, "Thay cụm đuôi sạc Samsung Galaxy A02 A022F","thay-cum-duoi-sac-samsung-galaxy-a02-a022f_1667623123.png",4,1,1,  500000,100,"test", 1));
     }
 }

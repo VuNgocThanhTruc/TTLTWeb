@@ -1,8 +1,8 @@
 package vn.edu.hcmuaf.fit.controller.web;
 
-import vn.edu.hcmuaf.fit.model.ProductModel;
-import vn.edu.hcmuaf.fit.model.RateReviewModel;
-import vn.edu.hcmuaf.fit.model.UserModel;
+import vn.edu.hcmuaf.fit.dao.ProductDAO;
+import vn.edu.hcmuaf.fit.model.*;
+import vn.edu.hcmuaf.fit.service.DiscountService;
 import vn.edu.hcmuaf.fit.service.ProductService;
 
 import javax.servlet.ServletException;
@@ -22,14 +22,24 @@ public class DetailProductController extends HttpServlet {
         int idProduct = Integer.parseInt(request.getParameter("id-product"));
 
         ProductService productService = new ProductService();
+        DiscountService discountService = new DiscountService();
         ProductModel product = productService.getDetailProduct(idProduct);
+
         List<ProductModel> pro = ProductService.getDifferentProduct();
         List<RateReviewModel> listRate = ProductService.getListCommentByIdProduct(idProduct);
+        // danh sach ton kho
+        InventoriesModel inventoriesList = productService.getInventores(idProduct);
+        // giảm giá
+        DiscountModel discount = discountService.getDiscounts(idProduct);
 
 
         request.setAttribute("pro", pro);
         request.setAttribute("product", product);
         request.setAttribute("listRate", listRate);
+        // danh sach ton kho
+        request.setAttribute("inventoriesList", inventoriesList);
+        // giảm giá
+        request.setAttribute("discount", discount);
 
         request.getRequestDispatcher("view/web/detailProduct.jsp").forward(request, response);
     }
@@ -41,6 +51,8 @@ public class DetailProductController extends HttpServlet {
         ProductModel product = productService.getDetailProduct(idProduct);
         List<RateReviewModel> listRate = ProductService.getListCommentByIdProduct(idProduct);
         List<ProductModel> pro = ProductService.getDifferentProduct();
+        // danh sach ton kho
+
         int rate = Integer.parseInt(request.getParameter("rate_value"));
         String content = request.getParameter("comment");
 
@@ -55,6 +67,7 @@ public class DetailProductController extends HttpServlet {
         request.setAttribute("listRate", listRate);
         request.setAttribute("pro", pro);
         request.setAttribute("product", product);
+
         request.getRequestDispatcher("view/web/detailProduct.jsp").forward(request, response);
     }
 }
