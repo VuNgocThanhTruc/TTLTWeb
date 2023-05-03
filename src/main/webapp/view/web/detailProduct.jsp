@@ -212,6 +212,10 @@
                                     </button>
                                 </div>
 
+                                <div class="service-fee">
+                                    Phí vận chuyển: <span>0</span>đ
+                                </div>
+
                                 <form id="add-item-form" action="" method="post" class="variants clearfix">
                                     <div class="select clearfix">
                                         <div class="selector-wrapper"><label for="product-select-option-0">Màu
@@ -548,20 +552,20 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <p>Tỉnh/Thành phố</p>
-                        <select class="select-province form-select" aria-label="Default select example">
+                        <p class="col-4">Tỉnh/Thành phố</p>
+                        <select class="col-6 select-province form-select" aria-label="Default select example">
                             <option selected>Vui lòng chọn Tỉnh/Thành phố</option>
                         </select>
                     </div>
                     <div class="row">
-                        <p>Quận/Huyện</p>
-                        <select class="select-district form-select" aria-label="Default select example">
+                        <p class="col-4">Quận/Huyện</p>
+                        <select class="col-6 select-district form-select" aria-label="Default select example" disabled>
                             <option selected>Vui lòng chọn Quận/Huyện</option>
                         </select>
                     </div>
                     <div class="row">
-                        <p>Phường/Xã</p>
-                        <select class="select-ward form-select" aria-label="Default select example">
+                        <p class="col-4">Phường/Xã</p>
+                        <select class="col-6 select-ward form-select" aria-label="Default select example" disabled>
                             <option selected>Vui lòng chọn Phường/Xã</option>
                         </select>
                     </div>
@@ -581,119 +585,203 @@
 <script src="js/divzoom.js"></script>
 <script src="js/rate&review.js"></script>
 <script>
-
-    var logisticIDToken = "";
+    let logisticIDToken = null;
 
     async function autoLoginLogisticAPI() {
-        $.ajax({
-            url: "<%=APIConstants.LOGISTIC_HOST_API%>/auth/login",
-            type: "POST",
-            dataType: "json",
-            data: {
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
                 'email': '<%=APIConstants.LOGISTIC_EMAIL_LOGIN%>',
                 'password': '<%=APIConstants.LOGISTIC_PASSWORD_LOGIN%>'
-            },
-            success: function (data) {
-                // Xử lý dữ liệu trả về ở đây
+            })
+        };
+
+        await fetch('<%=APIConstants.LOGISTIC_HOST_API%>/auth/login', options)
+            .then(response => response.json())
+            .then(data => {
+                // xử lý dữ liệu ở đây
                 logisticIDToken = data.access_token
-                // return data.access_token
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
-            }
-        });
+            })
+            .catch(error => {
+                // xử lý lỗi
+                console.log(error)
+            });
     }
 
     $(document).ready(function () {
-        $(".getAPIAddress").click(async function () {
-            await autoLoginLogisticAPI()
-            console.log(logisticIDToken)
-            let tagSelectModalGetProvince = document.querySelector('.select-province')
-            $.ajax({
-                url: "<%=APIConstants.LOGISTIC_HOST_API%>/province",
-                type: "GET",
-                dataType: "json",
-                headers: {
-                    'Authorization': 'Bearer ' + logisticIDToken
-                },
-                success: function (data) {
-                    // Xử lý dữ liệu trả về ở đây
-                    console.log(data.original.data);
+        let tagSelectModalGetProvince = document.querySelector('.select-province')
+        let tagSelectModalGetDistrict = document.querySelector('.select-district')
+        let tagSelectModalGetWard = document.querySelector('.select-ward')
 
-                    for (let i = 0; i < data.original.data.length; i++) {
-                        let option = document.createElement("option");
-                        option.value = `${data.original.data[i].ProvinceID}`;
-                        option.text = `${data.original.data[i].ProvinceName}`;
-                        tagSelectModalGetProvince.appendChild(option);
+        let height = 100
+        let length = 100
+        let width = 100
+        let weight = 100
+
+        let valueProvince = 0
+        let valueDistrict = 0
+        let valueWard = 0
+
+        $('.getAPIAddress').click(async () => {
+            let serviceFee = $('.service-fee span')
+
+            if (valueProvince > 0 && valueDistrict > 0 && valueWard > 0) {
+                $('.address').text(`${tagSelectModalGetWard.options[tagSelectModalGetWard.selectedIndex].textContent},
+                                    ${tagSelectModalGetDistrict.options[tagSelectModalGetDistrict.selectedIndex].textContent},
+                                    ${tagSelectModalGetProvince.options[tagSelectModalGetProvince.selectedIndex].textContent}`)
+
+                //display service fee
+                await autoLoginLogisticAPI()
+
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + logisticIDToken
+                    },
+                    body: JSON.stringify({
+                        'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,
+                        'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,
+                        'to_district_id': valueDistrict,
+                        'to_ward_id': valueWard,
+                        'height': height,
+                        'length': length,
+                        'width': width,
+                        'weight': weight,
+                    })
+                };
+
+                await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/calculateFee`, options)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 200) {
+                            serviceFee.text(data.data[0].service_fee)
+                        }
+                    })
+                    .catch(error => {
+                        // xử lý lỗi
+                        console.log(error)
+                    });
+
+
+            }
+        })
+
+        $(".select-province").focus(async function () {
+            if (logisticIDToken == null) {
+                await autoLoginLogisticAPI()
+
+                const options = {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + logisticIDToken
                     }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus, errorThrown);
+                };
+
+                await fetch('<%=APIConstants.LOGISTIC_HOST_API%>/province', options)
+                    .then(response => response.json())
+                    .then(data => {
+                        // xử lý dữ liệu ở đây
+                        for (let i = 0; i < data.original.data.length; i++) {
+                            let option = document.createElement("option");
+                            option.value = `${data.original.data[i].ProvinceID}`;
+                            option.text = `${data.original.data[i].ProvinceName}`;
+                            tagSelectModalGetProvince.appendChild(option);
+                        }
+                        valueProvince = tagSelectModalGetProvince.value * 1
+                        handleEventSelectProvinceChange()
+                        handleEventSelectDistrictChange()
+                    })
+                    .catch(error => {
+                        // xử lý lỗi
+                        console.log(error)
+                    });
+            }
+        })
+
+        function handleEventSelectProvinceChange() {
+            $(".select-province").change(async function () {
+                valueProvince = tagSelectModalGetProvince.value * 1
+                tagSelectModalGetDistrict.innerHTML = ''
+                // await autoLoginLogisticAPI()
+
+                if (valueProvince > 0) {
+                    tagSelectModalGetDistrict.disabled = false;
+
+                    const options = {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + logisticIDToken
+                        }
+                    };
+
+                    await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/district?provinceID=${valueProvince}`, options)
+                        .then(response => response.json())
+                        .then(data => {
+                            // xử lý dữ liệu ở đây
+                            for (let i = 0; i < data.original.data.length; i++) {
+                                let option = document.createElement("option");
+                                option.value = `${data.original.data[i].DistrictID}`;
+                                option.text = `${data.original.data[i].DistrictName}`;
+                                tagSelectModalGetDistrict.appendChild(option);
+                            }
+                            valueDistrict = tagSelectModalGetDistrict.value * 1
+                        })
+                        .catch(error => {
+                            // xử lý lỗi
+                            console.log(error)
+                        });
                 }
             });
-        });
+        }
 
-        $(".getAPIAddress").click(async function () {
-            await autoLoginLogisticAPI()
-            console.log(logisticIDToken)
-            let tagSelectModalGetDistrict = document.querySelector('.select-district')
-            $.ajax({
-                url: "<%=APIConstants.LOGISTIC_HOST_API%>/district",
-                type: "GET",
-                dataType: "json",
-                headers: {
-                    'Authorization': 'Bearer ' + logisticIDToken
-                }, data: {
-                    provinceID: 269
-                },
-                success: function (data) {
-                    // Xử lý dữ liệu trả về ở đây
-                    console.log(data);
+        function handleEventSelectDistrictChange() {
+            $(".select-district").change(async function () {
+                valueDistrict = tagSelectModalGetDistrict.value * 1
+                tagSelectModalGetWard.innerHTML = ''
+                if (valueDistrict > 0) {
+                    tagSelectModalGetWard.disabled = false;
+                    const options = {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + logisticIDToken
+                        }
+                    };
 
-                    for (let i = 0; i < data.original.data.length; i++) {
-                        let option = document.createElement("option");
-                        option.value = `${data.original.data[i].DistrictID}`;
-                        option.text = `${data.original.data[i].DistrictName}`;
-                        tagSelectModalGetDistrict.appendChild(option);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus, errorThrown);
+                    await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/ward?districtID=${valueDistrict}`, options)
+                        .then(response => response.json())
+                        .then(data => {
+                            // xử lý dữ liệu ở đây
+                            for (let i = 0; i < data.original.data.length; i++) {
+                                let option = document.createElement("option");
+                                option.value = `${data.original.data[i].WardCode}`;
+                                option.text = `${data.original.data[i].WardName}`;
+                                tagSelectModalGetWard.appendChild(option);
+                            }
+                            valueWard = tagSelectModalGetWard.value * 1
+
+                            console.log(valueDistrict)
+                            console.log(valueWard)
+
+
+                        })
+                        .catch(error => {
+                            // xử lý lỗi
+                            console.log(error)
+                        });
                 }
             });
-        });
+        }
 
-        $(".getAPIAddress").click(async function () {
-            await autoLoginLogisticAPI()
-            console.log(logisticIDToken)
-            let tagSelectModalGetWard = document.querySelector('.select-ward')
-            $.ajax({
-                url: "<%=APIConstants.LOGISTIC_HOST_API%>/ward",
-                type: "GET",
-                dataType: "json",
-                headers: {
-                    'Authorization': 'Bearer ' + logisticIDToken
-                }, data: {
-                    districtID: 2264
-                },
-                success: function (data) {
-                    // Xử lý dữ liệu trả về ở đây
-                    console.log(data);
-
-                    for (let i = 0; i < data.original.data.length; i++) {
-                        let option = document.createElement("option");
-                        option.value = `${data.original.data[i].WardID}`;
-                        option.text = `${data.original.data[i].WardName}`;
-                        tagSelectModalGetWard.appendChild(option);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus, errorThrown);
-                }
-            });
-        });
+        handleEventSelectProvinceChange()
+        handleEventSelectDistrictChange()
     });
-
 
 </script>
 
