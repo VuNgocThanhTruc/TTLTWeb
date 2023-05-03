@@ -4,11 +4,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="vn.edu.hcmuaf.fit.model.*" %>
 <%@ page import="vn.edu.hcmuaf.fit.dao.ImageDAO" %>
+<%@ page import="vn.edu.hcmuaf.fit.dao.DiscountDAO" %>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Quản lý Hình Ảnh | ADMIN</title>
+    <title>Quản lý giảm giá | ADMIN</title>
     <%@include file="../../common/admin/head.jsp" %>
 </head>
 
@@ -20,23 +21,24 @@
 <%--<% List<ImageModel> imageFooter = (List<ImageModel>) ImageDAO.loadAllImage();%>--%>
 <%
     List<ImageModel> listImage = (List<ImageModel>) ImageDAO.loadAllImage();
+    List<DiscountModel> discountList = (List<DiscountModel>) DiscountDAO.getDiscountManage();
     Boolean isGrantAdd = false;
     Boolean isGrantEdit = false;
     Boolean isGrantDel = false;
-    for(FunctionModel function : functions){
-        if(function.getName().equals("Add")){
-            isGrantAdd = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
-        }else if(function.getName().equals("Edit")){
-            isGrantEdit = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
-        }else if(function.getName().equals("Delete")){
-            isGrantDel = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+    for (FunctionModel function : functions) {
+        if (function.getName().equals("Add")) {
+            isGrantAdd = auth.getDecentralizeFuncOfRole(idRole, "2", function.getId());
+        } else if (function.getName().equals("Edit")) {
+            isGrantEdit = auth.getDecentralizeFuncOfRole(idRole, "2", function.getId());
+        } else if (function.getName().equals("Delete")) {
+            isGrantDel = auth.getDecentralizeFuncOfRole(idRole, "2", function.getId());
         }
     }
 %>
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
-            <li class="breadcrumb-item active"><a href="manage-blog.jsp"><b>Quản lý hình ảnh</b></a></li>
+            <li class="breadcrumb-item active"><a href="manage-blog.jsp"><b>Quản lý giảm giá</b></a></li>
         </ul>
         <div id="clock"></div>
     </div>
@@ -47,20 +49,20 @@
                     <div class="row element-button">
                         <div class="col-sm-2">
                             <%--Tạo mới--%>
-                            <%if(isGrantAdd == true) {%>
-                                <a class="btn btn-add btn-sm" href="manage-image?type=add" title="Thêm"><i
-                                        class="fas fa-plus"></i>
-                                    Tạo mới</a>
+                            <%if (isGrantAdd == true) {%>
+                            <a class="btn btn-add btn-sm" href="manage-image?type=add" title="Thêm"><i
+                                    class="fas fa-plus"></i>
+                                Tạo mới</a>
                             <%} else {%>
-                                <button
-                                        class="btn btn-add btn-sm"
-                                        type="button"
-                                        title="Không có quyền này!"
-                                        style="opacity: 0.5; cursor: not-allowed;"
-                                        disabled
-                                >
-                                    <i class="fas fa-plus"></i> Tạo mới
-                                </button>
+                            <button
+                                    class="btn btn-add btn-sm"
+                                    type="button"
+                                    title="Không có quyền này!"
+                                    style="opacity: 0.5; cursor: not-allowed;"
+                                    disabled
+                            >
+                                <i class="fas fa-plus"></i> Tạo mới
+                            </button>
                             <%}%>
                         </div>
 
@@ -74,10 +76,10 @@
                                     class="fas fa-trash-alt"></i> Xóa tất cả </a>
                         </div>
                     </div>
-                    <%--                    in ra tin tức--%>
-                    <% if (listImage == null) {
+                    <%-- in ra tin tức--%>
+                    <% if (discountList == null) {
                     %>
-                    <div>Chưa có ảnh</div>
+                    <div>Chưa có dữ liệu</div>
                     <%
                     } else {%>
                     <table class="table table-hover table-bordered" id="sampleTable">
@@ -85,75 +87,88 @@
                         <tr>
                             <th width="10"><input type="checkbox" id="all"></th>
                             <th>ID</th>
-                            <th>Tên ảnh</th>
+                            <th>Loại sản phẩm</th>
+                            <th>Tên sản phẩm</th>
                             <th>Ảnh</th>
-                            <th>Loại ảnh</th>
+                            <th>Giá tiền</th>
+                            <th>Giảm giá</th>`
+                            <th>Giá tiền giảm</th>`
+                            <th>Ngày giờ bắt đầu</th>
+                            <th>Ngày giờ kết thúc</th>
                             <th>Chức năng</th>
 
                         </tr>
                         </thead>
                         <tbody>
                         <%
-                            for (ImageModel list : listImage) {%>
+//                            for (ImageModel list : listImage) {
+                            for (DiscountModel list : discountList) {
+                                int priceDiscount= (int) Math.ceil(list.getPrice()*(100-list.getPercentDiscount())/100);
+                        %>
                         <tr>
                             <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                            <td><%=list.getId()%>
+                            <td><%=list.getIdDiscount()%>
                             </td>
-                            <td><%=list.getName_photo()%>
+                            <td><%=list.getNameTypeProduct()%>
                             </td>
-
+                            <td><%=list.getNameProduct()%>
+                            </td>
                             <td>
-
-                                <img src="<% if(list.getType()==1){out.print("../images/banner/"+list.getPhoto());}else{out.print("../images/footer/"+list.getPhoto());}%>"
+                                <img src="<% out.print("../images/product/"+list.getAvatar());%>"
                                      alt="" width="100px;" class="avatar">
+                            </td>
+                            <td><%=list.getPrice()%>₫
+                            </td>
+                            <td><%=list.getPercentDiscount()%>%
+                            </td>
 
+                            <td><%= priceDiscount %>₫
+                            </td>
+                            <td><%=list.getDateStart()%>
+                            </td>
+                            <td><%=list.getDateEnd()%>
                             </td>
 
 
-                            <td><%
-                                if (list.getType() == 1) {
-                                    out.print("Ảnh slide");
-                                } else if (list.getType() == 2) {
-                                    out.print("Ảnh footer");
-                                }
-                            %></td>
+
+
                             <td>
                                 <%--Xóa--%>
-                                <%if(isGrantDel == true) {%>
-                                    <a href="manage-image?type=del&id=<%=list.getId()%>">
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa">
-                                            <i class="fas fa-trash-alt"> </i>
-                                        </button>
-                                    </a>
-                                <%} else {%>
-                                    <button
-                                            class="btn btn-primary btn-sm trash"
-                                            type="button"
-                                            title="Không có quyền này!"
-                                            style="opacity: 0.5; cursor: not-allowed;"
-                                            disabled
-                                    >
-                                        <i class="fas fa-trash-alt"></i>
+                                <%if (isGrantDel == true) {%>
+                                <a href="manage-discount?type=del&id=<%=list.getIdDiscount()%>">
+                                    <button class="btn btn-primary btn-sm trash" type="button" title="Xóa">
+                                        <i class="fas fa-trash-alt"> </i>
                                     </button>
+                                </a>
+                                <%} else {%>
+                                <button
+                                        class="btn btn-primary btn-sm trash"
+                                        type="button"
+                                        title="Không có quyền này!"
+                                        style="opacity: 0.5; cursor: not-allowed;"
+                                        disabled
+                                >
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                                 <%}%>
                                 <%--Sửa--%>
-                                <%if(isGrantEdit == true) {%>
-                                    <a href="manage-image?type=edit&id-image=<%=list.getId()%>">
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
-                                                id="show-emp" data-toggle="modal" data-target="#ModalUP">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                    </a>
-                                <%} else {%>
-                                    <button
-                                            class="btn btn-primary btn-sm edit"
-                                            type="button"
-                                            title="Không có quyền này!"
-                                            style="opacity: 0.5; cursor: not-allowed;"
-                                            disabled
-                                    >
+                                <%if (isGrantEdit == true) {%>
+                                <a href="manage-image?type=edit&id-image=<%=list.getIdDiscount()%>">
+                                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
+                                            id="show-emp" data-toggle="modal" data-target="#ModalUP">
                                         <i class="fas fa-edit"></i>
                                     </button>
+                                </a>
+                                <%} else {%>
+                                <button
+                                        class="btn btn-primary btn-sm edit"
+                                        type="button"
+                                        title="Không có quyền này!"
+                                        style="opacity: 0.5; cursor: not-allowed;"
+                                        disabled
+                                >
+                                    <i class="fas fa-edit"></i>
+                                </button>
                                 <%}%>
                             </td>
                         </tr>
