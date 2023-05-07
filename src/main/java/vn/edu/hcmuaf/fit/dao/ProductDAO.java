@@ -29,8 +29,22 @@ public class ProductDAO {
                 while (rs2.next()) {
                     listImage.add(new LibraryImageModel(rs2.getString(1)));
                 }
-                System.out.println(list.toString());
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), listImage));
+
+                ProductModel productModel = new ProductModel();
+                productModel.setId(rs.getInt("id"));
+                productModel.setName(rs.getString("name"));
+                productModel.setPrice(rs.getInt("price"));
+                productModel.setIdBrand(rs.getInt("id_brand"));
+                productModel.setIdTypeProduct(rs.getInt("id_type_product"));
+                productModel.setIdStatusDevice(rs.getInt("id_status_device"));
+                productModel.setDescribe(rs.getString("describe"));
+                productModel.setHeight(rs.getInt("height"));
+                productModel.setLength(rs.getInt("length"));
+                productModel.setWidth(rs.getInt("width"));
+                productModel.setWeight(rs.getInt("weight"));
+                productModel.setListImage(listImage);
+
+                list.add(productModel);
             }
             return list;
         } catch (Exception ex) {
@@ -57,7 +71,21 @@ public class ProductDAO {
                 while (rs2.next()) {
                     listImage.add(new LibraryImageModel(rs2.getString(1)));
                 }
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), listImage));
+                ProductModel productModel = new ProductModel();
+                productModel.setId(rs.getInt("id"));
+                productModel.setName(rs.getString("name"));
+                productModel.setPrice(rs.getInt("price"));
+                productModel.setIdBrand(rs.getInt("id_brand"));
+                productModel.setIdTypeProduct(rs.getInt("id_type_product"));
+                productModel.setIdStatusDevice(rs.getInt("id_status_device"));
+                productModel.setDescribe(rs.getString("describe"));
+                productModel.setHeight(rs.getInt("height"));
+                productModel.setLength(rs.getInt("length"));
+                productModel.setWidth(rs.getInt("width"));
+                productModel.setWeight(rs.getInt("weight"));
+                productModel.setListImage(listImage);
+
+                list.add(productModel);
             }
             return list;
         } catch (Exception ex) {
@@ -86,7 +114,21 @@ public class ProductDAO {
                 while (rs2.next()) {
                     listImage.add(new LibraryImageModel(rs2.getString(1)));
                 }
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), listImage));
+                ProductModel productModel = new ProductModel();
+                productModel.setId(rs.getInt("id"));
+                productModel.setName(rs.getString("name"));
+                productModel.setPrice(rs.getInt("price"));
+                productModel.setIdBrand(rs.getInt("id_brand"));
+                productModel.setIdTypeProduct(rs.getInt("id_type_product"));
+                productModel.setIdStatusDevice(rs.getInt("id_status_device"));
+                productModel.setDescribe(rs.getString("describe"));
+                productModel.setHeight(rs.getInt("height"));
+                productModel.setLength(rs.getInt("length"));
+                productModel.setWidth(rs.getInt("width"));
+                productModel.setWeight(rs.getInt("weight"));
+                productModel.setListImage(listImage);
+
+                list.add(productModel);
             }
             return list;
         } catch (Exception ex) {
@@ -118,7 +160,21 @@ public class ProductDAO {
                         System.out.println(rs2.getString(1));
                         listImage.add(new LibraryImageModel(rs2.getString(1)));
                     }
-                    list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), listImage));
+                    ProductModel productModel = new ProductModel();
+                    productModel.setId(rs.getInt("id"));
+                    productModel.setName(rs.getString("name"));
+                    productModel.setPrice(rs.getInt("price"));
+                    productModel.setIdBrand(rs.getInt("id_brand"));
+                    productModel.setIdTypeProduct(rs.getInt("id_type_product"));
+                    productModel.setIdStatusDevice(rs.getInt("id_status_device"));
+                    productModel.setDescribe(rs.getString("describe"));
+                    productModel.setHeight(rs.getInt("height"));
+                    productModel.setLength(rs.getInt("length"));
+                    productModel.setWidth(rs.getInt("width"));
+                    productModel.setWeight(rs.getInt("weight"));
+                    productModel.setListImage(listImage);
+
+                    list.add(productModel);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -176,7 +232,21 @@ public class ProductDAO {
                 while (rs2.next()) {
                     listImage.add(new LibraryImageModel(rs2.getString(1)));
                 }
-                return new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), listImage);
+                ProductModel productModel = new ProductModel();
+                productModel.setId(rs.getInt("id"));
+                productModel.setName(rs.getString("name"));
+                productModel.setPrice(rs.getInt("price"));
+                productModel.setIdBrand(rs.getInt("id_brand"));
+                productModel.setIdTypeProduct(rs.getInt("id_type_product"));
+                productModel.setIdStatusDevice(rs.getInt("id_status_device"));
+                productModel.setDescribe(rs.getString("describe"));
+                productModel.setHeight(rs.getInt("height"));
+                productModel.setLength(rs.getInt("length"));
+                productModel.setWidth(rs.getInt("width"));
+                productModel.setWeight(rs.getInt("weight"));
+                productModel.setListImage(listImage);
+
+                return productModel;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -223,7 +293,21 @@ public class ProductDAO {
                     listImage.add(new LibraryImageModel(rs2.getString(1)));
                 }
 
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), listImage));
+                ProductModel productModel = new ProductModel();
+                productModel.setId(rs.getInt("id"));
+                productModel.setName(rs.getString("name"));
+                productModel.setPrice(rs.getInt("price"));
+                productModel.setIdBrand(rs.getInt("id_brand"));
+                productModel.setIdTypeProduct(rs.getInt("id_type_product"));
+                productModel.setIdStatusDevice(rs.getInt("id_status_device"));
+                productModel.setDescribe(rs.getString("describe"));
+                productModel.setHeight(rs.getInt("height"));
+                productModel.setLength(rs.getInt("length"));
+                productModel.setWidth(rs.getInt("width"));
+                productModel.setWeight(rs.getInt("weight"));
+                productModel.setListImage(listImage);
+
+                list.add(productModel);
             }
             return list;
         } catch (Exception e) {
@@ -251,7 +335,21 @@ public class ProductDAO {
                 while (rs2.next()) {
                     listImage.add(new LibraryImageModel(rs2.getString(1)));
                 }
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), listImage));
+                ProductModel productModel = new ProductModel();
+                productModel.setId(rs.getInt("id"));
+                productModel.setName(rs.getString("name"));
+                productModel.setPrice(rs.getInt("price"));
+                productModel.setIdBrand(rs.getInt("id_brand"));
+                productModel.setIdTypeProduct(rs.getInt("id_type_product"));
+                productModel.setIdStatusDevice(rs.getInt("id_status_device"));
+                productModel.setDescribe(rs.getString("describe"));
+                productModel.setHeight(rs.getInt("height"));
+                productModel.setLength(rs.getInt("length"));
+                productModel.setWidth(rs.getInt("width"));
+                productModel.setWeight(rs.getInt("weight"));
+                productModel.setListImage(listImage);
+
+                list.add(productModel);
             }
             return list;
         } catch (Exception e) {
@@ -342,7 +440,21 @@ public class ProductDAO {
                 while (rs2.next()) {
                     listImage.add(new LibraryImageModel(rs2.getString(1)));
                 }
-                list.add(new ProductModel(rs.getInt(1), rs.getString(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getInt(6), rs.getString(7), listImage));
+                ProductModel productModel = new ProductModel();
+                productModel.setId(rs.getInt("id"));
+                productModel.setName(rs.getString("name"));
+                productModel.setPrice(rs.getInt("price"));
+                productModel.setIdBrand(rs.getInt("id_brand"));
+                productModel.setIdTypeProduct(rs.getInt("id_type_product"));
+                productModel.setIdStatusDevice(rs.getInt("id_status_device"));
+                productModel.setDescribe(rs.getString("describe"));
+                productModel.setHeight(rs.getInt("height"));
+                productModel.setLength(rs.getInt("length"));
+                productModel.setWidth(rs.getInt("width"));
+                productModel.setWeight(rs.getInt("weight"));
+                productModel.setListImage(listImage);
+
+                list.add(productModel);
             }
             return list;
         } catch (Exception ex) {
@@ -384,10 +496,10 @@ public class ProductDAO {
         LinkedList<RateReviewModel> list = new LinkedList<>();
 
         String sql = "select u.avatar avatar, u.name name, r.rate rate, c.content content, c.create_at createAt from " +
-                    "rate_products r join users u on r.id_user=u.id " +
-                    "join comments c on c.id_rate_product=r.id " +
-                    "where r.id_product="+ idProduct+
-                    " order by r.id desc";
+                "rate_products r join users u on r.id_user=u.id " +
+                "join comments c on c.id_rate_product=r.id " +
+                "where r.id_product=" + idProduct +
+                " order by r.id desc";
 
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);

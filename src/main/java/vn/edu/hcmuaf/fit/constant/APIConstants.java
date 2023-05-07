@@ -19,4 +19,6 @@ public class APIConstants {
     public static String LOGISTIC_HOST_API = "http://140.238.54.136/api";
     public static String LOGISTIC_EMAIL_LOGIN = "phonecarenlu@gmail.com";
     public static String LOGISTIC_PASSWORD_LOGIN = "Phonecarenlu123";
+    public static int ID_DISTRICT_STORE = 3695;
+    public static int ID_WARD_STORE = 90816;
 }
