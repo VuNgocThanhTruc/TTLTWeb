@@ -20,7 +20,6 @@
 <%@include file="../../common/admin/sidebar.jsp" %>
 <%--<% List<ImageModel> imageFooter = (List<ImageModel>) ImageDAO.loadAllImage();%>--%>
 <%
-    List<ImageModel> listImage = (List<ImageModel>) ImageDAO.loadAllImage();
     List<DiscountModel> discountList = (List<DiscountModel>) DiscountDAO.getDiscountManage();
     Boolean isGrantAdd = false;
     Boolean isGrantEdit = false;
@@ -38,7 +37,7 @@
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
-            <li class="breadcrumb-item active"><a href="manage-blog.jsp"><b>Quản lý giảm giá</b></a></li>
+            <li class="breadcrumb-item active"><a href="manage-discount.jsp"><b>Quản lý giảm giá</b></a></li>
         </ul>
         <div id="clock"></div>
     </div>
@@ -50,7 +49,7 @@
                         <div class="col-sm-2">
                             <%--Tạo mới--%>
                             <%if (isGrantAdd == true) {%>
-                            <a class="btn btn-add btn-sm" href="manage-image?type=add" title="Thêm"><i
+                            <a class="btn btn-add btn-sm" href="manage-discount?type=add" title="Thêm"><i
                                     class="fas fa-plus"></i>
                                 Tạo mới</a>
                             <%} else {%>

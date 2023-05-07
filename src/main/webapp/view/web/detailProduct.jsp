@@ -162,15 +162,8 @@
                                 <div class="product-title">
                                     <h1><%=product.getName()%>
                                     </h1>
-                                    <%--                                    <p>Server time: <%=serverTime.toString()%>--%>
-                                    <%--                                    </p>--%>
-                                    <%--                                    <p>Server time: <%=timestamp.toString()%>--%>
-                                    <%--                                    </p>--%>
-                                    <%--                                    <p>date start: <%=dateStart.toString()%>--%>
-                                    <%--                                    </p>--%>
-                                    <%--                                    <p>date end: <%=dateEnd.toString()%>--%>
-                                    <%--                                    </p>--%>
-                                    <%-- <span id="pro_sku">ID: <%=product.getId()%></span>--%>
+
+<%--                                     <span id="pro_sku">ID: <%=product.getId()%></span>--%>
                                     <span id="pro_sku">SL: <%= inventories.getQuantity()%></span>
                                 </div>
 
@@ -182,6 +175,14 @@
                                     if (dateEnd.getTime() > timestamp.getTime() && dateStart.getTime() <timestamp.getTime()) {
                                         int priceDiscount = (int) Math.ceil(product.getPrice() * (100-discount.getPercentDiscount()) / 100);%>
                                 <div class="product-price" id="price-preview">
+                                    <p>Server time: <%=serverTime.toString()%>
+                                    </p>
+                                    <p>Server time: <%=timestamp.toString()%>
+                                    </p>
+                                    <p>date start: <%=dateStart.toString()%>
+                                    </p>
+                                    <p>date end: <%=dateEnd.toString()%>
+                                    </p>
                                     <span class="pro-price"><%=priceDiscount%>₫</span>
                                     <span class=""
                                           style="text-decoration: line-through;"><%=product.getPrice()%>₫</span>
