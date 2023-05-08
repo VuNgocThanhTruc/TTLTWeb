@@ -98,10 +98,6 @@
                                     <th>Tên sản phẩm</th>
                                     <th>Ảnh</th>
                                     <th>Giá tiền</th>
-                                    <th>Giảm giá</th>
-                                    `
-                                    <th>Ngày giờ bắt đầu</th>
-                                    <th>Ngày giờ kết thúc</th>
                                     <th>Chức năng</th>
                                 </tr>
                                 </thead>
@@ -121,51 +117,27 @@
                                     </td>
                                     <td><%=list.getPrice()%>₫
                                     </td>
+
                                     <td>
-                                        <input class="form-control" type="number" placeholder="" name="name_photo"
-                                               value="">
-                                    </td>
-                                    <td><input class="form-control" type="datetime" placeholder="" name="name_photo"
-                                               value="">
-                                    </td>
-                                    <td><input class="form-control" type="date" placeholder="" name="name_photo"
-                                               value="">
-                                    </td>
-                                    <td>
-                                        <%--chức năng xóa người dùng--%>
-                                        <%if (isGrantDel == true) {%>
-                                        <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                           href="manage-blog?action=delete&id=<%=list.getIdProduct()%>"><i
-                                                class="fas fa-trash-alt"></i></a>
-                                        <%} else {%>
-                                        <button
-                                                class="btn btn-primary btn-sm trash"
-                                                type="button"
-                                                title="Không có quyền này!"
-                                                style="opacity: 0.5; cursor: not-allowed;"
-                                                disabled
-                                        >
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <%}%>
+
                                         <%-- chức năng sửa thông tin người dùng--%>
                                         <%if (isGrantEdit == true) {%>
-                                        <a href="manage-blog?action=edit-blog&id-blog=<%=list.getIdProduct()%>               ">
-                                            <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
+                                        <a href="manage-discount?type=addDiscount&id-product=<%=list.getIdProduct()%>">
+                                            <button class="btn btn-success btn-sm edit" type="button" title="Thêm"
                                                     id="show-confirm-admin"
                                                     data-toggle="modal" data-target="#ModalConfirm"><i
-                                                    class="fas fa-edit"></i>
+                                                    class="fas fa-save"></i>
                                             </button>
                                         </a>
                                         <%} else {%>
                                         <button
-                                                class="btn btn-primary btn-sm edit"
+                                                class="btn btn-success btn-sm edit"
                                                 type="button"
                                                 title="Không có quyền này!"
                                                 style="opacity: 0.5; cursor: not-allowed;"
                                                 disabled
                                         >
-                                            <i class="fas fa-edit"></i>
+                                            <i class="fas fa-save"></i>
                                         </button>
                                         <%}%>
                                     </td>
@@ -207,18 +179,18 @@
                                     <div class="form-group col-md-3">
                                         <label class="control-label">Giảm giá(%)</label>
                                         <input class="form-control" type="number" placeholder="" name="numberDiscount"
-                                               value="" min="1" max="100">
+                                               value="" min="1" max="100" required>
                                     </div>
 
                                     <div class="form-group col-md-3">
                                         <label class="control-label">Ngày bắt đầu bắt đầu</label>
-                                        <input class="form-control" type="datetime-local" placeholder=""
+                                        <input class="form-control" type="datetime-local"
                                                name="dateStart"
-                                               value="" step="1">
+                                               value="" step="1" required>
                                     </div>
                                     <div class="form-group col-md-3">
                                         <label class="control-label">Ngày giờ kết thúc</label>
-                                        <input class="form-control" type="datetime-local" placeholder="" name="dateEnd" step="1">
+                                        <input class="form-control" type="datetime-local"  name="dateEnd" step="1" required>
                                     </div>
 
                                     <input class="btn btn-save" type="submit" value="lưu lại"/>

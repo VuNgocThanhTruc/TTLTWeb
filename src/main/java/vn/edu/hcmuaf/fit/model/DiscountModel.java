@@ -24,6 +24,27 @@ public class DiscountModel {
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.percentDiscount = percentDiscount;
+
+    }
+
+    public DiscountModel(int idTypeProduct, int idProduct, String nameTypeProduct, String nameProduct, String avatar, int price) {
+        this.idTypeProduct = idTypeProduct;
+        this.idProduct = idProduct;
+        this.nameTypeProduct = nameTypeProduct;
+        this.nameProduct = nameProduct;
+        this.avatar = avatar;
+        this.price = price;
+    }
+
+    public DiscountModel(int idDiscount, int idTypeProduct, int idProduct, String dateStart, String dateEnd, int percentDiscount, String nameTypeProduct, String nameProduct) {
+        this.idDiscount = idDiscount;
+        this.idTypeProduct = idTypeProduct;
+        this.idProduct = idProduct;
+        this.dateStart = dateStart;
+        this.dateEnd = dateEnd;
+        this.percentDiscount = percentDiscount;
+        this.nameTypeProduct = nameTypeProduct;
+        this.nameProduct = nameProduct;
     }
 
     public DiscountModel(int idProduct, String nameTypeProduct, String nameProduct, String avatar, int price) {
@@ -55,7 +76,6 @@ public class DiscountModel {
         this.avatar = avatar;
         this.price = price;
     }
-
 
     public int getIdDiscount() {
         return idDiscount;

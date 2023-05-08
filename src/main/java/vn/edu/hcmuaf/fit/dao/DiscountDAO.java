@@ -40,6 +40,33 @@ public class DiscountDAO {
             throw new RuntimeException(e);
         }
     }
+    // Lấy giảm giá từ id
+    public static DiscountModel getProductById(int id) {
+
+        DiscountModel discounts = new DiscountModel();
+
+        String sql = "SELECT p.id_type_product, p.id,p.`name`,t.name_type_product,p.avatar,p.price from products p join type_products t on p.id_type_product = t.id " +
+                "WHERE p.id=" + id;
+        try {
+
+            PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int idTypeProduct = Integer.parseInt(rs.getString(1));
+                int idProduct = Integer.parseInt(rs.getString(2));
+                String nameProduct = rs.getString(3);
+                String nameTypeProduct = rs.getString(4);
+
+                String avatar = rs.getString(5);
+                int price = Integer.parseInt(rs.getString(6));
+                discounts = new DiscountModel(idTypeProduct,idProduct,nameTypeProduct,nameProduct,avatar,price);
+            }
+            return discounts;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
     // Lấy danh sách giảm giá
     public static List<DiscountModel> getDiscountManage() {
         LinkedList<DiscountModel> discounts = new LinkedList<>();
@@ -167,7 +194,7 @@ public class DiscountDAO {
 
     public static void main(String[] args) {
         DiscountDAO a =new DiscountDAO();
-//        System.out.println(DiscountDAO.getDiscount(10));
+        System.out.println(DiscountDAO.getProductById(2));
 //        System.out.println(DiscountDAO.getIDProductByIDTypeProduct(1));
 
 //        a.addDiscountByTypeProduct(3,10,"2023-05-06 16:55:24","2023-05-06 16:55:24",10);

@@ -5,6 +5,7 @@ import vn.edu.hcmuaf.fit.dao.DiscountDAO;
 import vn.edu.hcmuaf.fit.dao.ImageDAO;
 import vn.edu.hcmuaf.fit.model.DiscountModel;
 import vn.edu.hcmuaf.fit.model.ProductModel;
+import vn.edu.hcmuaf.fit.service.DiscountService;
 import vn.edu.hcmuaf.fit.service.ProductService;
 
 import javax.servlet.ServletException;
@@ -26,6 +27,7 @@ public class ManageDiscountController extends HttpServlet {
         String typeParam = request.getParameter("type");
         String view = "";
         ProductService productService = new ProductService();
+        DiscountService discountService = new DiscountService();
 
         if (SystemConstant.LIST.equals(typeParam)) {
             view = "/view/admin/manage-discount.jsp";
@@ -34,7 +36,7 @@ public class ManageDiscountController extends HttpServlet {
         } else if (SystemConstant.EDIT.equals(typeParam)) {
             String idImgParam = request.getParameter("id-image");
 //            if (idImgParam != null) {
-//                request.setAttribute("image", productService.getDetailProduct(Integer.parseInt(idImgParam)));
+            request.setAttribute("image", productService.getDetailProduct(Integer.parseInt(idImgParam)));
 //            }
             view = "/view/admin/edit-discount.jsp";
         } else if (typeParam == null) {
@@ -42,13 +44,13 @@ public class ManageDiscountController extends HttpServlet {
         } else if (typeParam.equals("del")) {
             doGet_Del(request, response);
             view = "/view/admin/manage-discount.jsp";
-        }
-        else if (typeParam.equals("addByTypeProduct")) {
-//            doPost_addByTypeProduct(request, response);
-//
-//            view = "/view/admin/manage-discount.jsp";
-            System.out.println("get");
+        } else if (typeParam.equals("addDiscount")) {
 
+            String contain = request.getParameter("id-product");
+            if (contain != null) {
+                request.setAttribute("contain", discountService.getProductById(Integer.parseInt(contain)));
+            }
+            view = "/view/admin/add-detail-discount.jsp";
         }
 
 
@@ -86,11 +88,14 @@ public class ManageDiscountController extends HttpServlet {
         } else if (typeParam.equals("del")) {
             doGet_Del(request, response);
             view = "/view/admin/manage-discount.jsp";
-        }
-        else if (typeParam.equals("addByTypeProduct")) {
-            System.out.println("Post");
+        } else if (typeParam.equals("addByTypeProduct")) {
             doPost_addByTypeProduct(request, response);
 
+            view = "/view/admin/manage-discount.jsp";
+
+        } else if (typeParam.equals("addByIdProduct")) {
+            doPost_addByIdProduct(request, response);
+            System.out.println("post");
             view = "/view/admin/manage-discount.jsp";
 
         }
@@ -107,6 +112,7 @@ public class ManageDiscountController extends HttpServlet {
 
 //        request.getRequestDispatcher("/view/admin/manage-image.jsp").forward(request, response);
     }
+
     //xóa discount
     private void doGet_Del(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -119,6 +125,7 @@ public class ManageDiscountController extends HttpServlet {
 
 
     }
+
     // thêm mã giảm giá theo loại sản phẩm
     private void doPost_addByTypeProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -127,14 +134,30 @@ public class ManageDiscountController extends HttpServlet {
         int typeProduct = Integer.parseInt(request.getParameter("typeProduct"));
         int numberDiscount = Integer.parseInt(request.getParameter("numberDiscount"));
         String dateStart = request.getParameter("dateStart");
-        String dateEnd= request.getParameter("dateEnd");
+        String dateEnd = request.getParameter("dateEnd");
         HttpSession session = request.getSession();
         DiscountDAO discountDAO = new DiscountDAO();
-        List<DiscountModel> listIDTypeProduct=  discountDAO.getIDProductByIDTypeProduct(typeProduct);
+        List<DiscountModel> listIDTypeProduct = discountDAO.getIDProductByIDTypeProduct(typeProduct);
         for (DiscountModel list : listIDTypeProduct) {
-           discountDAO.addDiscount(typeProduct,list.getIdProduct(),dateStart,dateEnd,numberDiscount);
+            discountDAO.addDiscount(typeProduct, list.getIdProduct(), dateStart, dateEnd, numberDiscount);
         }
 //        System.out.println(typeProduct+" "+numberDiscount+" "+dateStart+" "+dateEnd);
 
+    }
+
+    // thêm mã giảm giá theo id sản phẩm
+    private void doPost_addByIdProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
+        int idTypeProduct = Integer.parseInt(request.getParameter("idTypeProduct"));
+        int idProduct = Integer.parseInt(request.getParameter("idProduct"));
+        int numberDiscount = Integer.parseInt(request.getParameter("numberDiscount"));
+        String dateStart = request.getParameter("dateStart");
+        String dateEnd = request.getParameter("dateEnd");
+        HttpSession session = request.getSession();
+        DiscountDAO discountDAO = new DiscountDAO();
+        System.out.println(idTypeProduct+" "+idProduct+" "+numberDiscount+" "+dateStart+" "+dateEnd);
+        discountDAO.addDiscount(idTypeProduct, idProduct, dateStart, dateEnd, numberDiscount);
     }
 }
