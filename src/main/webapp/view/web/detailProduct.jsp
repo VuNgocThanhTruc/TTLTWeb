@@ -318,7 +318,9 @@
                                                                        value="<%=product.getName()%>">
                                                                 <input type="hidden" name="amount"
                                                                        value="<%=product.getPrice()%>">
-                                                                <input type="hidden" name="discount_amount"
+                                                                <input type="hidden" name="discount \
+
+                                                                _amount"
                                                                        value="10000">
                                                                 <input type="hidden" name="currency_code" value="VND">
                                                                 <input type="hidden" name="id_item"

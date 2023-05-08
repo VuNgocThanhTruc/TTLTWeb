@@ -50,7 +50,7 @@
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
-            <li class="breadcrumb-item active"><a href="manage-discount.jsp"><b>Quản lý giảm giá</b></a></li>
+            <li class="breadcrumb-item active"><a href="manage-discount"><b>Quản lý giảm giá</b></a></li>
         </ul>
         <div id="clock"></div>
     </div>

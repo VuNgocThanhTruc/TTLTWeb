@@ -67,6 +67,36 @@ public class DiscountDAO {
             throw new RuntimeException(e);
         }
     }
+    // Lấy giảm giá từ id
+    public static DiscountModel getProductById2(int id) {
+
+        DiscountModel discounts = new DiscountModel();
+
+        String sql = "SELECT d.id,p.id_type_product,p.id,d.date_start,d.date_end,d.percent_discount,t.name_type_product,p.`name`,p.avatar,p.price from products p join type_products t on p.id_type_product = t.id join discounts d on  d.id_product = p.id " +
+                "WHERE p.id=" + id;
+        try {
+
+            PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int idDiscount = Integer.parseInt(rs.getString(1));
+                int idTypeProduct = Integer.parseInt(rs.getString(2));
+                int idProduct = Integer.parseInt(rs.getString(3));
+                String dateStart = rs.getString(4);
+                String dateEnd = rs.getString(5);
+                int percentDiscount = Integer.parseInt(rs.getString(6));
+                String nameTypeProduct = rs.getString(7);
+                String nameProduct = rs.getString(8);
+                String avatar = rs.getString(9);
+                int price = Integer.parseInt(rs.getString(10));
+                discounts = new DiscountModel(idDiscount,idTypeProduct, idProduct, dateStart, dateEnd, percentDiscount,nameTypeProduct,nameProduct,avatar,price);
+            }
+            return discounts;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
     // Lấy danh sách giảm giá
     public static List<DiscountModel> getDiscountManage() {
         LinkedList<DiscountModel> discounts = new LinkedList<>();
@@ -191,10 +221,30 @@ public class DiscountDAO {
             System.out.println("Error when addImage:" + e.getMessage());
         }
     }
+    // cập nhật mã giám giá
+    public void editDiscount(int idDiscount, String dateStart,String dateEnd,int percentDiscount) {
+        String sql = "update discounts set date_start=?,date_end=?,percent_discount=? where id ='" + idDiscount + "'";
+        Connection connect = ConnectToDatabase.getConnect();
+        try {
+            PreparedStatement ppstm = connect.prepareStatement(sql);
+
+            ppstm.setString(1, dateStart);
+            ppstm.setString(2, dateEnd);
+            ppstm.setInt(3, percentDiscount);
+
+
+            ppstm.executeUpdate();
+
+
+        } catch (Exception e) {
+            System.out.println("Error when addImage:" + e.getMessage());
+        }
+    }
 
     public static void main(String[] args) {
         DiscountDAO a =new DiscountDAO();
-        System.out.println(DiscountDAO.getProductById(2));
+        a.editDiscount(1,"2023-05-06 16:55:24","2023-05-06 16:55:24",10);
+//        System.out.println(DiscountDAO.getProductById2(5));
 //        System.out.println(DiscountDAO.getIDProductByIDTypeProduct(1));
 
 //        a.addDiscountByTypeProduct(3,10,"2023-05-06 16:55:24","2023-05-06 16:55:24",10);
