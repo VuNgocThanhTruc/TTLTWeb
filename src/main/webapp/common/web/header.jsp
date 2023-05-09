@@ -179,11 +179,11 @@
                         <button type="submit" class="btn-search btn" id="search-header-btn">
                             <i style="font-weight:bold" class="fas fa-search"></i>
                         </button>
-                        <div id="searchResultsWithAjax" >
+                        <div id="searchResultsWithAjax">
                         </div>
                     </form>
-<%--                    <div id="ajaxSearchResults" class="smart-search-wrapper ajaxSearchResults">--%>
-<%--                    </div>--%>
+                    <%--                    <div id="ajaxSearchResults" class="smart-search-wrapper ajaxSearchResults">--%>
+                    <%--                    </div>--%>
                 </div>
             </div>
         </div>
@@ -196,6 +196,7 @@
                 <input type="hidden" name="display" value="1">
                 <button class="w3view-cart btn" type="submit" name="submit" value="" onclick="addBtnCart()">
                     <div class="icon-ol"><i class="icon-header fas fa-shopping-cart" aria-hidden="true"></i></div>
+                    <span class="p-1 bg-danger border-0 text-light">0</span>
                 </button>
             </form>
         </div>
@@ -329,6 +330,9 @@
                 }
             });
         })
+
+        $('.w3view-cart.btn span').innerText =
+        <%=session.getAttribute("numCart")%>
     })
 
 </script>

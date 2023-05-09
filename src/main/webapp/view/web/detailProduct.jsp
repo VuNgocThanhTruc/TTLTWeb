@@ -1,6 +1,8 @@
 <%@ page import="vn.edu.hcmuaf.fit.model.ProductModel" %>
 <%@ page import="vn.edu.hcmuaf.fit.service.ProductService" %>
 <%@ page import="vn.edu.hcmuaf.fit.constant.APIConstants" %>
+<%@ page import="com.restfb.json.Json" %>
+<%@ page import="com.restfb.json.JsonObject" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="../../common/taglib.jsp" %>
 
@@ -168,8 +170,12 @@
                                     </button>
                                 </div>
 
-                                <div class="service-fee">
+                                <div class="product-price service-fee">
                                     Phí vận chuyển: <span>0</span>đ
+                                </div>
+
+                                <div class="product-price lead-time">
+                                    Dự tính thời gian giao: <span></span>
                                 </div>
 
                                 <form id="add-item-form" action="" method="post" class="variants clearfix">
@@ -529,6 +535,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
                     <button type="button" class="btn btn-primary getAPIAddress">Giao đến địa chỉ này</button>
+                    <a href="<%=request.getContextPath()%>/api/logistic?type=leadTime&logisticIDToken=<%=APIConstants.LOGISTIC_ID_TOKEN%>">Check</a>
                 </div>
             </div>
         </div>
@@ -545,25 +552,18 @@
 
     async function autoLoginLogisticAPI() {
 
-        const options = {
+        await fetch(`<%=request.getContextPath()%>/api/logistic?action=login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'email': '<%=APIConstants.LOGISTIC_EMAIL_LOGIN%>',
-                'password': '<%=APIConstants.LOGISTIC_PASSWORD_LOGIN%>'
-            })
-        };
-
-        await fetch('<%=APIConstants.LOGISTIC_HOST_API%>/auth/login', options)
+            }
+        })
             .then(response => response.json())
             .then(data => {
-                // xử lý dữ liệu ở đây
-                logisticIDToken = data.access_token
+                console.log(data)
+                logisticIDToken = data
             })
             .catch(error => {
-                // xử lý lỗi
                 console.log(error)
             });
     }
@@ -583,66 +583,121 @@
         let valueWard = 0
 
         $('.getAPIAddress').click(async () => {
-            let serviceFee = $('.service-fee span')
+                let serviceFee = $('.service-fee span')
+                let leadTime = $('.lead-time span')
 
-            if (valueProvince > 0 && valueDistrict > 0 && valueWard > 0) {
-                $('.address').text(`${tagSelectModalGetWard.options[tagSelectModalGetWard.selectedIndex].textContent},
+                if (valueProvince > 0 && valueDistrict > 0 && valueWard > 0) {
+                    $('.address').text(`${tagSelectModalGetWard.options[tagSelectModalGetWard.selectedIndex].textContent},
                                     ${tagSelectModalGetDistrict.options[tagSelectModalGetDistrict.selectedIndex].textContent},
                                     ${tagSelectModalGetProvince.options[tagSelectModalGetProvince.selectedIndex].textContent}`)
 
-                //display service fee
-                await autoLoginLogisticAPI()
+                    //display service fee
+                    // await autoLoginLogisticAPI()
 
-                const options = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + logisticIDToken
-                    },
-                    body: JSON.stringify({
-                        'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,
-                        'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,
-                        'to_district_id': valueDistrict,
-                        'to_ward_id': valueWard,
-                        'height': height,
-                        'length': length,
-                        'width': width,
-                        'weight': weight,
-                    })
-                };
+                    const options = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + logisticIDToken,
+                        },
+                        body: JSON.stringify({
+                            'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,
+                            'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,
+                            'to_district_id': valueDistrict,
+                            'to_ward_id': valueWard,
+                            'height': height,
+                            'length': length,
+                            'width': width,
+                            'weight': weight,
+                        })
+                    };
 
-                await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/calculateFee`, options)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 200) {
-                            serviceFee.text(data.data[0].service_fee)
+                    await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/calculateFee`, options)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === 200) {
+                                serviceFee.text(data.data[0].service_fee)
+                            }
+                        })
+                        .catch(error => {
+                            // xử lý lỗi
+                            console.log(error)
+                        });
+
+                    //    get lead time
+                    $.ajax({
+                        type: "POST",
+                        url: "<%=request.getContextPath()%>/api/logistic?action=leadTime",
+                        data: {
+                            logisticIDToken: logisticIDToken,
+                            from_district_id: <%=APIConstants.ID_DISTRICT_STORE%>,
+                            from_ward_id: <%=APIConstants.ID_WARD_STORE%>,
+                            to_district_id: valueDistrict,
+                            to_ward_id: valueWard,
+                            height: height,
+                            length: length,
+                            width: width,
+                            weight: weight
                         }
-                    })
-                    .catch(error => {
-                        // xử lý lỗi
-                        console.log(error)
+                    }).done(function (data) {
+                        console.log(data)
                     });
 
+                    <%--const options2 = {--%>
+                    <%--    method: 'POST',--%>
+                    <%--    headers: {--%>
+                    <%--        'Content-Type': 'application/json',--%>
+                    <%--        'Authorization': 'Bearer ' + logisticIDToken,--%>
+                    <%--        'Access-Control-Allow-Origin': 'http://140.238.54.136', --%>
+                    <%--        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE', --%>
+                    <%--        'Access-Control-Allow-Headers': 'Content-Type, Authorization' --%>
 
+                    <%--    },--%>
+                    <%--    body: JSON.stringify({--%>
+                    <%--        'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,--%>
+                    <%--        'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,--%>
+                    <%--        'to_district_id': valueDistrict,--%>
+                    <%--        'to_ward_id': valueWard,--%>
+                    <%--        'height': height,--%>
+                    <%--        'length': length,--%>
+                    <%--        'width': width,--%>
+                    <%--        'weight': weight,--%>
+                    <%--    })--%>
+                    <%--};--%>
+
+                    <%--await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/leadTime`, options2)--%>
+                    <%--    .then(response => response.json())--%>
+                    <%--    .then(data => {--%>
+                    <%--        console.log(data)--%>
+                    <%--        if (data.status === 200) {--%>
+                    <%--            let timestamp = data.data[0].timestamp--%>
+                    <%--            const date = new Date(timestamp)--%>
+                    <%--            leadTime.text(date.toLocaleString())--%>
+                    <%--        }--%>
+                    <%--    })--%>
+                    <%--    .catch(error => {--%>
+                    <%--        // xử lý lỗi--%>
+                    <%--        console.log(error)--%>
+                    <%--    });--%>
+
+                }
             }
-        })
+        )
 
         $(".select-province").focus(async function () {
-            if (logisticIDToken == null) {
+            if (logisticIDToken==null) {
+
                 await autoLoginLogisticAPI()
 
-                const options = {
+                await fetch(`<%=request.getContextPath()%>/api/logistic?action=province&token=${logisticIDToken}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + logisticIDToken
                     }
-                };
-
-                await fetch('<%=APIConstants.LOGISTIC_HOST_API%>/province', options)
+                })
                     .then(response => response.json())
                     .then(data => {
-                        // xử lý dữ liệu ở đây
+                        console.log("data: "+data)
                         for (let i = 0; i < data.original.data.length; i++) {
                             let option = document.createElement("option");
                             option.value = `${data.original.data[i].ProvinceID}`;
@@ -654,9 +709,10 @@
                         handleEventSelectDistrictChange()
                     })
                     .catch(error => {
-                        // xử lý lỗi
                         console.log(error)
                     });
+
+
             }
         })
 
