@@ -1,9 +1,12 @@
 package vn.edu.hcmuaf.fit.controller.admin;
 
 import com.sun.mail.iap.Response;
+import vn.edu.hcmuaf.fit.bean.Log;
+import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.ComponentModel;
 import vn.edu.hcmuaf.fit.model.FunctionModel;
 import vn.edu.hcmuaf.fit.model.RoleModel;
+import vn.edu.hcmuaf.fit.model.UserModel;
 import vn.edu.hcmuaf.fit.service.AuthoritiesService;
 
 import javax.management.relation.Role;
@@ -19,6 +22,9 @@ import java.util.StringTokenizer;
 public class ManageAuthoritiesController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        UserModel user =(UserModel) session.getAttribute("userlogin");
+
         AuthoritiesService authoritiesService = new AuthoritiesService();
         String view = "";
         String action = request.getParameter("action");
@@ -53,17 +59,25 @@ public class ManageAuthoritiesController extends HttpServlet {
             String idComponent = request.getParameter("idComp");
             request.setAttribute("id-component", idComponent);
             view = "/view/admin/manage-authorities.jsp";
+            DBConnect.getInstall().insert(
+                    new Log(0,
+                            Integer.parseInt(user == null ? user.getId() : "-1"),
+                            request.getRemoteAddr(),request.getRequestURI(),
+                            "Manage Authorities Page",
+                            0));
         }
         request.getRequestDispatcher(view).forward(request,response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        UserModel user =(UserModel) session.getAttribute("userlogin");
+
         String action = request.getParameter("action");
         String view = "/view/admin/manage-authorities.jsp?action=manage-authorities";
         AuthoritiesService authoritiesService = new AuthoritiesService();
         if(action.equals("add-authorities")){
-            System.out.println("add-submit");
             String nameRole = request.getParameter("name-role");
             String describeRole = request.getParameter("describe-role");
             //tạo nhóm quyền
@@ -80,6 +94,13 @@ public class ManageAuthoritiesController extends HttpServlet {
                     String idFunction = inputDecArr[1];
                     authoritiesService.setDecFuncForRole(idRole, idComponent, idFunction, true);
                 }
+
+            DBConnect.getInstall().insert(
+                    new Log(2,
+                            Integer.parseInt(user == null ? user.getId() : "-1"),
+                            request.getRemoteAddr(),request.getRequestURI(),
+                            "Add Role: id: " + idRole +", nameRole :" + nameRole,
+                            0));
 
             request.setAttribute("notify","Đã thêm nhóm quyền: " + nameRole);
         }else if(action.equals("edit-authorities")){
@@ -103,6 +124,14 @@ public class ManageAuthoritiesController extends HttpServlet {
                 }
 
             authoritiesService.print(idRole);
+
+            DBConnect.getInstall().insert(
+                    new Log(2,
+                            Integer.parseInt(user == null ? user.getId() : "-1"),
+                            request.getRemoteAddr(),request.getRequestURI(),
+                            "Edit Role: id: " + idRole +", nameRole :" + nameRole,
+                            0));
+
             request.setAttribute("notify","Đã sửa nhóm quyền: " + nameRole);
         }else if(action.equals("") || action == null) {
             System.out.println("post-authorities-null");
