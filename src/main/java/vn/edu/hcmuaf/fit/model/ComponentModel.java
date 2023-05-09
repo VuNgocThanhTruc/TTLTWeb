@@ -66,7 +66,8 @@ public class ComponentModel {
                 break;
             case "QLQ": result = "app-menu__icon bx bxs-key";
                 break;
-
+            case "QLL": result = "app-menu__icon bx bx-file-blank";
+                break;
        default: result = "";
         }
         return result;
@@ -97,7 +98,8 @@ public class ComponentModel {
                 break;
             case "QLQ": result = "manage-authorities?action=manage-authorities";
                 break;
-
+            case "QLL": result = "manage-log?action=manage-log";
+                break;
             default: result = "";
         }
         return result;

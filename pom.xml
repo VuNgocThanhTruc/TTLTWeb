@@ -126,6 +126,13 @@
       <version>3.12</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.jdbi/jdbi3-core -->
+    <dependency>
+      <groupId>org.jdbi</groupId>
+      <artifactId>jdbi3-core</artifactId>
+      <version>3.34.0</version>
+    </dependency>
+
   </dependencies>
   <build>
     <finalName>PhoneCare</finalName>

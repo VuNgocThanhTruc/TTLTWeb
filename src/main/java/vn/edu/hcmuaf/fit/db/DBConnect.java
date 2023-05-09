@@ -1,5 +1,8 @@
 package vn.edu.hcmuaf.fit.db;
 
+import org.jdbi.v3.core.Jdbi;
+import vn.edu.hcmuaf.fit.bean.AbBean;
+
 import java.sql.*;
 
 public class DBConnect {
@@ -60,4 +63,7 @@ public class DBConnect {
         }
     }
 
+    public boolean insert(AbBean bean){
+        return bean.insert(JdbiConnector.me());
+    }
 }

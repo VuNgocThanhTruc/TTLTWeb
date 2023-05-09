@@ -1,6 +1,8 @@
 package vn.edu.hcmuaf.fit.dao;
 
+import com.restfb.types.User;
 import vn.edu.hcmuaf.fit.db.ConnectToDatabase;
+import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.UserModel;
 
 import java.sql.*;
@@ -100,7 +102,6 @@ public class UserDAO implements ObjectDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return mapTemp;
     }
 
@@ -341,7 +342,8 @@ public class UserDAO implements ObjectDAO {
 
 
     public static void main(String[] args) {
-        UserDAO user = new UserDAO();
+        UserModel user = getUserById("1");
+        System.out.println(user.getAvatar());;
     }
 
     //Lấy ra toàn bộ tài khoản người dùng
@@ -400,5 +402,35 @@ public class UserDAO implements ObjectDAO {
             System.out.println("error in UserDAO:" + e.getMessage());
         }
         return listAccountAdmin;
+    }
+
+    //lấy ra một user bằng id
+    public static UserModel getUserById(String idUser){
+        UserModel user = null;
+        try {
+            PreparedStatement ps = DBConnect.getInstall().preStatement("select id, name, username,email, password, avatar, tel, id_type_user, dob, sex, address, id_role from users where id = ?");
+            ps.setString(1, idUser);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String name = rs.getString("name");
+                String username = rs.getString("username");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String avatar = rs.getString("avatar");
+                String tel = rs.getString("tel");
+                int id_type_user = rs.getInt("id_type_user");
+                String dob = rs.getString("dob");
+                int sex = rs.getInt("sex");
+                String address = rs.getString("address");
+                String idRole = rs.getString("id_role");
+                 user = new UserModel(id, name, username, email, password, avatar, tel, id_type_user,
+                        dob, sex, address, idRole);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("error in UserDAO:" + e.getMessage());
+        }
+        return user;
     }
 }
