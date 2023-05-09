@@ -1,8 +1,8 @@
 <%@ page import="vn.edu.hcmuaf.fit.model.ProductModel" %>
 <%@ page import="vn.edu.hcmuaf.fit.service.ProductService" %>
 <%@ page import="vn.edu.hcmuaf.fit.constant.APIConstants" %>
-<%@ page import="com.restfb.json.Json" %>
-<%@ page import="com.restfb.json.JsonObject" %>
+<%@page import="java.util.Date" %>
+<%@page import="java.sql.Timestamp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="../../common/taglib.jsp" %>
 
@@ -18,15 +18,22 @@
 <%
     List<ProductModel> pro = (List<ProductModel>) request.getAttribute("pro");
     List<RateReviewModel> listRate = (List<RateReviewModel>) request.getAttribute("listRate");
+
 %>
-<%ProductModel product = (ProductModel) request.getAttribute("product");%>
+<%
+    ProductModel product = (ProductModel) request.getAttribute("product");
+    InventoriesModel inventories = (InventoriesModel) request.getAttribute("inventoriesList");
+    DiscountModel discount = (DiscountModel) request.getAttribute("discount");
+
+
+%>
+
 <%@include file="../../common/web/header.jsp" %>
 
 <!--  detail product -->
 <main class="">
 
     <div id="product" class="productDetail-page">
-
         <!--  menu header seo -->
         <div class="breadcrumb-shop">
             <div class="container">
@@ -155,11 +162,46 @@
                                 <div class="product-title">
                                     <h1><%=product.getName()%>
                                     </h1>
-                                    <span id="pro_sku">ID: <%=product.getId()%></span>
+                                    <%--                                    <p>Server time: <%=serverTime.toString()%>--%>
+                                    <%--                                    </p>--%>
+                                    <%--                                    <p>Server time: <%=timestamp.toString()%>--%>
+                                    <%--                                    </p>--%>
+                                    <%--                                    <p>date start: <%=dateStart.toString()%>--%>
+                                    <%--                                    </p>--%>
+                                    <%--                                    <p>date end: <%=dateEnd.toString()%>--%>
+                                    <%--                                    </p>--%>
+                                    <%-- <span id="pro_sku">ID: <%=product.getId()%></span>--%>
+                                    <span id="pro_sku">SL: <%= inventories.getQuantity()%></span>
                                 </div>
-                                <div class="product-price" id="price-preview"><span
-                                        class="pro-price"><%=product.getPrice()%>₫</span>
+
+                                <% if (discount != null&& discount.getIdProduct()!=0) {
+                                    Date serverTime = new Date();
+                                    Timestamp timestamp = new Timestamp(serverTime.getTime());
+                                    Timestamp dateStart = Timestamp.valueOf(discount.getDateStart());
+                                    Timestamp dateEnd = Timestamp.valueOf(discount.getDateEnd());
+                                    if (dateEnd.getTime() > timestamp.getTime() && dateStart.getTime() <timestamp.getTime()) {
+                                        int priceDiscount = (int) Math.ceil(product.getPrice() * (100-discount.getPercentDiscount()) / 100);%>
+                                <div class="product-price" id="price-preview">
+                                    <span class="pro-price"><%=priceDiscount%>₫</span>
+                                    <span class=""
+                                          style="text-decoration: line-through;"><%=product.getPrice()%>₫</span>
+
+                                    <span class="pro-sale"
+                                          style="background-color: #ff6600;color: white;border: dashed;border-radius: 8px; "> -<%=discount.getPercentDiscount()%>%</span>
+
                                 </div>
+                                <%} else { %>
+                                <div class="product-price" id="price-preview">
+                                    <span class="pro-price"><%=product.getPrice()%>₫</span>
+                                </div>
+                                <%
+                                    }
+                                } else {
+                                %>
+                                <div class="product-price" id="price-preview">
+                                    <span class="pro-price"><%=product.getPrice()%>₫</span>
+                                </div>
+                                <%}%>
                                 <div class="product-price" id="delivery">
                                     <span>Giao đến: </span>
                                     <span class="address">Q. 3, P. 01, Hồ Chí Minh</span>
@@ -170,12 +212,8 @@
                                     </button>
                                 </div>
 
-                                <div class="product-price service-fee">
+                                <div class="service-fee">
                                     Phí vận chuyển: <span>0</span>đ
-                                </div>
-
-                                <div class="product-price lead-time">
-                                    Dự tính thời gian giao: <span></span>
                                 </div>
 
                                 <form id="add-item-form" action="" method="post" class="variants clearfix">
@@ -535,7 +573,6 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
                     <button type="button" class="btn btn-primary getAPIAddress">Giao đến địa chỉ này</button>
-                    <a href="<%=request.getContextPath()%>/api/logistic?type=leadTime&logisticIDToken=<%=APIConstants.LOGISTIC_ID_TOKEN%>">Check</a>
                 </div>
             </div>
         </div>
@@ -552,18 +589,25 @@
 
     async function autoLoginLogisticAPI() {
 
-        await fetch(`<%=request.getContextPath()%>/api/logistic?action=login`, {
+        const options = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }
-        })
+            },
+            body: JSON.stringify({
+                'email': '<%=APIConstants.LOGISTIC_EMAIL_LOGIN%>',
+                'password': '<%=APIConstants.LOGISTIC_PASSWORD_LOGIN%>'
+            })
+        };
+
+        await fetch('<%=APIConstants.LOGISTIC_HOST_API%>/auth/login', options)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
-                logisticIDToken = data
+                // xử lý dữ liệu ở đây
+                logisticIDToken = data.access_token
             })
             .catch(error => {
+                // xử lý lỗi
                 console.log(error)
             });
     }
@@ -583,121 +627,66 @@
         let valueWard = 0
 
         $('.getAPIAddress').click(async () => {
-                let serviceFee = $('.service-fee span')
-                let leadTime = $('.lead-time span')
+            let serviceFee = $('.service-fee span')
 
-                if (valueProvince > 0 && valueDistrict > 0 && valueWard > 0) {
-                    $('.address').text(`${tagSelectModalGetWard.options[tagSelectModalGetWard.selectedIndex].textContent},
+            if (valueProvince > 0 && valueDistrict > 0 && valueWard > 0) {
+                $('.address').text(`${tagSelectModalGetWard.options[tagSelectModalGetWard.selectedIndex].textContent},
                                     ${tagSelectModalGetDistrict.options[tagSelectModalGetDistrict.selectedIndex].textContent},
                                     ${tagSelectModalGetProvince.options[tagSelectModalGetProvince.selectedIndex].textContent}`)
 
-                    //display service fee
-                    // await autoLoginLogisticAPI()
-
-                    const options = {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + logisticIDToken,
-                        },
-                        body: JSON.stringify({
-                            'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,
-                            'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,
-                            'to_district_id': valueDistrict,
-                            'to_ward_id': valueWard,
-                            'height': height,
-                            'length': length,
-                            'width': width,
-                            'weight': weight,
-                        })
-                    };
-
-                    await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/calculateFee`, options)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.status === 200) {
-                                serviceFee.text(data.data[0].service_fee)
-                            }
-                        })
-                        .catch(error => {
-                            // xử lý lỗi
-                            console.log(error)
-                        });
-
-                    //    get lead time
-                    $.ajax({
-                        type: "POST",
-                        url: "<%=request.getContextPath()%>/api/logistic?action=leadTime",
-                        data: {
-                            logisticIDToken: logisticIDToken,
-                            from_district_id: <%=APIConstants.ID_DISTRICT_STORE%>,
-                            from_ward_id: <%=APIConstants.ID_WARD_STORE%>,
-                            to_district_id: valueDistrict,
-                            to_ward_id: valueWard,
-                            height: height,
-                            length: length,
-                            width: width,
-                            weight: weight
-                        }
-                    }).done(function (data) {
-                        console.log(data)
-                    });
-
-                    <%--const options2 = {--%>
-                    <%--    method: 'POST',--%>
-                    <%--    headers: {--%>
-                    <%--        'Content-Type': 'application/json',--%>
-                    <%--        'Authorization': 'Bearer ' + logisticIDToken,--%>
-                    <%--        'Access-Control-Allow-Origin': 'http://140.238.54.136', --%>
-                    <%--        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE', --%>
-                    <%--        'Access-Control-Allow-Headers': 'Content-Type, Authorization' --%>
-
-                    <%--    },--%>
-                    <%--    body: JSON.stringify({--%>
-                    <%--        'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,--%>
-                    <%--        'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,--%>
-                    <%--        'to_district_id': valueDistrict,--%>
-                    <%--        'to_ward_id': valueWard,--%>
-                    <%--        'height': height,--%>
-                    <%--        'length': length,--%>
-                    <%--        'width': width,--%>
-                    <%--        'weight': weight,--%>
-                    <%--    })--%>
-                    <%--};--%>
-
-                    <%--await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/leadTime`, options2)--%>
-                    <%--    .then(response => response.json())--%>
-                    <%--    .then(data => {--%>
-                    <%--        console.log(data)--%>
-                    <%--        if (data.status === 200) {--%>
-                    <%--            let timestamp = data.data[0].timestamp--%>
-                    <%--            const date = new Date(timestamp)--%>
-                    <%--            leadTime.text(date.toLocaleString())--%>
-                    <%--        }--%>
-                    <%--    })--%>
-                    <%--    .catch(error => {--%>
-                    <%--        // xử lý lỗi--%>
-                    <%--        console.log(error)--%>
-                    <%--    });--%>
-
-                }
-            }
-        )
-
-        $(".select-province").focus(async function () {
-            if (logisticIDToken==null) {
-
+                //display service fee
                 await autoLoginLogisticAPI()
 
-                await fetch(`<%=request.getContextPath()%>/api/logistic?action=province&token=${logisticIDToken}`, {
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + logisticIDToken
+                    },
+                    body: JSON.stringify({
+                        'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,
+                        'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,
+                        'to_district_id': valueDistrict,
+                        'to_ward_id': valueWard,
+                        'height': height,
+                        'length': length,
+                        'width': width,
+                        'weight': weight,
+                    })
+                };
+
+                await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/calculateFee`, options)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 200) {
+                            serviceFee.text(data.data[0].service_fee)
+                        }
+                    })
+                    .catch(error => {
+                        // xử lý lỗi
+                        console.log(error)
+                    });
+
+
+            }
+        })
+
+        $(".select-province").focus(async function () {
+            if (logisticIDToken == null) {
+                await autoLoginLogisticAPI()
+
+                const options = {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + logisticIDToken
                     }
-                })
+                };
+
+                await fetch('<%=APIConstants.LOGISTIC_HOST_API%>/province', options)
                     .then(response => response.json())
                     .then(data => {
-                        console.log("data: "+data)
+                        // xử lý dữ liệu ở đây
                         for (let i = 0; i < data.original.data.length; i++) {
                             let option = document.createElement("option");
                             option.value = `${data.original.data[i].ProvinceID}`;
@@ -709,10 +698,9 @@
                         handleEventSelectDistrictChange()
                     })
                     .catch(error => {
+                        // xử lý lỗi
                         console.log(error)
                     });
-
-
             }
         })
 
@@ -794,7 +782,6 @@
         handleEventSelectProvinceChange()
         handleEventSelectDistrictChange()
     });
-
 
 </script>
 

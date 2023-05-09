@@ -99,7 +99,8 @@
                                     </option>
                                 </select>
                             </td>
-                            <td name="description"><%=booking.getDescription()%></td><td>
+                            <td name="description"><%=booking.getDescription()%></td>
+                            <td>
                                 <%--sua booking--%>
                                 <%if(isGrantEdit == true) {%>
                                     <a href="manage-confirm?type=edit-confirm&id-confirm=<%=booking.getId()%>">

@@ -41,14 +41,14 @@
 
                         <div class="avatar text-center">
                             <img class="img-account-profile rounded-circle mb-2"
-                                 src="images/user/<% out.print( user.getAvatar());%>"
+                                 src="images/user/<%=user.getAvatar()%>"
                                  alt=""/>
                         </div>
 
-                        <div class="username  text-center"><% out.print(user.getName());%></div>
-                        <div class="email"><i class="fas fa-envelope"></i><% out.print(user.getEmail());%></div>
+                        <div class="username  text-center"><%=user.getName()%></div>
+                        <div class="email"><i class="fas fa-envelope"></i><%=user.getEmail()%></div>
                         <div class="phone"><i class="fas fa-phone-square-alt"></i><% if (user.getTel() != null) {
-                            out.print(user.getTel());
+                            user.getTel();
                         } else {
                             out.print("Bạn chưa nhập");
                         }%></div>
@@ -73,7 +73,7 @@
                             <div class="row">
                                 <div class="col-md-4 left">
                                     <img class="img-account-profile mb-2"
-                                         src="images/user/<% out.print( user.getAvatar());%>"
+                                         src="images/user/<%=user.getAvatar()%>"
                                          alt=""/>
 
                                 </div>
@@ -90,14 +90,14 @@
                                 <div class="col-md-6 ">
                                     <label class="mb-1">Họ tên</label>
                                     <input class="form-control" name="name" type="text"
-                                           value="<% out.print(user.getName());%>"/>
+                                           value="<%=user.getName()%>"/>
 
                                 </div>
                                 <div class="col-md-6">
                                     <label class="mb-1" for="sex">Giới tính</label>
 
                                     <select id="sex" name="sex" class="form-control">
-                                        <option value="<%out.print(user.getSex());%>" name="sex"
+                                        <option value="<%=user.getSex()%>" name="sex"
                                                 selected><% if (user.getSex() == 0) {
                                             out.print("Nam");
                                         } else if (user.getSex() == 1) {
@@ -121,12 +121,12 @@
                             <div class="mb-3">
                                 <label class="mb-1">Email</label>
                                 <input class="form-control" name="email" type="email"
-                                       value="<% out.print(user.getEmail() );%>"/>
+                                       value="<%=user.getEmail()%>"/>
                             </div>
                             <div class="mb-3 d-none">
                                 <label class="mb-1 ">ID</label>
                                 <input class="form-control" name="id" type="text"
-                                       value="<% out.print(user.getId());%>"/>
+                                       value="<%=user.getId()%>"/>
                             </div>
                             <div class="row gx-3 mb-3">
                                 <div class="col-md-6">
@@ -138,7 +138,7 @@
                                 <div class="col-md-6">
                                     <label class="mb-1" for="age">Ngày sinh</label>
                                     <input class="form-control" id="age" type="date" name="dob"
-                                           value="<% out.print(user.getDob());%>"/>
+                                           value="<%=user.getDob()%>"/>
                                 </div>
                             </div>
                             <div class="mb-3">

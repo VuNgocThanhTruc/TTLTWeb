@@ -81,6 +81,11 @@
                                onclick="myFunction(this)"><i
                                     class="fas fa-trash-alt"></i> Xóa tất cả </a>
                         </div>
+
+                        <div class="col-sm-2">
+                            <a href="manage-product?type=exportExcel" class="btn" type="button" title="Xuất dữ liệu" style="line-height: 0px;border: 1px solid #000000; font-size: 13px; padding: 5px 10px"
+                            ><i class='bx bxs-file-export'></i> Xuất Excel</a>
+                        </div>
                     </div>
                     <table class="table table-hover table-bordered" id="sampleTable">
                         <thead>
@@ -98,7 +103,7 @@
                         </thead>
                         <tbody>
                         <%
-                            for (ProductModel product : listProduct) {%>
+                            if(listProduct != null)  for (ProductModel product : listProduct) {%>
                         <tr class="product-<%=product.getId()%>">
                             <td width="10"><input type="checkbox" name="check1" value="1"></td>
                             <td class="id"><%=product.getId()%>
