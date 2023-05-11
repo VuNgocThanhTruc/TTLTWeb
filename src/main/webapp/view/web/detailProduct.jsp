@@ -212,8 +212,12 @@
                                     </button>
                                 </div>
 
-                                <div class="service-fee">
+                                <div class="product-price service-fee">
                                     Phí vận chuyển: <span>0</span>đ
+                                </div>
+
+                                <div class="product-price lead-time">
+                                    Dự tính thời gian giao: <span></span>
                                 </div>
 
                                 <form id="add-item-form" action="" method="post" class="variants clearfix">
@@ -589,25 +593,14 @@
 
     async function autoLoginLogisticAPI() {
 
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'email': '<%=APIConstants.LOGISTIC_EMAIL_LOGIN%>',
-                'password': '<%=APIConstants.LOGISTIC_PASSWORD_LOGIN%>'
-            })
-        };
-
-        await fetch('<%=APIConstants.LOGISTIC_HOST_API%>/auth/login', options)
+        await fetch(`<%=request.getContextPath()%>/api/logistic?action=login`, {
+            method: 'POST'
+        })
             .then(response => response.json())
             .then(data => {
-                // xử lý dữ liệu ở đây
-                logisticIDToken = data.access_token
+                logisticIDToken = data
             })
             .catch(error => {
-                // xử lý lỗi
                 console.log(error)
             });
     }
@@ -628,15 +621,16 @@
 
         $('.getAPIAddress').click(async () => {
             let serviceFee = $('.service-fee span')
+            let leadTime = $('.lead-time span')
 
             if (valueProvince > 0 && valueDistrict > 0 && valueWard > 0) {
                 $('.address').text(`${tagSelectModalGetWard.options[tagSelectModalGetWard.selectedIndex].textContent},
                                     ${tagSelectModalGetDistrict.options[tagSelectModalGetDistrict.selectedIndex].textContent},
                                     ${tagSelectModalGetProvince.options[tagSelectModalGetProvince.selectedIndex].textContent}`)
 
-                //display service fee
                 await autoLoginLogisticAPI()
 
+                //display service fee
                 const options = {
                     method: 'POST',
                     headers: {
@@ -675,18 +669,14 @@
             if (logisticIDToken == null) {
                 await autoLoginLogisticAPI()
 
-                const options = {
+                await fetch(`<%=request.getContextPath()%>/api/logistic?action=province&logisticIDToken=${logisticIDToken}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + logisticIDToken
                     }
-                };
-
-                await fetch('<%=APIConstants.LOGISTIC_HOST_API%>/province', options)
+                })
                     .then(response => response.json())
                     .then(data => {
-                        // xử lý dữ liệu ở đây
                         for (let i = 0; i < data.original.data.length; i++) {
                             let option = document.createElement("option");
                             option.value = `${data.original.data[i].ProvinceID}`;
@@ -698,7 +688,6 @@
                         handleEventSelectDistrictChange()
                     })
                     .catch(error => {
-                        // xử lý lỗi
                         console.log(error)
                     });
             }
@@ -724,7 +713,6 @@
                     await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/district?provinceID=${valueProvince}`, options)
                         .then(response => response.json())
                         .then(data => {
-                            // xử lý dữ liệu ở đây
                             for (let i = 0; i < data.original.data.length; i++) {
                                 let option = document.createElement("option");
                                 option.value = `${data.original.data[i].DistrictID}`;
@@ -734,7 +722,6 @@
                             valueDistrict = tagSelectModalGetDistrict.value * 1
                         })
                         .catch(error => {
-                            // xử lý lỗi
                             console.log(error)
                         });
                 }
@@ -757,7 +744,6 @@
                     await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/ward?districtID=${valueDistrict}`, options)
                         .then(response => response.json())
                         .then(data => {
-                            // xử lý dữ liệu ở đây
                             for (let i = 0; i < data.original.data.length; i++) {
                                 let option = document.createElement("option");
                                 option.value = `${data.original.data[i].WardCode}`;
@@ -772,7 +758,6 @@
 
                         })
                         .catch(error => {
-                            // xử lý lỗi
                             console.log(error)
                         });
                 }

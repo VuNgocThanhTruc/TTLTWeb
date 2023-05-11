@@ -366,7 +366,7 @@
                             <%--                                </fieldset>--%>
                             <%--                            </form>--%>
 
-                            <button class="btn" addToCartAJAX(<%=product.getId()%>)><i
+                            <button class="btn" onclick="addToCartAJAX(<%=product.getId()%>)"><i
                                     class="icon-header fas fa-shopping-cart" ></i>
                             </button>
 
@@ -437,10 +437,23 @@
         </div>
     </div>
 </div>
-
 <%@include file="../../common/web/footer.jsp" %>
-<script src="js/convertMoney.js"></script>
 <script>
+    function addToCartAJAX(idProduct) {
+        let numCart = document.querySelector(".sum-num-cart")
+
+        $.ajax({
+            type: 'POST',
+            data: {
+                "id_item": idProduct * 1,
+            },
+            url: "<%=request.getContextPath()%>/cart?action=add-to-cart",
+            success: function (data) {
+                numCart.innerText=data
+            }
+        });
+    }
+
     function showMore() {
         let listProduct = document.querySelector(".list-product")
         let lengthBoxProduct = document.getElementsByClassName("product").length
@@ -455,21 +468,8 @@
         });
     }
 
-    function addToCartAJAX(idProduct) {
-        console.log(true)
-        <%--$.ajax({--%>
-        <%--    type: 'POST',--%>
-        <%--    data: {--%>
-        <%--        "id_item": idProduct * 1,--%>
-        <%--    },--%>
-        <%--    url: "<%=request.getContextPath()%>/cart?action=add-to-cart",--%>
-        <%--    success: function (data) {--%>
-        <%--        console.log(true)--%>
-        <%--    }--%>
-        <%--});--%>
-    }
-
 </script>
+<script src="js/convertMoney.js"></script>
 </body>
 
 </html>

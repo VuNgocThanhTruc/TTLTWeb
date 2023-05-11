@@ -38,10 +38,6 @@ public class ProductDAO {
                 productModel.setIdTypeProduct(rs.getInt("id_type_product"));
                 productModel.setIdStatusDevice(rs.getInt("id_status_device"));
                 productModel.setDescribe(rs.getString("describe"));
-                productModel.setHeight(rs.getInt("height"));
-                productModel.setLength(rs.getInt("length"));
-                productModel.setWidth(rs.getInt("width"));
-                productModel.setWeight(rs.getInt("weight"));
                 productModel.setListImage(listImage);
 
                 list.add(productModel);
@@ -55,7 +51,7 @@ public class ProductDAO {
     public static List<ProductModel> getTop8() {
         LinkedList<ProductModel> list = new LinkedList<ProductModel>();
 
-        String sql = "select p.id ,`name`,id_type_product,id_status_device,id_brand,price,avatar,`describe`,created_by,created_date,modified_date,modified_by from products p \n" +
+        String sql = "select p.id ,`name`,id_type_product,id_status_device,id_brand,price,avatar,`describe`,created_by,created_date,modified_date,modified_by,height, length, width, weight from products p \n" +
                 "WHERE p.id_status_device =1 ORDER BY id desc LIMIT 0,4";
 
         try {
@@ -122,10 +118,6 @@ public class ProductDAO {
                 productModel.setIdTypeProduct(rs.getInt("id_type_product"));
                 productModel.setIdStatusDevice(rs.getInt("id_status_device"));
                 productModel.setDescribe(rs.getString("describe"));
-                productModel.setHeight(rs.getInt("height"));
-                productModel.setLength(rs.getInt("length"));
-                productModel.setWidth(rs.getInt("width"));
-                productModel.setWeight(rs.getInt("weight"));
                 productModel.setListImage(listImage);
 
                 list.add(productModel);
@@ -168,10 +160,6 @@ public class ProductDAO {
                     productModel.setIdTypeProduct(rs.getInt("id_type_product"));
                     productModel.setIdStatusDevice(rs.getInt("id_status_device"));
                     productModel.setDescribe(rs.getString("describe"));
-                    productModel.setHeight(rs.getInt("height"));
-                    productModel.setLength(rs.getInt("length"));
-                    productModel.setWidth(rs.getInt("width"));
-                    productModel.setWeight(rs.getInt("weight"));
                     productModel.setListImage(listImage);
 
                     list.add(productModel);
@@ -240,10 +228,6 @@ public class ProductDAO {
                 productModel.setIdTypeProduct(rs.getInt("id_type_product"));
                 productModel.setIdStatusDevice(rs.getInt("id_status_device"));
                 productModel.setDescribe(rs.getString("describe"));
-                productModel.setHeight(rs.getInt("height"));
-                productModel.setLength(rs.getInt("length"));
-                productModel.setWidth(rs.getInt("width"));
-                productModel.setWeight(rs.getInt("weight"));
                 productModel.setListImage(listImage);
 
                 return productModel;
@@ -301,10 +285,6 @@ public class ProductDAO {
                 productModel.setIdTypeProduct(rs.getInt("id_type_product"));
                 productModel.setIdStatusDevice(rs.getInt("id_status_device"));
                 productModel.setDescribe(rs.getString("describe"));
-                productModel.setHeight(rs.getInt("height"));
-                productModel.setLength(rs.getInt("length"));
-                productModel.setWidth(rs.getInt("width"));
-                productModel.setWeight(rs.getInt("weight"));
                 productModel.setListImage(listImage);
 
                 list.add(productModel);

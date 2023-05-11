@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.controller.web;
 
+import vn.edu.hcmuaf.fit.constant.APIConstants;
 import vn.edu.hcmuaf.fit.model.ProductCartModel;
 import vn.edu.hcmuaf.fit.model.ProductModel;
 import vn.edu.hcmuaf.fit.service.ProductService;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +30,8 @@ public class CartController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        int numCart = session.getAttribute("numCart") == null ? 0 : (int) session.getAttribute("numCart");
+        int numCart = 0;
+
         String actionParam = request.getParameter("action");
         String view = "";
         if ("add-to-cart".equals(actionParam)) {
@@ -41,13 +44,20 @@ public class CartController extends HttpServlet {
             view = request.getContextPath() + "/list-product";
         }
 
-        session.setAttribute("numCart", numCart++);
+        HashMap<Integer, ProductCartModel> cart = (HashMap<Integer, ProductCartModel>) session.getAttribute("cart");
+        for (Map.Entry<Integer, ProductCartModel> entry : cart.entrySet()) {
+            numCart+=entry.getValue().getQuantity();
+        }
+
         List<ProductModel> listProduct = ProductService.getTop8();
         request.setAttribute("listProduct", listProduct);
         request.setAttribute("activeProduct", "active");
-        request.getRequestDispatcher("/view/web/product.jsp").forward(request, response);
 
-//        response.sendRedirect(request.getContextPath() + "/list-product");
+        PrintWriter out = response.getWriter();
+        out.println(numCart);
+        out.close();
+
+        request.getRequestDispatcher("/view/web/product.jsp").forward(request, response);
     }
 
     private void doPostUpdateCart(HttpServletRequest request, HttpServletResponse response) {

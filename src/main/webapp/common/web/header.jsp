@@ -1,5 +1,7 @@
 <%@ page import="vn.edu.hcmuaf.fit.model.CategoryModel" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.Map" %>
 <%@ page import="vn.edu.hcmuaf.fit.model.UserModel" %>
 <%--
   Created by IntelliJ IDEA.
@@ -34,6 +36,13 @@
     String activeBlog = (String) request.getAttribute("activeBlog");
     String activeContact = (String) request.getAttribute("activeContact");
     String activeIntroduce = (String) request.getAttribute("activeIntroduce");
+    int numCart = 0;
+    if(session.getAttribute("cart")!=null){
+        HashMap<Integer, ProductCartModel> cart = (HashMap<Integer, ProductCartModel>) session.getAttribute("cart");
+        for (Map.Entry<Integer, ProductCartModel> entry : cart.entrySet()) {
+            numCart+=entry.getValue().getQuantity();
+        }
+    }
 %>
 
 <div class="header">
@@ -196,7 +205,7 @@
                 <input type="hidden" name="display" value="1">
                 <button class="w3view-cart btn" type="submit" name="submit" value="" onclick="addBtnCart()">
                     <div class="icon-ol"><i class="icon-header fas fa-shopping-cart" aria-hidden="true"></i></div>
-                    <span class="p-1 bg-danger border-0 text-light">0</span>
+                    <span class="p-1 bg-danger border-0 text-light sum-num-cart"><%=numCart%></span>
                 </button>
             </form>
         </div>

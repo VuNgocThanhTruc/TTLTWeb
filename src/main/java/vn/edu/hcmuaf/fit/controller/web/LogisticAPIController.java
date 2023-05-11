@@ -34,7 +34,7 @@ public class LogisticAPIController extends HttpServlet {
     }
 
     private void doGetProvince(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String paramToken = request.getParameter("token");
+        String paramToken = request.getParameter("logisticIDToken");
 
         String apiURL = APIConstants.LOGISTIC_HOST_API + "/province";
 
@@ -53,8 +53,6 @@ public class LogisticAPIController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Override
