@@ -9,16 +9,20 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import vn.edu.hcmuaf.fit.constant.APIConstants;
+import vn.edu.hcmuaf.fit.model.ProductCartModel;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet(name = "LogisticAPIController", value = "/api/logistic")
 public class LogisticAPIController extends HttpServlet {
@@ -66,26 +70,24 @@ public class LogisticAPIController extends HttpServlet {
             doPostLogin(request, response);
         }
         //        get data lead time
-        if ("leadTime".equals(param))
+        else if ("leadTime".equals(param))
             doPostLeadTime(request, response, logisticIDToken);
+        else if ("registerTransport".equals(param))
+            doPostRegisterTransport(request, response, logisticIDToken);
+        else if ("allTransports".equals(param))
+            doPostAllTransports (request, response, logisticIDToken);
+        else if ("getInfoTransport".equals(param))
+            doPostGetInfoTransport(request, response, logisticIDToken);
+
     }
 
-    private void doPostLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        String apiURL = APIConstants.LOGISTIC_HOST_API + "/auth/login";
-
-        BufferedReader br = request.getReader();
-        StringBuilder stringBuilder = new StringBuilder();
-        String line;
-        while ((line = br.readLine()) != null) {
-            stringBuilder.append(line);
-        }
+    private void doPostGetInfoTransport(HttpServletRequest request, HttpServletResponse response, String logisticIDToken)throws IOException {
+        String apiURL = APIConstants.LOGISTIC_HOST_API + "/getInfoTransport";
+        StringBuilder strBuf = new StringBuilder();
+        String idOrder = request.getParameter("idOrder");
 
         JSONObject json = new JSONObject();
-        json.put("password", APIConstants.LOGISTIC_PASSWORD_LOGIN);
-        json.put("email", APIConstants.LOGISTIC_EMAIL_LOGIN);
-
-        StringBuilder strBuf = new StringBuilder();
+        json.put("id", idOrder);
 
         HttpURLConnection conn = null;
         BufferedReader reader = null;
@@ -94,8 +96,7 @@ public class LogisticAPIController extends HttpServlet {
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
-            conn.setRequestProperty("Accept", "application/json");
-
+            conn.setRequestProperty("Authorization", "Bearer " + logisticIDToken);
             conn.setDoOutput(true);
 
             try (OutputStream os = conn.getOutputStream()) {
@@ -115,6 +116,7 @@ public class LogisticAPIController extends HttpServlet {
             while ((inputLine = in.readLine()) != null) {
                 strBuf.append(inputLine);
             }
+            System.out.println("strBuf: "+strBuf);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -135,14 +137,156 @@ public class LogisticAPIController extends HttpServlet {
         Gson gson = new Gson();
         JsonObject jsonRes = gson.fromJson(strBuf.toString(), JsonObject.class);
 
-        APIConstants.LOGISTIC_ID_TOKEN = jsonRes.get("access_token").toString();
+//        APIConstants.LOGISTIC_ID_TOKEN = jsonRes.get("access_token").toString();
 
         PrintWriter out = response.getWriter();
 
-        out.println(APIConstants.LOGISTIC_ID_TOKEN);
+        System.out.println(strBuf);
+
+        out.println(strBuf);
         out.close();
     }
 
+    private void doPostAllTransports(HttpServletRequest request, HttpServletResponse response, String logisticIDToken) throws IOException {
+        String apiURL = APIConstants.LOGISTIC_HOST_API + "/allTransports";
+        StringBuilder strBuf = new StringBuilder();
+
+        HttpURLConnection conn = null;
+        BufferedReader reader = null;
+        try {
+            URL url = new URL(apiURL);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setRequestProperty("Authorization", "Bearer " + logisticIDToken);
+
+            if (conn.getResponseCode() != 200) {
+                throw new RuntimeException("HTTP Request Failed with Error code : "
+                        + conn.getResponseCode());
+            }
+
+            reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                strBuf.append(inputLine);
+            }
+            System.out.println("strBuf: "+strBuf);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+
+        Gson gson = new Gson();
+        JsonObject jsonRes = gson.fromJson(strBuf.toString(), JsonObject.class);
+
+        PrintWriter out = response.getWriter();
+
+        System.out.println(strBuf);
+
+        out.println(strBuf);
+        out.close();
+    }
+
+    private void doPostRegisterTransport(HttpServletRequest request, HttpServletResponse response, String logisticIDToken) throws IOException {
+        String apiURL = APIConstants.LOGISTIC_HOST_API + "/registerTransport";
+        String toDistrictId = request.getParameter("to_district_id");
+        String toWardId = request.getParameter("to_ward_id");
+        HttpSession session = request.getSession();
+        HashMap<Integer, ProductCartModel> cart = (HashMap<Integer, ProductCartModel>) session.getAttribute("cart");
+        int height = 0;
+        int length = 0;
+        int width = 0;
+        int weight = 0;
+        for (Map.Entry<Integer, ProductCartModel> entry : cart.entrySet()) {
+            height+=entry.getValue().getProductModel().getHeight();
+            length+=entry.getValue().getProductModel().getLength();
+            width+=entry.getValue().getProductModel().getWidth();
+            weight+=entry.getValue().getProductModel().getWeight();
+        }
+
+        JSONObject json = new JSONObject();
+        json.put("from_district_id", APIConstants.ID_DISTRICT_STORE);
+        json.put("'from_ward_id'", APIConstants.ID_WARD_STORE);
+        json.put("to_district_id", toDistrictId);
+        json.put("to_ward_id", toWardId);
+        json.put("height", height);
+        json.put("length", length);
+        json.put("width", width);
+        json.put("weight", weight);
+
+        StringBuilder strBuf = new StringBuilder();
+
+        HttpURLConnection conn = null;
+        BufferedReader reader = null;
+        try {
+            URL url = new URL(apiURL);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setRequestProperty("Authorization", "Bearer " + logisticIDToken);
+            conn.setDoOutput(true);
+
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = json.toString().getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            if (conn.getResponseCode() != 200) {
+                throw new RuntimeException("HTTP POST Request Failed with Error code : "
+                        + conn.getResponseCode());
+            }
+
+            reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                strBuf.append(inputLine);
+            }
+            System.out.println("strBuf: "+strBuf);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+
+        Gson gson = new Gson();
+        JsonObject jsonRes = gson.fromJson(strBuf.toString(), JsonObject.class);
+
+//        APIConstants.LOGISTIC_ID_TOKEN = jsonRes.get("access_token").toString();
+
+        PrintWriter out = response.getWriter();
+
+        System.out.println(strBuf);
+
+        out.println(strBuf);
+        out.close();
+    }
     private void doPostLeadTime(HttpServletRequest request, HttpServletResponse response, String logisticIDToken) throws IOException {
 
         String apiURL = APIConstants.LOGISTIC_HOST_API + "/leadTime";
@@ -229,4 +373,77 @@ public class LogisticAPIController extends HttpServlet {
         out.println(strBuf);
         out.close();
     }
+    private void doPostLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        String apiURL = APIConstants.LOGISTIC_HOST_API + "/auth/login";
+
+//        BufferedReader br = request.getReader();
+//        StringBuilder stringBuilder = new StringBuilder();
+//        String line;
+//        while ((line = br.readLine()) != null) {
+//            stringBuilder.append(line);
+//        }
+
+        JSONObject json = new JSONObject();
+        json.put("password", APIConstants.LOGISTIC_PASSWORD_LOGIN);
+        json.put("email", APIConstants.LOGISTIC_EMAIL_LOGIN);
+
+        StringBuilder strBuf = new StringBuilder();
+
+        HttpURLConnection conn = null;
+        BufferedReader reader = null;
+        try {
+            URL url = new URL(apiURL);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setRequestProperty("Accept", "application/json");
+
+            conn.setDoOutput(true);
+
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = json.toString().getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
+            if (conn.getResponseCode() != 200) {
+                throw new RuntimeException("HTTP POST Request Failed with Error code : "
+                        + conn.getResponseCode());
+            }
+
+            reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                strBuf.append(inputLine);
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+
+        Gson gson = new Gson();
+        JsonObject jsonRes = gson.fromJson(strBuf.toString(), JsonObject.class);
+
+        APIConstants.LOGISTIC_ID_TOKEN = jsonRes.get("access_token").toString();
+
+        PrintWriter out = response.getWriter();
+
+        out.println(APIConstants.LOGISTIC_ID_TOKEN);
+        out.close();
+    }
+
 }

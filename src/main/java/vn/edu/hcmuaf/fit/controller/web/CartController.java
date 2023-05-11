@@ -127,6 +127,7 @@ public class CartController extends HttpServlet {
             }
         }
         session.setAttribute("cart", cart);
+        System.out.println(cart);
         for (Map.Entry<Integer, ProductCartModel> entry : cart.entrySet()) {
             System.out.println(entry.getValue().getProductModel().getName() + " quantity: " + entry.getValue().getQuantity());
         }

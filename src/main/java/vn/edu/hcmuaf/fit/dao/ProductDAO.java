@@ -228,6 +228,10 @@ public class ProductDAO {
                 productModel.setIdTypeProduct(rs.getInt("id_type_product"));
                 productModel.setIdStatusDevice(rs.getInt("id_status_device"));
                 productModel.setDescribe(rs.getString("describe"));
+                productModel.setHeight(rs.getInt("height"));
+                productModel.setLength(rs.getInt("length"));
+                productModel.setWidth(rs.getInt("width"));
+                productModel.setWeight(rs.getInt("weight"));
                 productModel.setListImage(listImage);
 
                 return productModel;

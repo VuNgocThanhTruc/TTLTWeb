@@ -323,9 +323,8 @@
 <script src="plugins/jquery-3.4.1/jquery-3.4.1.min.js"></script>
 <script>
     $(document).ready(() => {
-        $('#inputSearchAuto').on('change', (event) => {
+        $('#inputSearchAuto').on('input', (event) => {
             event.preventDefault();
-            console.log("change search")
             let inputSearchAuto = $('#inputSearchAuto').val()
             let searchResultsWithAjax = document.querySelector("#searchResultsWithAjax")
 
@@ -335,7 +334,6 @@
                 url: "<%=request.getContextPath()%>/list-product",
                 success: function (data) {
                     searchResultsWithAjax.innerHTML = data
-                    console.log(data)
                 }
             });
         })
