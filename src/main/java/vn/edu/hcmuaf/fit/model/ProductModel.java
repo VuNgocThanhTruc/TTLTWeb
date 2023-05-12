@@ -11,26 +11,26 @@ public class ProductModel {
     private long price;
     private String describe;
 
-    public List<LibraryImageModel> getListImage() {
-        return listImage;
-    }
-
-    public void setListImage(List<LibraryImageModel> listImage) {
-        this.listImage = listImage;
-    }
-
+    private int height;
+    private int length;
+    private int width;
+    private int weight;
     private List<LibraryImageModel> listImage;
 
     public ProductModel() {
     }
 
-    public ProductModel(int id, String name, int idTypeProduct, int idStatusDevice, int idBrand, long price, String describe,List<LibraryImageModel> listImage) {
+    public ProductModel(int id, String name, int idTypeProduct, int idStatusDevice, int idBrand, long price, String describe, int height, int length, int width, int weight, List<LibraryImageModel> listImage) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.idBrand = idBrand;
         this.idTypeProduct = idTypeProduct;
         this.idStatusDevice = idStatusDevice;
+        this.height = height;
+        this.length = length;
+        this.width = width;
+        this.weight = weight;
         this.describe = describe;
         this.listImage = listImage;
     }
@@ -93,6 +93,46 @@ public class ProductModel {
     public void setDescribe(String describe) {
         this.describe = describe;
     }
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public List<LibraryImageModel> getListImage() {
+        return listImage;
+    }
+
+    public void setListImage(List<LibraryImageModel> listImage) {
+        this.listImage = listImage;
+    }
+
 
     public String getCategory(int idTypeProduct){
         String result = "";
@@ -107,8 +147,22 @@ public class ProductModel {
         }
         return result;
     }
+
     @Override
     public String toString() {
-        return "ProductModel{" + "id=" + id + ", name='" + name + '\'' + ", price=" + price + ", idBrand=" + idBrand + ", idTypeProduct=" + idTypeProduct + ", idStatusDevice=" + idStatusDevice + ", describe='" + describe + '\'' + '}';
+        return "ProductModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", idTypeProduct=" + idTypeProduct +
+                ", idStatusDevice=" + idStatusDevice +
+                ", idBrand=" + idBrand +
+                ", price=" + price +
+                ", describe='" + describe + '\'' +
+                ", height=" + height +
+                ", length=" + length +
+                ", width=" + width +
+                ", weight=" + weight +
+                ", listImage=" + listImage +
+                '}';
     }
 }

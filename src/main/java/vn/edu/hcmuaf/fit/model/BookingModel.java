@@ -15,14 +15,17 @@ public class BookingModel {
 
     private int id_product;
     private String name;
-
-
     private int price;
     private int quantity;
     private String avatar;
-
     private String address;
     private String email;
+    private int toDistrictId;
+    private int toWardId;
+    private int height;
+    private int length;
+    private int width;
+    private int weight;
 
     public BookingModel(String id, String date_booking, String id_user, String id_payment, String description, StatusBooking statusBooking, String username, String nameTypePayment, String tel, int id_product, String name, int price, int quantity, String avatar, String address, String email) {
         this.id = id;
@@ -175,6 +178,54 @@ public class BookingModel {
         this.email = email;
     }
 
+    public int getToDistrictId() {
+        return toDistrictId;
+    }
+
+    public void setToDistrictId(int toDistrictId) {
+        this.toDistrictId = toDistrictId;
+    }
+
+    public int getToWardId() {
+        return toWardId;
+    }
+
+    public void setToWardId(int toWardId) {
+        this.toWardId = toWardId;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
     @Override
     public String toString() {
         return "BookingModel{" +
@@ -194,6 +245,12 @@ public class BookingModel {
                 ", avatar='" + avatar + '\'' +
                 ", address='" + address + '\'' +
                 ", email='" + email + '\'' +
+                ", toDistrictId=" + toDistrictId +
+                ", toWardId=" + toWardId +
+                ", height=" + height +
+                ", length=" + length +
+                ", width=" + width +
+                ", weight=" + weight +
                 '}';
     }
 }

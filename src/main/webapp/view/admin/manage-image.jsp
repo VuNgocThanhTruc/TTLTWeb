@@ -77,7 +77,7 @@
                     <%--                    in ra tin tức--%>
                     <% if (listImage == null) {
                     %>
-                    <div>Chưa có tin tức</div>
+                    <div>Chưa có ảnh</div>
                     <%
                     } else {%>
                     <table class="table table-hover table-bordered" id="sampleTable">

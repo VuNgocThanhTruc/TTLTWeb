@@ -28,4 +28,12 @@ public class ProductCartModel {
     public void setProductModel(ProductModel productModel) {
         this.productModel = productModel;
     }
+
+    @Override
+    public String toString() {
+        return "ProductCartModel{" +
+                "quantity=" + quantity +
+                ", productModel=" + productModel +
+                '}';
+    }
 }

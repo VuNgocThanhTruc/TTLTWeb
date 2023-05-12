@@ -19,6 +19,7 @@ public class AuthoritiesDAO {
     ResultSet rs = null;
     public AuthoritiesDAO(){
         connection = DBConnect.getInstall().getConnection();
+
     }
 
     //Lấy ra toàn bộ nhóm quyền
@@ -73,7 +74,7 @@ public class AuthoritiesDAO {
     }
 
     //tạo và cấp quyền mặc định cho nhóm quyền
-    public void createRoleDecDefault(String id_role){
+    public  void createRoleDecDefault(String id_role){
         List<ComponentModel> components = getAllComponent();
         List<FunctionModel> functions = getAllFunction();
 
@@ -218,6 +219,21 @@ public class AuthoritiesDAO {
         }
         return false;
     }
+    public static void main(String[] args) {
+        AuthoritiesDAO ad = new AuthoritiesDAO();
+        System.out.println(ad.getAllComponent());
+        //System.out.println(ad.getAllFunction());
+        //ad.getAuthoritiesOfComponent(1,1);
+        //System.out.println(ad.createIdRoleRamdom());
+        //ad.resetRoleById(1);
+        //ad.decentralizeFunctionForRole("2", "3","3",false);
+        //ad.createRoleDecDefault("1");
+
+        //ad.createRoleDecDefault("1");
+        //ad.deleteDecentralizeRole("1");
+        //ad.printDecentralizeOfRole("1");
+//        System.out.println(ad.getRoleById("1"));
+    }
 
     public void resetRoleById(String idRole) {
         String query = "update decentralizes set isGrant = 0 where id_role = ?";
@@ -301,4 +317,7 @@ public class AuthoritiesDAO {
         return list;
     }
 }
+
+
+
 

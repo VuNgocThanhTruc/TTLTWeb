@@ -47,11 +47,11 @@
                     </div>
                     <br>
                     <div>
-                        <a href="https://www.facebook.com/v16.0/dialog/oauth?scope=email&client_id=5842543845823968&redirect_uri=http://localhost:8080/TTLTWeb_war_exploded/login-facebook">
+                        <a href="https://www.facebook.com/v16.0/dialog/oauth?scope=email&client_id=5842543845823968&redirect_uri=http://localhost:8080/TTLTWeb_war/login-facebook">
                             <button type="button" class="btn btn-sm btn-outline-primary">Đăng nhập với Facebook <i
                                     class="fa fa-facebook-square"></i></button>
                         </a>
-                        <a href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile&&redirect_uri=http://localhost:8080/TTLTWeb_war_exploded/login-google&response_type=code
+                        <a href="https://accounts.google.com/o/oauth2/auth?scope=email%20profile&&redirect_uri=http://localhost:8080/TTLTWeb_war/login-google&response_type=code
 		&client_id=429868613240-b7ij0n2762it03pj9r5623l0a3qjlmnp.apps.googleusercontent.com&approval_prompt=force">
                             <button type="button" class="btn btn-sm btn-outline-danger">Đăng nhập với Google <i
                                     class="fa fa-google-plus-square"></i>

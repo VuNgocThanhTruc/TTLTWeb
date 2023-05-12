@@ -1,6 +1,8 @@
 <%@ page import="vn.edu.hcmuaf.fit.model.ProductModel" %>
 <%@ page import="vn.edu.hcmuaf.fit.service.ProductService" %>
 <%@ page import="vn.edu.hcmuaf.fit.constant.APIConstants" %>
+<%@page import="java.util.Date" %>
+<%@page import="java.sql.Timestamp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="../../common/taglib.jsp" %>
 
@@ -16,15 +18,22 @@
 <%
     List<ProductModel> pro = (List<ProductModel>) request.getAttribute("pro");
     List<RateReviewModel> listRate = (List<RateReviewModel>) request.getAttribute("listRate");
+
 %>
-<%ProductModel product = (ProductModel) request.getAttribute("product");%>
+<%
+    ProductModel product = (ProductModel) request.getAttribute("product");
+    InventoriesModel inventories = (InventoriesModel) request.getAttribute("inventoriesList");
+    DiscountModel discount = (DiscountModel) request.getAttribute("discount");
+
+
+%>
+
 <%@include file="../../common/web/header.jsp" %>
 
 <!--  detail product -->
 <main class="">
 
     <div id="product" class="productDetail-page">
-
         <!--  menu header seo -->
         <div class="breadcrumb-shop">
             <div class="container">
@@ -153,11 +162,47 @@
                                 <div class="product-title">
                                     <h1><%=product.getName()%>
                                     </h1>
-                                    <span id="pro_sku">ID: <%=product.getId()%></span>
+
+<%--                                     <span id="pro_sku">ID: <%=product.getId()%></span>--%>
+                                    <span id="pro_sku">SL: <%= inventories.getQuantity()%></span>
                                 </div>
-                                <div class="product-price" id="price-preview"><span
-                                        class="pro-price"><%=product.getPrice()%>₫</span>
+
+                                <% if (discount != null&& discount.getIdProduct()!=0) {
+                                    Date serverTime = new Date();
+                                    Timestamp timestamp = new Timestamp(serverTime.getTime());
+                                    Timestamp dateStart = Timestamp.valueOf(discount.getDateStart());
+                                    Timestamp dateEnd = Timestamp.valueOf(discount.getDateEnd());
+                                    if (dateEnd.getTime() > timestamp.getTime() && dateStart.getTime() <timestamp.getTime()) {
+                                        int priceDiscount = (int) Math.ceil(product.getPrice() * (100-discount.getPercentDiscount()) / 100);%>
+                                <div class="product-price" id="price-preview">
+                                    <p>Server time: <%=serverTime.toString()%>
+                                    </p>
+                                    <p>Server time: <%=timestamp.toString()%>
+                                    </p>
+                                    <p>date start: <%=dateStart.toString()%>
+                                    </p>
+                                    <p>date end: <%=dateEnd.toString()%>
+                                    </p>
+                                    <span class="pro-price"><%=priceDiscount%>₫</span>
+                                    <span class=""
+                                          style="text-decoration: line-through;"><%=product.getPrice()%>₫</span>
+
+                                    <span class="pro-sale"
+                                          style="background-color: #ff6600;color: white;border: dashed;border-radius: 8px; "> -<%=discount.getPercentDiscount()%>%</span>
+
                                 </div>
+                                <%} else { %>
+                                <div class="product-price" id="price-preview">
+                                    <span class="pro-price"><%=product.getPrice()%>₫</span>
+                                </div>
+                                <%
+                                    }
+                                } else {
+                                %>
+                                <div class="product-price" id="price-preview">
+                                    <span class="pro-price"><%=product.getPrice()%>₫</span>
+                                </div>
+                                <%}%>
                                 <div class="product-price" id="delivery">
                                     <span>Giao đến: </span>
                                     <span class="address">Q. 3, P. 01, Hồ Chí Minh</span>
@@ -166,6 +211,14 @@
                                             data-toggle="modal" data-target="#modalGetAddress">
                                         Đổi địa chỉ
                                     </button>
+                                </div>
+
+                                <div class="product-price service-fee">
+                                    Phí vận chuyển: <span>0</span>đ
+                                </div>
+
+                                <div class="product-price lead-time">
+                                    Dự tính thời gian giao: <span></span>
                                 </div>
 
                                 <form id="add-item-form" action="" method="post" class="variants clearfix">
@@ -269,7 +322,9 @@
                                                                        value="<%=product.getName()%>">
                                                                 <input type="hidden" name="amount"
                                                                        value="<%=product.getPrice()%>">
-                                                                <input type="hidden" name="discount_amount"
+                                                                <input type="hidden" name="discount \
+
+                                                                _amount"
                                                                        value="10000">
                                                                 <input type="hidden" name="currency_code" value="VND">
                                                                 <input type="hidden" name="id_item"
@@ -504,21 +559,24 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <p>Tỉnh/Thành phố</p>
-                        <select class="select-province form-select" aria-label="Default select example">
+                        <p class="col-4">Tỉnh/Thành phố</p>
+                        <select class="col-6 select-province form-select" aria-label="Default select example">
                             <option selected>Vui lòng chọn Tỉnh/Thành phố</option>
                         </select>
+                        <input type="hidden" name="id-province" class="id-province">
                     </div>
                     <div class="row">
-                        <p>Quận/Huyện</p>
-                        <select class="select-district form-select" aria-label="Default select example">
+                        <p class="col-4">Quận/Huyện</p>
+                        <select class="col-6 select-district form-select" aria-label="Default select example" disabled>
                             <option selected>Vui lòng chọn Quận/Huyện</option>
                         </select>
+                        <input type="hidden" name="id-district" class="id-district">
                     </div>
                     <div class="row">
-                        <p>Phường/Xã</p>
-                        <select class="select-ward form-select" aria-label="Default select example">
+                        <p class="col-4">Phường/Xã</p>
+                        <select class="col-6 select-ward form-select" aria-label="Default select example" disabled>
                             <option selected>Vui lòng chọn Phường/Xã</option>
+                            <input type="hidden" name="id-ward" class="id-ward">
                         </select>
                     </div>
                 </div>
@@ -537,120 +595,185 @@
 <script src="js/divzoom.js"></script>
 <script src="js/rate&review.js"></script>
 <script>
-
-    var logisticIDToken = "";
+    let logisticIDToken = null;
 
     async function autoLoginLogisticAPI() {
-        $.ajax({
-            url: "<%=APIConstants.LOGISTIC_HOST_API%>/auth/login",
-            type: "POST",
-            dataType: "json",
-            data: {
-                'email': '<%=APIConstants.LOGISTIC_EMAIL_LOGIN%>',
-                'password': '<%=APIConstants.LOGISTIC_PASSWORD_LOGIN%>'
-            },
-            success: function (data) {
-                // Xử lý dữ liệu trả về ở đây
-                logisticIDToken = data.access_token
-                // return data.access_token
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.log(textStatus, errorThrown);
-            }
-        });
+
+        await fetch(`<%=request.getContextPath()%>/api/logistic?action=login`, {
+            method: 'POST'
+        })
+            .then(response => response.json())
+            .then(data => {
+                logisticIDToken = data
+            })
+            .catch(error => {
+                console.log(error)
+            });
     }
 
     $(document).ready(function () {
-        $(".getAPIAddress").click(async function () {
-            await autoLoginLogisticAPI()
-            console.log(logisticIDToken)
-            let tagSelectModalGetProvince = document.querySelector('.select-province')
-            $.ajax({
-                url: "<%=APIConstants.LOGISTIC_HOST_API%>/province",
-                type: "GET",
-                dataType: "json",
-                headers: {
-                    'Authorization': 'Bearer ' + logisticIDToken
-                },
-                success: function (data) {
-                    // Xử lý dữ liệu trả về ở đây
-                    console.log(data.original.data);
+        let tagSelectModalGetProvince = document.querySelector('.select-province')
+        let tagSelectModalGetDistrict = document.querySelector('.select-district')
+        let tagSelectModalGetWard = document.querySelector('.select-ward')
 
-                    for (let i = 0; i < data.original.data.length; i++) {
-                        let option = document.createElement("option");
-                        option.value = `${data.original.data[i].ProvinceID}`;
-                        option.text = `${data.original.data[i].ProvinceName}`;
-                        tagSelectModalGetProvince.appendChild(option);
+        let height = 100
+        let length = 100
+        let width = 100
+        let weight = 100
+
+        let valueProvince = 0
+        let valueDistrict = 0
+        let valueWard = 0
+
+        $('.getAPIAddress').click(async () => {
+            let serviceFee = $('.service-fee span')
+            let leadTime = $('.lead-time span')
+
+            if (valueProvince > 0 && valueDistrict > 0 && valueWard > 0) {
+                $('.address').val(`${tagSelectModalGetWard.options[tagSelectModalGetWard.selectedIndex].textContent},
+                                    ${tagSelectModalGetDistrict.options[tagSelectModalGetDistrict.selectedIndex].textContent},
+                                    ${tagSelectModalGetProvince.options[tagSelectModalGetProvince.selectedIndex].textContent}`)
+
+                await autoLoginLogisticAPI()
+
+                //display service fee
+                const options = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + logisticIDToken
+                    },
+                    body: JSON.stringify({
+                        'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,
+                        'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,
+                        'to_district_id': valueDistrict,
+                        'to_ward_id': valueWard,
+                        'height': height,
+                        'length': length,
+                        'width': width,
+                        'weight': weight,
+                    })
+                };
+
+                await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/calculateFee`, options)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 200) {
+                            serviceFee.text(data.data[0].service_fee)
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    });
+
+
+            }
+        })
+
+        $(".select-province").focus(async function () {
+            if (logisticIDToken == null) {
+                await autoLoginLogisticAPI()
+
+                await fetch(`<%=request.getContextPath()%>/api/logistic?action=province&logisticIDToken=${logisticIDToken}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
                     }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus, errorThrown);
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        for (let i = 0; i < data.original.data.length; i++) {
+                            let option = document.createElement("option");
+                            option.value = `${data.original.data[i].ProvinceID}`;
+                            option.text = `${data.original.data[i].ProvinceName}`;
+                            tagSelectModalGetProvince.appendChild(option);
+                        }
+                        valueProvince = tagSelectModalGetProvince.value * 1
+                        console.log("valueProvince: "+valueProvince)
+                        $('.id-province').val(valueProvince)
+                        handleEventSelectProvinceChange()
+                        handleEventSelectDistrictChange()
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    });
+            }
+        })
+
+        function handleEventSelectProvinceChange() {
+            $(".select-province").change(async function () {
+                valueProvince = tagSelectModalGetProvince.value * 1
+                $('.id-province').val(valueProvince)
+                console.log("valueProvince: "+valueProvince)
+
+                tagSelectModalGetDistrict.innerHTML = ''
+                // await autoLoginLogisticAPI()
+
+                if (valueProvince > 0) {
+                    tagSelectModalGetDistrict.disabled = false;
+
+                    const options = {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + logisticIDToken
+                        }
+                    };
+
+                    await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/district?provinceID=${valueProvince}`, options)
+                        .then(response => response.json())
+                        .then(data => {
+                            for (let i = 0; i < data.original.data.length; i++) {
+                                let option = document.createElement("option");
+                                option.value = `${data.original.data[i].DistrictID}`;
+                                option.text = `${data.original.data[i].DistrictName}`;
+                                tagSelectModalGetDistrict.appendChild(option);
+                            }
+                            valueDistrict = tagSelectModalGetDistrict.value * 1
+                            $('.id-district').val(valueDistrict)
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        });
                 }
             });
-        });
+        }
 
-        $(".getAPIAddress").click(async function () {
-            await autoLoginLogisticAPI()
-            console.log(logisticIDToken)
-            let tagSelectModalGetDistrict = document.querySelector('.select-district')
-            $.ajax({
-                url: "<%=APIConstants.LOGISTIC_HOST_API%>/district",
-                type: "GET",
-                dataType: "json",
-                headers: {
-                    'Authorization': 'Bearer ' + logisticIDToken
-                },data: {
-                    provinceID: 269
-                },
-                success: function (data) {
-                    // Xử lý dữ liệu trả về ở đây
-                    console.log(data);
+        function handleEventSelectDistrictChange() {
+            $(".select-district").change(async function () {
+                valueDistrict = tagSelectModalGetDistrict.value * 1
+                tagSelectModalGetWard.innerHTML = ''
+                if (valueDistrict > 0) {
+                    tagSelectModalGetWard.disabled = false;
+                    const options = {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + logisticIDToken
+                        }
+                    };
 
-                    for (let i = 0; i < data.original.data.length; i++) {
-                        let option = document.createElement("option");
-                        option.value = `${data.original.data[i].DistrictID}`;
-                        option.text = `${data.original.data[i].DistrictName}`;
-                        tagSelectModalGetDistrict.appendChild(option);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus, errorThrown);
+                    await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/ward?districtID=${valueDistrict}`, options)
+                        .then(response => response.json())
+                        .then(data => {
+                            for (let i = 0; i < data.original.data.length; i++) {
+                                let option = document.createElement("option");
+                                option.value = `${data.original.data[i].WardCode}`;
+                                option.text = `${data.original.data[i].WardName}`;
+                                tagSelectModalGetWard.appendChild(option);
+                            }
+                            valueWard = tagSelectModalGetWard.value * 1
+                            $('.id-ward').val(valueWard)
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        });
                 }
             });
-        });
+        }
 
-        $(".getAPIAddress").click(async function () {
-            await autoLoginLogisticAPI()
-            console.log(logisticIDToken)
-            let tagSelectModalGetWard = document.querySelector('.select-ward')
-            $.ajax({
-                url: "<%=APIConstants.LOGISTIC_HOST_API%>/ward",
-                type: "GET",
-                dataType: "json",
-                headers: {
-                    'Authorization': 'Bearer ' + logisticIDToken
-                },data: {
-                    districtID: 2264
-                },
-                success: function (data) {
-                    // Xử lý dữ liệu trả về ở đây
-                    console.log(data);
-
-                    for (let i = 0; i < data.original.data.length; i++) {
-                        let option = document.createElement("option");
-                        option.value = `${data.original.data[i].WardID}`;
-                        option.text = `${data.original.data[i].WardName}`;
-                        tagSelectModalGetWard.appendChild(option);
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus, errorThrown);
-                }
-            });
-        });
+        handleEventSelectProvinceChange()
+        handleEventSelectDistrictChange()
     });
-
-
 
 </script>
 

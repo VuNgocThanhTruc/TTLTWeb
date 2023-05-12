@@ -62,6 +62,8 @@ public class ComponentModel {
                 break;
             case "QLTK": result = "app-menu__icon bx bxs-user-account";
                 break;
+            case "QLGG": result = "app-menu__icon bx bxs-discount";
+                break;
             case "QLQ": result = "app-menu__icon bx bxs-key";
                 break;
             case "QLL": result = "app-menu__icon bx bx-file-blank";
@@ -91,6 +93,8 @@ public class ComponentModel {
             case "QLLH": result = "manage-contact";
                 break;
             case "QLTK": result = "manage-account";
+                break;
+            case "QLGG": result = "manage-discount";
                 break;
             case "QLQ": result = "manage-authorities?action=manage-authorities";
                 break;

@@ -339,30 +339,36 @@
                     <div class="block-banner-category">
                         <div class="product-img fade-box">
                             <a href="detail-product?id-product=<%=product.getId()%>" title="" class="img-resize">
-                                <img src="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>" alt="" class="lazyloaded">
+                                <img src="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>"
+                                     alt="" class="lazyloaded">
                             </a>
                         </div>
                         <div class="product-detail clearfix">
-                            <form class="mini-cart" action="${pageContext.request.contextPath}/cart?action=add-to-cart"
-                                  method="post">
-                                <fieldset>
-                                    <input type="hidden" name="cmd" value="_cart">
-                                    <input type="hidden" name="add" value="1">
-                                    <input type="hidden" name="business" value="">
-                                    <input type="hidden" name="image" value="<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>">
-                                    <input type="hidden" name="item_name" value="<%=product.getName()%>">
-                                    <input type="hidden" name="amount" value="<%=product.getPrice()%>">
-                                    <input type="hidden" name="discount_amount" value="10000">
-                                    <input type="hidden" name="currency_code" value="VND">
-                                    <input type="hidden" name="id_item" value="<%=product.getId()%>">
-                                    <input type="hidden" name="return" value=" ">
-                                    <input type="hidden" name="cancel_return" value=" ">
-                                    <button class="btn btn-cart" type="submit"><i
-                                            class="icon-header fas fa-shopping-cart"
-                                            aria-hidden="true" onclick="addBtnCart()"></i>
-                                    </button>
-                                </fieldset>
-                            </form>
+                            <%--                            <form class="mini-cart" action="${pageContext.request.contextPath}/cart?action=add-to-cart"--%>
+                            <%--                                  method="post">--%>
+                            <%--                                <fieldset>--%>
+                            <%--                                    <input type="hidden" name="cmd" value="_cart">--%>
+                            <%--                                    <input type="hidden" name="add" value="1">--%>
+                            <%--                                    <input type="hidden" name="business" value="">--%>
+                            <%--                                    <input type="hidden" name="image"--%>
+                            <%--                                           value="<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>">--%>
+                            <%--                                    <input type="hidden" name="item_name" value="<%=product.getName()%>">--%>
+                            <%--                                    <input type="hidden" name="amount" value="<%=product.getPrice()%>">--%>
+                            <%--                                    <input type="hidden" name="discount_amount" value="10000">--%>
+                            <%--                                    <input type="hidden" name="currency_code" value="VND">--%>
+                            <%--                                    <input type="hidden" name="id_item" value="<%=product.getId()%>">--%>
+                            <%--                                    <input type="hidden" name="return" value=" ">--%>
+                            <%--                                    <input type="hidden" name="cancel_return" value=" ">--%>
+                            <%--                                    <button class="btn btn-cart btn-add-cart" type="submit"><i--%>
+                            <%--                                            class="icon-header fas fa-shopping-cart"--%>
+                            <%--                                            aria-hidden="true"></i>--%>
+                            <%--                                    </button>--%>
+                            <%--                                </fieldset>--%>
+                            <%--                            </form>--%>
+
+                            <button class="btn" onclick="addToCartAJAX(<%=product.getId()%>)"><i
+                                    class="icon-header fas fa-shopping-cart" ></i>
+                            </button>
 
                             <div class="pro-text">
                                 <a style=" color: black;
@@ -431,10 +437,23 @@
         </div>
     </div>
 </div>
-
 <%@include file="../../common/web/footer.jsp" %>
-<script src="js/convertMoney.js"></script>
 <script>
+    function addToCartAJAX(idProduct) {
+        let numCart = document.querySelector(".sum-num-cart")
+
+        $.ajax({
+            type: 'POST',
+            data: {
+                "id_item": idProduct * 1,
+            },
+            url: "<%=request.getContextPath()%>/cart?action=add-to-cart",
+            success: function (data) {
+                numCart.innerText=data
+            }
+        });
+    }
+
     function showMore() {
         let listProduct = document.querySelector(".list-product")
         let lengthBoxProduct = document.getElementsByClassName("product").length
@@ -442,13 +461,15 @@
         $.ajax({
             type: 'GET',
             data: {amountNext: lengthBoxProduct},
-                url: "<%=request.getContextPath()%>/LoadDataAJAX",
+            url: "<%=request.getContextPath()%>/LoadDataAJAX",
             success: function (data) {
                 listProduct.innerHTML += data
             }
         });
     }
+
 </script>
+<script src="js/convertMoney.js"></script>
 </body>
 
 </html>
