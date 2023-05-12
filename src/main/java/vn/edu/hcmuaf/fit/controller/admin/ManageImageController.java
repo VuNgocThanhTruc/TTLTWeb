@@ -29,7 +29,7 @@ public class ManageImageController extends HttpServlet {
         } else if (SystemConstant.EDIT.equals(typeParam)) {
             String idImgParam = request.getParameter("id-image");
             if (idImgParam != null) {
-                request.setAttribute("image", productService.getDetailProduct(Integer.parseInt(idImgParam)));
+                request.setAttribute("image", ImageDAO.loadImgById(idImgParam));
             }
             view = "/view/admin/edit-image.jsp";
         } else if (typeParam == null) {
@@ -58,6 +58,7 @@ public class ManageImageController extends HttpServlet {
             doPost_Add(request, response);
         } else if (SystemConstant.EDIT.equals(typeParam)) {
             doPost_Edit(request, response);
+//System.out.println("vô gòi");
         }
 
     }
@@ -108,20 +109,25 @@ public class ManageImageController extends HttpServlet {
     }
 
     private void doPost_Edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String name = request.getParameter("name_photo");
-       int id = Integer.parseInt(request.getParameter("id-image"));
-        System.out.println(id);
-
+        ImageDAO imageDao = new ImageDAO();
+        int id = Integer.parseInt(request.getParameter("id-image"));
+        String name = request.getParameter("namePhoto");
         int type = Integer.parseInt(request.getParameter("numType"));
-
-//        update image from client path to server
+        if(type==1){
+        String imageFileName = updateImageServer(request,"banner");
+        imageDao.updatePhoto(id,name,imageFileName,type);
+        }
+        else if(type==2) {
+            String imageFileName = updateImageServer(request,"footer");
+            imageDao.updatePhoto(id,name,imageFileName,type);
+        }
+        response.sendRedirect("manage-image");
+    }
+    //        update image from client path to server
+    protected String updateImageServer(HttpServletRequest request, String saveIntoPath) throws ServletException, IOException {
         Part file = request.getPart("ImageUpload");
-
         String imageFileName = file.getSubmittedFileName();  // get selected image file name
-        System.out.println("Selected Image File Name : " + imageFileName);
-
-        String uploadPath = getServletContext().getRealPath("") + File.separator + "/images/banner/" + imageFileName;  // upload path where we have to upload our actual image
-        System.out.println("Upload Path : " + uploadPath);
+        String uploadPath = getServletContext().getRealPath("") + File.separator +"/images/"+saveIntoPath+"/" + imageFileName;  // upload path where we have to upload our actual image
 
         // Uploading our selected image into the images folder
 
@@ -133,15 +139,11 @@ public class ManageImageController extends HttpServlet {
             is.read(data);
             fos.write(data);
             fos.close();
-
+            return imageFileName;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        ImageDAO imageDAO = new ImageDAO();
-        imageDAO.updatePhoto(id, name, imageFileName, type);
-
-        response.sendRedirect("manage-image");
-
     }
 
     private void doGet_Del(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

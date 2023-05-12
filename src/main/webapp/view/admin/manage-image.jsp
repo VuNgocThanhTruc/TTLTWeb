@@ -36,7 +36,7 @@
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
-            <li class="breadcrumb-item active"><a href="manage-blog.jsp"><b>Quản lý hình ảnh</b></a></li>
+            <li class="breadcrumb-item active"><a href="manage-image"><b>Quản lý hình ảnh</b></a></li>
         </ul>
         <div id="clock"></div>
     </div>

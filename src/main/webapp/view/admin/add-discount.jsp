@@ -194,10 +194,12 @@
                                     </div>
 
                                     <input class="btn btn-save" type="submit" value="lưu lại"/>
+
                                     <a href="manage-discount">
-                                        <button class="btn btn-cancel" data-dismiss="modal" type="reset">Hủy bỏ</button>
+                                        <button class="btn btn-cancel" type="button">Hủy bỏ</button>
                                     </a>
                                 </form>
+
 
 
                             </div>
