@@ -1,5 +1,7 @@
 <%@ page import="vn.edu.hcmuaf.fit.model.CategoryModel" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.Map" %>
 <%@ page import="vn.edu.hcmuaf.fit.model.UserModel" %>
 <%--
   Created by IntelliJ IDEA.
@@ -34,6 +36,13 @@
     String activeBlog = (String) request.getAttribute("activeBlog");
     String activeContact = (String) request.getAttribute("activeContact");
     String activeIntroduce = (String) request.getAttribute("activeIntroduce");
+    int numCart = 0;
+    if(session.getAttribute("cart")!=null){
+        HashMap<Integer, ProductCartModel> cart = (HashMap<Integer, ProductCartModel>) session.getAttribute("cart");
+        for (Map.Entry<Integer, ProductCartModel> entry : cart.entrySet()) {
+            numCart+=entry.getValue().getQuantity();
+        }
+    }
 %>
 
 <div class="header">
@@ -179,11 +188,11 @@
                         <button type="submit" class="btn-search btn" id="search-header-btn">
                             <i style="font-weight:bold" class="fas fa-search"></i>
                         </button>
-                        <div id="searchResultsWithAjax" >
+                        <div id="searchResultsWithAjax">
                         </div>
                     </form>
-<%--                    <div id="ajaxSearchResults" class="smart-search-wrapper ajaxSearchResults">--%>
-<%--                    </div>--%>
+                    <%--                    <div id="ajaxSearchResults" class="smart-search-wrapper ajaxSearchResults">--%>
+                    <%--                    </div>--%>
                 </div>
             </div>
         </div>
@@ -196,6 +205,7 @@
                 <input type="hidden" name="display" value="1">
                 <button class="w3view-cart btn" type="submit" name="submit" value="" onclick="addBtnCart()">
                     <div class="icon-ol"><i class="icon-header fas fa-shopping-cart" aria-hidden="true"></i></div>
+                    <span class="p-1 bg-danger border-0 text-light sum-num-cart"><%=numCart%></span>
                 </button>
             </form>
         </div>
@@ -313,9 +323,8 @@
 <script src="plugins/jquery-3.4.1/jquery-3.4.1.min.js"></script>
 <script>
     $(document).ready(() => {
-        $('#inputSearchAuto').on('change', (event) => {
+        $('#inputSearchAuto').on('input', (event) => {
             event.preventDefault();
-            console.log("change search")
             let inputSearchAuto = $('#inputSearchAuto').val()
             let searchResultsWithAjax = document.querySelector("#searchResultsWithAjax")
 
@@ -325,10 +334,12 @@
                 url: "<%=request.getContextPath()%>/list-product",
                 success: function (data) {
                     searchResultsWithAjax.innerHTML = data
-                    console.log(data)
                 }
             });
         })
+
+        $('.w3view-cart.btn span').innerText =
+        <%=session.getAttribute("numCart")%>
     })
 
 </script>
