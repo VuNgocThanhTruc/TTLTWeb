@@ -9,20 +9,22 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import vn.edu.hcmuaf.fit.bean.Log;
 import vn.edu.hcmuaf.fit.constant.SystemConstant;
 import vn.edu.hcmuaf.fit.dao.ProductDAO;
+import vn.edu.hcmuaf.fit.dao.UserDAO;
+import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.ProductModel;
+import vn.edu.hcmuaf.fit.model.UserModel;
 import vn.edu.hcmuaf.fit.service.CategorySevice;
 import vn.edu.hcmuaf.fit.service.ExportService;
 import vn.edu.hcmuaf.fit.service.ProductService;
 
+import javax.mail.Session;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
+import javax.servlet.http.*;
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.List;
@@ -37,6 +39,8 @@ public class ManageProductController extends HttpServlet {
         String idProductParam = request.getParameter("id-product");
         String view = "";
         ProductService productService = new ProductService();
+        HttpSession session = request.getSession();
+        UserModel user =(UserModel) session.getAttribute("userlogin");
 
         if (SystemConstant.LIST.equals(typeParam)) {
             view = "/view/admin/manage-product.jsp";
@@ -60,8 +64,8 @@ public class ManageProductController extends HttpServlet {
             view = "/view/admin/edit-product.jsp";
         } else if (SystemConstant.DELETE.equals(typeParam)) {
             if (idProductParam != null) {
-                System.out.println("delete");
                 ProductDAO.deleteProduct(Integer.parseInt(idProductParam));
+                DBConnect.getInstall().insert(new Log(3,Integer.parseInt(user == null ? user.getId() : "-1"), request.getRemoteAddr(),request.getRequestURI(),"Delete Product ID :" +idProductParam, 0));
             }
             request.setAttribute("listProduct", ProductService.getListProduct());
             view = "/view/admin/manage-product.jsp";
@@ -69,9 +73,11 @@ public class ManageProductController extends HttpServlet {
             //Export Data
             ExportService exportService = new ExportService();
             exportService.exportProduct(request, response);
+            DBConnect.getInstall().insert(new Log(Log.INFO,Integer.parseInt(user == null ? user.getId() : "-1"), request.getRemoteAddr(),request.getRequestURI(),"Export Data :" +ProductService.getListProduct().toString(), 0));
             view = "/view/admin/manage-product.jsp";
         }else if (typeParam == null) {
             view = "/view/admin/manage-product.jsp";
+            DBConnect.getInstall().insert(new Log(Log.INFO, Integer.parseInt(user == null ? user.getId() : "-1"), request.getRemoteAddr(), request.getRequestURI(),"Show list product: "+ProductService.getListProduct().toString(), 0));
             request.setAttribute("listProduct", ProductService.getListProduct());
         }
 
@@ -120,7 +126,6 @@ public class ManageProductController extends HttpServlet {
 
 
     private void doPost_Edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FileUploadException {
-//        System.out.println(request.getPart("idProduct").getSubmittedFileName());
         int pid = Integer.parseInt(request.getParameter("idProduct"));
         String pName = request.getParameter("name_product");
         int pidTypeProduct = Integer.parseInt(request.getParameter("categoryTypeProduct"));
@@ -143,6 +148,8 @@ public class ManageProductController extends HttpServlet {
     }
 
     private void doPost_EditBasic(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        UserModel user =(UserModel) session.getAttribute("userlogin");
         int pid = Integer.parseInt(request.getParameter("idModal"));
         String pName = request.getParameter("nameModal");
         int pidTypeProduct = Integer.parseInt(request.getParameter("categoryModal"));
@@ -151,6 +158,12 @@ public class ManageProductController extends HttpServlet {
         int pQuantity = Integer.parseInt(request.getParameter("quantityModal"));
 
         boolean checkUpdateProduct = ProductService.updateProductBasic(pid, pName, pQuantity, pidStatus, pPrice, pidTypeProduct);
+        DBConnect.getInstall().insert(
+                new Log(0,
+                        Integer.parseInt(user == null ? user.getId() : "-1"),
+                        request.getRemoteAddr(),request.getRequestURI(),
+                        "Edit Product id: " +pid+", Name: "+ pName +", Id Type Product: " +pidTypeProduct +", Status: " +pidStatus+", Price: "+ pPrice+", Quantity: " + pQuantity ,
+                        0));
         request.setAttribute("message", checkUpdateProduct);
         request.setAttribute("categoryTypeProduct", CategorySevice.getListTypeProduct());
         request.setAttribute("categoryBrand", CategorySevice.getListBrand());
@@ -159,6 +172,8 @@ public class ManageProductController extends HttpServlet {
     }
 
     protected void doPost_Add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        UserModel user =(UserModel) session.getAttribute("userlogin");
         response.setContentType("text/html;charset=UTF-8");
         String pName = request.getParameter("name_product");
         String pAvatar = request.getParameter("ImageUpload");
@@ -173,6 +188,12 @@ public class ManageProductController extends HttpServlet {
         String imageFileName = updateImageServer(request,"product");
 
         boolean checkAddNew = new ProductService().addNewProduct(pName, imageFileName, pidTypeProduct, pidStatus, pBrand, pPrice, pQuantity, pDescription, pidStore);
+        DBConnect.getInstall().insert(
+                new Log(0,
+                        Integer.parseInt(user == null ? user.getId() : "-1"),
+                        request.getRemoteAddr(),request.getRequestURI(),
+                        "Add New Product " +"Name: "+ pName +", Id Type Product: " +pidTypeProduct +", Status: " +pidStatus + ", Brand: " + pBrand+", Price: "+ pPrice+", Quantity: " + pQuantity+", Description: " + pDescription+", Id Store: " + pidStore ,
+                        0));
         request.setAttribute("message", checkAddNew);
         request.setAttribute("categoryTypeProduct", CategorySevice.getListTypeProduct());
         request.setAttribute("categoryBrand", CategorySevice.getListBrand());
@@ -185,10 +206,7 @@ public class ManageProductController extends HttpServlet {
         Part file = request.getPart("ImageUpload");
 
         String imageFileName = file.getSubmittedFileName();  // get selected image file name
-        System.out.println("Selected Image File Name : " + imageFileName);
-
         String uploadPath = getServletContext().getRealPath("") + File.separator +"/images/"+saveIntoPath+"/" + imageFileName;  // upload path where we have to upload our actual image
-        System.out.println("Upload Path : " + uploadPath);
 
         // Uploading our selected image into the images folder
 

@@ -1,6 +1,8 @@
 package vn.edu.hcmuaf.fit.controller.admin;
 
+import vn.edu.hcmuaf.fit.bean.Log;
 import vn.edu.hcmuaf.fit.dao.BookingDAO;
+import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.BookingModel;
 import vn.edu.hcmuaf.fit.model.UserModel;
 import vn.edu.hcmuaf.fit.service.BookingService;
@@ -19,6 +21,8 @@ import java.util.List;
 public class ManageOrderController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        UserModel user =(UserModel) session.getAttribute("userlogin");
         String typeParam = request.getParameter("type");
         String view = "/view/admin/manage-order.jsp";
         if (typeParam != null) {
@@ -45,6 +49,12 @@ public class ManageOrderController extends HttpServlet {
             } else if(typeParam.equals("exportExcelDetail")){
                 String idBooking = request.getParameter("idBooking");
                 ExportService.exportOrderDetail(idBooking, request, response);
+                DBConnect.getInstall().insert(
+                        new Log(0,
+                                Integer.parseInt(user == null ? user.getId() : "-1"),
+                                request.getRemoteAddr(),request.getRequestURI(),
+                                "Export Data Detail Booking id: "  + idBooking,
+                                0));
             }
         }
 
@@ -56,6 +66,9 @@ public class ManageOrderController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        UserModel user =(UserModel) session.getAttribute("userlogin");
+
         String typeParam = request.getParameter("type");
         if (typeParam != null) {
             if (typeParam.equals("edit")) {
@@ -67,47 +80,35 @@ public class ManageOrderController extends HttpServlet {
                     int status = Integer.parseInt(request.getParameter("status"));
                     String username = request.getParameter("username");
                     String email = request.getParameter("email");
-                    System.out.println(email);
                     String tel = request.getParameter("tel");
                     String address = request.getParameter("address");
                     BookingService.updateBooking(id, date, desc, status, username, email, tel, address);
-
+                    DBConnect.getInstall().insert(
+                            new Log(1,
+                                    Integer.parseInt(user == null ? user.getId() : "-1"),
+                                    request.getRemoteAddr(),request.getRequestURI(),
+                                    "Update Booking id: "  + idBooking+", desc: " +desc +", date: " +date+", status: "+ status+", username: "+username + ", email: "+email +", tel: " + tel + "address: " +address ,
+                                    0));
                     response.sendRedirect(request.getContextPath() + "/admin/manage-order?type=edit&id-booking=" + id);
                 }
             } else if (typeParam.equals("add")) {
                 String idBooking = request.getParameter("id-booking");
-                HttpSession session = request.getSession();
-                UserModel user = (UserModel) session.getAttribute("userlogin");
                 if (idBooking != null) {
                     String id = request.getParameter("id-booking");
                     String desc = request.getParameter("description");
                     String date = request.getParameter("date");
-                    System.out.println(date);
                     int status = Integer.parseInt(request.getParameter("status"));
                     String username = request.getParameter("username");
                     String email = request.getParameter("email");
                     String tel = request.getParameter("tel");
                     String address = request.getParameter("address");
                     BookingService.insertBooking(id, user.getId(), "1", date, desc, status, username, email, tel, address);
-
-                    response.sendRedirect(request.getContextPath() + "/admin/manage-order");
-                }
-            } else if (typeParam.equals("list")) {
-                String idBooking = request.getParameter("id-booking");
-                HttpSession session = request.getSession();
-                UserModel user = (UserModel) session.getAttribute("userlogin");
-                if (idBooking != null) {
-                    String id = request.getParameter("id-booking");
-                    String desc = request.getParameter("description");
-                    String date = request.getParameter("date");
-                    System.out.println(date);
-                    int status = Integer.parseInt(request.getParameter("status"));
-                    String username = request.getParameter("username");
-                    String email = request.getParameter("email");
-                    String tel = request.getParameter("tel");
-                    String address = request.getParameter("address");
-                    BookingService.insertBooking(id, user.getId(), "1", date, desc, status, username, email, tel, address);
-
+                    DBConnect.getInstall().insert(
+                            new Log(0,
+                                    Integer.parseInt(user == null ? user.getId() : "-1"),
+                                    request.getRemoteAddr(),request.getRequestURI(),
+                                    "Add Booking id: "  + idBooking+", desc: " +desc +", date: " +date+", status: "+ status+", username: "+username + ", email: "+email +", tel: " + tel + "address: " +address ,
+                                    0));
                     response.sendRedirect(request.getContextPath() + "/admin/manage-order");
                 }
             }

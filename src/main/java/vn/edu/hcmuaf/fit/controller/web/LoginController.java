@@ -1,7 +1,10 @@
 package vn.edu.hcmuaf.fit.controller.web;
 
+import vn.edu.hcmuaf.fit.bean.Log;
 import vn.edu.hcmuaf.fit.dao.UserDAO;
+import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.UserModel;
+import vn.edu.hcmuaf.fit.service.LogService;
 import vn.edu.hcmuaf.fit.util.Encode;
 
 
@@ -49,12 +52,10 @@ public class LoginController extends HttpServlet {
         response.setContentType("text/html;charset=utf-8");
 
         String action = request.getParameter("action");
-
-        System.out.println("dopost: " + action);
         HttpSession session = request.getSession();
+        Integer failedLoginCount = (Integer) session.getAttribute("failedLoginCount");
         session.setAttribute("mess", null);
         if (action == null) {
-            System.out.println("Khong thuc hien duoc gi het");
             session.setAttribute("mess", null);
         } else if (action.equals("login")) {
             String username = request.getParameter("username");
@@ -69,28 +70,33 @@ public class LoginController extends HttpServlet {
                 UserModel user = UserDAO.loadUsername().get(username);
                 session.setAttribute("userlogin", user);
                 session.setAttribute("mess", null);
+                failedLoginCount = 0;
                 response.sendRedirect("home");
 
             } else if (checkEmail == 1) {
                 UserModel userEmail = UserDAO.loadEmail().get(username);
                 session.setAttribute("userlogin", userEmail);
                 session.setAttribute("mess", null);
+                failedLoginCount = 0;
                 response.sendRedirect("home");
 
             } else if (checkUserName == 2) {
                 UserModel user = UserDAO.loadUsername().get(username);
                 session.setAttribute("userlogin", user);
                 session.setAttribute("mess", null);
+                failedLoginCount = 0;
                 response.sendRedirect("admin/index");
 
             } else if (checkEmail == 2) {
                 UserModel user = UserDAO.loadUsername().get(username);
                 session.setAttribute("userlogin", user);
                 session.setAttribute("mess", null);
+                failedLoginCount = 0;
                 response.sendRedirect("admin/index");
 
             } else {
                 session.setAttribute("mess", "errorsignin");
+                LogService.logUserLoginFailed(request.getRemoteAddr(), failedLoginCount, request);
                 response.sendRedirect("signin");
             }
         } else if (action.equals("logout")) {

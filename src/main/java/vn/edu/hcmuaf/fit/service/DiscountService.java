@@ -8,4 +8,14 @@ public class DiscountService {
     public static DiscountModel getDiscounts(int idProduct) {
         return DiscountDAO.getDiscount(idProduct);
     }
+    public static DiscountModel getProductById(int idProduct) {
+        return DiscountDAO.getProductById(idProduct);
+    }
+    public static DiscountModel getProductById2(int idProduct) {
+        return DiscountDAO.getProductById2(idProduct);
+    }
+
+
+
+
 }

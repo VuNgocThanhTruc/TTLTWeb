@@ -112,13 +112,13 @@
                             </td>
                             <td>
                                 <select class="form-control" id="status" name="status">
-                                    <option value="1" <%=listBooking == null ? "" : (booking.getStatus_booking() == 1 ? "selected" : "") %>>
+                                    <option value="1" <%=listBooking == null ? "" : (booking.getStatusBooking().getId() == 1 ? "selected" : "") %>>
                                         Đã xác nhận
                                     </option>
-                                    <option value="0" <%=listBooking == null ? "" : (booking.getStatus_booking() == 0 ? "selected" : "") %>>
+                                    <option value="0" <%=listBooking == null ? "" : (booking.getStatusBooking().getId() == 0 ? "selected" : "") %>>
                                         Chờ xác nhận
                                     </option>
-                                    <option value="-1" <%=listBooking == null ? "" : (booking.getStatus_booking() == -1 ? "selected" : "") %>>
+                                    <option value="-1" <%=listBooking == null ? "" : (booking.getStatusBooking().getId() == -1 ? "selected" : "") %>>
                                         Đã hủy
                                     </option>
                                 </select>

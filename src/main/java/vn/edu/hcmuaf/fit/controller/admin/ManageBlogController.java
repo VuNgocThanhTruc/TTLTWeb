@@ -1,10 +1,13 @@
 package vn.edu.hcmuaf.fit.controller.admin;
 
+import vn.edu.hcmuaf.fit.bean.Log;
 import vn.edu.hcmuaf.fit.constant.SystemConstant;
 import vn.edu.hcmuaf.fit.dao.BlogDAO;
 import vn.edu.hcmuaf.fit.dao.CustomerDAO;
+import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.BlogModel;
 import vn.edu.hcmuaf.fit.model.CustomerModel;
+import vn.edu.hcmuaf.fit.model.UserModel;
 import vn.edu.hcmuaf.fit.service.BlogService;
 import vn.edu.hcmuaf.fit.service.BookingService;
 import vn.edu.hcmuaf.fit.service.CustomerServices;
@@ -23,13 +26,22 @@ import java.util.List;
 public class ManageBlogController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        UserModel user =(UserModel) session.getAttribute("userlogin");
         String actionParam = request.getParameter("action");
         String view = "/view/admin/manage-blog.jsp";
-
         if (actionParam != null) {
             if (actionParam.equals("delete")) {
                 BlogDAO dao = new BlogDAO();
-                dao.deleteBlog(Integer.parseInt(request.getParameter("id")));
+                String idBlog = request.getParameter("id");
+                dao.deleteBlog(Integer.parseInt(idBlog));
+                DBConnect.getInstall().insert(
+                        new Log(2,
+                                Integer.parseInt(user == null ? user.getId() : "-1"),
+                                request.getRemoteAddr(),
+                                request.getRequestURI(),
+                                "Delete Blog id: "  + idBlog,
+                                0));
             } else if (actionParam.equals("edit-blog")) {
                 String idBlog = request.getParameter("id-blog");
                 BlogModel blog = BlogService.getDetailBlogForId(idBlog);
@@ -55,17 +67,16 @@ public class ManageBlogController extends HttpServlet {
     }
 
     private void doPostAdd(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        UserModel user =(UserModel) session.getAttribute("userlogin");
+
         String title = request.getParameter("title");
         String brief = request.getParameter("brief");
         String detail = request.getParameter("detail");
 
         Part file = request.getPart("ImageUpload");
         String imageFileName = file.getSubmittedFileName();  // get selected image file name
-        System.out.println("Selected Image File Name : " + imageFileName);
-
         String uploadPath = getServletContext().getRealPath("") + File.separator + "/images/blog/" + imageFileName;  // upload path where we have to upload our actual image
-        System.out.println("Upload Path : " + uploadPath);
-
         // Uploading our selected image into the images folder
 
         try {
@@ -81,26 +92,26 @@ public class ManageBlogController extends HttpServlet {
             e.printStackTrace();
         }
         BlogService.insertBlog( title, brief, detail, imageFileName);
-
+        DBConnect.getInstall().insert(
+                new Log(2,
+                        Integer.parseInt(user == null ? user.getId() : "-1"),
+                        request.getRemoteAddr(),request.getRequestURI(),
+                        "Add Blog Title: "  + title+", brief: " + brief+", detail: " + detail+", imageFileName: "+ imageFileName,
+                        0));
         response.sendRedirect(request.getContextPath() + "/admin/manage-blog");
 
     }
 
     private void doPost_Edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        UserModel user =(UserModel) session.getAttribute("userlogin");
         String id = request.getParameter("id-blog");
         String title = request.getParameter("title");
         String brief = request.getParameter("brief");
         String detail = request.getParameter("detail");
-
-        System.out.println(request.getPart("ImageUpload"));
-
         Part file = request.getPart("ImageUpload");
-
         String imageFileName = file.getSubmittedFileName();  // get selected image file name
-        System.out.println("Selected Image File Name : " + imageFileName);
-
         String uploadPath = getServletContext().getRealPath("") + File.separator + "/images/blog/" + imageFileName;  // upload path where we have to upload our actual image
-        System.out.println("Upload Path : " + uploadPath);
 
         // Uploading our selected image into the images folder
 
@@ -118,7 +129,12 @@ public class ManageBlogController extends HttpServlet {
         }
 
         BlogService.updateBlog(id, title, brief, detail, imageFileName);
-
+        DBConnect.getInstall().insert(
+                new Log(1,
+                        Integer.parseInt(user == null ? user.getId() : "-1"),
+                        request.getRemoteAddr(),request.getRequestURI(),
+                        "Edit Blog id: "  + id,
+                        0));
         response.sendRedirect(request.getContextPath() + "/admin/manage-blog?action=edit-blog&id-blog=" + id);
     }
 }
