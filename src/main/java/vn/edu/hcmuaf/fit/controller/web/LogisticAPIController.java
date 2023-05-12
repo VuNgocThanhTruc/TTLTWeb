@@ -288,6 +288,7 @@ public class LogisticAPIController extends HttpServlet {
         out.close();
     }
     private void doPostLeadTime(HttpServletRequest request, HttpServletResponse response, String logisticIDToken) throws IOException {
+        System.out.println("this");
 
         String apiURL = APIConstants.LOGISTIC_HOST_API + "/leadTime";
 

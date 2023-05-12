@@ -10,6 +10,7 @@ public class ProductModel {
     private int idBrand;
     private long price;
     private String describe;
+    private String avatar;
 
     private int height;
     private int length;
@@ -133,6 +134,13 @@ public class ProductModel {
         this.listImage = listImage;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public String getCategory(int idTypeProduct){
         String result = "";

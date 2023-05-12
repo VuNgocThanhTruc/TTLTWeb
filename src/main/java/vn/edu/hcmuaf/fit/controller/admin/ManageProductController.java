@@ -10,6 +10,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import vn.edu.hcmuaf.fit.bean.Log;
+import vn.edu.hcmuaf.fit.constant.APIConstants;
 import vn.edu.hcmuaf.fit.constant.SystemConstant;
 import vn.edu.hcmuaf.fit.dao.ProductDAO;
 import vn.edu.hcmuaf.fit.dao.UserDAO;
@@ -119,27 +120,30 @@ public class ManageProductController extends HttpServlet {
             } catch (FileUploadException e) {
                 throw new RuntimeException(e);
             }
-        } else {
+        } else{
             doPost_EditBasic(request, response);
         }
     }
-
-
     private void doPost_Edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FileUploadException {
-        int pid = Integer.parseInt(request.getParameter("idProduct"));
+        int pid = Integer.parseInt(request.getParameter("id-product"));
         String pName = request.getParameter("name_product");
         int pidTypeProduct = Integer.parseInt(request.getParameter("categoryTypeProduct"));
         int pidStatus = Integer.parseInt(request.getParameter("statusProduct"));
         int pBrand = Integer.parseInt(request.getParameter("categoryBrand"));
         int pPrice = Integer.parseInt(request.getParameter("price"));
-        int pQuantity = Integer.parseInt(request.getParameter("quantity"));
+//        int pQuantity = Integer.parseInt(request.getParameter("quantity"));
+
+        int height = Integer.parseInt(request.getParameter("height"));
+        int length = Integer.parseInt(request.getParameter("length"));
+        int width = Integer.parseInt(request.getParameter("width"));
+        int weight = Integer.parseInt(request.getParameter("weight"));
         String pDescription = request.getParameter("description");
         int pidStore = Integer.parseInt("1");
         String id = request.getParameter("idProduct");
 
         String imageFileName = updateImageServer(request,"product");
 
-        boolean checkUpdateProduct = ProductService.updateProduct(pid, pName, imageFileName, pidTypeProduct, pidStatus, pBrand, pPrice, pQuantity, pDescription, pidStore);
+        boolean checkUpdateProduct = ProductService.updateProduct(pid, pName, imageFileName, pidTypeProduct, pidStatus, pBrand, pPrice, pDescription, height,length,width,weight);
         request.setAttribute("message", checkUpdateProduct);
         request.setAttribute("categoryTypeProduct", CategorySevice.getListTypeProduct());
         request.setAttribute("categoryBrand", CategorySevice.getListBrand());
@@ -155,22 +159,23 @@ public class ManageProductController extends HttpServlet {
         int pidTypeProduct = Integer.parseInt(request.getParameter("categoryModal"));
         int pidStatus = Integer.parseInt(request.getParameter("statusModal"));
         int pPrice = Integer.parseInt(request.getParameter("priceModal"));
-        int pQuantity = Integer.parseInt(request.getParameter("quantityModal"));
+        int brand = Integer.parseInt(request.getParameter("brandModal"));
 
-        boolean checkUpdateProduct = ProductService.updateProductBasic(pid, pName, pQuantity, pidStatus, pPrice, pidTypeProduct);
+        boolean checkUpdateProduct = ProductService.updateProductBasic(pid, pName, brand, pidStatus, pPrice, pidTypeProduct);
         DBConnect.getInstall().insert(
                 new Log(0,
                         Integer.parseInt(user == null ? user.getId() : "-1"),
                         request.getRemoteAddr(),request.getRequestURI(),
-                        "Edit Product id: " +pid+", Name: "+ pName +", Id Type Product: " +pidTypeProduct +", Status: " +pidStatus+", Price: "+ pPrice+", Quantity: " + pQuantity ,
+                        "Edit Product id: " +pid+", Name: "+ pName +", Id Type Product: " +pidTypeProduct +", Status: " +pidStatus+", Price: "+ pPrice+", brand: " + brand ,
                         0));
-        request.setAttribute("message", checkUpdateProduct);
-        request.setAttribute("categoryTypeProduct", CategorySevice.getListTypeProduct());
-        request.setAttribute("categoryBrand", CategorySevice.getListBrand());
-        request.setAttribute("listProduct", ProductService.getListProduct());
-        request.getRequestDispatcher("/view/admin/manage-product.jsp").forward(request, response);
+        PrintWriter out = response.getWriter();
+        if(checkUpdateProduct){
+            out.println("success");
+        }else{
+            out.println("error");
+        }
+        out.close();
     }
-
     protected void doPost_Add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         UserModel user =(UserModel) session.getAttribute("userlogin");
@@ -183,11 +188,15 @@ public class ManageProductController extends HttpServlet {
         int pPrice = Integer.parseInt(request.getParameter("price"));
         int pQuantity = Integer.parseInt(request.getParameter("quantity"));
         String pDescription = request.getParameter("description");
+        int height = Integer.parseInt(request.getParameter("height"));
+        int length = Integer.parseInt(request.getParameter("length"));
+        int width = Integer.parseInt(request.getParameter("width"));
+        int weight = Integer.parseInt(request.getParameter("weight"));
         int pidStore = Integer.parseInt("1");
 
         String imageFileName = updateImageServer(request,"product");
 
-        boolean checkAddNew = new ProductService().addNewProduct(pName, imageFileName, pidTypeProduct, pidStatus, pBrand, pPrice, pQuantity, pDescription, pidStore);
+        boolean checkAddNew = new ProductService().addNewProduct(pName, imageFileName, pidTypeProduct, pidStatus, pBrand, pPrice, pQuantity, pDescription, pidStore, Integer.parseInt(user.getId()),height,length,width,weight);
         DBConnect.getInstall().insert(
                 new Log(0,
                         Integer.parseInt(user == null ? user.getId() : "-1"),

@@ -22,6 +22,7 @@
     List<ProductModel> listProduct = (List<ProductModel>) request.getAttribute("listProduct");
     String pageContextPath = (String) request.getContextPath();
     List<CategoryModel> categoryTypeProduct = (List<CategoryModel>) request.getAttribute("categoryTypeProduct");
+    List<CategoryModel> listBrand = (List<CategoryModel>) request.getAttribute("categoryBrand");
 
     Boolean isGrantAdd = false;
     Boolean isGrantEdit = false;
@@ -111,9 +112,9 @@
                             <td class="name"><%=product.getName()%>
                             </td>
                             <td>
-<%--                                <img--%>
-<%--                                    src="../images/product/<%=product.getAvatar()%>"--%>
-<%--                                    alt="" width="100px;" class="avatar">--%>
+                                <img
+                                    src="../images/product/<%=product.getAvatar()%>"
+                                    alt="" width="100px;" class="avatar">
                             </td>
                             <td class="quantity">
 <%--                                <%=product.getSumQuantity()%>--%>
@@ -198,7 +199,7 @@ MODAL EDIT BASIC
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label class="control-label" for="idModal">Mã sản phẩm </label>
-                            <input class="form-control" type="number" value="" id="idModal" name="idModal">
+                            <input class="form-control" type="number" value="" id="idModal" name="idModal" disabled>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label" for="nameModal">Tên sản phẩm</label>
@@ -206,9 +207,15 @@ MODAL EDIT BASIC
                                    value="" id="nameModal" name="nameModal">
                         </div>
                         <div class="form-group  col-md-6">
-                            <label class="control-label" for="quantityModal">Tồn kho</label>
-                            <input class="form-control" type="number" name="quantityModal" id="quantityModal" required
-                                   value="">
+                            <label class="control-label" for="brandModal">Thương hiệu</label>
+                            <select class="form-control" id="brandModal" name="brandModal">
+                                <%
+                                    for (CategoryModel brand : listBrand) {
+                                %>
+                                    <option value="<%=brand.getId()%>"><%=brand.getName()%></option>
+                                <%}%>
+                            </select>
+
                         </div>
                         <div class="form-group col-md-6 ">
                             <label for="statusModal" class="control-label" for="statusModal">Tình trạng sản phẩm</label>
@@ -240,7 +247,7 @@ MODAL EDIT BASIC
                     <BR>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-save" type="submit" onclick="save()">Lưu lại</button>
+                    <button class="btn btn-save" type="button" onclick="save()">Lưu lại</button>
                     <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
                 </div>
             </form>
@@ -315,7 +322,23 @@ MODAL EDIT BASIC
     });
 
     function save() {
-        swal("Đã lưu thành công.!", {});
+        $.ajax({
+            type: 'POST',
+            url: '<%=request.getContextPath()%>/admin/manage-product',
+            data: {
+                idModal: $('#ModalEditProduct #idModal').val(),
+                nameModal: $('#ModalEditProduct #nameModal').val(),
+                statusModal: $('#ModalEditProduct #statusModal').val(),
+                priceModal: $('#ModalEditProduct #priceModal').val(),
+                categoryModal: $('#ModalEditProduct #categoryModal').val(),
+                brandModal: $('#ModalEditProduct #brandModal').val(),
+            },
+            success: (result) => {
+                swal("Cập nhật thành công.!");
+                setTimeout(location.reload(),1000)
+            }
+        })
+
     }
 
     <!--MODAL-->
@@ -340,19 +363,6 @@ MODAL EDIT BASIC
         for (let i = 0; i < listCategory.length; i++) {
             listCategory[i].value == category ? listCategory[i].selected = true : listCategory[i].selected = false
         }
-        <%--$.ajax({--%>
-        <%--    type: 'GET',--%>
-        <%--    url: '<%=pageContextPath%>/admin/manage-product',--%>
-        <%--    data: {action: 'find', id: idProduct},--%>
-        <%--    success: (result) => {--%>
-        <%--        $('#ModalEditProduct #idModal').val(result.id);--%>
-        <%--        $('#ModalEditProduct #nameModal').val(result.name);--%>
-        <%--        $('#ModalEditProduct #quantityModal').val(result.quantity);--%>
-        <%--        $('#ModalEditProduct #statusModal').val(result.status);--%>
-        <%--        $('#ModalEditProduct #priceModal').val(result.price);--%>
-        <%--        $('#ModalEditProduct #categoryModal').val(result.category);--%>
-        <%--    }--%>
-        <%--})--%>
     }
 
 </script>
