@@ -144,7 +144,7 @@ public class UserDAO implements ObjectDAO {
     }
 
     public void signup(String name, int sex, String dob, String email, String username, String password) {
-        String sql = "insert into users(name,username,email,password,avatar,tel,id_type_user,dob,sex,address) values (?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into users(name,username,email,password,avatar,tel,id_type_user,dob,sex,address, id_role) values (?,?,?,?,?,?,?,?,?,?,?)";
         Connection connect = ConnectToDatabase.getConnect();
         try {
             PreparedStatement ppstm = connect.prepareStatement(sql);
@@ -160,7 +160,7 @@ public class UserDAO implements ObjectDAO {
             ppstm.setInt(9, sex);
 
             ppstm.setString(10, null);
-
+            ppstm.setString(11, "444632065");
             ppstm.executeUpdate();
 
 
@@ -170,7 +170,7 @@ public class UserDAO implements ObjectDAO {
     }
 
     public void signupWithAPI(String id, String name, String email, String tel, int sex, String dob) {
-        String sql = "insert into users(name,username,email,password,avatar,tel,id_type_user,dob,sex) values (?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into users(name,username,email,password,avatar,tel,id_type_user,dob,sex, id_role) values (?,?,?,?,?,?,?,?,?,?)";
         Connection connect = ConnectToDatabase.getConnect();
         try {
             PreparedStatement ppstm = connect.prepareStatement(sql);
@@ -183,11 +183,8 @@ public class UserDAO implements ObjectDAO {
             ppstm.setInt(7, 3);
             ppstm.setString(8, dob);
             ppstm.setInt(9, sex);
-
-
+            ppstm.setString(10, "444632065");
             ppstm.executeUpdate();
-
-
         } catch (Exception e) {
             System.out.println("Error when signup custommer:" + e.getMessage());
         }
@@ -315,8 +312,7 @@ public class UserDAO implements ObjectDAO {
     public static List<UserModel> getAllUser() {
         List<UserModel> listAllUser = new ArrayList<UserModel>();
         try {
-            ResultSet rs = new ConnectToDatabase().selectData("select id, name, username,email, password, avatar, tel, id_type_user,\n" +
-                    "                        dob, sex, address from users");
+            ResultSet rs = new ConnectToDatabase().selectData("select id, name, username,email, password, avatar, tel, id_type_user, dob, sex, address, id_role from users");
             while (rs.next()) {
                 String id = rs.getString(1);
                 String name = rs.getString(2);
@@ -329,8 +325,9 @@ public class UserDAO implements ObjectDAO {
                 String dob = rs.getString(9);
                 int sex = rs.getInt(10);
                 String address = rs.getString(11);
+                String idRole = rs.getString(12);
                 UserModel user = new UserModel(id, name, username, email, password, avatar, tel, id_type_user,
-                        dob, sex, address);
+                        dob, sex, address, idRole);
                 listAllUser.add(user);
             }
         } catch (Exception e) {

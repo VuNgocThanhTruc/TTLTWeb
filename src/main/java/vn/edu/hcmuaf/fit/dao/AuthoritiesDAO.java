@@ -4,14 +4,13 @@ import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.ComponentModel;
 import vn.edu.hcmuaf.fit.model.FunctionModel;
 import vn.edu.hcmuaf.fit.model.RoleModel;
+import vn.edu.hcmuaf.fit.model.UserModel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class AuthoritiesDAO {
     Connection connection;
@@ -101,7 +100,6 @@ public class AuthoritiesDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(decentralizes);
     }
     // tạo quyền sử dụng một chức năng cho nhóm quyền
     public void decentralizeFunctionForRole(String idRole, String idComponent, String idFunction, Boolean isGrant) {
@@ -307,6 +305,17 @@ public class AuthoritiesDAO {
         return nameRole;
     }
 
+    public Set<UserModel> getListUserOfRole(String idRole){
+        Set<UserModel> list = new HashSet<UserModel>();
+        if(UserDAO.getAllUser() != null) for(UserModel user : UserDAO.getAllUser()){
+            if(user.getIdRole() != null){
+                if(user.getIdRole().equals(idRole)){
+                    list.add(user);
+                }
+            }
+        }
+        return list;
+    }
 }
 
 
