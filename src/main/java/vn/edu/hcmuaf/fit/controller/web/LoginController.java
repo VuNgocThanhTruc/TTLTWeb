@@ -4,10 +4,12 @@ import vn.edu.hcmuaf.fit.bean.Log;
 import vn.edu.hcmuaf.fit.dao.UserDAO;
 import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.UserModel;
+import vn.edu.hcmuaf.fit.service.AuthoritiesService;
 import vn.edu.hcmuaf.fit.service.LogService;
 import vn.edu.hcmuaf.fit.util.Encode;
 
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,11 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Set;
 
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -50,14 +52,16 @@ public class LoginController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=utf-8");
-
+        ServletContext context = request.getServletContext();
         String action = request.getParameter("action");
+        String view = "";
         HttpSession session = request.getSession();
         Integer failedLoginCount = (Integer) session.getAttribute("failedLoginCount");
         session.setAttribute("mess", null);
         if (action == null) {
             session.setAttribute("mess", null);
         } else if (action.equals("login")) {
+            UserModel user = null;
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             password = Encode.toSHA1(password);
@@ -66,39 +70,35 @@ public class LoginController extends HttpServlet {
             int checkEmail = new UserDAO().checkLoginbyEmail(username, password);
 
             if (checkUserName == 1) {
-
-                UserModel user = UserDAO.loadUsername().get(username);
+                user = UserDAO.loadUsername().get(username);
                 session.setAttribute("userlogin", user);
                 session.setAttribute("mess", null);
-                failedLoginCount = 0;
-                response.sendRedirect("home");
-
+                view = "home";
             } else if (checkEmail == 1) {
-                UserModel userEmail = UserDAO.loadEmail().get(username);
-                session.setAttribute("userlogin", userEmail);
+                user = UserDAO.loadEmail().get(username);
+                session.setAttribute("userlogin", user);
                 session.setAttribute("mess", null);
-                failedLoginCount = 0;
-                response.sendRedirect("home");
-
+                view = "home";
             } else if (checkUserName == 2) {
-                UserModel user = UserDAO.loadUsername().get(username);
+                user = UserDAO.loadUsername().get(username);
                 session.setAttribute("userlogin", user);
                 session.setAttribute("mess", null);
-                failedLoginCount = 0;
-                response.sendRedirect("admin/index");
-
+                view = "admin/index";
             } else if (checkEmail == 2) {
-                UserModel user = UserDAO.loadUsername().get(username);
+                user = UserDAO.loadUsername().get(username);
                 session.setAttribute("userlogin", user);
                 session.setAttribute("mess", null);
-                failedLoginCount = 0;
-                response.sendRedirect("admin/index");
-
+                view = "admin/index";
             } else {
                 session.setAttribute("mess", "errorsignin");
                 LogService.logUserLoginFailed(request.getRemoteAddr(), failedLoginCount, request);
-                response.sendRedirect("signin");
+                view = "signin";
             }
+            if(user != null){
+                failedLoginCount = 0;
+            }
+            AuthoritiesService.checkRelogin(context, user);
+            response.sendRedirect(view);
         } else if (action.equals("logout")) {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
