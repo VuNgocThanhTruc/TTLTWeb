@@ -15,7 +15,7 @@ public class APIConstants {
     public static String GOOGLE_GRANT_TYPE = "authorization_code";
 
     //    API Logistic
-    public static String LOGISTIC_ID_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTQwLjIzOC41NC4xMzYvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2ODEzMTI0MTEsImV4cCI6MTY4MTMxMzAxMSwibmJmIjoxNjgxMzEyNDExLCJqdGkiOiJORXZZNTdyNzFJVWRsN0RSIiwic3ViIjoiMzcwODE5NzNhZDY1NDE2MThhOGJmNGNiZTE2MzI4ZGUiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.ea-ycbFMAfoVbJk4ebcAs01J-6ALG7q8dR_b7nnJdEU";
+    public static String LOGISTIC_ID_TOKEN = "";
     public static String LOGISTIC_HOST_API = "http://140.238.54.136/api";
     public static String LOGISTIC_EMAIL_LOGIN = "phonecarenlu@gmail.com";
     public static String LOGISTIC_PASSWORD_LOGIN = "Phonecarenlu123";

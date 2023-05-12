@@ -213,8 +213,12 @@
                                     </button>
                                 </div>
 
-                                <div class="service-fee">
+                                <div class="product-price service-fee">
                                     Phí vận chuyển: <span>0</span>đ
+                                </div>
+
+                                <div class="product-price lead-time">
+                                    Dự tính thời gian giao: <span></span>
                                 </div>
 
                                 <form id="add-item-form" action="" method="post" class="variants clearfix">
@@ -559,17 +563,20 @@
                         <select class="col-6 select-province form-select" aria-label="Default select example">
                             <option selected>Vui lòng chọn Tỉnh/Thành phố</option>
                         </select>
+                        <input type="hidden" name="id-province" class="id-province">
                     </div>
                     <div class="row">
                         <p class="col-4">Quận/Huyện</p>
                         <select class="col-6 select-district form-select" aria-label="Default select example" disabled>
                             <option selected>Vui lòng chọn Quận/Huyện</option>
                         </select>
+                        <input type="hidden" name="id-district" class="id-district">
                     </div>
                     <div class="row">
                         <p class="col-4">Phường/Xã</p>
                         <select class="col-6 select-ward form-select" aria-label="Default select example" disabled>
                             <option selected>Vui lòng chọn Phường/Xã</option>
+                            <input type="hidden" name="id-ward" class="id-ward">
                         </select>
                     </div>
                 </div>
@@ -592,25 +599,14 @@
 
     async function autoLoginLogisticAPI() {
 
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                'email': '<%=APIConstants.LOGISTIC_EMAIL_LOGIN%>',
-                'password': '<%=APIConstants.LOGISTIC_PASSWORD_LOGIN%>'
-            })
-        };
-
-        await fetch('<%=APIConstants.LOGISTIC_HOST_API%>/auth/login', options)
+        await fetch(`<%=request.getContextPath()%>/api/logistic?action=login`, {
+            method: 'POST'
+        })
             .then(response => response.json())
             .then(data => {
-                // xử lý dữ liệu ở đây
-                logisticIDToken = data.access_token
+                logisticIDToken = data
             })
             .catch(error => {
-                // xử lý lỗi
                 console.log(error)
             });
     }
@@ -631,15 +627,16 @@
 
         $('.getAPIAddress').click(async () => {
             let serviceFee = $('.service-fee span')
+            let leadTime = $('.lead-time span')
 
             if (valueProvince > 0 && valueDistrict > 0 && valueWard > 0) {
-                $('.address').text(`${tagSelectModalGetWard.options[tagSelectModalGetWard.selectedIndex].textContent},
+                $('.address').val(`${tagSelectModalGetWard.options[tagSelectModalGetWard.selectedIndex].textContent},
                                     ${tagSelectModalGetDistrict.options[tagSelectModalGetDistrict.selectedIndex].textContent},
                                     ${tagSelectModalGetProvince.options[tagSelectModalGetProvince.selectedIndex].textContent}`)
 
-                //display service fee
                 await autoLoginLogisticAPI()
 
+                //display service fee
                 const options = {
                     method: 'POST',
                     headers: {
@@ -666,7 +663,6 @@
                         }
                     })
                     .catch(error => {
-                        // xử lý lỗi
                         console.log(error)
                     });
 
@@ -678,18 +674,14 @@
             if (logisticIDToken == null) {
                 await autoLoginLogisticAPI()
 
-                const options = {
+                await fetch(`<%=request.getContextPath()%>/api/logistic?action=province&logisticIDToken=${logisticIDToken}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + logisticIDToken
                     }
-                };
-
-                await fetch('<%=APIConstants.LOGISTIC_HOST_API%>/province', options)
+                })
                     .then(response => response.json())
                     .then(data => {
-                        // xử lý dữ liệu ở đây
                         for (let i = 0; i < data.original.data.length; i++) {
                             let option = document.createElement("option");
                             option.value = `${data.original.data[i].ProvinceID}`;
@@ -697,11 +689,12 @@
                             tagSelectModalGetProvince.appendChild(option);
                         }
                         valueProvince = tagSelectModalGetProvince.value * 1
+                        console.log("valueProvince: "+valueProvince)
+                        $('.id-province').val(valueProvince)
                         handleEventSelectProvinceChange()
                         handleEventSelectDistrictChange()
                     })
                     .catch(error => {
-                        // xử lý lỗi
                         console.log(error)
                     });
             }
@@ -710,6 +703,9 @@
         function handleEventSelectProvinceChange() {
             $(".select-province").change(async function () {
                 valueProvince = tagSelectModalGetProvince.value * 1
+                $('.id-province').val(valueProvince)
+                console.log("valueProvince: "+valueProvince)
+
                 tagSelectModalGetDistrict.innerHTML = ''
                 // await autoLoginLogisticAPI()
 
@@ -727,7 +723,6 @@
                     await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/district?provinceID=${valueProvince}`, options)
                         .then(response => response.json())
                         .then(data => {
-                            // xử lý dữ liệu ở đây
                             for (let i = 0; i < data.original.data.length; i++) {
                                 let option = document.createElement("option");
                                 option.value = `${data.original.data[i].DistrictID}`;
@@ -735,9 +730,9 @@
                                 tagSelectModalGetDistrict.appendChild(option);
                             }
                             valueDistrict = tagSelectModalGetDistrict.value * 1
+                            $('.id-district').val(valueDistrict)
                         })
                         .catch(error => {
-                            // xử lý lỗi
                             console.log(error)
                         });
                 }
@@ -760,7 +755,6 @@
                     await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/ward?districtID=${valueDistrict}`, options)
                         .then(response => response.json())
                         .then(data => {
-                            // xử lý dữ liệu ở đây
                             for (let i = 0; i < data.original.data.length; i++) {
                                 let option = document.createElement("option");
                                 option.value = `${data.original.data[i].WardCode}`;
@@ -768,14 +762,9 @@
                                 tagSelectModalGetWard.appendChild(option);
                             }
                             valueWard = tagSelectModalGetWard.value * 1
-
-                            console.log(valueDistrict)
-                            console.log(valueWard)
-
-
+                            $('.id-ward').val(valueWard)
                         })
                         .catch(error => {
-                            // xử lý lỗi
                             console.log(error)
                         });
                 }

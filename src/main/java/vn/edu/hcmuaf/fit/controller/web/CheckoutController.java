@@ -34,6 +34,12 @@ public class CheckoutController extends HttpServlet {
         String description = request.getParameter("description");
         String payment = request.getParameter("payment");
         String store = request.getParameter("store");
+        int toDistrictID = Integer.parseInt(request.getParameter("id-district")) ;
+        int toWardId =Integer.parseInt(request.getParameter("id-ward")) ;
+        int height =Integer.parseInt(request.getParameter("store")) ;
+        int length =Integer.parseInt(request.getParameter("store")) ;
+        int width = Integer.parseInt(request.getParameter("store"));
+        int weight =Integer.parseInt( request.getParameter("store"));
 
         HttpSession session = request.getSession();
         UserModel user = (UserModel) session.getAttribute("userlogin");
@@ -54,6 +60,13 @@ public class CheckoutController extends HttpServlet {
         booking.setDate_booking(date + " " + time + ":00");
         booking.setDescription(description);
         booking.setId_payment(payment);
+        booking.setToDistrictId(toDistrictID);
+        booking.setToWardId(toWardId);
+        booking.setHeight(height);
+        booking.setLength(length);
+        booking.setWidth(width);
+        booking.setWeight(weight);
+
         int idInserted = checkoutService.insertBookingCart(booking);
         if (idInserted > 0) {
             session.setAttribute("mess", "success");
