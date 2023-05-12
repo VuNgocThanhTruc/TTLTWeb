@@ -4,14 +4,13 @@ import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.ComponentModel;
 import vn.edu.hcmuaf.fit.model.FunctionModel;
 import vn.edu.hcmuaf.fit.model.RoleModel;
+import vn.edu.hcmuaf.fit.model.UserModel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class AuthoritiesDAO {
     Connection connection;
@@ -100,7 +99,6 @@ public class AuthoritiesDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(decentralizes);
     }
     // tạo quyền sử dụng một chức năng cho nhóm quyền
     public void decentralizeFunctionForRole(String idRole, String idComponent, String idFunction, Boolean isGrant) {
@@ -220,21 +218,6 @@ public class AuthoritiesDAO {
         }
         return false;
     }
-    public static void main(String[] args) {
-        AuthoritiesDAO ad = new AuthoritiesDAO();
-        //System.out.println(ad.getAllComponent());
-        //System.out.println(ad.getAllFunction());
-        //ad.getAuthoritiesOfComponent(1,1);
-        //System.out.println(ad.createIdRoleRamdom());
-        //ad.resetRoleById(1);
-        //ad.decentralizeFunctionForRole("2", "3","3",false);
-        //ad.createRoleDecDefault("1");
-
-        //ad.createRoleDecDefault("1");
-        //ad.deleteDecentralizeRole("1");
-        //ad.printDecentralizeOfRole("1");
-        System.out.println(ad.getRoleById("1"));
-    }
 
     public void resetRoleById(String idRole) {
         String query = "update decentralizes set isGrant = 0 where id_role = ?";
@@ -304,6 +287,18 @@ public class AuthoritiesDAO {
             throw new RuntimeException(e);
         }
         return nameRole;
+    }
+
+    public Set<UserModel> getListUserOfRole(String idRole){
+        Set<UserModel> list = new HashSet<UserModel>();
+        if(UserDAO.getAllUser() != null) for(UserModel user : UserDAO.getAllUser()){
+            if(user.getIdRole() != null){
+                if(user.getIdRole().equals(idRole)){
+                    list.add(user);
+                }
+            }
+        }
+        return list;
     }
 }
 

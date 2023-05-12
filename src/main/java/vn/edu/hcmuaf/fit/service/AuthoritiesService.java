@@ -4,8 +4,11 @@ import vn.edu.hcmuaf.fit.dao.AuthoritiesDAO;
 import vn.edu.hcmuaf.fit.model.ComponentModel;
 import vn.edu.hcmuaf.fit.model.FunctionModel;
 import vn.edu.hcmuaf.fit.model.RoleModel;
+import vn.edu.hcmuaf.fit.model.UserModel;
 
+import javax.servlet.ServletContext;
 import java.util.List;
+import java.util.Set;
 
 public class AuthoritiesService {
     public AuthoritiesDAO authoritiesDAO;
@@ -71,8 +74,34 @@ public class AuthoritiesService {
     public void updateRole(String idRole, String nameRole, String describeRole) {
         authoritiesDAO.updateRole(idRole, nameRole, describeRole);
     }
-
+    // Lay ra ten nhom quyen bang id
     public String getNameRoleById(String id){
         return authoritiesDAO.getNameRoleById(id);
+    }
+
+    // Lay ra cac tai khoan thuoc nhom quyen tu idRole
+    public Set<UserModel> listUserOfRole(String idRole){
+        return authoritiesDAO.getListUserOfRole(idRole);
+    }
+
+    //CheckRelogin
+
+    public static void checkRelogin(ServletContext context, UserModel user){
+        Boolean requiredLogin = (Boolean) context.getAttribute("requiredLogin");
+        if(requiredLogin != null && requiredLogin){
+            Set<UserModel> listUserNeedRelogin =(Set<UserModel>) context.getAttribute("listUserNeedRelogin");
+            if(user != null) {
+                if(listUserNeedRelogin != null){
+                    for (UserModel userNeedRelogin : listUserNeedRelogin){
+                        if(userNeedRelogin.getId().equals(user.getId())){
+                            listUserNeedRelogin.remove(userNeedRelogin);
+                        }
+                    }
+                }
+            }
+            if(listUserNeedRelogin.size() == 0){
+                context.setAttribute("requiredLogin", false);
+            }
+        }
     }
 }

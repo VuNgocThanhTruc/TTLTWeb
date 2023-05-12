@@ -16,6 +16,7 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 @WebServlet(name = "ManageAuthoritiesController", value = "/admin/manage-authorities")
@@ -47,7 +48,6 @@ public class ManageAuthoritiesController extends HttpServlet {
             request.setAttribute("describe-role", describeRole);
             view = "/view/admin/edit-authorities.jsp";
         }else if(action.equals("delete-authorities")){
-            System.out.println("del-authorities-servlet");
             List<RoleModel> roles = authoritiesService.getAllRole();
             request.setAttribute("roles", roles);
             String idComponent = request.getParameter("idComp");
@@ -104,7 +104,6 @@ public class ManageAuthoritiesController extends HttpServlet {
 
             request.setAttribute("notify","Đã thêm nhóm quyền: " + nameRole);
         }else if(action.equals("edit-authorities")){
-            System.out.println("edit-submit");
             String idRole = request.getParameter("id-role");
             String nameRole = request.getParameter("name-role");
             String describeRole = request.getParameter("describe-role");
@@ -112,7 +111,6 @@ public class ManageAuthoritiesController extends HttpServlet {
             authoritiesService.updateRole(idRole, nameRole, describeRole);
             //cài lại quyền mặc định cho nhóm quyền
             authoritiesService.resetRole(idRole);
-            authoritiesService.print(idRole);
             //cài quyền cho nhóm quyền
             String[] decentralizes = request.getParameterValues("cb_decentralize");
             if(decentralizes != null)
@@ -124,6 +122,16 @@ public class ManageAuthoritiesController extends HttpServlet {
                 }
 
             authoritiesService.print(idRole);
+
+            // Thong bao relogin cho cac tai khoan thuoc nhom quyen
+            Set<UserModel> listUserNeedRelogin = authoritiesService.listUserOfRole(idRole);
+            Set<UserModel> listUserNeedReloginBegin =(Set<UserModel>) getServletContext().getAttribute("listUserNeedRelogin");
+            if(listUserNeedReloginBegin != null && listUserNeedReloginBegin.size() != 0){
+                listUserNeedRelogin.addAll(listUserNeedReloginBegin);
+            }
+            getServletContext().setAttribute("requiredLogin", true);
+            getServletContext().setAttribute("listUserNeedRelogin", listUserNeedRelogin);
+            getServletContext().setAttribute("idRoleEdit", idRole);
 
             DBConnect.getInstall().insert(
                     new Log(2,
