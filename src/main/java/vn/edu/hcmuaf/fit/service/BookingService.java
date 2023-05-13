@@ -15,8 +15,8 @@ public class BookingService {
         return BookingDAO.getListBooking(status);
     }
 
-    public static boolean updateStatusBooking(String idBookingParam) {
-        return BookingDAO.updateStatusBooking(idBookingParam);
+    public static boolean updateStatusBooking(String typeStatus,String idBookingParam) {
+        return BookingDAO.updateStatusBooking(typeStatus,idBookingParam);
     }
 
     public static BookingModel getConfirm(String id) {
@@ -36,7 +36,6 @@ public class BookingService {
     }
 
     public static void main(String[] args) {
-        System.out.println(BookingService.updateStatusBooking("997"));
     }
 
     public static List<DetailBookingModel> getListDetailBooking(String idBooking) {

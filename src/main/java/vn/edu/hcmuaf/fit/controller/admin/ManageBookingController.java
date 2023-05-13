@@ -2,9 +2,11 @@ package vn.edu.hcmuaf.fit.controller.admin;
 
 import vn.edu.hcmuaf.fit.bean.Log;
 import vn.edu.hcmuaf.fit.dao.BookingDAO;
+import vn.edu.hcmuaf.fit.dao.CategoryDAO;
 import vn.edu.hcmuaf.fit.dao.CustomerDAO;
 import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.BookingModel;
+import vn.edu.hcmuaf.fit.model.CategoryModel;
 import vn.edu.hcmuaf.fit.model.UserModel;
 import vn.edu.hcmuaf.fit.service.BookingService;
 
@@ -24,9 +26,11 @@ public class ManageBookingController extends HttpServlet {
         HttpSession session = request.getSession();
         UserModel user =(UserModel) session.getAttribute("userlogin");
 
+
         String statusParam = request.getParameter("status");
         String view = "";
         List<BookingModel> listBooking = null;
+        List<CategoryModel> listTypeStatusBook = CategoryDAO.getListTypeStatusBooking();
         if (statusParam == null) {
             //get all list booking
             view = "/view/admin/manage-booked.jsp";
@@ -43,11 +47,14 @@ public class ManageBookingController extends HttpServlet {
 
             view = "/view/admin/manage-booked.jsp";
         } else if (statusParam.equalsIgnoreCase("wait-accept")) {
-            String actionParam = request.getParameter("action");
-            if (actionParam != null && actionParam.equals("change_status")) {
+            String typeStatus = request.getParameter("type-status");
+
+            if (typeStatus != null) {
+                System.out.println("change status:"+statusParam);
+
                 String idBookingParam = request.getParameter("id-booking");
                 if (idBookingParam != null) {
-                    boolean checkUpdateStatusBooking = BookingService.updateStatusBooking(idBookingParam);
+                    boolean checkUpdateStatusBooking = BookingService.updateStatusBooking(typeStatus,idBookingParam);
                     request.setAttribute("message", checkUpdateStatusBooking);
                 }
 
@@ -61,7 +68,7 @@ public class ManageBookingController extends HttpServlet {
             listBooking = BookingService.getListBooking(0);
             view = "/view/admin/manage-confirm.jsp";
         }
-        if (request.getParameter("action") != null ){
+        else if (request.getParameter("action") != null ){
             if(request.getParameter("action").equals("delete") ){
                 BookingDAO dao = new BookingDAO();
                 dao.deleteConfirm(Integer.parseInt(request.getParameter("id")));
@@ -75,6 +82,7 @@ public class ManageBookingController extends HttpServlet {
                                 0));
             }
         }
+        request.setAttribute("listTypeStatusBook", listTypeStatusBook);
         request.setAttribute("listBooking", listBooking);
         request.getRequestDispatcher(view).forward(request, response);
     }

@@ -1,6 +1,5 @@
-<%@ page import="vn.edu.hcmuaf.fit.model.CustomerModel" %>
 <%@ page import="java.util.List" %>
-<%@ page import="vn.edu.hcmuaf.fit.model.BookingModel" %>
+<%@ page import="vn.edu.hcmuaf.fit.model.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,6 +17,8 @@
 <%@include file="../../common/admin/sidebar.jsp" %>
 <%
     List<BookingModel> listBooking = (List<BookingModel>) request.getAttribute("listBooking");
+    List<CategoryModel> listTypeStatusBook = (List<CategoryModel>) request.getAttribute("listTypeStatusBook");
+
     Boolean isGrantAdd = false;
     Boolean isGrantEdit = false;
     Boolean isGrantDel = false;
@@ -87,16 +88,12 @@
                             <td name="date_booking"><%=booking.getDate_booking()%>
                             </td>
                             <td>
-                                <select class="form-control" id="status" name="status">
-                                    <option value="1" <%=listBooking == null ? "" : (booking.getStatusBooking().getId() == 1 ? "selected" : "") %>>
-                                        Đã xác nhận
-                                    </option>
-                                    <option value="0" <%=listBooking == null ? "" : (booking.getStatusBooking().getId() == 0 ? "selected" : "") %>>
-                                        Chờ xác nhận
-                                    </option>
-                                    <option value="-1" <%=listBooking == null ? "" : (booking.getStatusBooking().getId() == -1 ? "selected" : "") %>>
-                                        Đã hủy
-                                    </option>
+                                <select class="select-type-booking form-control" id="status" name="status">
+                                    <%for (CategoryModel statusBook : listTypeStatusBook) {%>
+                                        <option value="<%=statusBook.getId()%>" <%=statusBook.getId() == booking.getStatusBooking().getId() ? "selected" : ""%>>
+                                            <%=statusBook.getName()%>
+                                        </option>
+                                    <%}%>
                                 </select>
                             </td>
                             <td name="description"><%=booking.getDescription()%></td>
@@ -300,5 +297,18 @@ MODAL
         swal("Đã lưu thành công.!", {});
 
     }
+
+
+        $('.select-type-booking').on('change',()=>{
+            let selectTypeBookElement =$('.select-type-booking')
+            console.log("change value select type booking:"+selectTypeBookElement.val())
+
+            $.ajax({
+            type: 'GET',
+            url: `<%=request.getContextPath()%>/admin/manage-booking?status=wait-accept&type-status=${selectTypeBookElement.val()}&id-booking=1013`,
+            success: function (data) {
+            }
+        });
+    })
 </script>
 </body>
