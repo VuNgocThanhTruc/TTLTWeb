@@ -16,6 +16,9 @@ public class ProductModel {
     private int width;
     private int weight;
     private List<LibraryImageModel> listImage;
+    private String dateStart;
+    private String dateEnd;
+    private int percentDiscount;
 
     public ProductModel() {
     }
@@ -33,6 +36,24 @@ public class ProductModel {
         this.weight = weight;
         this.describe = describe;
         this.listImage = listImage;
+    }
+
+    public ProductModel(int id, String name, int idTypeProduct, int idStatusDevice, int idBrand, long price, String describe, int height, int length, int width, int weight, List<LibraryImageModel> listImage, String dateStart, String dateEnd, int percentDiscount) {
+        this.id = id;
+        this.name = name;
+        this.idTypeProduct = idTypeProduct;
+        this.idStatusDevice = idStatusDevice;
+        this.idBrand = idBrand;
+        this.price = price;
+        this.describe = describe;
+        this.height = height;
+        this.length = length;
+        this.width = width;
+        this.weight = weight;
+        this.listImage = listImage;
+        this.dateStart = dateStart;
+        this.dateEnd = dateEnd;
+        this.percentDiscount = percentDiscount;
     }
 
     public int getId() {
@@ -133,6 +154,29 @@ public class ProductModel {
         this.listImage = listImage;
     }
 
+    public String getDateStart() {
+        return dateStart;
+    }
+
+    public void setDateStart(String dateStart) {
+        this.dateStart = dateStart;
+    }
+
+    public String getDateEnd() {
+        return dateEnd;
+    }
+
+    public void setDateEnd(String dateEnd) {
+        this.dateEnd = dateEnd;
+    }
+
+    public int getPercentDiscount() {
+        return percentDiscount;
+    }
+
+    public void setPercentDiscount(int percentDiscount) {
+        this.percentDiscount = percentDiscount;
+    }
 
     public String getCategory(int idTypeProduct){
         String result = "";
@@ -163,6 +207,9 @@ public class ProductModel {
                 ", width=" + width +
                 ", weight=" + weight +
                 ", listImage=" + listImage +
+                ", dateStart='" + dateStart + '\'' +
+                ", dateEnd='" + dateEnd + '\'' +
+                ", percentDiscount=" + percentDiscount +
                 '}';
     }
 }
