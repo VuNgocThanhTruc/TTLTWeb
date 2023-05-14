@@ -19,6 +19,8 @@ public class ManageImageController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String typeParam = request.getParameter("type");
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
         String view = "";
         ProductService productService = new ProductService();
 
@@ -53,6 +55,8 @@ public class ManageImageController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
         String typeParam = request.getParameter("type");
         if (typeParam.equals("add")) {
             doPost_Add(request, response);
@@ -64,7 +68,8 @@ public class ManageImageController extends HttpServlet {
     }
 
     private void doPost_Add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
         String name = request.getParameter("name_photo");
 
 
@@ -109,6 +114,8 @@ public class ManageImageController extends HttpServlet {
     }
 
     private void doPost_Edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=utf-8");
         ImageDAO imageDao = new ImageDAO();
         int id = Integer.parseInt(request.getParameter("id-image"));
         String name = request.getParameter("namePhoto");
@@ -148,7 +155,6 @@ public class ManageImageController extends HttpServlet {
 
     private void doGet_Del(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=utf-8");
 
 

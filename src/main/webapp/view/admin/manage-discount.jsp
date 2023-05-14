@@ -124,7 +124,7 @@
                                 <%
                                 } else { %>
 
-                                <table class="table table-hover table-bordered" id="sampleTable">
+                                <table class="display table table-hover table-bordered" id="sampleTable">
                                     <thead>
                                     <tr>
                                         <th width="10"><input type="checkbox" id="all"></th>
@@ -264,7 +264,7 @@
                                 <div>Chưa có dữ liệu</div>
                                 <%
                                 } else {%>
-                                <table class="table table-hover table-bordered" id="sampleTable">
+                                <table class="display table table-hover table-bordered" id="sampleTable">
                                     <thead>
                                     <tr>
                                         <th width="10"><input type="checkbox" id="all"></th>
