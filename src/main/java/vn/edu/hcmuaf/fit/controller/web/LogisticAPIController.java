@@ -20,11 +20,11 @@ import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 @WebServlet(name = "LogisticAPIController", value = "/api/logistic")
+
 public class LogisticAPIController extends HttpServlet {
 
     @Override
@@ -203,30 +203,19 @@ public class LogisticAPIController extends HttpServlet {
 
     private void doPostRegisterTransport(HttpServletRequest request, HttpServletResponse response, String logisticIDToken) throws IOException {
         String apiURL = APIConstants.LOGISTIC_HOST_API + "/registerTransport";
-        String toDistrictId = request.getParameter("to_district_id");
-        String toWardId = request.getParameter("to_ward_id");
-        HttpSession session = request.getSession();
-        HashMap<Integer, ProductCartModel> cart = (HashMap<Integer, ProductCartModel>) session.getAttribute("cart");
-        int height = 0;
-        int length = 0;
-        int width = 0;
-        int weight = 0;
-        for (Map.Entry<Integer, ProductCartModel> entry : cart.entrySet()) {
-            height+=entry.getValue().getProductModel().getHeight();
-            length+=entry.getValue().getProductModel().getLength();
-            width+=entry.getValue().getProductModel().getWidth();
-            weight+=entry.getValue().getProductModel().getWeight();
-        }
+        Gson gson = new Gson();
+        String stringRequest = request.getReader().readLine();
+        JsonObject jsonRequest = gson.fromJson(stringRequest, JsonObject.class);
 
         JSONObject json = new JSONObject();
         json.put("from_district_id", APIConstants.ID_DISTRICT_STORE);
         json.put("'from_ward_id'", APIConstants.ID_WARD_STORE);
-        json.put("to_district_id", toDistrictId);
-        json.put("to_ward_id", toWardId);
-        json.put("height", height);
-        json.put("length", length);
-        json.put("width", width);
-        json.put("weight", weight);
+        json.put("to_district_id", jsonRequest.get("to_district_id").toString());
+        json.put("to_ward_id", jsonRequest.get("to_ward_id").toString());
+        json.put("height", jsonRequest.get("height").toString());
+        json.put("length", jsonRequest.get("length").toString());
+        json.put("width", jsonRequest.get("width").toString());
+        json.put("weight", jsonRequest.get("weight").toString());
 
         StringBuilder strBuf = new StringBuilder();
 
@@ -236,8 +225,9 @@ public class LogisticAPIController extends HttpServlet {
             URL url = new URL(apiURL);
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json; utf-8");
-            conn.setRequestProperty("Authorization", "Bearer " + logisticIDToken);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Access-Control-Allow-Origin", "*");
+            conn.setRequestProperty("Authorization", "Bearer " + jsonRequest.get("logisticIDToken").toString());
             conn.setDoOutput(true);
 
             try (OutputStream os = conn.getOutputStream()) {
@@ -275,16 +265,13 @@ public class LogisticAPIController extends HttpServlet {
             }
         }
 
-        Gson gson = new Gson();
         JsonObject jsonRes = gson.fromJson(strBuf.toString(), JsonObject.class);
-
-//        APIConstants.LOGISTIC_ID_TOKEN = jsonRes.get("access_token").toString();
 
         PrintWriter out = response.getWriter();
 
-        System.out.println(strBuf);
+        System.out.println("jsonRes: "+jsonRes);
 
-        out.println(strBuf);
+        out.println(jsonRes);
         out.close();
     }
     private void doPostLeadTime(HttpServletRequest request, HttpServletResponse response, String logisticIDToken) throws IOException {
@@ -378,13 +365,6 @@ public class LogisticAPIController extends HttpServlet {
 
         String apiURL = APIConstants.LOGISTIC_HOST_API + "/auth/login";
 
-//        BufferedReader br = request.getReader();
-//        StringBuilder stringBuilder = new StringBuilder();
-//        String line;
-//        while ((line = br.readLine()) != null) {
-//            stringBuilder.append(line);
-//        }
-
         JSONObject json = new JSONObject();
         json.put("password", APIConstants.LOGISTIC_PASSWORD_LOGIN);
         json.put("email", APIConstants.LOGISTIC_EMAIL_LOGIN);
@@ -447,4 +427,51 @@ public class LogisticAPIController extends HttpServlet {
         out.close();
     }
 
+//    public static String registerTranport(){
+//        String apiURL = APIConstants.LOGISTIC_HOST_API + "/registerTransport";
+//        String param = "?from_district_id="+APIConstants.ID_DISTRICT_STORE+"&from_ward_id="+APIConstants.ID_WARD_STORE+"&to_district_id="+2270+"&to_ward_id="+231013+"&height="+231013+"&length="+231013+"&width="+231013+"&weight="+23101;
+////        JSONObject json = new JSONObject();
+////        json.put("from_district_id", APIConstants.ID_DISTRICT_STORE);
+////        json.put("'from_ward_id'", APIConstants.ID_WARD_STORE);
+////        json.put("to_district_id", 2270);
+////        json.put("to_ward_id", 231013);
+////        json.put("height", 150);
+////        json.put("length", 150);
+////        json.put("width", 150);
+////        json.put("weight", 150);
+//        StringBuilder strBuf= new StringBuilder();
+//        HttpURLConnection conn = null;
+//
+//        try {
+//            URL url = new URL(apiURL+param);
+//            conn = (HttpURLConnection) url.openConnection();
+//            conn.setRequestMethod("POST");
+//            conn.setRequestProperty("Authorization", "Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTQwLjIzOC41NC4xMzYvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2ODQxMTM0NzcsImV4cCI6MTY4NDExNDA3NywibmJmIjoxNjg0MTEzNDc3LCJqdGkiOiJmcWJnemI4T1hmcTNGalM5Iiwic3ViIjoiMzcwODE5NzNhZDY1NDE2MThhOGJmNGNiZTE2MzI4ZGUiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.GCad_J_Y8-0QYEXROHsu0p2gyxoYa-LriDIL60zZ-5k");
+////            conn.setDoOutput(true);
+//
+//            int responseCode = conn.getResponseCode();
+//            BufferedReader reader = null;
+//
+//            if(responseCode==200 | responseCode==201){
+//
+//                reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+//
+//                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+//                String inputLine;
+//                while ((inputLine = in.readLine()) != null) {
+//                    strBuf.append(inputLine);
+//                }
+//                System.out.println("strBuf: "+strBuf);
+//            }
+//
+//        } catch (MalformedURLException e) {
+//            throw new RuntimeException(e);
+//        } catch (ProtocolException e) {
+//            throw new RuntimeException(e);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        return strBuf.toString();
+//    }
 }

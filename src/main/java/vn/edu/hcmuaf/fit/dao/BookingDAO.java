@@ -21,7 +21,7 @@ public class BookingDAO implements ObjectDAO {
     public static List<BookingModel> getListBooking(int status) {
         LinkedList<BookingModel> list = new LinkedList<>();
 
-        String sql = "SELECT b.id id,date_booking, id_user ,username, id_payment, t.name nameTypePayment,description, b.status_booking id_status_booking, s.name name_status_booking,tel " +
+        String sql = "SELECT b.id id,date_booking, id_user ,username, id_payment, t.name nameTypePayment,description, b.status_booking id_status_booking, s.name name_status_booking,tel, to_district_id, to_ward_id, height, length, width, weight " +
                 "FROM bookings b join type_payments t on t.id = b.id_payment " +
                 "join status_bookings s on s.id = b.status_booking " +
                 "WHERE status_booking=?" + "order by id desc ";
@@ -46,6 +46,12 @@ public class BookingDAO implements ObjectDAO {
                 booking.setStatusBooking(statusBooking);
                 booking.setDescription(rs.getString("description"));
                 booking.setTel(rs.getString("tel"));
+                booking.setToDistrictId(rs.getInt("to_district_id"));
+                booking.setToWardId(rs.getInt("to_ward_id"));
+                booking.setHeight(rs.getInt("height"));
+                booking.setLength(rs.getInt("length"));
+                booking.setWidth(rs.getInt("width"));
+                booking.setWeight(rs.getInt("weight"));
 
                 list.add(booking);
             }

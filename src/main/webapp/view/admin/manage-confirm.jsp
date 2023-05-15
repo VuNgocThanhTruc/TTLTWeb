@@ -1,6 +1,7 @@
 <%@ page import="vn.edu.hcmuaf.fit.model.CustomerModel" %>
 <%@ page import="java.util.List" %>
 <%@ page import="vn.edu.hcmuaf.fit.model.BookingModel" %>
+<%@ page import="vn.edu.hcmuaf.fit.constant.APIConstants" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,13 +23,13 @@
     Boolean isGrantAdd = false;
     Boolean isGrantEdit = false;
     Boolean isGrantDel = false;
-    for(FunctionModel function : functions){
-        if(function.getName().equals("Add")){
-            isGrantAdd = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
-        }else if(function.getName().equals("Edit")){
-            isGrantEdit = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
-        }else if(function.getName().equals("Delete")){
-            isGrantDel = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+    for (FunctionModel function : functions) {
+        if (function.getName().equals("Add")) {
+            isGrantAdd = auth.getDecentralizeFuncOfRole(idRole, "2", function.getId());
+        } else if (function.getName().equals("Edit")) {
+            isGrantEdit = auth.getDecentralizeFuncOfRole(idRole, "2", function.getId());
+        } else if (function.getName().equals("Delete")) {
+            isGrantDel = auth.getDecentralizeFuncOfRole(idRole, "2", function.getId());
         }
     }
 %>
@@ -45,17 +46,17 @@
             <div class="tile">
                 <div class="tile-body">
                     <div class="row element-button">
-<%--                        <div class="col-sm-2">--%>
+                        <%--                        <div class="col-sm-2">--%>
 
-<%--                            <a class="btn btn-add btn-sm" href="admin/manage-booking" title="Thêm"><i--%>
-<%--                                    class="fas fa-plus"></i>--%>
-<%--                                Tạo mới </a>--%>
-<%--                        </div>--%>
-<%--                        <div class="col-sm-2">--%>
-<%--                            <a class="btn btn-delete btn-sm print-file" type="button" title="In"--%>
-<%--                               onclick="myApp.printTable()"><i--%>
-<%--                                    class="fas fa-print"></i> In dữ liệu</a>--%>
-<%--                        </div>--%>
+                        <%--                            <a class="btn btn-add btn-sm" href="admin/manage-booking" title="Thêm"><i--%>
+                        <%--                                    class="fas fa-plus"></i>--%>
+                        <%--                                Tạo mới </a>--%>
+                        <%--                        </div>--%>
+                        <%--                        <div class="col-sm-2">--%>
+                        <%--                            <a class="btn btn-delete btn-sm print-file" type="button" title="In"--%>
+                        <%--                               onclick="myApp.printTable()"><i--%>
+                        <%--                                    class="fas fa-print"></i> In dữ liệu</a>--%>
+                        <%--                        </div>--%>
 
                         <div class="col-sm-2">
                             <a class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i
@@ -95,14 +96,17 @@
                             <td>
                                 <a class="btn btn-success btn-sm edit" type="button" title="Xác nhận"
                                    id="accept-booking" data-toggle="modal" data-target=""
-                                   href="manage-booking?status=wait-accept&action=change_status&id-booking=<%=booking.getId()%>"><i
+                                <%--                                   href="manage-booking?status=wait-accept&type-status=1&id-booking=<%=booking.getId()%>"--%>
+                                   onclick="handleClickRegisterTransport(<%=booking.getToDistrictId()%>,<%=booking.getToWardId()%>,<%=booking.getHeight()%>,<%=booking.getLength()%>,<%=booking.getWidth()%>,<%=booking.getWeight()%>)"
+                                ><i
                                         class="fas fa-check-square"></i></a>
                                 <%-- sua don hang--%>
-                                <%if(isGrantEdit == true) {%>
+                                <%if (isGrantEdit == true) {%>
                                 <a href="manage-confirm?type=edit-confirm&id-confirm=<%=booking.getId()%>">
                                     <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
                                             id="show-confirm"
-                                            data-toggle="modal" data-target="#ModalConfirm"><i class="fas fa-edit"></i>
+                                            data-toggle="modal" data-target="#ModalConfirm">
+                                        <i class="fas fa-edit"></i>
                                     </button>
                                 </a>
                                 <%} else {%>
@@ -117,21 +121,22 @@
                                 </button>
                                 <%}%>
                                 <%--                                xóa đơn hàng--%>
-                                <%if(isGrantDel == true) {%>
-                                    <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                       href="manage-booking?status=wait-accept&action=delete&id=<%=booking.getId()%>">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a>
+                                <%if (isGrantDel == true) {%>
+                                <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
+                                   href="manage-booking?status=wait-accept&action=delete&id=<%=booking.getId()%>"
+                                >
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
                                 <%} else {%>
-                                    <button
-                                            class="btn btn-primary btn-sm trash"
-                                            type="button"
-                                            title="Không có quyền này!"
-                                            style="opacity: 0.5; cursor: not-allowed;"
-                                            disabled
-                                    >
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
+                                <button
+                                        class="btn btn-primary btn-sm trash"
+                                        type="button"
+                                        title="Không có quyền này!"
+                                        style="opacity: 0.5; cursor: not-allowed;"
+                                        disabled
+                                >
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                                 <%}%>
                             </td>
                         </tr>
@@ -354,16 +359,77 @@ MODAL
     });
 
     function save() {
-
         swal("Đã lưu thành công.!", {});
-
     }
 
+    let logisticIDToken = null;
+
+    async function autoLoginLogisticAPI() {
+
+        await fetch(`<%=request.getContextPath()%>/api/logistic?action=login`, {
+            method: 'POST'
+        })
+            .then(response => response.json())
+            .then(data => {
+                logisticIDToken = data
+            })
+            .catch(error => {
+                console.log(error)
+            });
+    }
 
     //Modal
-    $("#show-confirm").on("click", function () {
-        $("#ModalConfirm").modal({backdrop: false, keyboard: false})
-    });
+
+    async function handleClickRegisterTransport(toDistrictID, toWardID,height, length, width, weight) {
+        await autoLoginLogisticAPI()
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Authorization': 'Bearer ' + logisticIDToken,
+
+            },
+            body: JSON.stringify({
+                'logisticIDToken': logisticIDToken,
+                'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,
+                'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,
+                'to_district_id': toDistrictID,
+                'to_ward_id': toWardID,
+                'height': height,
+                'length': length,
+                'width': width,
+                'weight': weight,
+            })
+        };
+
+        <%--await fetch(`https://cors-anywhere.herokuapp.com/<%=APIConstants.LOGISTIC_HOST_API%>/registerTransport`, options)--%>
+        <%--    .then(response => response.json())--%>
+        <%--    .then(data => {--%>
+        <%--        console.log(data)--%>
+        <%--        // if (data.status === 200) {--%>
+        <%--        // }--%>
+        <%--    })--%>
+        <%--    .catch(error => {--%>
+        <%--        console.log(error)--%>
+        <%--    });--%>
+
+        await fetch(`<%=request.getContextPath()%>/api/logistic?action=registerTransport`, options)
+            .then(response => response.json())
+            .then(data => {
+                // console.log(data)
+                // if (data.status === 200) {
+                // }
+            })
+            .catch(error => {
+                console.log(error)
+            });
+    }
+
+    // $("#show-confirm").on("click", async function () {
+    //     $("#ModalConfirm").modal({backdrop: false, keyboard: false})
+    // });
+
 
 </script>
 </body>
