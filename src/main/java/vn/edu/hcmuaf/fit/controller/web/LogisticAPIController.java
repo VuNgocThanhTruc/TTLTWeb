@@ -65,6 +65,12 @@ public class LogisticAPIController extends HttpServlet {
 
         String param = request.getParameter("action");
         String logisticIDToken = request.getParameter("logisticIDToken");
+        String toDistrictID = request.getParameter("to_district_id");
+        String toWardID = request.getParameter("to_ward_id");
+        String height = request.getParameter("height");
+        String length = request.getParameter("length");
+        String width = request.getParameter("width");
+        String weight = request.getParameter("weight");
 
         if ("login".equals(param)) {
             doPostLogin(request, response);
@@ -73,15 +79,14 @@ public class LogisticAPIController extends HttpServlet {
         else if ("leadTime".equals(param))
             doPostLeadTime(request, response, logisticIDToken);
         else if ("registerTransport".equals(param))
-            doPostRegisterTransport(request, response, logisticIDToken);
+            registerTransport(logisticIDToken, toDistrictID, toWardID, height, length, width, weight);
         else if ("allTransports".equals(param))
-            doPostAllTransports (request, response, logisticIDToken);
+            doPostAllTransports(request, response, logisticIDToken);
         else if ("getInfoTransport".equals(param))
             doPostGetInfoTransport(request, response, logisticIDToken);
-
     }
 
-    private void doPostGetInfoTransport(HttpServletRequest request, HttpServletResponse response, String logisticIDToken)throws IOException {
+    private void doPostGetInfoTransport(HttpServletRequest request, HttpServletResponse response, String logisticIDToken) throws IOException {
         String apiURL = APIConstants.LOGISTIC_HOST_API + "/getInfoTransport";
         StringBuilder strBuf = new StringBuilder();
         String idOrder = request.getParameter("idOrder");
@@ -90,7 +95,6 @@ public class LogisticAPIController extends HttpServlet {
         json.put("id", idOrder);
 
         HttpURLConnection conn = null;
-        BufferedReader reader = null;
         try {
             URL url = new URL(apiURL);
             conn = (HttpURLConnection) url.openConnection();
@@ -109,26 +113,17 @@ public class LogisticAPIController extends HttpServlet {
                         + conn.getResponseCode());
             }
 
-            reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 strBuf.append(inputLine);
             }
-            System.out.println("strBuf: "+strBuf);
+            System.out.println("strBuf: " + strBuf);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
             if (conn != null) {
                 conn.disconnect();
             }
@@ -152,7 +147,6 @@ public class LogisticAPIController extends HttpServlet {
         StringBuilder strBuf = new StringBuilder();
 
         HttpURLConnection conn = null;
-        BufferedReader reader = null;
         try {
             URL url = new URL(apiURL);
             conn = (HttpURLConnection) url.openConnection();
@@ -165,26 +159,17 @@ public class LogisticAPIController extends HttpServlet {
                         + conn.getResponseCode());
             }
 
-            reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 strBuf.append(inputLine);
             }
-            System.out.println("strBuf: "+strBuf);
+            System.out.println("strBuf: " + strBuf);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
             if (conn != null) {
                 conn.disconnect();
             }
@@ -220,7 +205,6 @@ public class LogisticAPIController extends HttpServlet {
         StringBuilder strBuf = new StringBuilder();
 
         HttpURLConnection conn = null;
-        BufferedReader reader = null;
         try {
             URL url = new URL(apiURL);
             conn = (HttpURLConnection) url.openConnection();
@@ -240,26 +224,17 @@ public class LogisticAPIController extends HttpServlet {
                         + conn.getResponseCode());
             }
 
-            reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 strBuf.append(inputLine);
             }
-            System.out.println("strBuf: "+strBuf);
+            System.out.println("strBuf: " + strBuf);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
             if (conn != null) {
                 conn.disconnect();
             }
@@ -269,11 +244,12 @@ public class LogisticAPIController extends HttpServlet {
 
         PrintWriter out = response.getWriter();
 
-        System.out.println("jsonRes: "+jsonRes);
+        System.out.println("jsonRes: " + jsonRes);
 
         out.println(jsonRes);
         out.close();
     }
+
     private void doPostLeadTime(HttpServletRequest request, HttpServletResponse response, String logisticIDToken) throws IOException {
         System.out.println("this");
 
@@ -299,7 +275,6 @@ public class LogisticAPIController extends HttpServlet {
         StringBuilder strBuf = new StringBuilder();
 
         HttpURLConnection conn = null;
-        BufferedReader reader = null;
         try {
             URL url = new URL(apiURL);
             conn = (HttpURLConnection) url.openConnection();
@@ -324,26 +299,17 @@ public class LogisticAPIController extends HttpServlet {
                         + conn.getResponseCode());
             }
 
-            reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 strBuf.append(inputLine);
             }
-            System.out.println("strBuf: "+strBuf);
+            System.out.println("strBuf: " + strBuf);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
             if (conn != null) {
                 conn.disconnect();
             }
@@ -352,17 +318,12 @@ public class LogisticAPIController extends HttpServlet {
         Gson gson = new Gson();
         JsonObject jsonRes = gson.fromJson(strBuf.toString(), JsonObject.class);
 
-//        APIConstants.LOGISTIC_ID_TOKEN = jsonRes.get("access_token").toString();
-
         PrintWriter out = response.getWriter();
-
-        System.out.println(strBuf);
-
         out.println(strBuf);
         out.close();
     }
-    private void doPostLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
+    private void doPostLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String apiURL = APIConstants.LOGISTIC_HOST_API + "/auth/login";
 
         JSONObject json = new JSONObject();
@@ -372,7 +333,6 @@ public class LogisticAPIController extends HttpServlet {
         StringBuilder strBuf = new StringBuilder();
 
         HttpURLConnection conn = null;
-        BufferedReader reader = null;
         try {
             URL url = new URL(apiURL);
             conn = (HttpURLConnection) url.openConnection();
@@ -392,8 +352,6 @@ public class LogisticAPIController extends HttpServlet {
                         + conn.getResponseCode());
             }
 
-            reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-
             BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
@@ -404,13 +362,6 @@ public class LogisticAPIController extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
             if (conn != null) {
                 conn.disconnect();
             }
@@ -427,51 +378,61 @@ public class LogisticAPIController extends HttpServlet {
         out.close();
     }
 
-//    public static String registerTranport(){
-//        String apiURL = APIConstants.LOGISTIC_HOST_API + "/registerTransport";
-//        String param = "?from_district_id="+APIConstants.ID_DISTRICT_STORE+"&from_ward_id="+APIConstants.ID_WARD_STORE+"&to_district_id="+2270+"&to_ward_id="+231013+"&height="+231013+"&length="+231013+"&width="+231013+"&weight="+23101;
-////        JSONObject json = new JSONObject();
-////        json.put("from_district_id", APIConstants.ID_DISTRICT_STORE);
-////        json.put("'from_ward_id'", APIConstants.ID_WARD_STORE);
-////        json.put("to_district_id", 2270);
-////        json.put("to_ward_id", 231013);
-////        json.put("height", 150);
-////        json.put("length", 150);
-////        json.put("width", 150);
-////        json.put("weight", 150);
-//        StringBuilder strBuf= new StringBuilder();
-//        HttpURLConnection conn = null;
-//
-//        try {
-//            URL url = new URL(apiURL+param);
-//            conn = (HttpURLConnection) url.openConnection();
-//            conn.setRequestMethod("POST");
-//            conn.setRequestProperty("Authorization", "Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTQwLjIzOC41NC4xMzYvYXBpL2F1dGgvbG9naW4iLCJpYXQiOjE2ODQxMTM0NzcsImV4cCI6MTY4NDExNDA3NywibmJmIjoxNjg0MTEzNDc3LCJqdGkiOiJmcWJnemI4T1hmcTNGalM5Iiwic3ViIjoiMzcwODE5NzNhZDY1NDE2MThhOGJmNGNiZTE2MzI4ZGUiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.GCad_J_Y8-0QYEXROHsu0p2gyxoYa-LriDIL60zZ-5k");
-////            conn.setDoOutput(true);
-//
-//            int responseCode = conn.getResponseCode();
-//            BufferedReader reader = null;
-//
-//            if(responseCode==200 | responseCode==201){
-//
-//                reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-//
-//                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-//                String inputLine;
-//                while ((inputLine = in.readLine()) != null) {
-//                    strBuf.append(inputLine);
-//                }
-//                System.out.println("strBuf: "+strBuf);
-//            }
-//
-//        } catch (MalformedURLException e) {
-//            throw new RuntimeException(e);
-//        } catch (ProtocolException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        return strBuf.toString();
-//    }
+    private static void loginLogistic() throws IOException {
+        String apiURL = APIConstants.LOGISTIC_HOST_API + "/auth/login";
+
+        String param = "?email=" + APIConstants.LOGISTIC_EMAIL_LOGIN + "&password=" + APIConstants.LOGISTIC_PASSWORD_LOGIN;
+
+        HttpURLConnection conn = null;
+        StringBuilder strBuf = new StringBuilder();
+
+        try {
+            URL url = new URL(apiURL + param);
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+
+            if (conn.getResponseCode() != 200) {
+                throw new RuntimeException("HTTP POST Request Failed with Error code : "
+                        + conn.getResponseCode());
+            }
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                strBuf.append(inputLine);
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+        Gson gson = new Gson();
+        JsonObject jsonRes = gson.fromJson(strBuf.toString(), JsonObject.class);
+        APIConstants.LOGISTIC_ID_TOKEN = jsonRes.get("access_token").toString();
+    }
+
+    public static String registerTransport(String logisticIDToken, String toDistrictID, String toWardID, String height, String length, String width, String weight) throws IOException {
+        System.out.println("logisticIDToken: " + logisticIDToken);
+        String apiURL = APIConstants.LOGISTIC_HOST_API + "/registerTransport";
+        String param = "?from_district_id=" + APIConstants.ID_DISTRICT_STORE + "&from_ward_id=" + APIConstants.ID_WARD_STORE + "&to_district_id=" + toDistrictID + "&to_ward_id=" + toWardID + "&height=" + height + "&length=" + length + "&width=" + width + "&weight=" + weight;
+        StringBuilder strBuf = new StringBuilder();
+
+        URL url = new URL(apiURL + param);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Authorization", "Bearer " + logisticIDToken);
+        int responseCode = conn.getResponseCode();
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+        String inputLine;
+        while ((inputLine = in.readLine()) != null) {
+            strBuf.append(inputLine);
+        }
+        System.out.println(strBuf);
+        return strBuf.toString();
+    }
 }

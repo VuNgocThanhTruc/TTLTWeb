@@ -94,12 +94,12 @@
                             <td name="description"><%=booking.getDescription()%>
                             </td>
                             <td>
-                                <a class="btn btn-success btn-sm edit" type="button" title="Xác nhận"
+                                <button class="btn btn-success btn-sm edit" type="button" title="Xác nhận"
                                    id="accept-booking" data-toggle="modal" data-target=""
-                                <%--                                   href="manage-booking?status=wait-accept&type-status=1&id-booking=<%=booking.getId()%>"--%>
-                                   onclick="handleClickRegisterTransport(<%=booking.getToDistrictId()%>,<%=booking.getToWardId()%>,<%=booking.getHeight()%>,<%=booking.getLength()%>,<%=booking.getWidth()%>,<%=booking.getWeight()%>)"
+                                   href="manage-booking?status=wait-accept&type-status=1&id-booking=<%=booking.getId()%>"
+                                   onclick="handleClickRegisterTransport(<%=booking.getId()%>,<%=booking.getToDistrictId()%>,<%=booking.getToWardId()%>,<%=booking.getHeight()%>,<%=booking.getLength()%>,<%=booking.getWidth()%>,<%=booking.getWeight()%>)"
                                 ><i
-                                        class="fas fa-check-square"></i></a>
+                                        class="fas fa-check-square"></i></button>
                                 <%-- sua don hang--%>
                                 <%if (isGrantEdit == true) {%>
                                 <a href="manage-confirm?type=edit-confirm&id-confirm=<%=booking.getId()%>">
@@ -380,15 +380,12 @@ MODAL
 
     //Modal
 
-    async function handleClickRegisterTransport(toDistrictID, toWardID,height, length, width, weight) {
+    async function handleClickRegisterTransport(idBooking, toDistrictID, toWardID,height, length, width, weight) {
         await autoLoginLogisticAPI()
         const options = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
                 'Authorization': 'Bearer ' + logisticIDToken,
-
             },
             body: JSON.stringify({
                 'logisticIDToken': logisticIDToken,
@@ -403,33 +400,33 @@ MODAL
             })
         };
 
-        <%--await fetch(`https://cors-anywhere.herokuapp.com/<%=APIConstants.LOGISTIC_HOST_API%>/registerTransport`, options)--%>
-        <%--    .then(response => response.json())--%>
-        <%--    .then(data => {--%>
-        <%--        console.log(data)--%>
-        <%--        // if (data.status === 200) {--%>
-        <%--        // }--%>
-        <%--    })--%>
-        <%--    .catch(error => {--%>
-        <%--        console.log(error)--%>
-        <%--    });--%>
+        $.ajax({
+            type: 'GET',
+            url: `<%=request.getContextPath()%>/admin/manage-booking?status=wait-accept&type-status=1&id-booking=${idBooking}`
+        });
 
-        await fetch(`<%=request.getContextPath()%>/api/logistic?action=registerTransport`, options)
-            .then(response => response.json())
-            .then(data => {
-                // console.log(data)
-                // if (data.status === 200) {
-                // }
-            })
-            .catch(error => {
-                console.log(error)
-            });
+        await $.ajax({
+            type: 'POST',
+            data: {
+                'logisticIDToken': logisticIDToken,
+                'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,
+                'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,
+                'to_district_id': toDistrictID,
+                'to_ward_id': toWardID,
+                'height': height,
+                'length': length,
+                'width': width,
+                'weight': weight,
+            },
+            url: `<%=request.getContextPath()%>/api/logistic?action=registerTransport`,
+            success: function (data) {
+                console.log(data)
+            }
+        });
     }
 
     // $("#show-confirm").on("click", async function () {
     //     $("#ModalConfirm").modal({backdrop: false, keyboard: false})
     // });
-
-
 </script>
 </body>
