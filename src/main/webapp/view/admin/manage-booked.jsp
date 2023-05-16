@@ -22,13 +22,13 @@
     Boolean isGrantAdd = false;
     Boolean isGrantEdit = false;
     Boolean isGrantDel = false;
-    for(FunctionModel function : functions){
-        if(function.getName().equals("Add")){
-            isGrantAdd = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
-        }else if(function.getName().equals("Edit")){
-            isGrantEdit = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
-        }else if(function.getName().equals("Delete")){
-            isGrantDel = auth.getDecentralizeFuncOfRole(idRole,"2",function.getId());
+    for (FunctionModel function : functions) {
+        if (function.getName().equals("Add")) {
+            isGrantAdd = auth.getDecentralizeFuncOfRole(idRole, "2", function.getId());
+        } else if (function.getName().equals("Edit")) {
+            isGrantEdit = auth.getDecentralizeFuncOfRole(idRole, "2", function.getId());
+        } else if (function.getName().equals("Delete")) {
+            isGrantDel = auth.getDecentralizeFuncOfRole(idRole, "2", function.getId());
         }
     }
 %>
@@ -90,48 +90,53 @@
                             <td>
                                 <select class="select-type-booking form-control" id="status" name="status">
                                     <%for (CategoryModel statusBook : listTypeStatusBook) {%>
-                                        <option value="<%=statusBook.getId()%>" <%=statusBook.getId() == booking.getStatusBooking().getId() ? "selected" : ""%>>
-                                            <%=statusBook.getName()%>
-                                        </option>
+                                    <option value="<%=statusBook.getId()%>" <%=statusBook.getId() == booking.getStatusBooking().getId() ? "selected" : ""%>>
+                                        <%=statusBook.getName()%>
+                                    </option>
                                     <%}%>
                                 </select>
                             </td>
-                            <td name="description"><%=booking.getDescription()%></td>
+                            <td name="description"><%=booking.getDescription()%>
+                            </td>
                             <td>
-                                <%--sua booking--%>
-                                <%if(isGrantEdit == true) {%>
-                                    <a href="manage-confirm?type=edit-confirm&id-confirm=<%=booking.getId()%>">
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
-                                                id="show-confirm"
-                                                data-toggle="modal" data-target="#ModalConfirm"><i class="fas fa-edit"></i>
-                                        </button>
-                                    </a>
-                                <%} else {%>
-                                    <button
-                                            class="btn btn-primary btn-sm edit"
-                                            type="button"
-                                            title="Không có quyền này!"
-                                            style="opacity: 0.5; cursor: not-allowed;"
-                                            disabled
-                                    >
-                                        <i class="fas fa-edit"></i>
+                                <%--view booking--%>
+                                    <button class="btn btn-primary btn-sm edit" type="button" title="Xem" onclick="openModalLogistic()">
+                                        <i class="fa fa-eye"></i>
                                     </button>
+                                <%--sua booking--%>
+                                <%if (isGrantEdit == true) {%>
+                                <a href="manage-confirm?type=edit-confirm&id-confirm=<%=booking.getId()%>">
+                                    <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
+                                            id="show-confirm"
+                                            data-toggle="modal" data-target="#ModalConfirm"><i class="fas fa-edit"></i>
+                                    </button>
+                                </a>
+                                <%} else {%>
+                                <button
+                                        class="btn btn-primary btn-sm edit"
+                                        type="button"
+                                        title="Không có quyền này!"
+                                        style="opacity: 0.5; cursor: not-allowed;"
+                                        disabled
+                                >
+                                    <i class="fas fa-edit"></i>
+                                </button>
                                 <%}%>
                                 <%--                                    xóa--%>
-                                <%if(isGrantDel == true) {%>
-                                    <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                       href="manage-booking?status=wait-accept&action=delete&id=<%=booking.getId()%>"><i
-                                            class="fas fa-trash-alt"></i></a>
+                                <%if (isGrantDel == true) {%>
+                                <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
+                                   href="manage-booking?status=wait-accept&action=delete&id=<%=booking.getId()%>"><i
+                                        class="fas fa-trash-alt"></i></a>
                                 <%} else {%>
-                                    <button
-                                            class="btn btn-primary btn-sm trash"
-                                            type="button"
-                                            title="Không có quyền này!"
-                                            style="opacity: 0.5; cursor: not-allowed;"
-                                            disabled
-                                    >
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
+                                <button
+                                        class="btn btn-primary btn-sm trash"
+                                        type="button"
+                                        title="Không có quyền này!"
+                                        style="opacity: 0.5; cursor: not-allowed;"
+                                        disabled
+                                >
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
                                 <%}%>
                             </td>
                         </tr>
@@ -144,171 +149,73 @@
     </div>
 </main>
 
-<!--
-MODAL
--->
-<div class="modal fade" id="ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+<!-- MODAL EDIT BASIC -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+    Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="modalLogistic" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
      data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group  col-md-12">
-              <span class="thong-tin-thanh-toan">
-                <h5>Chỉnh sửa thông tin cơ bản</h5>
-              </span>
+            <form method="POST">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group  col-md-12">
+                          <span class="thong-tin-thanh-toan">
+                            <h5>Chỉnh sửa thông tin sản phẩm cơ bản</h5>
+                          </span>
+                        </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="control-label" for="idModal">Mã sản phẩm </label>
+                            <input class="form-control" type="number" value="" id="idModal" name="idModal" disabled>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label" for="nameModal">Tên sản phẩm</label>
+                            <input class="form-control" type="text" required
+                                   value="" id="nameModal" name="nameModal">
+                        </div>
+                        <div class="form-group  col-md-6">
+                            <label class="control-label" for="brandModal">Thương hiệu</label>
+                            <select class="form-control" id="brandModal" name="brandModal">
+                            </select>
+
+                        </div>
+                        <div class="form-group col-md-6 ">
+                            <label for="statusModal" class="control-label" for="statusModal">Tình trạng sản phẩm</label>
+                            <select class="form-control" id="statusModal" name="statusModal">
+                                <option value="1">Còn hàng</option>
+                                <option value="0">Hết hàng</option>
+                                <option value="-1">Ngưng hoạt động</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label" for="priceModal">Giá bán</label>
+                            <input class="form-control" type="text" id="priceModal" name="priceModal" value="300.000đ">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="categoryModal" class="control-label">Danh mục</label>
+                            <select class="form-control" id="categoryModal" name="categoryModal">
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <a class="urlEditBasic"
+                       style="float: right;font-weight: 600;color: #ea0000;">Chỉnh sửa sản phẩm nâng cao</a>
+                    <BR>
                 </div>
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label class="control-label">ID </label>
-                        <input class="form-control" type="number" value="71309005">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="control-label">Tên sản phẩm</label>
-                        <input class="form-control" type="text" required
-                               value="Thay dây nút nguồn Xiaomi Redmi Note 11 Pro	">
-                    </div>
-                    <div class="form-group  col-md-6">
-                        <label class="control-label">Số lượng</label>
-                        <input class="form-control" type="number" required value="1">
-                    </div>
-                    <div class="form-group col-md-6 ">
-                        <label class="control-label">Ngày hẹn</label>
-                        <input class="form-control" type="date" value="2020-10-20">
-
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label class="control-label">Tổng tiền</label>
-                        <input class="form-control" type="text" value="300.000đ">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="exampleSelect1" class="control-label">Trình trạng</label>
-                        <select class="form-control" id="exampleSelect1">
-                            <option>Chờ thanh toán</option>
-                            <option>Đã thanh toán</option>
-                            <option>Đã hủy</option>
-
-                        </select>
-                    </div>
+                <div class="modal-footer">
+                    <button class="btn btn-save" type="button" onclick="save()">Lưu lại</button>
+                    <span class="close" onclick="closeModal()">Đóng</span>
                 </div>
-                <BR>
-                <a href="edit-booked.jsp" style="float: right;font-weight: 600;color: #ea0000;">Chỉnh sửa sản phẩm nâng
-                    cao</a>
-                <BR>
-                <BR>
-                <button class="btn btn-save" type="button" onclick="save()">Lưu lại</button>
-                <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
-                <BR>
-            </div>
-            <div class="modal-footer">
-            </div>
+            </form>
         </div>
     </div>
 </div>
 <!--
 <%@include file="../../common/admin/script.jsp" %>
 -->
-
-<!-- Essential javascripts for application to work-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="src/jquery.table2excel.js"></script>
-<script src="js/main.js"></script>
-<!-- The javascript plugin to display page loading on top-->
-<script src="../../admin/doc/js/plugins/pace.min.js"></script>
-<!-- Page specific javascripts-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<!-- Data table plugin-->
-<script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
-<script type="text/javascript">
-    $('#sampleTable').DataTable();
-
-    //Thời Gian
-    function time() {
-        var today = new Date();
-        var weekday = new Array(7);
-        weekday[0] = "Chủ Nhật";
-        weekday[1] = "Thứ Hai";
-        weekday[2] = "Thứ Ba";
-        weekday[3] = "Thứ Tư";
-        weekday[4] = "Thứ Năm";
-        weekday[5] = "Thứ Sáu";
-        weekday[6] = "Thứ Bảy";
-        var day = weekday[today.getDay()];
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1;
-        var yyyy = today.getFullYear();
-        var h = today.getHours();
-        var m = today.getMinutes();
-        var s = today.getSeconds();
-        m = checkTime(m);
-        s = checkTime(s);
-        nowTime = h + " giờ " + m + " phút " + s + " giây";
-        if (dd < 10) {
-            dd = '0' + dd
-        }
-        if (mm < 10) {
-            mm = '0' + mm
-        }
-        today = day + ', ' + dd + '/' + mm + '/' + yyyy;
-        tmp = '<span class="date"> ' + today + ' - ' + nowTime +
-            '</span>';
-        document.getElementById("clock").innerHTML = tmp;
-        clocktime = setTimeout("time()", "1000", "Javascript");
-
-        function checkTime(i) {
-            if (i < 10) {
-                i = "0" + i;
-            }
-            return i;
-        }
-    }
-</script>
-<script>
-    function deleteRow(r) {
-        var i = r.parentNode.parentNode.rowIndex;
-        document.getElementById("myTable").deleteRow(i);
-    }
-
-    jQuery(function () {
-        jQuery(".trash").click(function () {
-            swal({
-                title: "Cảnh báo",
-                text: "Bạn có chắc chắn là muốn xóa sản phẩm này?",
-                buttons: ["Hủy bỏ", "Đồng ý"],
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        swal("Đã xóa thành công.!", {});
-                    }
-                });
-        });
-    });
-    oTable = $('#sampleTable').dataTable();
-    $('#all').click(function (e) {
-        $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
-        e.stopImmediatePropagation();
-    });
-
-    function save() {
-
-        swal("Đã lưu thành công.!", {});
-
-    }
-
-
-        $('.select-type-booking').on('change',()=>{
-            let selectTypeBookElement =$('.select-type-booking')
-            console.log("change value select type booking:"+selectTypeBookElement.val())
-
-            $.ajax({
-            type: 'GET',
-            url: `<%=request.getContextPath()%>/admin/manage-booking?status=wait-accept&type-status=${selectTypeBookElement.val()}&id-booking=1013`,
-            success: function (data) {
-            }
-        });
-    })
-</script>
 </body>

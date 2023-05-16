@@ -95,9 +95,9 @@
                             </td>
                             <td>
                                 <button class="btn btn-success btn-sm edit" type="button" title="Xác nhận"
-                                   id="accept-booking" data-toggle="modal" data-target=""
-                                   href="manage-booking?status=wait-accept&type-status=1&id-booking=<%=booking.getId()%>"
-                                   onclick="handleClickRegisterTransport(<%=booking.getId()%>,<%=booking.getToDistrictId()%>,<%=booking.getToWardId()%>,<%=booking.getHeight()%>,<%=booking.getLength()%>,<%=booking.getWidth()%>,<%=booking.getWeight()%>)"
+                                        id="accept-booking" data-toggle="modal" data-target=""
+                                        href="manage-booking?status=wait-accept&type-status=1&id-booking=<%=booking.getId()%>"
+                                        onclick="handleClickRegisterTransport(<%=booking.getId()%>,<%=booking.getToDistrictId()%>,<%=booking.getToWardId()%>,<%=booking.getHeight()%>,<%=booking.getLength()%>,<%=booking.getWidth()%>,<%=booking.getWeight()%>)"
                                 ><i
                                         class="fas fa-check-square"></i></button>
                                 <%-- sua don hang--%>
@@ -262,110 +262,9 @@ MODAL
 <!--
 <%@include file="../../common/admin/script.jsp" %>
 -->
-
-<!-- Essential javascripts for application to work-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="src/jquery.table2excel.js"></script>
-<script src="js/main.js"></script>
-<!-- The javascript plugin to display page loading on top-->
-<script src="../../admin/doc/js/plugins/pace.min.js"></script>
-<!-- Page specific javascripts-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<!-- Data table plugin-->
-<script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
-<script type="text/javascript">
-    $('#sampleTable').DataTable();
-
-    //Thời Gian
-    function time() {
-        var today = new Date();
-        var weekday = new Array(7);
-        weekday[0] = "Chủ Nhật";
-        weekday[1] = "Thứ Hai";
-        weekday[2] = "Thứ Ba";
-        weekday[3] = "Thứ Tư";
-        weekday[4] = "Thứ Năm";
-        weekday[5] = "Thứ Sáu";
-        weekday[6] = "Thứ Bảy";
-        var day = weekday[today.getDay()];
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1;
-        var yyyy = today.getFullYear();
-        var h = today.getHours();
-        var m = today.getMinutes();
-        var s = today.getSeconds();
-        m = checkTime(m);
-        s = checkTime(s);
-        nowTime = h + " giờ " + m + " phút " + s + " giây";
-        if (dd < 10) {
-            dd = '0' + dd
-        }
-        if (mm < 10) {
-            mm = '0' + mm
-        }
-        today = day + ', ' + dd + '/' + mm + '/' + yyyy;
-        tmp = '<span class="date"> ' + today + ' - ' + nowTime +
-            '</span>';
-        document.getElementById("clock").innerHTML = tmp;
-        clocktime = setTimeout("time()", "1000", "Javascript");
-
-        function checkTime(i) {
-            if (i < 10) {
-                i = "0" + i;
-            }
-            return i;
-        }
-    }
-</script>
 <script>
-    function deleteRow(r) {
-        var i = r.parentNode.parentNode.rowIndex;
-        document.getElementById("myTable").deleteRow(i);
-    }
-
-    <%--if (<%=checkMess!=null%>) {--%>
-    <%--    if (<%=checkMess%>) {--%>
-    <%--        $(this).change(() => {--%>
-    <%--            swal({--%>
-    <%--                title: "Thông báo",--%>
-    <%--                text: "Cập nhật trạng thái lịch đặt thành công",--%>
-    <%--                buttons: ["Xác nhận"],--%>
-    <%--            })--%>
-    <%--        })--%>
-    <%--    } else {--%>
-
-    <%--    }--%>
-    <%--}--%>
-
-    jQuery(function () {
-        jQuery(".trash").click(function () {
-            swal({
-                title: "Cảnh báo",
-                text: "Bạn có chắc chắn là muốn xóa sản phẩm này?",
-                buttons: ["Hủy bỏ", "Đồng ý"],
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        swal("Đã xóa thành công.!", {});
-                    }
-                });
-        });
-    });
-    oTable = $('#sampleTable').dataTable();
-    $('#all').click(function (e) {
-        $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
-        e.stopImmediatePropagation();
-    });
-
-    function save() {
-        swal("Đã lưu thành công.!", {});
-    }
-
     let logisticIDToken = null;
-
     async function autoLoginLogisticAPI() {
-
         await fetch(`<%=request.getContextPath()%>/api/logistic?action=login`, {
             method: 'POST'
         })
@@ -377,29 +276,8 @@ MODAL
                 console.log(error)
             });
     }
-
-    //Modal
-
-    async function handleClickRegisterTransport(idBooking, toDistrictID, toWardID,height, length, width, weight) {
+    async function handleClickRegisterTransport(idBooking, toDistrictID, toWardID, height, length, width, weight) {
         await autoLoginLogisticAPI()
-        const options = {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + logisticIDToken,
-            },
-            body: JSON.stringify({
-                'logisticIDToken': logisticIDToken,
-                'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,
-                'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,
-                'to_district_id': toDistrictID,
-                'to_ward_id': toWardID,
-                'height': height,
-                'length': length,
-                'width': width,
-                'weight': weight,
-            })
-        };
-
         $.ajax({
             type: 'GET',
             url: `<%=request.getContextPath()%>/admin/manage-booking?status=wait-accept&type-status=1&id-booking=${idBooking}`
@@ -408,6 +286,7 @@ MODAL
         await $.ajax({
             type: 'POST',
             data: {
+                'idBooking': idBooking,
                 'logisticIDToken': logisticIDToken,
                 'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,
                 'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,
@@ -425,8 +304,5 @@ MODAL
         });
     }
 
-    // $("#show-confirm").on("click", async function () {
-    //     $("#ModalConfirm").modal({backdrop: false, keyboard: false})
-    // });
 </script>
 </body>

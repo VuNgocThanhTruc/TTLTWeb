@@ -61,7 +61,7 @@ public class BookingDAO implements ObjectDAO {
         }
     }
 
-    public static boolean updateStatusBooking(String typeStatus,String idBookingParam) {
+    public static boolean updateStatusBooking(String typeStatus, String idBookingParam) {
         String sql = "Update bookings set status_booking=? where id=?";
         try {
 
@@ -266,19 +266,31 @@ public class BookingDAO implements ObjectDAO {
 
     }
 
-    public static void updateBooking(String id, String date, String desc, int status, String username, String email, String tel, String address) {
-        date += ":00";
-        String sql = "update bookings set date_booking = ?, description = ?, status_booking=?, username=?,email=?,tel=?, address=? where id = ?";
+    public static void updateBooking(BookingModel bookingModel) {
+        String sql = "update bookings set date_booking = ?, description = ?, status_booking=?, username=?,email=?,tel=?, address=?, id_transport=? where id = ?";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
-            ps.setTimestamp(1, Timestamp.valueOf(date.replace("T", " ")));
-            ps.setString(2, desc);
-            ps.setInt(3, status);
-            ps.setString(4, username);
-            ps.setString(5, email);
-            ps.setString(6, tel);
-            ps.setString(7, address);
-            ps.setString(8, id);
+            ps.setTimestamp(1, Timestamp.valueOf(bookingModel.getDate_booking()));
+            ps.setString(2, bookingModel.getDescription());
+            ps.setInt(3, bookingModel.getStatusBooking().getId());
+            ps.setString(4, bookingModel.getUsername());
+            ps.setString(5, bookingModel.getEmail());
+            ps.setString(6, bookingModel.getTel());
+            ps.setString(7, bookingModel.getAddress());
+            ps.setString(8, bookingModel.getIdTransport());
+            ps.setString(9, bookingModel.getId());
+            ps.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void updateBookingIDTransport(BookingModel bookingModel) {
+        String sql = "update bookings set id_transport=? where id = ?";
+        try {
+            PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
+            ps.setString(1, bookingModel.getIdTransport());
+            ps.setString(2, bookingModel.getId());
             ps.executeUpdate();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -288,7 +300,7 @@ public class BookingDAO implements ObjectDAO {
     public static List<BookingModel> getListBooking() {
         LinkedList<BookingModel> list = new LinkedList<>();
 
-        String sql = "SELECT b.id id,date_booking, id_user ,username, id_payment, t.name nameTypePayment,description, b.status_booking id_status_booking, s.name name_status_booking,tel,email " +
+        String sql = "SELECT b.id id,date_booking, id_user ,username, id_payment, t.name nameTypePayment,description, b.status_booking id_status_booking, s.name name_status_booking,tel,email,id_transport " +
                 "FROM bookings b join type_payments t on t.id = b.id_payment " +
                 "join status_bookings s on s.id = b.status_booking " +
                 "order by id desc ";
@@ -305,16 +317,13 @@ public class BookingDAO implements ObjectDAO {
                 booking.setUsername(rs.getString("username"));
                 booking.setId_payment(rs.getString("id_payment"));
                 booking.setNameTypePayment(rs.getString("nameTypePayment"));
-
-
-              StatusBooking statusBooking = new StatusBooking();
+                StatusBooking statusBooking = new StatusBooking();
                 statusBooking.setId(rs.getInt("id_status_booking"));
                 statusBooking.setName(rs.getString("name_status_booking"));
-
-
                 booking.setStatusBooking(statusBooking);
                 booking.setDescription(rs.getString("description"));
                 booking.setTel(rs.getString("tel"));
+                booking.setIdTransport(rs.getString("id_transport"));
 
                 list.add(booking);
             }
@@ -369,8 +378,10 @@ public class BookingDAO implements ObjectDAO {
     }
 
     public static void main(String[] args) {
-        BookingDAO b = new BookingDAO();
-        b.updateBooking("1", "2022-12-12 12:12", "test", 1, "test", "test@gmail.com", "123", "tphcm");
+        BookingModel bookingModel = new BookingModel();
+        bookingModel.setId("1013");
+        bookingModel.setIdTransport("558e6a5e95ba4aaaba10b84385d67d00");
+        BookingDAO.updateBookingIDTransport(bookingModel);
 
     }
 

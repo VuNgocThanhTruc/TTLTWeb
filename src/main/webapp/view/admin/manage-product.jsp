@@ -180,9 +180,7 @@
     </div>
 </main>
 
-<!--
-MODAL EDIT BASIC
--->
+<!-- MODAL EDIT BASIC -->
 <div class="modal fade" id="ModalEditProduct" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
      data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -257,69 +255,7 @@ MODAL EDIT BASIC
 
 <%@include file="../../common/admin/script.jsp" %>
 <!-- Essential javascripts for application to work-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="src/jquery.table2excel.js"></script>
-<script src="js/main.js"></script>
-<!-- Page specific javascripts-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<!-- Data table plugin-->
-<script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
 <script>
-    function deleteRow(r) {
-        var i = r.parentNode.parentNode.rowIndex;
-        document.getElementById("myTable").deleteRow(i);
-    }
-
-    // document.querySelector('.trash').addEventListener('click', function(e) {
-    //     var form = this;
-    //
-    //     e.preventDefault(); // <--- prevent form from submitting
-    //
-    //     swal({
-    //         title: "Cảnh báo",
-    //         text: "Bạn có chắc chắn là muốn xóa sản phẩm này?",
-    //         buttons: ["Hủy bỏ", "Đồng ý"],
-    //         icon: "warning",
-    //         buttons: [
-    //             'No, cancel it!',
-    //             'Yes, I am sure!'
-    //         ],
-    //         dangerMode: true,
-    //     }).then(function(isConfirm) {
-    //         if (isConfirm) {
-    //             swal({
-    //                 title: 'Shortlisted!',
-    //                 text: 'Candidates are successfully shortlisted!',
-    //                 icon: 'success'
-    //             }).then(function() {
-    //                 form.submit(); // <--- submit form programmatically
-    //             });
-    //         } else {
-    //             swal("Cancelled", "Your imaginary file is safe :)", "error");
-    //         }
-    //     })
-    // });
-
-    jQuery(function () {
-        jQuery(".trash").click(function () {
-            swal({
-                title: "Cảnh báo",
-                text: "Bạn có chắc chắn là muốn xóa sản phẩm này?",
-                buttons: ["Hủy bỏ", "Đồng ý"],
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        swal("Đã xóa thành công.!", {});
-                    }
-                });
-        });
-    });
-    oTable = $('#sampleTable').dataTable();
-    $('#all').click(function (e) {
-        $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
-        e.stopImmediatePropagation();
-    });
 
     function save() {
         $.ajax({

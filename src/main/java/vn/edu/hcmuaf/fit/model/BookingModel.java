@@ -26,6 +26,7 @@ public class BookingModel {
     private int length;
     private int width;
     private int weight;
+    private String idTransport;
     private int createBy;
 
     public BookingModel(String id, String date_booking, String id_user, String id_payment, String description, StatusBooking statusBooking, String username, String nameTypePayment, String tel, int id_product, String name, int price, int quantity, String avatar, String address, String email) {
@@ -233,6 +234,14 @@ public class BookingModel {
 
     public void setCreateBy(int createBy) {
         this.createBy = createBy;
+    }
+
+    public String getIdTransport() {
+        return idTransport;
+    }
+
+    public void setIdTransport(String idTransport) {
+        this.idTransport = idTransport;
     }
 
     @Override
