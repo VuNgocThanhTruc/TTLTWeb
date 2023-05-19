@@ -116,11 +116,11 @@
                                        value="<%=product==null?"":product.getName()%>">
                             </div>
 
-                            <div class="form-group  col-md-3">
-                                <label class="control-label">Số lượng</label>
-                                <input class="form-control" type="number" name="quantity"
-                                       value="<%=product==null?"":"product.getSumQuantity()"%>">
-                            </div>
+<%--                            <div class="form-group  col-md-3">--%>
+<%--                                <label class="control-label">Số lượng</label>--%>
+<%--                                <input class="form-control" type="number" name="quantity"--%>
+<%--                                       value="<%=product==null?"":"product.getSumQuantity()"%>">--%>
+<%--                            </div>--%>
                             <div class="form-group col-md-3 ">
                                 <label for="statusProduct" class="control-label">Tình trạng</label>
                                 <select class="form-control" id="statusProduct" name="statusProduct">
@@ -188,15 +188,35 @@
                                 <input class="form-control" type="text" name="price"
                                        value="<%=product==null?"":product.getPrice()%>">
                             </div>
+                            <div class="form-group col-md-3">
+                                <label class="control-label">Height</label>
+                                <input class="form-control" type="number" name="height"
+                                       value="<%=product.getHeight()%>">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="control-label">Length</label>
+                                <input class="form-control" type="number" name="length"
+                                       value="<%=product.getLength()%>">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="control-label">Width</label>
+                                <input class="form-control" type="number" name="width"
+                                       value="<%=product.getWidth()%>">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="control-label">Weight</label>
+                                <input class="form-control" type="number" name="weight"
+                                       value="<%=product.getWeight()%>">
+                            </div>
                             <div class="form-group col-md-12">
                                 <label class="control-label">Ảnh sản phẩm</label>
                                 <div id="myfileupload">
                                     <input type="file" id="uploadfile" name="ImageUpload" onchange="readURL(this)"
-                                           value="<%="product.getAvatar()"%>"/>
+                                           value="<%=product.getAvatar()%>"/>
                                 </div>
                                 <div id="thumbbox">
                                     <img height="450" width="400" alt="Thumb image" id="thumbimage"
-                                         src="../images/product/<%="product.getAvatar()"%>"/>
+                                         src="../images/product/<%=product.getAvatar()%>"/>
                                     <a class="removeimg" href="javascript:"></a>
                                 </div>
                                 <div id="boxchoice">

@@ -75,8 +75,29 @@ public class CategoryDAO {
         return null;
     }
 
+    public static List<CategoryModel> getListTypeStatusBooking() {
+        LinkedList<CategoryModel> list = new LinkedList<CategoryModel>();
+
+        String sql = "select id,name from status_bookings";
+        try {
+            PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                CategoryModel categoryModel = new CategoryModel();
+                categoryModel.setId(rs.getInt("id"));
+                categoryModel.setName(rs.getString("name"));
+                list.add(categoryModel);
+            }
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
-        System.out.println(new CategoryDAO().getListStatusProduct().toString());
+        System.out.println(new CategoryDAO().getListTypeStatusBooking().toString());
     }
 
 }

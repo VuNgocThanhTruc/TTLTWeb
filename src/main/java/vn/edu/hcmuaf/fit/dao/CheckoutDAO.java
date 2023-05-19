@@ -11,20 +11,26 @@ public class CheckoutDAO implements ObjectDAO {
 
     public int addBooking(Object obj) {
         BookingModel booking = (BookingModel) obj;
-        String sql = "INSERT INTO bookings " +
-                "VALUES (NULL, ?, ?, ?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO bookings (date_booking, id_user, id_payment, description, status_booking, username, email, tel, address, create_by, to_district_id, to_ward_id, height, length, width, weight) " +
+                "VALUES (?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
         try {
             ps.setString(1, booking.getDate_booking());
-
             ps.setString(2,booking.getId_user());
             ps.setString(3, booking.getId_payment());
             ps.setString(4, booking.getDescription());
-            ps.setString(5, "1");
+            ps.setInt(5, 0);
             ps.setString(6, booking.getUsername());
             ps.setString(7, booking.getEmail());
             ps.setString(8, booking.getTel());
             ps.setString(9, booking.getAddress());
+            ps.setInt(10, booking.getCreateBy());
+            ps.setInt(11, booking.getToDistrictId());
+            ps.setInt(12, booking.getToWardId());
+            ps.setInt(13, booking.getHeight());
+            ps.setInt(14, booking.getLength());
+            ps.setInt(15, booking.getWidth());
+            ps.setInt(16, booking.getWeight());
 
             ps.executeUpdate();
             ResultSet idInserted = ps.getGeneratedKeys();
