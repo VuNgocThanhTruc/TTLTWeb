@@ -104,11 +104,6 @@
                         <%--                        </div>--%>
                         <div class="row">
                             <div class="form-group col-md-3">
-                                <label class="control-label">Mã sản phẩm </label>
-                                <input class="form-control" type="number" placeholder="" name="idProduct"
-                                       value="">
-                            </div>
-                            <div class="form-group col-md-3">
                                 <label class="control-label">Tên sản phẩm</label>
                                 <input class="form-control" type="text" name="name_product"
                                        value="">
@@ -152,7 +147,27 @@
                             </div>
                             <div class="form-group col-md-3">
                                 <label class="control-label">Giá bán</label>
-                                <input class="form-control" type="text" name="price"
+                                <input class="form-control" type="number" name="price"
+                                       value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="control-label">Height</label>
+                                <input class="form-control" type="number" name="height"
+                                       value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="control-label">Length</label>
+                                <input class="form-control" type="number" name="length"
+                                       value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="control-label">Width</label>
+                                <input class="form-control" type="number" name="width"
+                                       value="">
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label class="control-label">Weight</label>
+                                <input class="form-control" type="number" name="weight"
                                        value="">
                             </div>
                             <div class="form-group col-md-12">

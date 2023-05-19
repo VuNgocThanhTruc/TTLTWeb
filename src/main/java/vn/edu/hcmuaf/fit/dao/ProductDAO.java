@@ -13,8 +13,7 @@ public class ProductDAO {
     public static List<ProductModel> findAll() {
         LinkedList<ProductModel> list = new LinkedList<ProductModel>();
 
-        String sql = "select p.id,name,id_type-product, id_status_device,id_brand,price, p.describe,l.url from products p";
-
+        String sql = "select p.id,name,id_type_product, id_status_device,id_brand,price, p.describe, avatar from products p";
 
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -38,6 +37,7 @@ public class ProductDAO {
                 productModel.setIdTypeProduct(rs.getInt("id_type_product"));
                 productModel.setIdStatusDevice(rs.getInt("id_status_device"));
                 productModel.setDescribe(rs.getString("describe"));
+                productModel.setAvatar(rs.getString("avatar"));
                 productModel.setListImage(listImage);
 
                 list.add(productModel);
@@ -82,6 +82,7 @@ public class ProductDAO {
                 productModel.setLength(rs.getInt("length"));
                 productModel.setWidth(rs.getInt("width"));
                 productModel.setWeight(rs.getInt("weight"));
+                productModel.setAvatar(rs.getString("avatar"));
                 productModel.setDateStart(rs.getString("date_start"));
                 productModel.setDateEnd(rs.getString("date_end"));
                 productModel.setPercentDiscount(rs.getInt("percent_discount"));
@@ -124,6 +125,7 @@ public class ProductDAO {
                 productModel.setIdTypeProduct(rs.getInt("id_type_product"));
                 productModel.setIdStatusDevice(rs.getInt("id_status_device"));
                 productModel.setDescribe(rs.getString("describe"));
+                productModel.setAvatar(rs.getString("avatar"));
                 productModel.setListImage(listImage);
 
                 list.add(productModel);
@@ -166,6 +168,7 @@ public class ProductDAO {
                     productModel.setIdTypeProduct(rs.getInt("id_type_product"));
                     productModel.setIdStatusDevice(rs.getInt("id_status_device"));
                     productModel.setDescribe(rs.getString("describe"));
+                    productModel.setAvatar(rs.getString("avatar"));
                     productModel.setListImage(listImage);
 
                     list.add(productModel);
@@ -234,6 +237,7 @@ public class ProductDAO {
                 productModel.setIdTypeProduct(rs.getInt("id_type_product"));
                 productModel.setIdStatusDevice(rs.getInt("id_status_device"));
                 productModel.setDescribe(rs.getString("describe"));
+                productModel.setAvatar(rs.getString("avatar"));
                 productModel.setHeight(rs.getInt("height"));
                 productModel.setLength(rs.getInt("length"));
                 productModel.setWidth(rs.getInt("width"));
@@ -346,38 +350,52 @@ public class ProductDAO {
             throw new RuntimeException(e);
         }
     }
-//    INSERT INTO `products` (`id`, `name`, `avatar`, `id_type_product`, `id_status_device`, `id_brand`, `price`, `sum_quantity`, `describe`, `id_store`)
-//    VALUES (NULL, 'Test2', 'thay-cam-ung-asus-zenfone-max-plus-m1-zb570tl_1667468452.png\r\n', '3', '1', '5', '350000', '44', '', '2');
-
-    public static boolean addNewProduct(String name, String avatar, int id_type_product, int id_status_device, int id_brand, int price, int sum_quantity, String describe, int id_store) {
-        String sql = "INSERT INTO products (`id`, `name`, `avatar`, `id_type_product`, `id_status_device`, `id_brand`, `price`, `sum_quantity`, `describe`, `id_store`, `created_by`) " + "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+    public static boolean addNewProduct(String name, String avatar, int idTypeProduct, int idStatusDevice, int idBrand, int price, int sumQuantity, String describe, int idStore,int idUser, int height, int length, int width, int weight) {
+        String sql = "INSERT INTO products (`id`, `name`, `avatar`, `id_type_product`, `id_status_device`, `id_brand`, `price`, `describe`,`created_by` ,`height`,`length`,`width`,`weight`,`avatar`) " + "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?)";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ps.setString(1, name);
             ps.setString(2, avatar);
-            ps.setInt(3, id_type_product);
-            ps.setInt(4, id_status_device);
-            ps.setInt(5, id_brand);
+            ps.setInt(3, idTypeProduct);
+            ps.setInt(4, idStatusDevice);
+            ps.setInt(5, idBrand);
             ps.setInt(6, price);
-            ps.setInt(7, sum_quantity);
-            ps.setString(8, describe);
-            ps.setInt(9, id_store);
-            ps.setInt(10, 1);//set id user
+            ps.setString(7, describe);
+            ps.setInt(8, idUser);
+            ps.setInt(9,height);
+            ps.setInt(10,length);
+            ps.setInt(11,width);
+            ps.setInt(12,weight);
 
             ps.executeUpdate();
+
+            ResultSet rs = ps.getGeneratedKeys();
+            int lastInsertId = 0;
+            if (rs.next()) {
+                lastInsertId = rs.getInt(1);
+            }
+
+            sql = "Insert into inventories(`id_product`,`quantity`,`modified_by`) " + "values (?,?,?)";
+
+            ps = DBConnect.getInstall().preStatement(sql);
+            ps.setInt(1, lastInsertId);
+            ps.setInt(2, sumQuantity);
+            ps.setInt(3, idUser);
+            ps.executeUpdate();
+
             return true;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static boolean updateProductBasic(int id, String name, int sumQuantity, int id_status_device, int price, int id_type_product) {
+    public static boolean updateProductBasic(int id, String name, int brand, int id_status_device, int price, int id_type_product) {
 //        UPDATE products SET name = 'Test' WHERE products.id = ;
-        String sql = "UPDATE PRODUCTS SET NAME=?, sum_quantity=?, id_status_device=?,price=?, id_type_product=? WHERE PRODUCTS.ID=?";
+        String sql = "UPDATE PRODUCTS SET NAME=?, id_brand=?, id_status_device=?,price=?, id_type_product=? WHERE PRODUCTS.ID=?";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ps.setString(1, name);
-            ps.setInt(2, sumQuantity);
+            ps.setInt(2, brand);
             ps.setInt(3, id_status_device);
             ps.setInt(4, price);
             ps.setInt(5, id_type_product);
@@ -390,9 +408,9 @@ public class ProductDAO {
         }
     }
 
-    public static boolean updateProduct(int id, String name, String avatar, int id_type_product, int id_status_device, int id_brand, int price, int sum_quantity, String describe, int id_store) {
+    public static boolean updateProduct(int id, String name, String avatar, int id_type_product, int id_status_device, int id_brand, int price, String describe,int height,int length,int width,int weight) {
         System.out.println(avatar);
-        String sql = "UPDATE PRODUCTS SET NAME=?, avatar=?,id_type_product=?,  id_status_device=?,id_brand=?,price=?, sum_quantity=?,`describe`=?,id_store=? WHERE ID=?";
+        String sql = "UPDATE PRODUCTS SET NAME=?, avatar=?,id_type_product=?,  id_status_device=?,id_brand=?,price=?,`describe`=?,height=?,length=?,width=?,weight=? WHERE ID=?";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ps.setString(1, name);
@@ -401,10 +419,12 @@ public class ProductDAO {
             ps.setInt(4, id_status_device);
             ps.setInt(5, id_brand);
             ps.setInt(6, price);
-            ps.setInt(7, sum_quantity);
-            ps.setString(8, describe);
-            ps.setInt(9, id_store);
-            ps.setInt(10, id);
+            ps.setString(7, describe);
+            ps.setInt(8, height);
+            ps.setInt(9, length);
+            ps.setInt(10, width);
+            ps.setInt(11, weight);
+            ps.setInt(12, id);
             ps.executeUpdate();
             return true;
         } catch (Exception e) {

@@ -22,6 +22,7 @@
     List<ProductModel> listProduct = (List<ProductModel>) request.getAttribute("listProduct");
     String pageContextPath = (String) request.getContextPath();
     List<CategoryModel> categoryTypeProduct = (List<CategoryModel>) request.getAttribute("categoryTypeProduct");
+    List<CategoryModel> listBrand = (List<CategoryModel>) request.getAttribute("categoryBrand");
 
     Boolean isGrantAdd = false;
     Boolean isGrantEdit = false;
@@ -111,9 +112,9 @@
                             <td class="name"><%=product.getName()%>
                             </td>
                             <td>
-<%--                                <img--%>
-<%--                                    src="../images/product/<%=product.getAvatar()%>"--%>
-<%--                                    alt="" width="100px;" class="avatar">--%>
+                                <img
+                                    src="../images/product/<%=product.getAvatar()%>"
+                                    alt="" width="100px;" class="avatar">
                             </td>
                             <td class="quantity">
 <%--                                <%=product.getSumQuantity()%>--%>
@@ -179,9 +180,7 @@
     </div>
 </main>
 
-<!--
-MODAL EDIT BASIC
--->
+<!-- MODAL EDIT BASIC -->
 <div class="modal fade" id="ModalEditProduct" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
      data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -198,7 +197,7 @@ MODAL EDIT BASIC
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label class="control-label" for="idModal">Mã sản phẩm </label>
-                            <input class="form-control" type="number" value="" id="idModal" name="idModal">
+                            <input class="form-control" type="number" value="" id="idModal" name="idModal" disabled>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label" for="nameModal">Tên sản phẩm</label>
@@ -206,9 +205,15 @@ MODAL EDIT BASIC
                                    value="" id="nameModal" name="nameModal">
                         </div>
                         <div class="form-group  col-md-6">
-                            <label class="control-label" for="quantityModal">Tồn kho</label>
-                            <input class="form-control" type="number" name="quantityModal" id="quantityModal" required
-                                   value="">
+                            <label class="control-label" for="brandModal">Thương hiệu</label>
+                            <select class="form-control" id="brandModal" name="brandModal">
+                                <%
+                                    for (CategoryModel brand : listBrand) {
+                                %>
+                                    <option value="<%=brand.getId()%>"><%=brand.getName()%></option>
+                                <%}%>
+                            </select>
+
                         </div>
                         <div class="form-group col-md-6 ">
                             <label for="statusModal" class="control-label" for="statusModal">Tình trạng sản phẩm</label>
@@ -240,7 +245,7 @@ MODAL EDIT BASIC
                     <BR>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-save" type="submit" onclick="save()">Lưu lại</button>
+                    <button class="btn btn-save" type="button" onclick="save()">Lưu lại</button>
                     <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
                 </div>
             </form>
@@ -250,72 +255,26 @@ MODAL EDIT BASIC
 
 <%@include file="../../common/admin/script.jsp" %>
 <!-- Essential javascripts for application to work-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="src/jquery.table2excel.js"></script>
-<script src="js/main.js"></script>
-<!-- Page specific javascripts-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<!-- Data table plugin-->
-<script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
 <script>
-    function deleteRow(r) {
-        var i = r.parentNode.parentNode.rowIndex;
-        document.getElementById("myTable").deleteRow(i);
-    }
-
-    // document.querySelector('.trash').addEventListener('click', function(e) {
-    //     var form = this;
-    //
-    //     e.preventDefault(); // <--- prevent form from submitting
-    //
-    //     swal({
-    //         title: "Cảnh báo",
-    //         text: "Bạn có chắc chắn là muốn xóa sản phẩm này?",
-    //         buttons: ["Hủy bỏ", "Đồng ý"],
-    //         icon: "warning",
-    //         buttons: [
-    //             'No, cancel it!',
-    //             'Yes, I am sure!'
-    //         ],
-    //         dangerMode: true,
-    //     }).then(function(isConfirm) {
-    //         if (isConfirm) {
-    //             swal({
-    //                 title: 'Shortlisted!',
-    //                 text: 'Candidates are successfully shortlisted!',
-    //                 icon: 'success'
-    //             }).then(function() {
-    //                 form.submit(); // <--- submit form programmatically
-    //             });
-    //         } else {
-    //             swal("Cancelled", "Your imaginary file is safe :)", "error");
-    //         }
-    //     })
-    // });
-
-    jQuery(function () {
-        jQuery(".trash").click(function () {
-            swal({
-                title: "Cảnh báo",
-                text: "Bạn có chắc chắn là muốn xóa sản phẩm này?",
-                buttons: ["Hủy bỏ", "Đồng ý"],
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        swal("Đã xóa thành công.!", {});
-                    }
-                });
-        });
-    });
-    oTable = $('#sampleTable').dataTable();
-    $('#all').click(function (e) {
-        $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
-        e.stopImmediatePropagation();
-    });
 
     function save() {
-        swal("Đã lưu thành công.!", {});
+        $.ajax({
+            type: 'POST',
+            url: '<%=request.getContextPath()%>/admin/manage-product',
+            data: {
+                idModal: $('#ModalEditProduct #idModal').val(),
+                nameModal: $('#ModalEditProduct #nameModal').val(),
+                statusModal: $('#ModalEditProduct #statusModal').val(),
+                priceModal: $('#ModalEditProduct #priceModal').val(),
+                categoryModal: $('#ModalEditProduct #categoryModal').val(),
+                brandModal: $('#ModalEditProduct #brandModal').val(),
+            },
+            success: (result) => {
+                swal("Cập nhật thành công.!");
+                setTimeout(location.reload(),1000)
+            }
+        })
+
     }
 
     <!--MODAL-->
@@ -340,19 +299,6 @@ MODAL EDIT BASIC
         for (let i = 0; i < listCategory.length; i++) {
             listCategory[i].value == category ? listCategory[i].selected = true : listCategory[i].selected = false
         }
-        <%--$.ajax({--%>
-        <%--    type: 'GET',--%>
-        <%--    url: '<%=pageContextPath%>/admin/manage-product',--%>
-        <%--    data: {action: 'find', id: idProduct},--%>
-        <%--    success: (result) => {--%>
-        <%--        $('#ModalEditProduct #idModal').val(result.id);--%>
-        <%--        $('#ModalEditProduct #nameModal').val(result.name);--%>
-        <%--        $('#ModalEditProduct #quantityModal').val(result.quantity);--%>
-        <%--        $('#ModalEditProduct #statusModal').val(result.status);--%>
-        <%--        $('#ModalEditProduct #priceModal').val(result.price);--%>
-        <%--        $('#ModalEditProduct #categoryModal').val(result.category);--%>
-        <%--    }--%>
-        <%--})--%>
     }
 
 </script>
