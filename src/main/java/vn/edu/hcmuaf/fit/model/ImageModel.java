@@ -16,6 +16,10 @@ public class ImageModel {
         this.type = type;
     }
 
+    public ImageModel() {
+
+    }
+
     public String getId() {
         return id;
     }

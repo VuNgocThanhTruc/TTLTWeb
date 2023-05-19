@@ -78,8 +78,8 @@ public class ImageDAO {
         return list;
     }
 
-    public static List<ImageModel> loadImgById(String id_img) {
-        LinkedList<ImageModel> list = new LinkedList<>();
+    public static ImageModel loadImgById(String id_img) {
+        ImageModel image = new ImageModel();
         try {
             ResultSet rs = new ConnectToDatabase().selectData("select * from images where id ='" + id_img + "'");
             while (rs.next()) {
@@ -88,15 +88,14 @@ public class ImageDAO {
                 String photo = rs.getString(3);
                 int type = rs.getInt(4);
 
-                ImageModel imageModel = new ImageModel(id, name_photo, photo, type);
-                list.add(imageModel);
+                image = new ImageModel(id, name_photo, photo, type);
+
 
             }
-            return list;
+            return image;
         } catch (Exception e) {
-            System.out.println("LoadImage: " + e.getMessage());
+            throw new RuntimeException(e);
         }
-        return list;
     }
 
     public void del(String id) {
@@ -140,7 +139,6 @@ public class ImageDAO {
             ppstm.setInt(4, id);
 
 
-
             ppstm.executeUpdate();
         } catch (Exception e) {
             System.out.println("Error when addImage custommer:" + e.getMessage());
@@ -178,9 +176,11 @@ public class ImageDAO {
     }
 
     public static void main(String[] args) {
-        ImageDAO imageDao = new ImageDAO();
+//        ImageDAO imageDao = new ImageDAO();
+
 //        imageDao.addImage("sad", "asd", 1);
 //        imageDao.updatePhoto("8","ád","fdsfsd",1);
+        System.out.println(ImageDAO.loadImgById("2"));
     }
 }
 

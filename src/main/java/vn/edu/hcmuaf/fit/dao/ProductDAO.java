@@ -51,8 +51,11 @@ public class ProductDAO {
     public static List<ProductModel> getTop8() {
         LinkedList<ProductModel> list = new LinkedList<ProductModel>();
 
-        String sql = "select p.id ,`name`,id_type_product,id_status_device,id_brand,price,avatar,`describe`,created_by,created_date,modified_date,modified_by,height, length, width, weight from products p \n" +
-                "WHERE p.id_status_device =1 ORDER BY id desc LIMIT 0,4";
+        String sql = "select p.id ,p.`name`,p.id_type_product,p.id_status_device,p.id_brand,p.price,p.avatar,p.`describe`,p.created_by,p.created_date,p.modified_date,p.modified_by,p.height, p.length, p.width, p.weight,d.date_start,d.date_end,d.percent_discount from products p LEFT JOIN  discounts d on p.id= d.id_product\n" +
+                "UNION\n" +
+                "select p.id ,p.`name`,p.id_type_product,p.id_status_device,p.id_brand,p.price,p.avatar,p.`describe`,p.created_by,p.created_date,p.modified_date,p.modified_by,p.height, p.length, p.width, p.weight,d.date_start,d.date_end,d.percent_discount from products p RIGHT JOIN   discounts d on p.id= d.id_product\n" +
+                "\n" +
+                "WHERE p.id_status_device =1 ORDER BY id desc LIMIT 0,8";
 
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -80,7 +83,9 @@ public class ProductDAO {
                 productModel.setWidth(rs.getInt("width"));
                 productModel.setWeight(rs.getInt("weight"));
                 productModel.setAvatar(rs.getString("avatar"));
-
+                productModel.setDateStart(rs.getString("date_start"));
+                productModel.setDateEnd(rs.getString("date_end"));
+                productModel.setPercentDiscount(rs.getInt("percent_discount"));
                 productModel.setListImage(listImage);
 
                 list.add(productModel);
@@ -617,7 +622,7 @@ public class ProductDAO {
 
     public static void main(String[] args) {
 //        System.out.println(ProductDAO.getDifferentProduct());
-//        System.out.println(ProductDAO.getDicount(10));
+        System.out.println(ProductDAO.getTop8());
 //        System.out.println(ProductDAO.updateProduct(2, "Thay cụm đuôi sạc Samsung Galaxy A02 A022F","thay-cum-duoi-sac-samsung-galaxy-a02-a022f_1667623123.png",4,1,1,  500000,100,"test", 1));
     }
 }

@@ -1,15 +1,19 @@
+
 <%@ page import="vn.edu.hcmuaf.fit.model.BlogModel" %>
 <%@ page import="java.util.List" %>
 <%@ page import="vn.edu.hcmuaf.fit.service.BlogService" %>
+<%--<%@ page contentType="text/html;charset=UTF-8" language="java" %>--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="vn.edu.hcmuaf.fit.model.*" %>
 <%@ page import="vn.edu.hcmuaf.fit.dao.ImageDAO" %>
 <!DOCTYPE html>
 <html lang="en">
+<%--<meta charset="UTF-8">--%>
 
 <head>
     <title>Quản lý Hình Ảnh | ADMIN</title>
     <%@include file="../../common/admin/head.jsp" %>
+
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -36,7 +40,7 @@
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
-            <li class="breadcrumb-item active"><a href="manage-blog.jsp"><b>Quản lý hình ảnh</b></a></li>
+            <li class="breadcrumb-item active"><a href="manage-image"><b>Quản lý hình ảnh</b></a></li>
         </ul>
         <div id="clock"></div>
     </div>
@@ -169,16 +173,24 @@
 <%@include file="../../common/admin/script.jsp" %>
 <!-- Essential javascripts for application to work-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="src/jquery.table2excel.js"></script>
-<script src="js/main.js"></script>
-<!-- The javascript plugin to display page loading on top-->
-<script src="../../admin/doc/js/plugins/pace.min.js"></script>
+
 <!-- Page specific javascripts-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <!-- Data table plugin-->
-<script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
-<script type="text/javascript">$('#sampleTable').DataTable();</script>
+<%--<script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>--%>
+<%--<script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>--%>
+<link rel="stylesheet" href="../js/jquery.dataTables.min.css">
+<script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#sampleTable').dataTable( {
+            "language": {
+                "url": "../js/json/vi.json"
+            }
+        } );
+    } );
+    // $('#sampleTable').DataTable();
+</script>
 <script>
     function deleteRow(r) {
         var i = r.parentNode.parentNode.rowIndex;
@@ -200,7 +212,7 @@
     //             });
     //     });
     // });
-    oTable = $('#sampleTable').dataTable();
+    // oTable = $('#sampleTable').dataTable();
     $('#all').click(function (e) {
         $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
         e.stopImmediatePropagation();
