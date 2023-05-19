@@ -2693,11 +2693,13 @@ ul.article-info-more li i {
 .number-rating {
   padding-left: 5px;
   font-size: 13px;
+
 }
 
 .product-price {
   padding: 10px 0;
   border-bottom: 1px dotted #dfe0e1;
+
 }
 
 .product-price span.pro-price {
@@ -2716,7 +2718,6 @@ ul.article-info-more li i {
   font-size: 12px;
   color: #f94c43;
 }
-
 .product-price del {
   font-size: 14px;
   color: #777a7b;

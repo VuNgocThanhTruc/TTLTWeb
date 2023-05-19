@@ -1,6 +1,5 @@
 <%@ page import="java.util.List" %>
-<%@ page import="vn.edu.hcmuaf.fit.model.CategoryModel" %>
-<%@ page import="vn.edu.hcmuaf.fit.model.ProductModel" %>
+<%@ page import="vn.edu.hcmuaf.fit.model.*" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@include file="../../common/taglib.jsp" %>
 
@@ -61,16 +60,22 @@
 </head>
 
 <body class="app sidebar-mini rtl">
+
 <!-- Navbar-->
 <%@include file="../../common/admin/header.jsp" %>
 
 <!-- Sidebar menu-->
 <%@include file="../../common/admin/sidebar.jsp" %>
+<%
+  String pageContextPath = (String) request.getContextPath();
+  //  DiscountModel discount = (DiscountModel) request.getAttribute("contain2");
+  ImageModel image=(ImageModel) request.getAttribute("image");
 
+%>
 <main class="app-content">
   <div class="app-title">
     <ul class="app-breadcrumb breadcrumb">
-      <li class="breadcrumb-item"><a href="admin/manage-product">Quản lý ảnh</a></li>
+      <li class="breadcrumb-item"><a href="manage-image">Quản lý ảnh</a></li>
       <li class="breadcrumb-item">Thêm ảnh</li>
     </ul>
   </div>
@@ -79,34 +84,48 @@
       <div class="tile">
         <h3 class="tile-title">Sửa ảnh</h3>
         <div class="tile-body">
-          <form action="manage-image?type=edit" method="post" enctype="multipart/form-data">
+          <form action="manage-image?type=edit&id-image=<%=image.getId()%>" method="post" enctype="multipart/form-data">
             <div class="form-group col-md-3">
               <label class="control-label">Tên ảnh </label>
-              <input class="form-control" type="text" placeholder="" name="name_photo"
-                     value="">
+              <input class="form-control" type="text" placeholder="" name="namePhoto"
+                     value="<%=image.getName_photo()%>">
             </div>
 
             <div class="form-group col-md-3 ">
               <label for="statusProduct" class="control-label">Loại</label>
               <select class="form-control" id="statusProduct" name="numType">
 
-                <option value="1" name="numType" selected>Ảnh slide
+                <option value="<%=image.getType()%>" name="numType" selected><%
+                  if (image.getType() == 1) {
+                    out.print("Ảnh slide");
+                  } else if (image.getType() == 2) {
+                    out.print("Ảnh footer");
+                  }
+                %>
                 </option>
-                <option value="2" name="numType">Ảnh footer
+                <option value="<% if (image.getType() == 1) {
+                    out.print(2);
+                  } else if (image.getType() == 2) {
+                    out.print(1);
+                  }%>" name="numType" ><%
+                  if (image.getType() == 1) {
+                    out.print("Ảnh footer");
+                  } else if (image.getType() == 2) {
+                    out.print("Ảnh slide");
+                  }
+                %>
                 </option>
-
               </select>
             </div>
             <div class="form-group col-md-12">
               <label class="control-label">Ảnh sản phẩm</label>
               <div id="myfileupload">
-                <input type="file" id="uploadfile" name="ImageUpload" onchange="readURL(this)"/>
-
-                <input type="hidden" value="7" name="id-image">
+                <input type="file" id="uploadfile" name="ImageUpload" onchange="readURL(this)" value="<%=image.getPhoto()%>"/>
+                <input type="hidden" value="" name="id-image">
               </div>
               <div id="thumbbox">
                 <img height="450" width="400" alt="Thumb image" id="thumbimage"
-                     style="display: none"/>
+                     src="<% if(image.getType()==1){out.print("../images/banner/"+image.getPhoto());}else{out.print("../images/footer/"+image.getPhoto());}%>"/>
                 <a class="removeimg" href="javascript:"></a>
               </div>
               <div id="boxchoice">
@@ -119,7 +138,7 @@
 
             <input class="btn btn-save" type="submit" value="lưu lại"/>
             <a href="manage-image">
-              <button class="btn btn-cancel" data-dismiss="modal" type="reset">Hủy bỏ</button>
+              <button class="btn btn-cancel" type="button">Hủy bỏ</button>
             </a>
           </form>
 

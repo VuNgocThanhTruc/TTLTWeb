@@ -1,5 +1,8 @@
 <%@ page import="java.util.List" %>
-<%@ page import="vn.edu.hcmuaf.fit.model.ProductModel" %><%--
+<%@ page import="vn.edu.hcmuaf.fit.model.ProductModel" %>
+<%@page import="java.util.Date" %>
+<%@page import="java.sql.Timestamp" %>
+<%--
   Created by IntelliJ IDEA.
   User: vutru
   Date: 12/8/2022
@@ -16,6 +19,7 @@
     <%@include file="../../common/web/head.jsp" %>
     <title>Điện thoại | Phone Care</title>
     <link rel="stylesheet" href="css/product.css">
+    <link rel="stylesheet" type="text/css" href="css/rate_review.css">
 </head>
 
 <body>
@@ -367,25 +371,49 @@
                             <%--                            </form>--%>
 
                             <button class="btn" onclick="addToCartAJAX(<%=product.getId()%>)"><i
-                                    class="icon-header fas fa-shopping-cart" ></i>
+                                    class="icon-header fas fa-shopping-cart"></i>
                             </button>
 
                             <div class="pro-text">
-                                <a style=" color: black;
-                                                    font-size: 14px;text-decoration: none;"
+                                <a style=" color: black;font-size: 20px;text-decoration: none;font-weight: bold; "
                                    href="detail-product?id-product=<%=product.getId()%>"
                                    title="" inspiration pack>
                                     <%=product.getName()%>
                                 </a>
                             </div>
-                            <div class="pro-price">
-                                <p>
-                                    <%--                                    <script>--%>
-                                    <%--                                        convertMoney("10000");--%>
-                                    <%--                                    </script>--%>
-                                    <%=product.getPrice()%>
-                                </p>
-                            </div>
+                            <%
+                                if (product.getDateStart() != null || product.getDateEnd() != null) {
+                                    Date serverTime = new Date();
+                                    Timestamp timestamp = new Timestamp(serverTime.getTime());
+                                    Timestamp dateStart = Timestamp.valueOf(product.getDateStart());
+                                    Timestamp dateEnd = Timestamp.valueOf(product.getDateEnd());
+                                    if (dateEnd.getTime() > timestamp.getTime() && dateStart.getTime() < timestamp.getTime()) {
+                                        int priceDiscount = (int) Math.ceil(product.getPrice() * (100 - product.getPercentDiscount()) / 100);
+                            %>
+                                <div class="product-price" style=" text-align: center;">
+                                    <span class="pro-price"><%=priceDiscount%>₫</span>
+                                    <span class=""
+                                          style="text-decoration: line-through;"><%=product.getPrice()%>₫</span>
+
+                                    <span class="pro-sale"
+                                          style="background-color: #ff6600;color: white;border: dashed;border-radius: 8px; "> -<%=product.getPercentDiscount()%>%</span>
+
+                                </div>
+                                <%} else { %>
+                                <div class="product-price" style=" text-align: center;">
+                                    <span class="pro-price"><%=product.getPrice()%>₫</span>
+                                </div>
+                                <%
+                                    }
+                                } else {
+                                %>
+                                <div class="product-price" style=" text-align: center;">
+                                    <span class="pro-price"><%=product.getPrice()%>₫</span>
+                                </div>
+                                <%}%>
+
+
+
                         </div>
                     </div>
                 </div>
@@ -449,7 +477,7 @@
             },
             url: "<%=request.getContextPath()%>/cart?action=add-to-cart",
             success: function (data) {
-                numCart.innerText=data
+                numCart.innerText = data
             }
         });
     }
