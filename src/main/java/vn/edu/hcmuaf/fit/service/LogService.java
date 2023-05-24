@@ -11,7 +11,7 @@ public class LogService {
     public static final Integer LOGIN_FAILED_LOG_MAX = 5;
 
     //Check log số lượng cố gắng đăng nhập quá nhiều lần cho phép và lock ip
-    public static final Integer LOGIN_FAILED_LOG_LOCK_IP = 20;
+    public static final Integer LOGIN_FAILED_LOG_LOCK_IP = 10;
     public LogService(){
     }
 

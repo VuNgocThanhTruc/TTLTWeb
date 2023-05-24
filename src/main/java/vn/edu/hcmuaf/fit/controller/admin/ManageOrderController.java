@@ -51,7 +51,7 @@ public class ManageOrderController extends HttpServlet {
                 ExportService.exportOrderDetail(idBooking, request, response);
                 DBConnect.getInstall().insert(
                         new Log(0,
-                                Integer.parseInt(user == null ? user.getId() : "-1"),
+                                Integer.parseInt(user == null ? "-1" : user.getId()),
                                 request.getRemoteAddr(),request.getRequestURI(),
                                 "Export Data Detail Booking id: "  + idBooking,
                                 0));
@@ -85,7 +85,7 @@ public class ManageOrderController extends HttpServlet {
                     BookingService.updateBooking(id, date, desc, status, username, email, tel, address);
                     DBConnect.getInstall().insert(
                             new Log(1,
-                                    Integer.parseInt(user == null ? user.getId() : "-1"),
+                                    Integer.parseInt(user == null ? "-1" : user.getId()),
                                     request.getRemoteAddr(),request.getRequestURI(),
                                     "Update Booking id: "  + idBooking+", desc: " +desc +", date: " +date+", status: "+ status+", username: "+username + ", email: "+email +", tel: " + tel + "address: " +address ,
                                     0));
@@ -105,7 +105,7 @@ public class ManageOrderController extends HttpServlet {
                     BookingService.insertBooking(id, user.getId(), "1", date, desc, status, username, email, tel, address);
                     DBConnect.getInstall().insert(
                             new Log(0,
-                                    Integer.parseInt(user == null ? user.getId() : "-1"),
+                                    Integer.parseInt(user == null ? "-1" : user.getId()),
                                     request.getRemoteAddr(),request.getRequestURI(),
                                     "Add Booking id: "  + idBooking+", desc: " +desc +", date: " +date+", status: "+ status+", username: "+username + ", email: "+email +", tel: " + tel + "address: " +address ,
                                     0));

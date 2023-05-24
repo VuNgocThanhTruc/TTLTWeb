@@ -58,6 +58,7 @@ public class Log extends AbBean implements Serializable {
     public Log(int level,int userId, String ip_address, String src, String content,int status) {
         this.level = level;
         this.src = src;
+        this.ip_address = ip_address;
         this.id_user = userId;
         this.content = content;
         this.status = status;
@@ -132,23 +133,12 @@ public class Log extends AbBean implements Serializable {
         this.ip_address = ip_address;
     }
 
-    @Override
-    public String toString() {
-        return "Log{" +
-                "id=" + id +
-                ", level=" + level +
-                ", src='" + src + '\'' +
-                ", userId=" + id_user +
-                ", content='" + content + '\'' +
-                ", creatAt=" + create_at +
-                ", status=" + status +
-                '}'+"\n";
-    }
+
 
     public boolean insert(Jdbi db){
         Integer i = db.withHandle(handle ->
                 handle.execute("INSERT INTO logs(`level`, `id_user`, `ip_address`, `src`, `content`, `create_at`, `status`)  VALUES(?,?,?,?,?,NOW(),?)",
-                        this.level, getId_user() == -1 ? null : getId_user(), getIp_address() == null ? "Không xác định" : getIp_address(), this.src, this.content, this.status)
+                        this.level, getId_user() == -1 ? null : getId_user(), this.ip_address, this.src, this.content, this.status)
         );
         return true;
     }

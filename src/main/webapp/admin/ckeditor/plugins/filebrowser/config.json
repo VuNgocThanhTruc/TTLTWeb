@@ -1,0 +1,15 @@
+{
+  "baseURL": "/Downloads",
+  "serve": "/uploads",
+  "rules": [
+    {
+      "pattern": "/uploads",
+      "storage": "/path/to/your/webapp/admin/images"
+    }
+  ],
+  "auth": {
+    "method": "basicauth",
+    "username": "admin",
+    "password": "yourpassword"
+  }
+}

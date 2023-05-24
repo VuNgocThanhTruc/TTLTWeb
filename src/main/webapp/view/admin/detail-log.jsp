@@ -1,5 +1,6 @@
 <%@ page import="vn.edu.hcmuaf.fit.bean.Log" %>
-<%@ page import="java.text.SimpleDateFormat" %><%--
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="vn.edu.hcmuaf.fit.dao.UserDAO" %><%--
   Created by IntelliJ IDEA.
   User: minht
   Date: 20/04/2023
@@ -55,7 +56,7 @@
 
 <%
     Log log = (Log) request.getAttribute("log");
-    UserModel userLog = (UserModel) request.getAttribute("user");
+    UserModel userLog = UserDAO.getUserById(String.valueOf(log.getId_user()));
     String imageUser = userLog == null ? "no-avatar.png" : userLog.getAvatar();
     String nameUser = userLog == null ? "Không xác định" : userLog.getName();
     String iconLog =  "";
