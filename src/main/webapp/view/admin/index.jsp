@@ -1,5 +1,6 @@
-<%--<%@ page contentType="text/html;charset=UTF-8" language="java" %>--%>
+<%@ page import="java.util.List" %><%--<%@ page contentType="text/html;charset=UTF-8" language="java" %>--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
+<% List<Integer> list= (List<Integer>) request.getAttribute("list"); %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -220,6 +221,7 @@
             pointStrokeColor: "rgb(255, 212, 59)",
             pointHighlightFill: "rgb(255, 212, 59)",
             pointHighlightStroke: "rgb(255, 212, 59)",
+            <%=list%>
             data: [20, 59, 90, 51, 56, 100]
         },
             {

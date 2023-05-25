@@ -193,6 +193,7 @@ public class ManageProductController extends HttpServlet {
         int width = Integer.parseInt(request.getParameter("width"));
         int weight = Integer.parseInt(request.getParameter("weight"));
         int pidStore = Integer.parseInt("1");
+        int avatar = Integer.parseInt("avatar");
 
         String imageFileName = updateImageServer(request,"product");
 

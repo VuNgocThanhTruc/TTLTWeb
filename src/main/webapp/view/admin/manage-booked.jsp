@@ -228,7 +228,7 @@
             type: 'GET',
             url: `<%=request.getContextPath()%>/admin/manage-booking?status=wait-accept&type-status=${value}&id-booking=${idBooking}`,
             success: function () {
-                swal("thay đổi trạng thái đơn hàng thành công!", {
+                swal("Thay đổi trạng thái đơn hàng thành công!", {
                     title: "Thông báo",
                     buttons: false,
                     timer: 3000,
