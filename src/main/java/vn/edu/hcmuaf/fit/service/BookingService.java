@@ -32,7 +32,7 @@ public class BookingService {
     }
 
     public static void updateBookingIDTransport(BookingModel bookingModel) {
-        BookingDAO.updateBooking(bookingModel);
+        BookingDAO.updateBookingIDTransport(bookingModel);
     }
 
     public static void insertBooking(String id, String id_user, String id_payment, String date, String desc, int status, String username, String email, String tel, String address) {

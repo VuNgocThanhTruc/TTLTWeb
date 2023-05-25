@@ -477,6 +477,11 @@
             },
             url: "<%=request.getContextPath()%>/cart?action=add-to-cart",
             success: function (data) {
+                swal("Đã thêm sản phẩm vào giỏ hàng!", {
+                    buttons: false,
+                    timer: 1000,
+                    icon: "success",
+                });
                 numCart.innerText = data
             }
         });

@@ -97,7 +97,7 @@
                                 <button class="btn btn-success btn-sm edit" type="button" title="Xác nhận"
                                         id="accept-booking" data-toggle="modal" data-target=""
                                         href="manage-booking?status=wait-accept&type-status=1&id-booking=<%=booking.getId()%>"
-                                        onclick="handleClickRegisterTransport(<%=booking.getId()%>,<%=booking.getToDistrictId()%>,<%=booking.getToWardId()%>,<%=booking.getHeight()%>,<%=booking.getLength()%>,<%=booking.getWidth()%>,<%=booking.getWeight()%>)"
+                                        onclick="handleClickRegisterTransport(<%=booking.getId()%>,<%=booking.getFromDistrictId()%>,<%=booking.getFromWardId()%>,<%=booking.getToDistrictId()%>,<%=booking.getToWardId()%>,<%=booking.getHeight()%>,<%=booking.getLength()%>,<%=booking.getWidth()%>,<%=booking.getWeight()%>)"
                                 ><i
                                         class="fas fa-check-square"></i></button>
                                 <%-- sua don hang--%>
@@ -276,7 +276,13 @@ MODAL
                 console.log(error)
             });
     }
-    async function handleClickRegisterTransport(idBooking, toDistrictID, toWardID, height, length, width, weight) {
+    async function handleClickRegisterTransport(idBooking,fromDistrictID,fromWardID, toDistrictID, toWardID, height, length, width, weight) {
+
+        console.log('fromDistrictID'+fromDistrictID)
+        console.log('fromWardID'+fromWardID)
+        console.log('toDistrictID'+toDistrictID)
+        console.log('toWardID'+toWardID)
+
         await autoLoginLogisticAPI()
         $.ajax({
             type: 'GET',
@@ -288,8 +294,8 @@ MODAL
             data: {
                 'idBooking': idBooking,
                 'logisticIDToken': logisticIDToken,
-                'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,
-                'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,
+                'from_district_id': fromDistrictID,
+                'from_ward_id': fromWardID,
                 'to_district_id': toDistrictID,
                 'to_ward_id': toWardID,
                 'height': height,
@@ -300,8 +306,15 @@ MODAL
             url: `<%=request.getContextPath()%>/api/logistic?action=registerTransport`,
             success: function (data) {
                 console.log(data)
+                swal("Đơn hàng đã được giao cho đơn vị vận chuyển", {
+                    title: "Xác nhận đơn hàng thành công!",
+                    buttons: false,
+                    timer: 3000,
+                    icon: "success",
+                });
             }
         });
+        location.reload()
     }
 
 </script>
