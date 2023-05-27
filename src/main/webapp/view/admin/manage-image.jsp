@@ -177,20 +177,20 @@
 <!-- Page specific javascripts-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <!-- Data table plugin-->
-<%--<script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>--%>
-<%--<script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>--%>
-<link rel="stylesheet" href="../js/jquery.dataTables.min.css">
-<script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#sampleTable').dataTable( {
-            "language": {
-                "url": "../js/json/vi.json"
-            }
-        } );
-    } );
-    // $('#sampleTable').DataTable();
-</script>
+<script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
+<%--<link rel="stylesheet" href="../js/jquery.dataTables.min.css">--%>
+<%--<script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>--%>
+<%--<script type="text/javascript">--%>
+<%--    $(document).ready(function() {--%>
+<%--        $('#sampleTable').dataTable( {--%>
+<%--            "language": {--%>
+<%--                "url": "../js/json/vi.json"--%>
+<%--            }--%>
+<%--        } );--%>
+<%--    } );--%>
+<%--    // $('#sampleTable').DataTable();--%>
+<%--</script>--%>
 <script>
     function deleteRow(r) {
         var i = r.parentNode.parentNode.rowIndex;

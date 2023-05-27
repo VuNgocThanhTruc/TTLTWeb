@@ -115,19 +115,16 @@
                                 </div>
                             </div>
 
-                                <%-- in ra tin tức--%>
                                 <% if (discountList == null) {
-
-
                                 %>
                                 <div>Chưa có dữ liệu</div>
                                 <%
                                 } else { %>
 
-                                <table class="display table table-hover table-bordered" id="sampleTable">
+                                <table class="display table table-hover table-bordered" id="adminTable">
                                     <thead>
                                     <tr>
-                                        <th width="10"><input type="checkbox" id="all"></th>
+<%--                                        <th width="10"><input type="checkbox" id="all"></th>--%>
                                         <th>ID</th>
                                         <th>Loại sản phẩm</th>
                                         <th>Tên sản phẩm</th>
@@ -153,7 +150,7 @@
                                             int priceDiscount= (int) Math.ceil(list.getPrice()*(100-list.getPercentDiscount())/100);
                                     %>
                                     <tr>
-                                        <td width="10"><input type="checkbox" name="check1" value="1"></td>
+<%--                                        <td width="10"><input type="checkbox" name="check1" value="1"></td>--%>
                                         <td><%=list.getIdDiscount()%>
                                         </td>
                                         <td><%=list.getNameTypeProduct()%>
@@ -264,10 +261,10 @@
                                 <div>Chưa có dữ liệu</div>
                                 <%
                                 } else {%>
-                                <table class="display table table-hover table-bordered" id="sampleTable">
+                                <table class="display table table-hover table-bordered" id="">
                                     <thead>
                                     <tr>
-                                        <th width="10"><input type="checkbox" id="all"></th>
+<%--                                        <th width="10"><input type="checkbox" id="all"></th>--%>
                                         <th>ID</th>
                                         <th>Loại sản phẩm</th>
                                         <th>Tên sản phẩm</th>
@@ -292,7 +289,7 @@
                                             int priceDiscount= (int) Math.ceil(list.getPrice()*(100-list.getPercentDiscount())/100);
                                     %>
                                     <tr>
-                                        <td width="10"><input type="checkbox" name="check1" value="1"></td>
+<%--                                        <td width="10"><input type="checkbox" name="check1" value="1"></td>--%>
                                         <td><%=list.getIdDiscount()%>
                                         </td>
                                         <td><%=list.getNameTypeProduct()%>

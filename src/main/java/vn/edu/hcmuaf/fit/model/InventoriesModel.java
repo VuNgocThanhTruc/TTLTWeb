@@ -3,19 +3,32 @@ package vn.edu.hcmuaf.fit.model;
 public class InventoriesModel {
     private int idProduct;
     private int quantity;
-    private String modifidedDate;
+    private String modifiedDate;
     private String modifiedBy;
+    private String name;
+    private String avatar;
+    private int price;
+
     public InventoriesModel() {
 
 
     }
 
-    public InventoriesModel(int idProduct, int quantity, String modifidedDate, String modifiedBy) {
-
+    public InventoriesModel(int idProduct, int quantity, String modifiedDate, String modifiedBy) {
         this.idProduct = idProduct;
         this.quantity = quantity;
-        this.modifidedDate = modifidedDate;
+        this.modifiedDate = modifiedDate;
         this.modifiedBy = modifiedBy;
+    }
+
+    public InventoriesModel(int idProduct, int quantity, String modifiedDate, String modifiedBy, String name, String avatar, int price) {
+        this.idProduct = idProduct;
+        this.quantity = quantity;
+        this.modifiedDate = modifiedDate;
+        this.modifiedBy = modifiedBy;
+        this.name = name;
+        this.avatar = avatar;
+        this.price = price;
     }
 
     public int getIdProduct() {
@@ -34,12 +47,12 @@ public class InventoriesModel {
         this.quantity = quantity;
     }
 
-    public String getModifidedDate() {
-        return modifidedDate;
+    public String getModifiedDate() {
+        return modifiedDate;
     }
 
-    public void setModifidedDate(String modifidedDate) {
-        this.modifidedDate = modifidedDate;
+    public void setModifiedDate(String modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 
     public String getModifiedBy() {
@@ -50,13 +63,40 @@ public class InventoriesModel {
         this.modifiedBy = modifiedBy;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
         return "InventoriesModel{" +
                 "idProduct=" + idProduct +
                 ", quantity=" + quantity +
-                ", modifidedDate='" + modifidedDate + '\'' +
+                ", modifiedDate='" + modifiedDate + '\'' +
                 ", modifiedBy='" + modifiedBy + '\'' +
+                ", name='" + name + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", price=" + price +
                 '}';
     }
 }
