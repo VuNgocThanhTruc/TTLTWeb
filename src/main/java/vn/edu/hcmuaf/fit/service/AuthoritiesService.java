@@ -84,6 +84,11 @@ public class AuthoritiesService {
         return authoritiesDAO.getListUserOfRole(idRole);
     }
 
+    //Xoa nhom quyen
+    public void deleteRole(String idRoleDel){
+        authoritiesDAO.deleteRole(idRoleDel);
+    }
+
     //CheckRelogin
 
     public static void checkRelogin(ServletContext context, UserModel user){

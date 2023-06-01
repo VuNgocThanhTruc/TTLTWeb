@@ -47,6 +47,7 @@ public class BlogModel {
     }
 
     public String getBriefContent() {
+        if(this.briefContent == null) return "Không xác định";
         return briefContent;
     }
 

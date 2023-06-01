@@ -9,7 +9,15 @@
 
     <%@include file="../../common/web/head.jsp" %>
     <title><%=blog.getTitle()%> | Phone Care</title>
-
+    <style>
+        #heading{
+            display: flex;
+            justify-content: space-between;
+            flex-grow: 1;
+            align-items: center;
+            border-bottom: 2px solid #FFD43B;
+        }
+    </style>
 </head>
 
 <body>
@@ -56,7 +64,7 @@
                         <div class="item-article clearfix">
                             <div class="post-image">
                                 <a href="">
-                                    <img src="images/blog/<%=newblog.getAvatar()%>" alt=""></a>
+                                        <%=newblog.getAvatar()%>
                             </div>
                             <div class="post-content">
                                 <h3>
@@ -174,22 +182,23 @@
         </div>
         <div class="col-md-9 col-sm-12 col-xs-12 article-area">
             <div class="content-page">
+                <div id="heading"class="tile-title">
+                    <a style="background: none; color: #808990;" class="btn btn-cancel" href="list-blog"><i class="fas fa-angle-left"></i> Quay lại</a>
+                    <ul class="article-info-more" style="padding-left: 0 ">
+                        <li> Người viết:<%=blog.getUserCreated()%> lúc
+                            <time pubdate="" datetime="<%=blog.getCreatedDate()%>"><%=blog.getCreatedDate()%>
+                            </time>
+                        </li>
+                        <li><i class="far fa-file-alt"></i><a style="color:black;text-decoration: none;" href="#">
+                            <%=blog.getTypeBlog()%>
+                        </a></li>
+                    </ul>
+                </div>
                 <div class="article-content" style="font-size: 18px">
                     <div class="box-article-heading clearfix">
-                        <div class="background-img">
-                            <img src="images/blog/<%=blog.getAvatar()%>" alt="">
-                        </div>
                         <h1 class="sb-title-article"><%=blog.getTitle()%>
                         </h1>
-                        <ul class="article-info-more" style="padding-left: 0 ">
-                            <li> Người viết:<%=blog.getUserCreated()%> lúc
-                                <time pubdate="" datetime="<%=blog.getCreatedDate()%>"><%=blog.getCreatedDate()%>
-                                </time>
-                            </li>
-                            <li><i class="far fa-file-alt"></i><a style="color:black;text-decoration: none;" href="#">
-                                <%=blog.getTypeBlog()%>
-                            </a></li>
-                        </ul>
+
                     </div>
                     <%=blog.getDetailContent()%>
                 </div>

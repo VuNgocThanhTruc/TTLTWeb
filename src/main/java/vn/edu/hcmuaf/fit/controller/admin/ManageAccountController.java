@@ -24,10 +24,12 @@ public class ManageAccountController extends HttpServlet {
 
         //Gọi danh sách tài khoản admin
         List<UserModel> listAccAdmin = accountService.getListAccountAdmin();
+
         DBConnect.getInstall().insert(
                 new Log(0,
-                        Integer.parseInt(user == null ? user.getId() : "-1"),
-                        request.getRemoteAddr(),request.getRequestURI(),
+                        Integer.parseInt(user == null ? "-1" : user.getId()),
+                        request.getRemoteAddr(),
+                        request.getRequestURI(),
                         "List account: "  + listAccUser + listAccAdmin,
                         0));
         request.setAttribute("listAccUser", listAccUser);

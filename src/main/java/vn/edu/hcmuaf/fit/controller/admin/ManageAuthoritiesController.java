@@ -51,7 +51,15 @@ public class ManageAuthoritiesController extends HttpServlet {
             List<RoleModel> roles = authoritiesService.getAllRole();
             request.setAttribute("roles", roles);
             String idComponent = request.getParameter("idComp");
+            String idRoleDel = request.getParameter("id-role");
             request.setAttribute("id-component", idComponent);
+            authoritiesService.deleteRole(idRoleDel);
+            DBConnect.getInstall().insert(
+                    new Log(3,
+                            Integer.parseInt(user == null ? "-1" : user.getId()),
+                            request.getRemoteAddr(),request.getRequestURI(),
+                            "Delete Role: id:" +idRoleDel,
+                            0));
             view = "/view/admin/manage-authorities.jsp";
         }else if(action.equals("manage-authorities")) {
             List<RoleModel> roles = authoritiesService.getAllRole();
@@ -61,7 +69,7 @@ public class ManageAuthoritiesController extends HttpServlet {
             view = "/view/admin/manage-authorities.jsp";
             DBConnect.getInstall().insert(
                     new Log(0,
-                            Integer.parseInt(user == null ? user.getId() : "-1"),
+                            Integer.parseInt(user == null ? "-1" : user.getId()),
                             request.getRemoteAddr(),request.getRequestURI(),
                             "Manage Authorities Page",
                             0));
@@ -97,7 +105,7 @@ public class ManageAuthoritiesController extends HttpServlet {
 
             DBConnect.getInstall().insert(
                     new Log(2,
-                            Integer.parseInt(user == null ? user.getId() : "-1"),
+                            Integer.parseInt(user == null ? "-1" : user.getId()),
                             request.getRemoteAddr(),request.getRequestURI(),
                             "Add Role: id: " + idRole +", nameRole :" + nameRole,
                             0));
@@ -135,7 +143,7 @@ public class ManageAuthoritiesController extends HttpServlet {
 
             DBConnect.getInstall().insert(
                     new Log(2,
-                            Integer.parseInt(user == null ? user.getId() : "-1"),
+                            Integer.parseInt(user == null ? "-1" : user.getId()),
                             request.getRemoteAddr(),request.getRequestURI(),
                             "Edit Role: id: " + idRole +", nameRole :" + nameRole,
                             0));

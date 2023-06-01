@@ -43,7 +43,7 @@
 
     // Lấy ra toàn bộ quyền
     List<RoleModel> roles =  auth.getAllRole();
-
+    int stt = 0;
 %>
 <main class="app-content">
     <div class="app-title">
@@ -101,26 +101,26 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <c:forEach items="${roles}" var="role" varStatus="loop">
+                        <%for(RoleModel roleModel : roles) { %>
                         <tr>
                             <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                            <td width="30" style="text-align: center">${loop.count}</td>
-                            <td>${role.name}</td>
-                            <td>${role.describe}</td>
+                            <td width="30" style="text-align: center"><%=stt+=1%></td>
+                            <td><%=roleModel.getName()%></td>
+                            <td><%=roleModel.getDescribe()%></td>
                             <td>
                                 <%--Nút xem phân quyền--%>
                                     <button style="font-size: 12px;padding: 4px 7px;"
                                             type="button"
                                             class="btn btn-info btn-sm"
                                             title="Xem phân quyền"
-                                            onclick="viewDecentralize(${role.id})">
+                                            onclick="viewDecentralize(<%=roleModel.getId()%>)">
                                         <i class="fas fa-eye"></i>
                                     </button>
 
                                 <%--Nút xóa nhóm quyền--%>
-                                <%if(isGrantDel == true) {%>
+                                <%if(isGrantDel == true && !roleModel.getId().equals("1")) {%>
                                 <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                   href="manage-authorities?action=delete-authorities&id-role=${role.id}"><i class="fas fa-trash-alt"></i></a>
+                                   href="manage-authorities?action=delete-authorities&id-role=<%=roleModel.getId()%>"  onclick="return confirmDelete()"><i class="fas fa-trash-alt"></i></a>
                                 <%} else {%>
                                     <button
                                     class="btn btn-primary btn-sm trash"
@@ -133,8 +133,8 @@
                                     </button>
                                 <%}%>
                                 <%-- Nút chỉnh sửa nhóm quyền --%>
-                                <%if(isGrantEdit == true) {%>
-                                <a href="manage-authorities?action=edit-authorities&id-role=${role.id}">
+                                <%if(isGrantEdit == true && !roleModel.getId().equals("1")) {%>
+                                <a href="manage-authorities?action=edit-authorities&id-role=<%=roleModel.getId()%>">
                                     <button class="btn btn-primary btn-sm edit" type="button" title="Chỉnh sửa"
                                             id="show-confirm"
                                             data-toggle="modal" data-target="#ModalConfirm"><i class="fas fa-edit"></i>
@@ -153,7 +153,7 @@
                                 <%}%>
                             </td>
                         </tr>
-                        </c:forEach>
+                        <% } %>
                         </tbody>
                     </table>
                     </c:if>
@@ -218,7 +218,6 @@
 </div>
 <%}%>
 
-
 <%-- end modal--%>
 
 <%@include file="../../common/admin/script.jsp" %>
@@ -241,6 +240,14 @@
     function closeViewDecentralize(idRole){
         const modal = document.getElementById("modal-"+idRole);
         modal.style.display = "none";
+    }
+
+    function confirmDelete() {
+        if (confirm("Bạn có chắc chắn muốn xóa?")) {
+            return true; // Nếu người dùng chấp nhận xóa, tiếp tục hành động
+        } else {
+            return false; // Nếu người dùng không chấp nhận xóa, ngăn không cho hành động xóa xảy ra
+        }
     }
 </script>
 </body>
