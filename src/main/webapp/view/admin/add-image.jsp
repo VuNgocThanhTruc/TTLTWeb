@@ -70,7 +70,7 @@
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb">
-            <li class="breadcrumb-item"><a href="admin/manage-product">Quản lý ảnh</a></li>
+            <li class="breadcrumb-item"><a href="manage-image">Quản lý ảnh</a></li>
             <li class="breadcrumb-item">Thêm ảnh</li>
         </ul>
     </div>
@@ -117,7 +117,7 @@
 
                         <input class="btn btn-save" type="submit" value="lưu lại"/>
                         <a href="manage-image">
-                            <button class="btn btn-cancel" data-dismiss="modal" type="reset">Hủy bỏ</button>
+                            <button class="btn btn-cancel" type="button">Hủy bỏ</button>
                         </a>
                     </form>
 

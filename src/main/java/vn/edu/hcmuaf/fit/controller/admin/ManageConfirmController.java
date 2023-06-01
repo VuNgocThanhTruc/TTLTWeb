@@ -3,6 +3,8 @@ package vn.edu.hcmuaf.fit.controller.admin;
 import vn.edu.hcmuaf.fit.bean.Log;
 import vn.edu.hcmuaf.fit.constant.SystemConstant;
 import vn.edu.hcmuaf.fit.db.DBConnect;
+import vn.edu.hcmuaf.fit.model.BookingModel;
+import vn.edu.hcmuaf.fit.model.StatusBooking;
 import vn.edu.hcmuaf.fit.model.UserModel;
 import vn.edu.hcmuaf.fit.service.BookingService;
 
@@ -47,7 +49,19 @@ public class ManageConfirmController extends HttpServlet {
         String email = request.getParameter("email");
         String tel = request.getParameter("tel");
         String address = request.getParameter("address");
-        BookingService.updateBooking(id, date, desc, status, username, email, tel, address);
+
+        BookingModel bookingModel = new BookingModel();
+        bookingModel.setId(id);
+        bookingModel.setDate_booking(date);
+        bookingModel.setDescription(desc);
+        StatusBooking statusBooking = new StatusBooking();
+        statusBooking.setId(status);
+        bookingModel.setStatusBooking(statusBooking);
+        bookingModel.setUsername(username);
+        bookingModel.setEmail(email);
+        bookingModel.setTel(tel);
+        bookingModel.setAddress(address);
+        BookingService.updateBooking(bookingModel);
 
         DBConnect.getInstall().insert(
                 new Log(1,

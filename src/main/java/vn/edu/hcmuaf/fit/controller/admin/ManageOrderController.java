@@ -4,6 +4,7 @@ import vn.edu.hcmuaf.fit.bean.Log;
 import vn.edu.hcmuaf.fit.dao.BookingDAO;
 import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.BookingModel;
+import vn.edu.hcmuaf.fit.model.StatusBooking;
 import vn.edu.hcmuaf.fit.model.UserModel;
 import vn.edu.hcmuaf.fit.service.BookingService;
 import vn.edu.hcmuaf.fit.service.ExportService;
@@ -58,8 +59,8 @@ public class ManageOrderController extends HttpServlet {
             }
         }
 
-        List<BookingModel> listBooking1 = BookingService.getListBooking();
-        request.setAttribute("listBooking1", listBooking1);
+        List<BookingModel> listBooking = BookingService.getListBooking();
+        request.setAttribute("listBooking", listBooking);
 
         request.getRequestDispatcher(view).forward(request, response);
     }
@@ -82,7 +83,20 @@ public class ManageOrderController extends HttpServlet {
                     String email = request.getParameter("email");
                     String tel = request.getParameter("tel");
                     String address = request.getParameter("address");
-                    BookingService.updateBooking(id, date, desc, status, username, email, tel, address);
+
+                    BookingModel bookingModel = new BookingModel();
+                    bookingModel.setId(id);
+                    bookingModel.setDate_booking(date);
+                    bookingModel.setDescription(desc);
+                    StatusBooking statusBooking = new StatusBooking();
+                    statusBooking.setId(status);
+                    bookingModel.setStatusBooking(statusBooking);
+                    bookingModel.setUsername(username);
+                    bookingModel.setEmail(email);
+                    bookingModel.setTel(tel);
+                    bookingModel.setAddress(address);
+                    BookingService.updateBooking(bookingModel);
+
                     DBConnect.getInstall().insert(
                             new Log(1,
                                     Integer.parseInt(user == null ? "-1" : user.getId()),

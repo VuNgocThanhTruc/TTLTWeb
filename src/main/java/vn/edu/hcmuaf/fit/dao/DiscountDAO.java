@@ -9,7 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.LinkedList;
-import  java.util.List;
+import java.util.List;
 
 public class DiscountDAO {
 
@@ -40,6 +40,7 @@ public class DiscountDAO {
             throw new RuntimeException(e);
         }
     }
+
     // Lấy giảm giá từ id
     public static DiscountModel getProductById(int id) {
 
@@ -60,13 +61,14 @@ public class DiscountDAO {
 
                 String avatar = rs.getString(5);
                 int price = Integer.parseInt(rs.getString(6));
-                discounts = new DiscountModel(idTypeProduct,idProduct,nameTypeProduct,nameProduct,avatar,price);
+                discounts = new DiscountModel(idTypeProduct, idProduct, nameTypeProduct, nameProduct, avatar, price);
             }
             return discounts;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
     // Lấy giảm giá từ id
     public static DiscountModel getProductById2(int id) {
 
@@ -90,13 +92,14 @@ public class DiscountDAO {
                 String nameProduct = rs.getString(8);
                 String avatar = rs.getString(9);
                 int price = Integer.parseInt(rs.getString(10));
-                discounts = new DiscountModel(idDiscount,idTypeProduct, idProduct, dateStart, dateEnd, percentDiscount,nameTypeProduct,nameProduct,avatar,price);
+                discounts = new DiscountModel(idDiscount, idTypeProduct, idProduct, dateStart, dateEnd, percentDiscount, nameTypeProduct, nameProduct, avatar, price);
             }
             return discounts;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
     // Lấy danh sách giảm giá
     public static List<DiscountModel> getDiscountManage() {
         LinkedList<DiscountModel> discounts = new LinkedList<>();
@@ -118,13 +121,14 @@ public class DiscountDAO {
                 String nameProduct = rs.getString(8);
                 String avatar = rs.getString(9);
                 int price = Integer.parseInt(rs.getString(10));
-                discounts.add(new DiscountModel(idDiscount, idTypeProduct, idProduct, dateStart, dateEnd, percentDiscount,nameTypeProduct,nameProduct,avatar,price));
+                discounts.add(new DiscountModel(idDiscount, idTypeProduct, idProduct, dateStart, dateEnd, percentDiscount, nameTypeProduct, nameProduct, avatar, price));
             }
             return discounts;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
     // Lấy danh sách sản phẩm chưa có mã giảm giá
     public static List<DiscountModel> getProductNoDiscount() {
         LinkedList<DiscountModel> discounts = new LinkedList<>();
@@ -141,13 +145,14 @@ public class DiscountDAO {
                 String nameProduct = rs.getString(3);
                 String avatar = rs.getString(4);
                 int price = Integer.parseInt(rs.getString(5));
-                discounts.add(new DiscountModel( idProduct, nameTypeProduct,nameProduct,avatar,price));
+                discounts.add(new DiscountModel(idProduct, nameTypeProduct, nameProduct, avatar, price));
             }
             return discounts;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
     // Lấy danh sách cách thể loại sản phẩm
     public static List<DiscountModel> getTypeProduct() {
         LinkedList<DiscountModel> discounts = new LinkedList<>();
@@ -162,19 +167,20 @@ public class DiscountDAO {
                 int idTypeProduct = Integer.parseInt(rs.getString(1));
                 String nameTypeProduct = rs.getString(2);
 
-                discounts.add(new DiscountModel(idTypeProduct,nameTypeProduct));
+                discounts.add(new DiscountModel(idTypeProduct, nameTypeProduct));
             }
             return discounts;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
     // Lấy danh sách cách thể loại sản phẩm
     public static List<DiscountModel> getIDProductByIDTypeProduct(int id) {
         LinkedList<DiscountModel> discounts = new LinkedList<>();
 
         String sql = "select p.id from products p join type_products t on p.id_type_product=t.id\n" +
-                "where p.id_type_product="+id;
+                "where p.id_type_product=" + id;
         try {
 
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -201,28 +207,31 @@ public class DiscountDAO {
         }
 
     }
+
     // thêm mã giám giá
-    public void addDiscount(int idTypeProduct, int idProduct, String dateStart,String dateEnd,int percentDiscount) {
-        String sql = "insert into discounts(id_type_product,id_product,date_start,date_end,percent_discount) values (?,?,?,?,?)";
+    public void addDiscount(int idTypeProduct, int idProduct, String dateStart, String dateEnd, int percentDiscount) {
+//        String sql = "insert into discounts(id_type_product,id_product,date_start,date_end,percent_discount) values (?,?,?,?,?)";
+        String sql = "insert into discounts(id_type_product,id_product,date_start,date_end,percent_discount) SELECT " + "'" +idTypeProduct + "','" + idProduct + "','" + dateStart + "','" + dateEnd + "','" + percentDiscount + "'  WHERE NOT EXISTS (\n" +
+                "    SELECT 1\n" +
+                "    FROM discounts WHERE id_product = " + idProduct + ")";
         Connection connect = ConnectToDatabase.getConnect();
         try {
             PreparedStatement ppstm = connect.prepareStatement(sql);
-            ppstm.setInt(1, idTypeProduct);
-            ppstm.setInt(2, idProduct);
-            ppstm.setString(3, dateStart);
-            ppstm.setString(4, dateEnd);
-            ppstm.setInt(5, percentDiscount);
-
-
+//            ppstm.setInt(1, idTypeProduct);
+//            ppstm.setInt(2, idProduct);
+//            ppstm.setString(3, dateStart);
+//            ppstm.setString(4, dateEnd);
+//            ppstm.setInt(5, percentDiscount);
             ppstm.executeUpdate();
 
 
         } catch (Exception e) {
-            System.out.println("Error when addImage:" + e.getMessage());
+            System.out.println("Error when addDiscount:" + e.getMessage());
         }
     }
+
     // cập nhật mã giám giá
-    public void editDiscount(int idDiscount, String dateStart,String dateEnd,int percentDiscount) {
+    public void editDiscount(int idDiscount, String dateStart, String dateEnd, int percentDiscount) {
         String sql = "update discounts set date_start=?,date_end=?,percent_discount=? where id ='" + idDiscount + "'";
         Connection connect = ConnectToDatabase.getConnect();
         try {
@@ -242,10 +251,11 @@ public class DiscountDAO {
     }
 
     public static void main(String[] args) {
-        DiscountDAO a =new DiscountDAO();
-        a.editDiscount(1,"2023-05-06 16:55:24","2023-05-06 16:55:24",10);
+        DiscountDAO a = new DiscountDAO();
+//        a.editDiscount(1, "2023-05-06 16:55:24", "2023-05-06 16:55:24", 10);
 //        System.out.println(DiscountDAO.getProductById2(5));
 //        System.out.println(DiscountDAO.getIDProductByIDTypeProduct(1));
+//        a.addDiscount(3,3,"2024-05-06 16:55:24","2024-05-06 16:55:24",100);
 
 //        a.addDiscountByTypeProduct(3,10,"2023-05-06 16:55:24","2023-05-06 16:55:24",10);
     }
