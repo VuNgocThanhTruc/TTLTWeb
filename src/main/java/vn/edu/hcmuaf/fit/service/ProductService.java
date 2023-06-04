@@ -49,16 +49,16 @@ public class ProductService {
         return ProductDAO.getListProductBySearch(searchPram);
     }
 
-    public boolean addNewProduct(String name, String avatar, int idTypeProduct, int idStatusDevice, int idBrand, int price, int sumQuantity, String describe, int idStore, int idUser, int height,int length,int width,int weight) {
-        return ProductDAO.addNewProduct(name, avatar, idTypeProduct, idStatusDevice, idBrand, price, sumQuantity, describe, idStore,idUser,height, length, width, weight);
+    public boolean addNewProduct(String name, String avatar, int idTypeProduct, int idStatusDevice, int idBrand, int price, int sumQuantity, String describe, int idStore, int idUser, int height,int length,int width,int weight,List<String> listFileNameImage) {
+        return ProductDAO.addNewProduct(name, avatar, idTypeProduct, idStatusDevice, idBrand, price, sumQuantity, describe, idStore,idUser,height, length, width, weight,listFileNameImage);
     }
 
     public static boolean updateProductBasic(int id, String name, int brand, int id_status_device, int price, int id_type_product) {
         return ProductDAO.updateProductBasic(id, name, brand, id_status_device, price, id_type_product);
     }
 
-    public static boolean updateProduct(int id, String name, String avatar, int id_type_product, int id_status_device, int id_brand, int price, String describe, int height,int length,int width,int weight) {
-        return ProductDAO.updateProduct(id, name, avatar, id_type_product, id_status_device, id_brand, price, describe, height,length,width,weight);
+    public static boolean updateProduct(int id, String name, String avatar, int id_type_product, int id_status_device, int id_brand, int price, String describe, int height,int length,int width,int weight,List<String> listFileNameImage) {
+        return ProductDAO.updateProduct(id, name, avatar, id_type_product, id_status_device, id_brand, price, describe, height,length,width,weight, listFileNameImage);
     }
 
     public static boolean insertTypeProduct(String name) {

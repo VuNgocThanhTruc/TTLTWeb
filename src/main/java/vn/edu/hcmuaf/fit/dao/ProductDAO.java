@@ -350,7 +350,7 @@ public class ProductDAO {
             throw new RuntimeException(e);
         }
     }
-    public static boolean addNewProduct(String name, String avatar, int idTypeProduct, int idStatusDevice, int idBrand, int price, int sumQuantity, String describe, int idStore,int idUser, int height, int length, int width, int weight) {
+    public static boolean addNewProduct(String name, String avatar, int idTypeProduct, int idStatusDevice, int idBrand, int price, int sumQuantity, String describe, int idStore,int idUser, int height, int length, int width, int weight,List<String> listFileNameImage) {
         String sql = "INSERT INTO products (`id`, `name`, `avatar`, `id_type_product`, `id_status_device`, `id_brand`, `price`, `describe`,`created_by` ,`height`,`length`,`width`,`weight`) " + "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -382,7 +382,15 @@ public class ProductDAO {
             ps.setInt(2, sumQuantity);
             ps.setInt(3, idUser);
             ps.executeUpdate();
-
+            if(!listFileNameImage.isEmpty()){
+                sql = "INSERT INTO library_images(url,id_product) values(?,?)";
+                ps = DBConnect.getInstall().preStatement(sql);
+                ps.setInt(2,lastInsertId);
+                for (int i = 0; i < listFileNameImage.size(); i++) {
+                    ps.setString(1, listFileNameImage.get(i));
+                    ps.executeUpdate();
+                }
+            }
             return true;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -408,8 +416,7 @@ public class ProductDAO {
         }
     }
 
-    public static boolean updateProduct(int id, String name, String avatar, int id_type_product, int id_status_device, int id_brand, int price, String describe,int height,int length,int width,int weight) {
-        System.out.println(avatar);
+    public static boolean updateProduct(int id, String name, String avatar, int id_type_product, int id_status_device, int id_brand, int price, String describe,int height,int length,int width,int weight,List<String> listFileNameImage) {
         String sql = "UPDATE PRODUCTS SET NAME=?, avatar=?,id_type_product=?,  id_status_device=?,id_brand=?,price=?,`describe`=?,height=?,length=?,width=?,weight=? WHERE ID=?";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -426,6 +433,17 @@ public class ProductDAO {
             ps.setInt(11, weight);
             ps.setInt(12, id);
             ps.executeUpdate();
+
+            if(!listFileNameImage.isEmpty()){
+                sql = "INSERT INTO library_images(url,id_product) values(?,?)";
+                ps = DBConnect.getInstall().preStatement(sql);
+                ps.setInt(2,id);
+                for (int i = 0; i < listFileNameImage.size(); i++) {
+                    ps.setString(1, listFileNameImage.get(i));
+                    ps.executeUpdate();
+                }
+            }
+
             return true;
         } catch (Exception e) {
             throw new RuntimeException(e);
