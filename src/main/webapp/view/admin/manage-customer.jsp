@@ -16,7 +16,8 @@
 <!-- Sidebar menu-->
 <%@include file="../../common/admin/sidebar.jsp" %>
 <%
-    List<CustomerModel> listCustomer = (List<CustomerModel>) request.getAttribute("listCustomer");
+//    List<CustomerModel> listCustomer = (List<CustomerModel>) request.getAttribute("listCustomer");
+    List<UserModel> listAccountUser = (List<UserModel>) request.getAttribute("listAccUser");
     Boolean isGrantAdd = false;
     Boolean isGrantEdit = false;
     Boolean isGrantDel = false;
@@ -59,13 +60,13 @@
 <%--                                    class="fas fa-print"></i> In dữ liệu</a>--%>
 <%--                        </div>--%>
 
-                        <div class="col-sm-2">
-                            <a href="" class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i
-                                    class="fas fa-trash-alt"></i> Xóa tất cả </a>
-                        </div>
-                    </div>
+<%--                        <div class="col-sm-2">--%>
+<%--                            <a href="" class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i--%>
+<%--                                    class="fas fa-trash-alt"></i> Xóa tất cả </a>--%>
+<%--                        </div>--%>
+<%--                    </div>--%>
                     <%--                    In ra khách hàng--%>
-                    <% if (listCustomer == null) {
+                    <% if (listAccountUser == null) {
                     %>
                     <div>Chưa có khách hàng</div>
                     <%
@@ -77,39 +78,54 @@
                         <tr>
                             <th><input type="checkbox" id="all"></th>
                             <th>ID</th>
+
+                            <th>Avatar</th>
                             <th>Họ và tên</th>
+                            <th>User name</th>
+                            <th>Ngày sinh</th>
+                            <th>Giới tính</th>
                             <th>Địa chỉ</th>
                             <th>Email</th>
                             <th>SĐT</th>
-                            <th>Chức năng</th>
+
                         </tr>
                         </thead>
                         <tbody>
                         <%
-                            for (CustomerModel customer :
-                                    listCustomer) {%>
+                            for (UserModel acc :
+                                    listAccountUser) {%>
                         <tr>
                             <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                            <td><%=customer.getId()%>
-                            </td>
-                            <td><%=customer.getUsername()%>
-                            </td>
-                            <td><%=customer.getAddress()%>
-                            </td>
-                            <td><%=customer.getEmail()%>
-                            </td>
-                            <td><%=customer.getTel()%>
+                            <td><%=acc.getId()%>
                             </td>
 
-                            <td class="table-td-center">
-                                <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                   href="manage-customer?action=delete&id=<%=customer.getId()%>"><i
-                                        class="fas fa-trash-alt"></i></a>
-
-                                <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp"
-                                        data-toggle="modal" data-target="#ModalUP"><i class="fas fa-edit"></i>
-                                </button>
+                            <td> <img src="<% out.print("../images/user/"+acc.getAvatar());%>"
+                                      alt="" width="100px;" class="avatar">
                             </td>
+                            <td><%=acc.getName()%>
+                            </td>
+                            <td><%=acc.getUsername()%>
+                            </td>
+                            <td><%=acc.getDob()%>
+                            </td>
+                            <td><%if(acc.getSex()==0){out.print("Nam");}else{out.print("Nữ");}%>
+                            </td>
+                            <td><%=acc.getAddress()%>
+                            </td>
+                            <td><%=acc.getEmail()%>
+                            </td>
+                            <td><%=acc.getTel()%>
+                            </td>
+
+<%--                            <td class="table-td-center">--%>
+<%--                                <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"--%>
+<%--                                   href="manage-customer?action=delete&id=<%=customer.getId()%>"><i--%>
+<%--                                        class="fas fa-trash-alt"></i></a>--%>
+
+<%--                                <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp"--%>
+<%--                                        data-toggle="modal" data-target="#ModalUP"><i class="fas fa-edit"></i>--%>
+<%--                                </button>--%>
+<%--                            </td>--%>
                         </tr>
                         <%
                             }%>
