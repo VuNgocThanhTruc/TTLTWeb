@@ -59,9 +59,55 @@ public class InventoriesDAO {
         }
 
     }
+    //Lấy danh sách các sản phẩm có tồn kho
+    public static List<InventoriesModel> getListInventoryNotNull(){
+        LinkedList<InventoriesModel> list = new LinkedList<>();
+        String sql = "SELECT i.id_product,i.quantity,i.modified_date,i.modified_by,p.`name`,p.avatar,p.price FROM inventories i RIGHT JOIN products p on p.id=i.id_product WHERE i.id_product is not null";
+        try {
+
+            PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int idProduct = Integer.parseInt(rs.getString(1));
+                int quantity = Integer.parseInt(rs.getString(2));
+                String modifiedDate = rs.getString(3);
+                String modifiedBy = rs.getString(4);
+                String name = rs.getString(5);
+                String avatar = rs.getString(6);
+                int price = Integer.parseInt(rs.getString(7));
+                list.add(new InventoriesModel(idProduct, quantity, modifiedDate, modifiedBy, name, avatar, price));
+            }
+            return list;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    //Lấy danh sách các sản phẩm chưa có tồn kho
+    public static List<InventoriesModel> getListInventoryNull(){
+        LinkedList<InventoriesModel> list = new LinkedList<>();
+        String sql = "SELECT p.id ,p.`name`,p.avatar,p.price FROM inventories i RIGHT JOIN products p on p.id=i.id_product WHERE i.id_product is null";
+        try {
+
+            PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int idProduct = Integer.parseInt(rs.getString(1));
+
+                String name = rs.getString(2);
+                String avatar = rs.getString(3);
+                int price = Integer.parseInt(rs.getString(4));
+                list.add(new InventoriesModel(idProduct, name, avatar, price));
+            }
+            return list;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static void main(String[] args) {
 //        InventoriesDAO a = new InventoriesDAO();
-        System.out.println(InventoriesDAO.getListProductsStockForALongTime());
+        System.out.println(InventoriesDAO.getListInventoryNull());
     }
 }

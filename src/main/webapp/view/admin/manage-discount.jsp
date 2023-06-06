@@ -31,9 +31,7 @@
 <!-- Sidebar menu-->
 <%@include file="../../common/admin/sidebar.jsp" %>
 <%
-    List<UserModel> listAccountUser = (List<UserModel>) request.getAttribute("listAccUser");
 
-    List<UserModel> listAccountAdmin = (List<UserModel>) request.getAttribute("listAccAdmin");
     List<DiscountModel> discountList = (List<DiscountModel>) DiscountDAO.getDiscountManage();
 
     Boolean isGrantAdd = false;

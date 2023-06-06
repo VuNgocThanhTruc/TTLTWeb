@@ -21,6 +21,13 @@ public class InventoriesModel {
         this.modifiedBy = modifiedBy;
     }
 
+    public InventoriesModel(int idProduct, String name, String avatar, int price) {
+        this.idProduct = idProduct;
+        this.name = name;
+        this.avatar = avatar;
+        this.price = price;
+    }
+
     public InventoriesModel(int idProduct, int quantity, String modifiedDate, String modifiedBy, String name, String avatar, int price) {
         this.idProduct = idProduct;
         this.quantity = quantity;
