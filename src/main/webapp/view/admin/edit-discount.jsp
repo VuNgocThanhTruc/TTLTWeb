@@ -28,9 +28,7 @@
 <!-- Sidebar menu-->
 <%@include file="../../common/admin/sidebar.jsp" %>
 <%
-  List<UserModel> listAccountUser = (List<UserModel>) request.getAttribute("listAccUser");
 
-  List<UserModel> listAccountAdmin = (List<UserModel>) request.getAttribute("listAccAdmin");
   DiscountModel discount = (DiscountModel) request.getAttribute("contain2");
 
   Boolean isGrantAdd = false;
@@ -53,7 +51,7 @@
 <main class="app-content">
   <div class="app-title">
     <ul class="app-breadcrumb breadcrumb side">
-      <li class="breadcrumb-item active"><a href="manage-discount.jsp"><b>Quản lý giảm giá</b></a></li>
+      <li class="breadcrumb-item active"><a href="manage-discount"><b>Quản lý giảm giá</b></a></li>
     </ul>
     <div id="clock"></div>
   </div>

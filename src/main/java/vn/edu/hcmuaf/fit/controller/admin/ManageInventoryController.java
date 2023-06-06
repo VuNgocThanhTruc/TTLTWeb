@@ -2,6 +2,7 @@ package vn.edu.hcmuaf.fit.controller.admin;
 
 import vn.edu.hcmuaf.fit.constant.SystemConstant;
 import vn.edu.hcmuaf.fit.dao.DiscountDAO;
+import vn.edu.hcmuaf.fit.dao.InventoriesDAO;
 import vn.edu.hcmuaf.fit.model.DiscountModel;
 import vn.edu.hcmuaf.fit.service.DiscountService;
 import vn.edu.hcmuaf.fit.service.ProductService;
@@ -33,22 +34,25 @@ public class ManageInventoryController extends HttpServlet {
         } else if (SystemConstant.EDIT.equals(typeParam)) {
             String contain = request.getParameter("id-product");
             if (contain != null) {
-                request.setAttribute("contain2", discountService.getProductById2(Integer.parseInt(contain)));
+                request.setAttribute("containInventory", InventoriesDAO.getListInventoryNotNullById(Integer.parseInt(contain)));
+                request.setAttribute("messInventory", "notNull");
             }
-            view = "/view/admin/edit-discount.jsp";
+            view = "/view/admin/edit-inventory.jsp";
         } else if (typeParam == null) {
             view = "/view/admin/manage-inventory.jsp";
         } else if (typeParam.equals("del")) {
             doGet_Del(request, response);
-            view = "/view/admin/manage-discount.jsp";
-        } else if (typeParam.equals("addDiscount")) {
+            view = "/view/admin/manage-inventory.jsp";
+        } else if (typeParam.equals("editInventory")) {
 
             String contain = request.getParameter("id-product");
             if (contain != null) {
-                request.setAttribute("contain", discountService.getProductById(Integer.parseInt(contain)));
+                request.setAttribute("containInventory", InventoriesDAO.getListInventoryNullById(Integer.parseInt(contain)));
+                request.setAttribute("messInventory", "null");
             }
-            view = "/view/admin/add-detail-discount.jsp";
+            view = "/view/admin/edit-inventory.jsp";
         }
+
         request.getRequestDispatcher(view).forward(request, response);
 
 
@@ -74,20 +78,16 @@ public class ManageInventoryController extends HttpServlet {
             view = "/view/admin/manage-discount.jsp";
         } else if (typeParam.equals("del")) {
             doGet_Del(request, response);
-            view = "/view/admin/manage-discount.jsp";
-        } else if (typeParam.equals("addByTypeProduct")) {
-            doPost_addByTypeProduct(request, response);
-            view = "/view/admin/manage-discount.jsp";
-
+            view = "/view/admin/manage-inventory.jsp";
         } else if (typeParam.equals("addByIdProduct")) {
             doPost_addByIdProduct(request, response);
 
-            view = "/view/admin/manage-discount.jsp";
+            view = "/view/admin/manage-inventory.jsp";
 
         }
         else if (typeParam.equals("editByIdProduct")) {
             doPost_editByIdProduct(request, response);
-            view = "/view/admin/manage-discount.jsp";
+            view = "/view/admin/manage-inventory.jsp";
 
         }
 
@@ -106,49 +106,30 @@ public class ManageInventoryController extends HttpServlet {
         discountDAO.delDiscount(id);
     }
 
-    // thêm mã giảm giá theo loại sản phẩm
-    private void doPost_addByTypeProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=utf-8");
-        int typeProduct = Integer.parseInt(request.getParameter("typeProduct"));
-        int numberDiscount = Integer.parseInt(request.getParameter("numberDiscount"));
-        String dateStart = request.getParameter("dateStart");
-        String dateEnd = request.getParameter("dateEnd");
-        HttpSession session = request.getSession();
-        DiscountDAO discountDAO = new DiscountDAO();
-        List<DiscountModel> listIDTypeProduct = discountDAO.getIDProductByIDTypeProduct(typeProduct);
-        for (DiscountModel list : listIDTypeProduct) {
-            discountDAO.addDiscount(typeProduct, list.getIdProduct(), dateStart, dateEnd, numberDiscount);
-        }
-    }
 
-    // thêm mã giảm giá theo id sản phẩm
+    // thêm vào kho
     private void doPost_addByIdProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=utf-8");
-        int idTypeProduct = Integer.parseInt(request.getParameter("idTypeProduct"));
         int idProduct = Integer.parseInt(request.getParameter("idProduct"));
-        int numberDiscount = Integer.parseInt(request.getParameter("numberDiscount"));
-        String dateStart = request.getParameter("dateStart");
-        String dateEnd = request.getParameter("dateEnd");
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        String modifiedDate = request.getParameter("modifiedDate");
         HttpSession session = request.getSession();
-        DiscountDAO discountDAO = new DiscountDAO();
-        discountDAO.addDiscount(idTypeProduct, idProduct, dateStart, dateEnd, numberDiscount);
+        InventoriesDAO inventoriesDAO =new InventoriesDAO();
+        inventoriesDAO.addInventories(idProduct,quantity,modifiedDate);
     }
-    // cập nhật mã giảm giá theo id sản phẩm
+    // cập nhật tồn kho
     private void doPost_editByIdProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=utf-8");
-        int idDiscount = Integer.parseInt(request.getParameter("idDiscount"));
-        int numberDiscount = Integer.parseInt(request.getParameter("numberDiscount"));
-        String dateStart = request.getParameter("dateStart");
-        String dateEnd = request.getParameter("dateEnd");
+        int idProduct = Integer.parseInt(request.getParameter("idProduct"));
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        String modifiedDate = request.getParameter("modifiedDate");
         HttpSession session = request.getSession();
-        DiscountDAO discountDAO = new DiscountDAO();
-        discountDAO.editDiscount(idDiscount, dateStart, dateEnd, numberDiscount);
+        InventoriesDAO inventoriesDAO =new InventoriesDAO();
+        inventoriesDAO.editInventories(idProduct,quantity,modifiedDate);
     }
 }
 

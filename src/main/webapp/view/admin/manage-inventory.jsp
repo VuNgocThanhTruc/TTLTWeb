@@ -54,7 +54,7 @@
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
-            <li class="breadcrumb-item active"><a href="manage-discount"><b>Quản lý giảm giá</b></a></li>
+            <li class="breadcrumb-item active"><a href="manage-inventory"><b>Quản lý kho</b></a></li>
         </ul>
         <div id="clock"></div>
     </div>
@@ -165,7 +165,7 @@
                                         <td>
                                             <%--Xóa--%>
                                             <%if (isGrantDel == true) {%>
-                                            <a href="manage-discount?type=del&id=<%=list.getIdProduct()%>">
+                                            <a href="manage-inventory?type=del&id=<%=list.getIdProduct()%>">
                                                 <button class="btn btn-primary btn-sm trash" type="button" title="Xóa">
                                                     <i class="fas fa-trash-alt"> </i>
                                                 </button>
@@ -183,7 +183,7 @@
                                             <%}%>
                                             <%--Sửa--%>
                                             <%if (isGrantEdit == true) {%>
-                                            <a href="manage-discount?type=edit&id-product=<%=list.getIdProduct()%>">
+                                            <a href="manage-inventory?type=edit&id-product=<%=list.getIdProduct()%>">
                                                 <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
                                                         id="show-emp" data-toggle="modal" data-target="#ModalUP">
                                                     <i class="fas fa-edit"></i>
@@ -281,27 +281,10 @@
                                     </td>
 
                                     <td>
-                                        <%--Xóa--%>
-                                        <%if (isGrantDel == true) {%>
-                                        <a href="manage-discount?type=del&id=<%=list.getIdProduct()%>">
-                                            <button class="btn btn-primary btn-sm trash" type="button" title="Xóa">
-                                                <i class="fas fa-trash-alt"> </i>
-                                            </button>
-                                        </a>
-                                        <%} else {%>
-                                        <button
-                                                class="btn btn-primary btn-sm trash"
-                                                type="button"
-                                                title="Không có quyền này!"
-                                                style="opacity: 0.5; cursor: not-allowed;"
-                                                disabled
-                                        >
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <%}%>
+
                                         <%--Sửa--%>
                                         <%if (isGrantEdit == true) {%>
-                                        <a href="manage-discount?type=edit&id-product=<%=list.getIdProduct()%>">
+                                        <a href="manage-inventory?type=editInventory&id-product=<%=list.getIdProduct()%>">
                                             <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
                                                     id="show-emp" data-toggle="modal" data-target="#ModalUP">
                                                 <i class="fas fa-edit"></i>
