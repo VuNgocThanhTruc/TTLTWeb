@@ -102,8 +102,8 @@ public class ManageInventoryController extends HttpServlet {
         response.setContentType("text/html;charset=utf-8");
         String id = request.getParameter("id");
         HttpSession session = request.getSession();
-        DiscountDAO discountDAO = new DiscountDAO();
-        discountDAO.delDiscount(id);
+        InventoriesDAO inventoriesDAO =new InventoriesDAO();
+        inventoriesDAO.delInventory(id);
     }
 
 

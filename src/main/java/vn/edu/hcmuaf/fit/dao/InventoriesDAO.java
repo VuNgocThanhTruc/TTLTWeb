@@ -186,8 +186,19 @@ public class InventoriesDAO {
             System.out.println("Error when addInventories:" + e.getMessage());
         }
     }
+    //Xóa 1 dòng bằng inventory
+    public void delInventory(String id) {
+        getListInventoryNotNull().remove(id);
+        try {
+            new ConnectToDatabase().executeSql("delete from inventories where id_product ='" + id + "'");
+
+        } catch (Exception e) {
+            System.out.println("Error When delete inventories:" + e.getMessage());
+        }
+
+    }
     public static void main(String[] args) {
-//        InventoriesDAO a = new InventoriesDAO();
-        System.out.println(InventoriesDAO.getListInventoryNull());
+        InventoriesDAO a = new InventoriesDAO();
+//        a.delInventory("1");
     }
 }
