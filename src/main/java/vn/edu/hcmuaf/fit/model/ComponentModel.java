@@ -44,7 +44,7 @@ public class ComponentModel {
     public String getIcon(){
         String result = "";
         switch (this.code){
-            case "QLKH": result = "app-menu__icon bx bx-tachometer";
+            case "QLKH": result = "app-menu__icon bx bx-user-pin";
                 break;
             case "QLSP": result = "app-menu__icon bx bxl-product-hunt";
                 break;
@@ -92,7 +92,7 @@ public class ComponentModel {
                 break;
             case "QLLH": result = "manage-contact";
                 break;
-            case "QLTK": result = "manage-account";
+            case "QLTK": result = "manage-account?action=manager-account";
                 break;
             case "QLGG": result = "manage-discount";
                 break;

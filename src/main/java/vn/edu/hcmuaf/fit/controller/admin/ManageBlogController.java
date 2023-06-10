@@ -50,6 +50,10 @@ public class ManageBlogController extends HttpServlet {
                 request.setAttribute("blog", blog);
                 view = "/view/admin/edit-blog.jsp";
             } else if (SystemConstant.ADD.equals(actionParam)) {
+                String back = request.getParameter("back");
+                if(back != null && back.equals("true")){
+                    request.setAttribute("previous-page", "manage-blog");
+                }
                 view = "/view/admin/add-blog.jsp";
             }
         }
@@ -86,7 +90,7 @@ public class ManageBlogController extends HttpServlet {
         if (matcher.find()) {
             coverImage = matcher.group();
         }
-        BlogService.insertBlog(title, brief, detail, coverImage);
+        BlogService.insertBlog(title, brief, detail, coverImage, user == null ? "1" : user.getId());
         DBConnect.getInstall().insert(
                 new Log(2,
                         Integer.parseInt(user == null ? "-1" : user.getId()),

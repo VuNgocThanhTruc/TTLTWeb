@@ -13,7 +13,7 @@ import java.util.List;
 public class BlogDAO extends AbstractDAO {
 
 
-    public static void insertBlog(String title, String brief, String detail, String imageFileName) {
+    public static void insertBlog(String title, String brief, String detail, String imageFileName, String idUser) {
         String sql = "INSERT INTO blogs (id, title, briefContent, detail_content, status, avatar, id_type_blog, create_date, id_user_create) " +
                 "VALUES (NULL, ?, ?, ?, ?, ?, ? ,?, ? )";
         try {
@@ -25,7 +25,7 @@ public class BlogDAO extends AbstractDAO {
             ps.setString(5,imageFileName);
             ps.setInt(6,1);
             ps.setTimestamp(7, Timestamp.from(Instant.now()));
-            ps.setInt(8,1);
+            ps.setString(8, idUser);
             ps.executeUpdate();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -225,10 +225,5 @@ public class BlogDAO extends AbstractDAO {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-
-    public static void main(String[] args) {
-        new BlogDAO().insertBlog("test","test","test","tes.jpg");
     }
 }

@@ -17,6 +17,10 @@
             align-items: center;
             border-bottom: 2px solid #FFD43B;
         }
+        #new-blog img{
+            max-width: 100px;
+            max-height: 65px;
+        }
     </style>
 </head>
 
@@ -63,12 +67,12 @@
                         <%for (BlogModel newblog : newListBlog) {%>
                         <div class="item-article clearfix">
                             <div class="post-image">
-                                <a href="">
+                                <a id="new-blog" href="detail-blog?id-blog=<%=newblog.getId()%>">
                                         <%=newblog.getAvatar()%>
                             </div>
                             <div class="post-content">
                                 <h3>
-                                    <a href="list-blog"><%=newblog.getTitle()%>
+                                    <a href="detail-blog?id-blog=<%=newblog.getId()%>"><%=newblog.getTitle()%>
                                     </a>
                                 </h3>
                                 <span class="author"><%=newblog.getUserCreated()%></span>
@@ -183,7 +187,7 @@
         <div class="col-md-9 col-sm-12 col-xs-12 article-area">
             <div class="content-page">
                 <div id="heading"class="tile-title">
-                    <a style="background: none; color: #808990;" class="btn btn-cancel" href="list-blog"><i class="fas fa-angle-left"></i> Quay lại</a>
+                    <button style="background: none; color: #808990;" class="btn btn-cancel" onclick="goBack()"><i class="fas fa-angle-left"></i> Quay lại</button>
                     <ul class="article-info-more" style="padding-left: 0 ">
                         <li> Người viết:<%=blog.getUserCreated()%> lúc
                             <time pubdate="" datetime="<%=blog.getCreatedDate()%>"><%=blog.getCreatedDate()%>
@@ -208,6 +212,11 @@
 </div>
 
 <%@include file="../../common/web/footer.jsp" %>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 </body>
 
 </html>

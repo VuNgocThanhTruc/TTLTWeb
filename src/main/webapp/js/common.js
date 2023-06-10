@@ -6,3 +6,6 @@ function showNotification(title, message, type) {
         button: "OK",
     });
 }
+function goBack() {
+    window.history.back();
+}

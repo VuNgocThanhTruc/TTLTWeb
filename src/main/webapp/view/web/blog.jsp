@@ -12,6 +12,11 @@
     <style>
         #img-blog img{
             object-fit: cover;
+            max-height: 200px;
+        }
+        #new-blog img{
+            max-width: 100px;
+            max-height: 65px;
         }
     </style>
     <title>Blog | Phone Care </title>
@@ -57,12 +62,12 @@
                         <%for (BlogModel blog : newListBlog) {%>
                         <div class="item-article clearfix">
                             <div class="post-image">
-                                <a href="">
+                                <a id="new-blog" href="detail-blog?id-blog=<%=blog.getId()%>">
                                         <%=blog.getAvatar()%>
                             </div>
                             <div class="post-content">
                                 <h3>
-                                    <a href="list-blog"><%=blog.getTitle()%>
+                                    <a href="detail-blog?id-blog=<%=blog.getId()%>"><%=blog.getTitle()%>
                                     </a>
                                 </h3>
                                 <span class="author"><%=blog.getUserCreated()%></span>

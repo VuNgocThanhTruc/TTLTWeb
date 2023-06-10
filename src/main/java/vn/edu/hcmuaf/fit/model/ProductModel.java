@@ -1,5 +1,7 @@
 package vn.edu.hcmuaf.fit.model;
+
 import vn.edu.hcmuaf.fit.service.CategorySevice;
+
 import java.util.List;
 
 public class ProductModel {
@@ -115,6 +117,7 @@ public class ProductModel {
     public void setDescribe(String describe) {
         this.describe = describe;
     }
+
     public int getHeight() {
         return height;
     }
@@ -161,6 +164,7 @@ public class ProductModel {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
 
     public String getDateStart() {
         return dateStart;
@@ -186,13 +190,13 @@ public class ProductModel {
         this.percentDiscount = percentDiscount;
     }
 
-    public String getCategory(int idTypeProduct){
+    public String getCategory(int idTypeProduct) {
         String result = "";
-        List<CategoryModel>  listBrand = CategorySevice.getListTypeProduct();
-        for (CategoryModel category: listBrand) {
-            System.out.println("category: " + category + ", idTypeProduct: " +idTypeProduct);
-            if(category.getId() == idTypeProduct){
-                System.out.println("category true: " + category + ", idTypeProduct: " +idTypeProduct);
+        List<CategoryModel> listBrand = CategorySevice.getListTypeProduct();
+        for (CategoryModel category : listBrand) {
+            System.out.println("category: " + category + ", idTypeProduct: " + idTypeProduct);
+            if (category.getId() == idTypeProduct) {
+                System.out.println("category true: " + category + ", idTypeProduct: " + idTypeProduct);
                 result = category.getName();
                 break;
             }

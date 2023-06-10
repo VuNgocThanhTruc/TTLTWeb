@@ -91,11 +91,11 @@
                         <tr>
                             <th width="10"><input type="checkbox" id="all"></th>
                             <th>ID</th>
-                            <th>Tiêu đề tin</th>
-                            <th>Ảnh đại diên</th>
-                            <th>Nội dung tóm tắt</th>
-                            <th>Người đăng</th>
-                            <th>Chức năng</th>
+                            <th width="300px">Tiêu đề tin</th>
+                            <th width="300px">Ảnh đại diên</th>
+                            <th width="500px">Nội dung tóm tắt</th>
+                            <th width="150px" style="text-align: center">Người đăng</th>
+                            <th width="100px" style="text-align: center">Chức năng</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -220,39 +220,16 @@ MODAL
         </div>
     </div>
 </div>
-<!--
 <%@include file="../../common/admin/script.jsp" %>
--->
-
-<!-- Essential javascripts for application to work-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="src/jquery.table2excel.js"></script>
-<script src="js/main.js"></script>
-<!-- The javascript plugin to display page loading on top-->
 <script src="../../admin/doc/js/plugins/pace.min.js"></script>
-<!-- Page specific javascripts-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<!-- Data table plugin-->
-<%--<script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>--%>
-<%--<script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>--%>
-<link rel="stylesheet" href="../js/jquery.dataTables.min.css">
-<script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#sampleTable').DataTable( {
-            "language": {
-                "url": "../js/json/vi.json"
-            }
-        } );
-    } );
-    // $('#sampleTable').DataTable();
-</script>
 <script>
     function deleteRow(r) {
         var i = r.parentNode.parentNode.rowIndex;
         document.getElementById("myTable").deleteRow(i);
     }
-
 
     function confirmDelete() {
         if (confirm("Bạn có chắc chắn muốn xóa?")) {
@@ -262,7 +239,6 @@ MODAL
         }
     }
 
-    oTable = $('#sampleTable').dataTable();
     $('#all').click(function (e) {
         $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
         e.stopImmediatePropagation();
@@ -279,30 +255,21 @@ MODAL
         }
     }
 
-    //Modal
-    $("#show-emp").on("click", function () {
-        $("#ModalUP").modal({backdrop: false, keyboard: false})
-    });
-
-    function save() {
-
-        swal("Đã lưu thành công.!", {});
-
-    }
-
     var tdBriefs = document.querySelectorAll('.brief-content');
     for(var i = 0; i < tdBriefs.length; i++){
-        console.log("i", i)
         var tdBrief = tdBriefs[i];
         var firstElement = tdBrief.firstElementChild;
-        firstElement.style.fontWeight = "normal";
+        firstElement.style.fontWeight = "400";
         firstElement.style.fontStyle = "normal";
+        firstElement.style.color = "#000";
 
         var content = firstElement.textContent;
 
         if (content.length > 200) {
             var truncatedContent = content.substring(0, 200) + "...";
             firstElement.textContent = truncatedContent;
+        }else{
+            firstElement.textContent = content + "...";
         }
 
         var lengthChildren = tdBrief.children.length;
@@ -315,6 +282,21 @@ MODAL
         }
     }
 
+    var ems = document.querySelectorAll('em');
+    for(var i = 0; i < ems.length; i++){
+        var em = ems[i];
+        em.style.fontStyle = 'normal'
+        em.style.color = "#000";
+        em.style.fontWeight = "400";
+    }
+
+    var strongs = document.querySelectorAll('strong');
+    for(var i = 0; i < strongs.length; i++){
+        var strong = strongs[i];
+        strong.style.fontStyle = 'normal'
+        strong.style.color = "#000";
+        strong.style.fontWeight = "400";
+    }
 
 </script>
 

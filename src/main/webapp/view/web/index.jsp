@@ -11,6 +11,13 @@
 <head>
     <%@include file="../../common/web/head.jsp" %>
     <title>Phone Care</title>
+    <style>
+        #link-blog img{
+            height: 200px;
+            object-fit: cover;
+            max-height: 200px;
+        }
+    </style>
 </head>
 <body>
 <% List<ProductModel> newList = (List<ProductModel>) ProductDAO.newProduct();%>
@@ -202,12 +209,11 @@
                     List<BlogModel> newListBlog = (List<BlogModel>) blogService.getNewBlog();
                     for (BlogModel blog : newListBlog) {
                 %>
-                <div class="col-md-4">
+                <div>
                     <div class="post_item">
                         <div class="post_featured">
-                            <a href="detail-blog?id-blog=<%=blog.getId()%>" title="">
-                                <img class="img-resize" style="padding-bottom:15px;"
-                                     src="images/blog/<%=blog.getAvatar()%>" alt="" >
+                            <a id="link-blog" href="detail-blog?id-blog=<%=blog.getId()%>" title="Chi tiết tin tức">
+                                <%=blog.getAvatar()%>
                             </a>
                         </div>
                         <div class="pro-text">
@@ -226,8 +232,8 @@
                                 </a>
                             </h3>
                         </div>
-                        <div style="text-align:center; padding-bottom: 30px;">
-                            <span><%=blog.getBriefContent()%></span>
+                        <div class="brief-content" style="text-align:center; padding-bottom: 30px;">
+                            <%=blog.getBriefContent()%>
                         </div>
                     </div>
                 </div>
@@ -299,7 +305,48 @@
 
 <!--gallery-->
 <%@include file="../../common/web/footer.jsp" %>
+<script>
+    var tdBriefs = document.querySelectorAll('.brief-content');
+    for(var i = 0; i < tdBriefs.length; i++){
+        console.log("i", i)
+        var tdBrief = tdBriefs[i];
+        var firstElement = tdBrief.firstElementChild;
+        firstElement.style.fontWeight = "normal";
+        firstElement.style.fontStyle = "normal";
 
+        var content = firstElement.textContent;
+
+        if (content.length > 200) {
+            var truncatedContent = content.substring(0, 200) + "...";
+            firstElement.textContent = truncatedContent;
+        }
+
+        var lengthChildren = tdBrief.children.length;
+        for (var j = 1; i < lengthChildren; j++) {
+            var children = tdBrief.children[j];
+            if(children != undefined){
+                children.style.display = 'none';
+            }
+            if(j > lengthChildren) break;
+        }
+    }
+
+    var ems = document.querySelectorAll('em');
+    for(var i = 0; i < ems.length; i++){
+        var em = ems[i];
+        em.style.fontStyle = 'normal'
+        em.style.color = "#000";
+        em.style.fontWeight = "400";
+    }
+
+    var strongs = document.querySelectorAll('strong');
+    for(var i = 0; i < strongs.length; i++){
+        var strong = strongs[i];
+        strong.style.fontStyle = 'normal'
+        strong.style.color = "#000";
+        strong.style.fontWeight = "400";
+    }
+</script>
 </body>
 
 </html>
