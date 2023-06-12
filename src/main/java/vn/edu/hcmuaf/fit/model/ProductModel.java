@@ -163,7 +163,6 @@ public class ProductModel {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
-
     public String getDateStart() {
         return dateStart;
     }

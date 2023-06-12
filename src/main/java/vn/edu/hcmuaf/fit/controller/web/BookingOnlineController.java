@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.controller.web;
 
+import vn.edu.hcmuaf.fit.constant.APIConstants;
 import vn.edu.hcmuaf.fit.model.BookingModel;
 import vn.edu.hcmuaf.fit.model.StatusBooking;
 import vn.edu.hcmuaf.fit.model.UserModel;
@@ -27,14 +28,11 @@ public class BookingOnlineController extends HttpServlet {
 
         String action = request.getParameter("action");
 
-        System.out.println("bookingOnline dopost: " + action);
         HttpSession session = request.getSession();
         session.setAttribute("mess", null);
         if (action == null) {
-            System.out.println("Khong thuc hien duoc gi het");
             session.setAttribute("mess", null);
         } else if (action.equals("booking")) {
-//            System.out.println("update successfully " );
             String name = request.getParameter("username");
             String tel = request.getParameter("tel");
             String email = request.getParameter("email");
@@ -43,6 +41,10 @@ public class BookingOnlineController extends HttpServlet {
             String date = request.getParameter("date");
             String description = request.getParameter("description");
             String payment = request.getParameter("payment");
+            String fromDistrictID = request.getParameter("id-district");
+            String fromWardID = request.getParameter("id-ward");
+            int toDistrictID = APIConstants.ID_DISTRICT_STORE;
+            int toWardID = APIConstants.ID_WARD_STORE;
 
 
             UserModel user = (UserModel) session.getAttribute("userlogin");
@@ -64,6 +66,15 @@ public class BookingOnlineController extends HttpServlet {
             booking.setDate_booking(date + " " + time + ":00");
             booking.setDescription(description);
             booking.setId_payment(payment);
+            booking.setFromDistrictId(Integer.parseInt(fromDistrictID));
+            booking.setFromWardId(Integer.parseInt(fromWardID));
+            booking.setToDistrictId(toDistrictID);
+            booking.setToWardId(toWardID);
+
+            System.out.println(fromDistrictID);
+            System.out.println(fromWardID);
+            System.out.println(toWardID);
+
             int idInserted = checkoutService.insertBookingCart(booking);
             if (idInserted > 0) {
                 session.setAttribute("mess", "success");
