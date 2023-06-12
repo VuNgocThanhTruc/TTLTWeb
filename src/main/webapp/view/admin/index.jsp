@@ -1,4 +1,11 @@
-<%--<%@ page contentType="text/html;charset=UTF-8" language="java" %>--%>
+<%@ page import="vn.edu.hcmuaf.fit.model.*" %>
+<%@ page import="java.util.List" %>
+<%@ page import="vn.edu.hcmuaf.fit.dao.InventoriesDAO" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.sql.Timestamp" %>
+<%@ page import="java.time.Instant" %>
+<%@ page import="java.time.LocalDate" %>
+<%@ page import="java.time.Duration" %><%--<%@ page contentType="text/html;charset=UTF-8" language="java" %>--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 
 <!DOCTYPE html>
@@ -13,6 +20,10 @@
 <%@include file="../../common/admin/header.jsp"%>
 
 <%@include file="../../common/admin/sidebar.jsp"%>
+<%
+    List<InventoriesModel> inventoriesList = (List<InventoriesModel>) InventoriesDAO.getListProductsOutOfStock(10);
+    List<InventoriesModel> inventoriesList2 = (List<InventoriesModel>) InventoriesDAO.getListProductsStockForALongTime();
+%>
 <main class="app-content">
     <div class="row">
         <div class="col-md-12">
@@ -68,53 +79,48 @@
                         </div>
                     </div>
                 </div>
+                <% if (inventoriesList == null) {
+                %>
+                <div>Chưa có dữ liệu</div>
+                <%
+                } else {
+
+                %>
                 <!-- col-12 -->
                 <div class="col-md-12">
                     <div class="tile">
-                        <h3 class="tile-title">Tình trạng đơn hàng</h3>
+                        <h3 class="tile-title">Sản phẩm sắp hết hàng</h3>
                         <div>
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
-                                    <th>ID đơn hàng</th>
-                                    <th>Tên khách hàng</th>
-                                    <th>Tổng tiền</th>
-                                    <th>Trạng thái</th>
+                                    <th>ID</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Ảnh</th>
+                                    <th>Giá</th>
+                                    <th>Số lượng</th>
                                 </tr>
                                 </thead>
                                 <tbody>
+                                    <%
+                                for (InventoriesModel list : inventoriesList) {
+
+                                    %>
                                 <tr>
-                                    <td>AL3947</td>
-                                    <td>Phạm Thị Ngọc</td>
+                                    <td><%=list.getIdProduct()%></td>
+                                    <td><%=list.getName()%></td>
                                     <td>
-                                        19.770.000 đ
+                                    <img src="<% out.print("../images/product/"+list.getAvatar());%>"
+                                         alt="" width="100px;" class="avatar">
                                     </td>
-                                    <td><span class="badge bg-info">Chờ xử lý</span></td>
+                                    <td><%=list.getPrice()%>₫</td>
+                                    <%if (list.getQuantity()<4){%>
+                                    <td><span class="badge bg-danger"><%=list.getQuantity()%></span></td>
+                                    <% }else{%>
+                                    <td><span class="badge bg-warning"><%=list.getQuantity()%></span></td>
+                                    <%}%>
                                 </tr>
-                                <tr>
-                                    <td>ER3835</td>
-                                    <td>Nguyễn Thị Mỹ Yến</td>
-                                    <td>
-                                        16.770.000 đ
-                                    </td>
-                                    <td><span class="badge bg-warning">Đang vận chuyển</span></td>
-                                </tr>
-                                <tr>
-                                    <td>MD0837</td>
-                                    <td>Triệu Thanh Phú</td>
-                                    <td>
-                                        9.400.000 đ
-                                    </td>
-                                    <td><span class="badge bg-success">Đã hoàn thành</span></td>
-                                </tr>
-                                <tr>
-                                    <td>MT9835</td>
-                                    <td>Đặng Hoàng Phúc	</td>
-                                    <td>
-                                        40.650.000 đ
-                                    </td>
-                                    <td><span class="badge bg-danger">Đã hủy	</span></td>
-                                </tr>
+                                    <%}%>
                                 </tbody>
                             </table>
                         </div>
@@ -122,6 +128,69 @@
                     </div>
                 </div>
                 <!-- / col-12 -->
+                <%}%>
+                <% if (inventoriesList2 == null) {
+                %>
+                <div>Chưa có dữ liệu</div>
+                <%
+                } else {
+
+                %>
+                <!-- col-12 -->
+                <div class="col-md-12">
+                    <div class="tile">
+                        <h3 class="tile-title">Sản phẩm tồn kho lâu</h3>
+                        <div>
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Ảnh</th>
+                                    <th>Giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Ngày giờ nhập</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <%
+                                    Date serverTime = new Date();
+                                    Timestamp currentDate = new Timestamp(serverTime.getTime());
+                                    LocalDate localDateCurrent = currentDate.toLocalDateTime().toLocalDate();
+
+                                    for (InventoriesModel list : inventoriesList2) {
+                                        Timestamp modifiedDate = Timestamp.valueOf(list.getModifiedDate());
+                                        LocalDate localDateModified = modifiedDate.toLocalDateTime().toLocalDate();
+                                        long daysBetween = Duration.between(localDateCurrent.atStartOfDay(), localDateModified.atStartOfDay())
+                                                .toDays();
+                                        int day = (int) Math.abs(daysBetween);
+                                        if (day>365){
+                                %>
+                                <tr>
+                                    <td><%=list.getIdProduct()%></td>
+                                    <td><%=list.getName()%></td>
+                                    <td>
+                                        <img src="<% out.print("../images/product/"+list.getAvatar());%>"
+                                             alt="" width="100px;" class="avatar">
+                                    </td>
+                                    <td><%=list.getPrice()%>₫</td>
+                                    <%if (list.getQuantity()<4){%>
+                                    <td><span class="badge bg-danger"><%=list.getQuantity()%></span></td>
+                                    <% }else{%>
+                                    <td><span class="badge bg-warning"><%=list.getQuantity()%></span></td>
+                                    <%}%>
+                                    <td><%=day%></td>
+                                </tr>
+                                <%}}%>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- / div trống-->
+                    </div>
+                </div>
+                <!-- / col-12 -->
+                <%}%>
+
                 <!-- col-12 -->
                 <div class="col-md-12">
                     <div class="tile">

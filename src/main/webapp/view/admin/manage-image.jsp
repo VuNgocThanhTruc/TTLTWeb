@@ -175,15 +175,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#sampleTable').dataTable( {
-            "language": {
-                "url": "../js/json/vi.json"
-            }
-        } );
-    } );
-</script>
 <script>
     function deleteRow(r) {
         var i = r.parentNode.parentNode.rowIndex;

@@ -26,7 +26,7 @@ public class LoadDataAJAX extends HttpServlet {
                             "                    <div class=\"block-banner-category\">\n" +
                             "                        <div class=\"product-img fade-box\">\n" +
                             "                            <a href=\"detail-product?id-product=" + p.getId() + "\" title=\"\" class=\"img-resize\">\n" +
-//                            "                                <img src=\"images/product/" + p.getAvatar() + "\" alt=\"\" class=\"lazyloaded\">\n" +
+                            "                                <img src=\"images/product/" + p.getAvatar() + "\" alt=\"\" class=\"lazyloaded\">\n" +
                             "                            </a>\n" +
                             "                        </div>\n" +
                             "                        <div class=\"product-detail clearfix\">\n" +
