@@ -13,8 +13,8 @@ public class BlogService {
         this.blogDAO = new BlogDAO();
     }
 
-    public static void insertBlog(String title, String brief, String detail, String imageFileName) {
-        BlogDAO.insertBlog(title, brief, detail, imageFileName);
+    public static void insertBlog(String title, String brief, String detail, String imageFileName, String idUser) {
+        BlogDAO.insertBlog(title, brief, detail, imageFileName, idUser);
     }
 
     public List<BlogModel> getListBlog() {

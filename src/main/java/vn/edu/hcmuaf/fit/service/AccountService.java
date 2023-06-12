@@ -7,7 +7,7 @@ import java.util.List;
 
 public class AccountService {
 
-    public UserDAO userDAO;
+    public static UserDAO userDAO;
 
     public AccountService() {
         this.userDAO = new UserDAO();
@@ -25,5 +25,21 @@ public class AccountService {
     //Service lấy ra danh sách tài khoản admin
     public List<UserModel> getListAccountAdmin(){
         return userDAO.getListAccountAdmin();
+    }
+
+    public static UserModel getUserById(String id){
+        return userDAO.getUserById(id);
+    }
+
+    public List<UserModel> getListAccountLocked() {
+        return userDAO.getListAccountLocked();
+    }
+
+    public Boolean getStatusLockUser(String id){
+        return userDAO.getStatusLockUser(id);
+    }
+
+    public static void lockOrUnlockUser(String idUser, String action){
+        userDAO.changeStatusUser(idUser, action);
     }
 }

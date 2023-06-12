@@ -260,12 +260,11 @@
                     </div>
                 </div>
             </div>
-
         </div>
         <!--END right-->
     </div>
 
-
+    <%@include file="statisticalUser.jsp"%>
     <div class="text-center" style="font-size: 13px">
         <p><b>Copyright
             <script type="text/javascript">

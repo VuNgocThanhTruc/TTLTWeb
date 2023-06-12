@@ -94,7 +94,7 @@ public class ComponentModel {
                 break;
             case "QLLH": result = "manage-contact";
                 break;
-            case "QLTK": result = "manage-account";
+            case "QLTK": result = "manage-account?action=manager-account";
                 break;
             case "QLGG": result = "manage-discount";
                 break;

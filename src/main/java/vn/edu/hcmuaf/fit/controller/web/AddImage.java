@@ -60,7 +60,7 @@ public class AddImage extends HttpServlet {
         userDAO.addImage(user.getId(), imageFileName);
         user = UserDAO.loadId().get(user.getId());
         session.setAttribute("userlogin", user);
-        request.getRequestDispatcher("/view/web/profile.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/web/profile-admin.jsp").forward(request, response);
 
 
     }

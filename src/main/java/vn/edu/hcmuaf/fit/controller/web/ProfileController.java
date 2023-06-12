@@ -14,7 +14,7 @@ import static java.lang.Integer.parseInt;
 public class ProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/view/web/profile.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/web/profile-admin.jsp").forward(request, response);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ProfileController extends HttpServlet {
             UserModel user2 = UserDAO.loadId().get(id);
             session.setAttribute("userlogin", user2);
             System.out.println(id + " " + hovaten + " " + 0 + " " + email + " " + tel + " " + dob + " " + address);
-            request.getRequestDispatcher("/view/web/profile.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/web/profile-admin.jsp").forward(request, response);
 
         }
 //        else if (action.equals("addImage")) {
@@ -77,7 +77,7 @@ public class ProfileController extends HttpServlet {
 //
 //            UserDAO userDAO = new UserDAO();
 //            userDAO.addImage(user.getId(),imageFileName);
-//            request.getRequestDispatcher("/view/web/profile.jsp").forward(request, response);
+//            request.getRequestDispatcher("/view/web/profile-admin.jsp").forward(request, response);
 //        }
     }
 }

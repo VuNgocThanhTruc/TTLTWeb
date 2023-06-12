@@ -1,8 +1,6 @@
 package vn.edu.hcmuaf.fit.controller.web;
 
-import vn.edu.hcmuaf.fit.bean.Log;
 import vn.edu.hcmuaf.fit.dao.UserDAO;
-import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.UserModel;
 import vn.edu.hcmuaf.fit.service.AuthoritiesService;
 import vn.edu.hcmuaf.fit.service.LogService;
@@ -17,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Set;
 
 @WebServlet("/login")
 public class LoginController extends HttpServlet {
@@ -28,23 +25,16 @@ public class LoginController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=utf-8");
         HttpSession session = request.getSession();
-
         String action = request.getParameter("action");
 //        String username = request.getParameter("username");
 //        String password = request.getParameter("password");
 //        password = Encode.toSHA1(password);
-        System.out.println("doget: " + action);
         if (action == null) {
-
             System.out.println("Khong thuc hien duoc gi het");
-
         } else if (action.equals("logout")) {
-
             session.invalidate();
-//                response.sendRedirect("signin");
             response.sendRedirect("signin");
         }
-
     }
 
     @Override
@@ -57,18 +47,20 @@ public class LoginController extends HttpServlet {
         String view = "";
         HttpSession session = request.getSession();
         Integer failedLoginCount = (Integer) session.getAttribute("failedLoginCount");
+        Integer failedUserLoginCount = (Integer) session.getAttribute("failedUserLoginCount");
+        String urlCurrent = (String) request.getParameter("url");
+        System.out.println("urlCurrent: " + urlCurrent);
         session.setAttribute("mess", null);
         if (action == null) {
             session.setAttribute("mess", null);
         } else if (action.equals("login")) {
             UserModel user = null;
+            UserModel userLoginFailed = null;
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             password = Encode.toSHA1(password);
-
             int checkUserName = new UserDAO().checkLogin(username, password);
             int checkEmail = new UserDAO().checkLoginbyEmail(username, password);
-
             if (checkUserName == 1) {
                 user = UserDAO.loadUsername().get(username);
                 session.setAttribute("userlogin", user);
@@ -89,13 +81,38 @@ public class LoginController extends HttpServlet {
                 session.setAttribute("userlogin", user);
                 session.setAttribute("mess", null);
                 view = "admin/index";
+            } else if(checkUserName == 5 || checkEmail == 5) {
+                view = "view/common/error-locked.jsp";
             } else {
-                session.setAttribute("mess", "errorsignin");
-                LogService.logUserLoginFailed(request.getRemoteAddr(), failedLoginCount, request);
+                //xu ly neu sai mat khau nhung dung ten dang nhap
+                if(checkUserName == 4){
+                    userLoginFailed = UserDAO.loadUsername().get(username);
+                    session.setAttribute("mess", "error-password");
+                    session.setAttribute("username", userLoginFailed.getUsername());
+                    session.setAttribute("name", userLoginFailed.getName());
+                    session.setAttribute("avatar", userLoginFailed.getAvatar());
+                    LogService.logUserLoginFailed(userLoginFailed.getUsername(), failedUserLoginCount, request);
+                }else if(checkEmail == 4){
+                    userLoginFailed = UserDAO.loadUsername().get(username);
+                    session.setAttribute("mess", "error-password");
+                    session.setAttribute("username", userLoginFailed.getUsername());
+                    session.setAttribute("name", userLoginFailed.getName());
+                    session.setAttribute("avatar", userLoginFailed.getAvatar());
+                    LogService.logUserLoginFailed(userLoginFailed.getUsername(), failedUserLoginCount, request);
+                }else{
+                    session.setAttribute("mess", "errorsignin");
+                    LogService.logIpAddressLoginFailed(request.getRemoteAddr(), failedLoginCount, request);
+                }
                 view = "signin";
             }
             if(user != null){
                 failedLoginCount = 0;
+                failedUserLoginCount = 0;
+                if(!urlCurrent.equals("null")){
+                    view = urlCurrent;
+                }
+                java.sql.Date now = new java.sql.Date(System.currentTimeMillis());
+                LogService.logAccess(now);
             }
             AuthoritiesService.checkRelogin(context, user);
             response.sendRedirect(view);

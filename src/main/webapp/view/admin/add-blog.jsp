@@ -137,6 +137,7 @@
 <%@include file="../../common/admin/header.jsp" %>
 <%
     String pageContextPath = (String) request.getContextPath();
+    String previousPage = (String) request.getAttribute("previous-page");
 %>
 <!-- Sidebar menu-->
 <%@include file="../../common/admin/sidebar.jsp" %>
@@ -154,11 +155,13 @@
                     <form class="row" action="<%=pageContextPath%>/admin/manage-blog?action=add"
                           method="post" enctype="multipart/form-data">
                         <div id="heading"class="tile-title">
-                            <a style="background: none; color: #808990;" class="btn btn-cancel" href="manage-blog"><i class="fas fa-angle-left"></i> Quay lại</a>
+                            <%if(previousPage != null && previousPage.equals("manage-blog")) {%>
+                                <a href="<%=pageContextPath%>/admin/manage-blog" style="background: none; color: #808990;" class="btn"><i class="fas fa-angle-left"></i> Quay lại</a>
+                            <%} else {%>
+                                <div onclick="goBack()" style="background: none; color: #808990;" class="btn"><i class="fas fa-angle-left"></i> Quay lại</div>
+                            <%}%>
                             <input class="btn btn-save" type="submit" value="Xuất bản" onclick="return confirmNotify('Bạn chắc chắn muốn xuất bản?')">
                         </div>
-                        <input type="hidden" class="form-control" placeholder="" name="id-blog"
-                               value="">
                         <div class="form-group">
                             <input id="header-blog" class="form-control" type="text" placeholder="Tiêu đề"
                                    name="title" value="">
@@ -215,7 +218,7 @@
     </div>
 </main>
 <%@include file="../../common/admin/script.jsp" %>
-<script src="../../admin/doc/js/plugins/pace.min.js"></script>
+<script src="../js/common.js"></script>
 <script>
     const inpFile = document.getElementById("inpFile");
     const loadFile = document.getElementById("loadFile");

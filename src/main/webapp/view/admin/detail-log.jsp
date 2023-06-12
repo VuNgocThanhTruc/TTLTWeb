@@ -58,6 +58,7 @@
     Log log = (Log) request.getAttribute("log");
     UserModel userLog = UserDAO.getUserById(String.valueOf(log.getId_user()));
     String imageUser = userLog == null ? "no-avatar.png" : userLog.getAvatar();
+    String idUser = userLog == null ? "Null" : userLog.getId();
     String nameUser = userLog == null ? "Không xác định" : userLog.getName();
     String iconLog =  "";
     if(log.getLevel()==1){
@@ -120,7 +121,7 @@
                       <div style="width: 50px; height: 50px">
                         <img style="width: 100%;border: 1px solid #333;height: 100%;object-fit: cover;border-radius: 100%;" src="../images/user/<%=imageUser%>" alt="<%=imageUser%>">
                       </div>
-                      <a href="" style="display: flex; align-items: center;">
+                      <a href="manage-account?action=profile-user&id-user=<%=idUser%>" style="display: flex; align-items: center;">
                         <p style="margin: 0; padding-left: 20px; font-size: 17px"><%=nameUser%></p>
                         <i id="icon-datial-user" class="fas fa-chevron-circle-right"></i>
                       </a>

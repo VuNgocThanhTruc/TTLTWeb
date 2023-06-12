@@ -62,9 +62,21 @@ public class AuthorizactionFilter implements Filter {
                         filterChain.doFilter(servletRequest, servletResponse);
                     }
                 } else {
+                    String urlCurrent = request.getRequestURL().toString();
+                    String queryString = request.getQueryString();
+                    if (queryString != null) {
+                        urlCurrent += "?" + queryString + "&back=true";
+                    }
+                    session.setAttribute("URL-current", urlCurrent);
                     response.sendRedirect(request.getContextPath() + "/signin");
                 }
             } else {
+                String urlCurrent = request.getRequestURL().toString();
+                String queryString = request.getQueryString();
+                if (queryString != null) {
+                    urlCurrent += "?" + queryString + "&back=true";
+                }
+                session.setAttribute("URL-current", urlCurrent);
                 response.sendRedirect(request.getContextPath() + "/signin");
             }
         } else {
