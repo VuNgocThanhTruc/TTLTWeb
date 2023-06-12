@@ -356,8 +356,8 @@ public class ProductDAO {
             throw new RuntimeException(e);
         }
     }
-    public static boolean addNewProduct(String name, String avatar, int idTypeProduct, int idStatusDevice, int idBrand, int price, int sumQuantity, String describe, int idStore,int idUser, int height, int length, int width, int weight) {
-        String sql = "INSERT INTO products (`id`, `name`, `avatar`, `id_type_product`, `id_status_device`, `id_brand`, `price`, `describe`,`created_by` ,`height`,`length`,`width`,`weight`,`avatar`) " + "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?)";
+    public static boolean addNewProduct(String name, String avatar, int idTypeProduct, int idStatusDevice, int idBrand, int price, int sumQuantity, String describe, int idStore,int idUser, int height, int length, int width, int weight,List<String> listFileNameImage) {
+        String sql = "INSERT INTO products (`id`, `name`, `avatar`, `id_type_product`, `id_status_device`, `id_brand`, `price`, `describe`,`created_by` ,`height`,`length`,`width`,`weight`) " + "VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ps.setString(1, name);
@@ -388,7 +388,15 @@ public class ProductDAO {
             ps.setInt(2, sumQuantity);
             ps.setInt(3, idUser);
             ps.executeUpdate();
-
+            if(!listFileNameImage.isEmpty()){
+                sql = "INSERT INTO library_images(url,id_product) values(?,?)";
+                ps = DBConnect.getInstall().preStatement(sql);
+                ps.setInt(2,lastInsertId);
+                for (int i = 0; i < listFileNameImage.size(); i++) {
+                    ps.setString(1, listFileNameImage.get(i));
+                    ps.executeUpdate();
+                }
+            }
             return true;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -414,8 +422,7 @@ public class ProductDAO {
         }
     }
 
-    public static boolean updateProduct(int id, String name, String avatar, int id_type_product, int id_status_device, int id_brand, int price, String describe,int height,int length,int width,int weight) {
-        System.out.println(avatar);
+    public static boolean updateProduct(int id, String name, String avatar, int id_type_product, int id_status_device, int id_brand, int price, String describe,int height,int length,int width,int weight,List<String> listFileNameImage) {
         String sql = "UPDATE PRODUCTS SET NAME=?, avatar=?,id_type_product=?,  id_status_device=?,id_brand=?,price=?,`describe`=?,height=?,length=?,width=?,weight=? WHERE ID=?";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -432,6 +439,17 @@ public class ProductDAO {
             ps.setInt(11, weight);
             ps.setInt(12, id);
             ps.executeUpdate();
+
+            if(!listFileNameImage.isEmpty()){
+                sql = "INSERT INTO library_images(url,id_product) values(?,?)";
+                ps = DBConnect.getInstall().preStatement(sql);
+                ps.setInt(2,id);
+                for (int i = 0; i < listFileNameImage.size(); i++) {
+                    ps.setString(1, listFileNameImage.get(i));
+                    ps.executeUpdate();
+                }
+            }
+
             return true;
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -627,10 +645,44 @@ public class ProductDAO {
 //        }
 //    }
 
+//    get income by year
+    public static List<Integer> getIncomeByYear (String year) {
+        LinkedList<Integer> list = new LinkedList<>();
+
+        String sql = " select count(*) countIncome from bookings WHERE year(date_booking)=? and month(date_booking)=? and status_booking = 7";
+        String countSumSQL = "select count(*) countSum from bookings where year(date_booking)=?";
+        try {
+
+            PreparedStatement ps = DBConnect.getInstall().preStatement(countSumSQL);
+            ps.setString(1,year);
+            ResultSet rs = ps.executeQuery();
+
+            int countIncomeByYear = 0;
+            int countSum = 0;
+            while (rs.next()) {
+                countSum = rs.getInt("countSum");
+
+                for (int i = 0; i <= 11;i++){
+                    ps = DBConnect.getInstall().preStatement(sql);
+                    ps.setString(1,year);
+                    ps.setString(2, String.valueOf(i+1));
+                    rs = ps.executeQuery();
+
+                    while (rs.next()) {
+                        countIncomeByYear = rs.getInt("countIncome");
+                        System.out.println((float)countIncomeByYear);
+                        list.add(Math.round((float)countIncomeByYear/countSum)*100);
+                    }
+                }
+            }
+            return list;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public static void main(String[] args) {
-//        System.out.println(ProductDAO.getDifferentProduct());
-        System.out.println(ProductDAO.getTop8());
-//        System.out.println(ProductDAO.updateProduct(2, "Thay cụm đuôi sạc Samsung Galaxy A02 A022F","thay-cum-duoi-sac-samsung-galaxy-a02-a022f_1667623123.png",4,1,1,  500000,100,"test", 1));
+        System.out.println(ProductDAO.getIncomeByYear("2023"));
     }
 }

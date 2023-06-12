@@ -20,6 +20,8 @@ public class BookingModel {
     private String avatar;
     private String address;
     private String email;
+    private int fromDistrictId;
+    private int fromWardId;
     private int toDistrictId;
     private int toWardId;
     private int height;
@@ -270,6 +272,22 @@ public class BookingModel {
                 ", width=" + width +
                 ", weight=" + weight +
                 '}';
+    }
+
+    public int getFromWardId() {
+        return fromWardId;
+    }
+
+    public void setFromWardId(int fromWardId) {
+        this.fromWardId = fromWardId;
+    }
+
+    public int getFromDistrictId() {
+        return fromDistrictId;
+    }
+
+    public void setFromDistrictId(int fromDistrictId) {
+        this.fromDistrictId = fromDistrictId;
     }
 }
 

@@ -88,7 +88,8 @@
                             <td name="date_booking"><%=booking.getDate_booking()%>
                             </td>
                             <td>
-                                <select class="select-type-booking form-control" id="status" name="status">
+                                <select class="select-type-booking form-control" id="status" name="status"
+                                        onchange="changeStatusBooking(<%=booking.getId()%>)">
                                     <%for (CategoryModel statusBook : listTypeStatusBook) {%>
                                     <option value="<%=statusBook.getId()%>" <%=statusBook.getId() == booking.getStatusBooking().getId() ? "selected" : ""%>>
                                         <%=statusBook.getName()%>
@@ -100,9 +101,10 @@
                             </td>
                             <td>
                                 <%--view booking--%>
-                                    <button class="btn btn-primary btn-sm edit" type="button" title="Xem" onclick="openModalLogistic()">
-                                        <i class="fa fa-eye"></i>
-                                    </button>
+                                <button class="btn btn-primary btn-sm edit" type="button" title="Xem"
+                                        onclick="openModalLogistic()">
+                                    <i class="fa fa-eye"></i>
+                                </button>
                                 <%--sua booking--%>
                                 <%if (isGrantEdit == true) {%>
                                 <a href="manage-confirm?type=edit-confirm&id-confirm=<%=booking.getId()%>">
@@ -218,4 +220,24 @@
 <!--
 <%@include file="../../common/admin/script.jsp" %>
 -->
+
+<script>
+    async function changeStatusBooking(idBooking) {
+        let value = $('#status').val()
+        await $.ajax({
+            type: 'GET',
+            url: `<%=request.getContextPath()%>/admin/manage-booking?status=wait-accept&type-status=${value}&id-booking=${idBooking}`,
+            success: function () {
+                swal("Thay đổi trạng thái đơn hàng thành công!", {
+                    title: "Thông báo",
+                    buttons: false,
+                    timer: 3000,
+                    icon: "success",
+                });
+            }
+        });
+        location.reload()
+    }
+</script>
+
 </body>

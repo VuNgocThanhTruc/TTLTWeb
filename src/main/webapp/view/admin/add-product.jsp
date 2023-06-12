@@ -188,6 +188,12 @@
                                 </div>
                             </div>
                             <div class="form-group col-md-12">
+                                <label class="control-label">Thư viện ảnh sản phẩm</label>
+                                <div id="libraryfileupload">
+                                    <input type="file" id="uploadfilelibrary" name="uploadfilelibrary" multiple/>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-12">
                                 <label class="control-label">Mô tả sản phẩm</label>
                                 <textarea class="form-control" name="description"
                                           id="description"></textarea>

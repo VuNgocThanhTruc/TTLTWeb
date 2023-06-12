@@ -29,6 +29,11 @@ public class ProductCartModel {
         this.productModel = productModel;
     }
 
+    public float getSumMoney(){
+        float res = 0;
+        res= (quantity*productModel.getPrice());
+        return res;
+    }
 
     @Override
     public String toString() {
