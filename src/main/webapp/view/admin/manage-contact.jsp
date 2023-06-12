@@ -45,36 +45,6 @@
       <div class="tile">
         <div class="tile-body">
           <div class="row element-button">
-            <div class="col-sm-2">
-              <%--Tạo mới--%>
-                <%if(isGrantAdd == true) {%>
-              <a class="btn btn-add btn-sm" href="manage-blog?action=add" title="Thêm"><i
-                      class="fas fa-plus"></i>
-                Tạo mới</a>
-                <%} else {%>
-                <button
-                        class="btn btn-add btn-sm"
-                        type="button"
-                        title="Không có quyền này!"
-                        style="opacity: 0.5; cursor: not-allowed;"
-                        disabled
-                >
-                  <i class="fas fa-plus"></i> Tạo mới
-                </button>
-                <%}%>
-            </div>
-
-            <%--                        <div class="col-sm-2">--%>
-            <%--                            <a class="btn btn-delete btn-sm print-file" type="button" title="In"--%>
-            <%--                               onclick="myApp.printTable()"><i class="fas fa-print"></i> In dữ liệu</a>--%>
-            <%--                        </div>--%>
-
-            <%--                        <div class="col-sm-2">--%>
-            <%--                            <a class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i--%>
-            <%--                                    class="fas fa-trash-alt"></i> Xóa tất cả </a>--%>
-            <%--                        </div>--%>
-          </div>
-          <%--                    in ra tin tức--%>
           <% if (listContact == null){
           %>
           <div>Chưa có phản hồi </div>
@@ -203,10 +173,6 @@ MODAL
 <script src="../../admin/doc/js/plugins/pace.min.js"></script>
 <!-- Page specific javascripts-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<!-- Data table plugin-->
-<script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
-<script type="text/javascript">$('#sampleTable').DataTable();</script>
 <script>
   function deleteRow(r) {
     var i = r.parentNode.parentNode.rowIndex;
