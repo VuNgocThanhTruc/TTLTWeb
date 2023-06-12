@@ -9,7 +9,16 @@
 
 <head>
     <%@include file="../../common/web/head.jsp" %>
-
+    <style>
+        #img-blog img{
+            object-fit: cover;
+            max-height: 200px;
+        }
+        #new-blog img{
+            max-width: 100px;
+            max-height: 65px;
+        }
+    </style>
     <title>Blog | Phone Care </title>
 </head>
 
@@ -53,12 +62,12 @@
                         <%for (BlogModel blog : newListBlog) {%>
                         <div class="item-article clearfix">
                             <div class="post-image">
-                                <a href="">
-                                    <img src="images/blog/<%=blog.getAvatar()%>" alt="" width="100px;" class="avatar"></a>
+                                <a id="new-blog" href="detail-blog?id-blog=<%=blog.getId()%>">
+                                        <%=blog.getAvatar()%>
                             </div>
                             <div class="post-content">
                                 <h3>
-                                    <a href="list-blog"><%=blog.getTitle()%>
+                                    <a href="detail-blog?id-blog=<%=blog.getId()%>"><%=blog.getTitle()%>
                                     </a>
                                 </h3>
                                 <span class="author"><%=blog.getUserCreated()%></span>
@@ -183,10 +192,9 @@
                     <article class="blog-loop">
                         <div class="blog-post row">
                             <div class="col-md-4 col-xs-12 col-sm-12">
-                                <a href="detail-blog?id-blog=<%=blog.getId()%>" class="blog-post-thumbnail" title=""
+                                <a id="img-blog" href="detail-blog?id-blog=<%=blog.getId()%>" class="blog-post-thumbnail" title=""
                                    rel="nofollow">
-                                    <img style="border: 1px;width: 100%" src="images/blog/<%=blog.getAvatar()%>"
-                                         alt="" width="100px;" class="avatar">
+                                    <%=blog.getAvatar()%>
                                 </a>
                             </div>
                             <div class="col-md-8 col-xs-12 col-sm-12">
@@ -197,11 +205,10 @@
                                 <div class="blog-post-meta">
                                     <span class="author vcard">Người viết: <%=blog.getUserCreated()%></span>
                                     <span class="date">
-                      <time pubdate="" datetime="2022-10-30"><%=blog.getCreatedDate()%></time>
-                    </span>
+                                        <time pubdate="" datetime="2022-10-30"><%=blog.getCreatedDate()%></time>
+                                     </span>
                                 </div>
-                                <p class="entry-content"><%=blog.getBriefContent()%>
-                                </p>
+                                    <div class="entry-content"><%=blog.getBriefContent()%></div>
                             </div>
                         </div>
                     </article>
@@ -229,7 +236,36 @@
 </div>
 
 <%@include file="../../common/web/footer.jsp" %>
+<script>
+    const img = document.querySelectorAll('#img-blog img')
+    console.log(img)
 
+    var tdBriefs = document.querySelectorAll('.entry-content');
+    for(var i = 0; i < tdBriefs.length; i++){
+        var tdBrief = tdBriefs[i];
+        var firstElement = tdBrief.firstElementChild;
+        firstElement.style.fontWeight = "normal";
+        firstElement.style.fontStyle = "normal";
+
+        var content = firstElement.textContent;
+
+        if (content.length > 200) {
+            var truncatedContent = content.substring(0, 200) + "...";
+            firstElement.textContent = truncatedContent;
+        }
+
+        var lengthChildren = tdBrief.children.length;
+        for (var j = 1; i < lengthChildren; j++) {
+            console.log("j", j)
+            var children = tdBrief.children[j];
+            console.log("child ",children)
+            if(children != undefined){
+                children.style.display = 'none';
+            }
+            if(j > lengthChildren) break;
+        }
+    }
+</script>
 </body>
 
 </html>

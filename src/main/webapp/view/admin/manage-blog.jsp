@@ -8,6 +8,13 @@
 <head>
     <title>Quản lý sản phẩm | ADMIN</title>
     <%@include file="../../common/admin/head.jsp" %>
+    <style>
+        img{
+            max-width: 250px;
+            max-height: 150px;
+            object-fit: contain;
+        }
+    </style>
 </head>
 
 <body onload="time()" class="app sidebar-mini rtl">
@@ -84,11 +91,11 @@
                         <tr>
                             <th width="10"><input type="checkbox" id="all"></th>
                             <th>ID</th>
-                            <th>Tiêu đề tin</th>
-                            <th>Ảnh đại diên</th>
-                            <th>Nội dung tóm tắt</th>
-                            <th>Người đăng</th>
-                            <th>Chức năng</th>
+                            <th width="300px">Tiêu đề tin</th>
+                            <th width="300px">Ảnh đại diên</th>
+                            <th width="500px">Nội dung tóm tắt</th>
+                            <th width="150px" style="text-align: center">Người đăng</th>
+                            <th width="100px" style="text-align: center">Chức năng</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -99,14 +106,14 @@
                             <td width="10"><input type="checkbox" name="check1" value="1"></td>
                             <td><%=blog.getId()%></td>
                             <td><%=blog.getTitle()%></td>
-                            <td><img src="../images/blog/<%=blog.getAvatar()%>" width="100px;" class="avatar"></td>
-                            <td><%=blog.getBriefContent()%></td>
+                            <td><%=blog.getAvatar()%></td>
+                            <td class="brief-content"><%=blog.getBriefContent()%></td>
                             <td><%=blog.getUserCreated()%></td>
                             <td>
                                 <%--xóa tin tức--%>
                                 <%if(isGrantDel == true) {%>
                                     <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                       href="manage-blog?action=delete&id=<%=blog.getId()%>"><i class="fas fa-trash-alt"></i></a>
+                                       href="manage-blog?action=delete&id=<%=blog.getId()%>" onclick="return confirmDelete()"><i class="fas fa-trash-alt"></i></a>
                                 <%} else {%>
                                     <button
                                             class="btn btn-primary btn-sm trash"
@@ -213,60 +220,30 @@ MODAL
         </div>
     </div>
 </div>
-<!--
 <%@include file="../../common/admin/script.jsp" %>
--->
-
-<!-- Essential javascripts for application to work-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script src="src/jquery.table2excel.js"></script>
-<script src="js/main.js"></script>
-<!-- The javascript plugin to display page loading on top-->
 <script src="../../admin/doc/js/plugins/pace.min.js"></script>
-<!-- Page specific javascripts-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<!-- Data table plugin-->
-<%--<script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>--%>
-<%--<script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>--%>
-<link rel="stylesheet" href="../js/jquery.dataTables.min.css">
-<script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#sampleTable').DataTable( {
-            "language": {
-                "url": "../js/json/vi.json"
-            }
-        } );
-    } );
-    // $('#sampleTable').DataTable();
-</script>
 <script>
     function deleteRow(r) {
         var i = r.parentNode.parentNode.rowIndex;
         document.getElementById("myTable").deleteRow(i);
     }
 
-    // jQuery(function () {
-    //     jQuery(".trash").click(function () {
-    //         swal({
-    //             title: "Cảnh báo",
-    //
-    //             text: "Bạn có chắc chắn là muốn xóa?",
-    //             buttons: ["Hủy bỏ", "Đồng ý"],
-    //         })
-    //             .then((willDelete) => {
-    //                 if (willDelete) {
-    //                     swal("Đã xóa thành công.!", {});
-    //                 }
-    //             });
-    //     });
-    // });
-    // oTable = $('#sampleTable').dataTable();
-    // $('#all').click(function (e) {
-    //     $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
-    //     e.stopImmediatePropagation();
-    // });
+    function confirmDelete() {
+        if (confirm("Bạn có chắc chắn muốn xóa?")) {
+            return true; // Nếu người dùng chấp nhận xóa, tiếp tục hành động
+        } else {
+            return false; // Nếu người dùng không chấp nhận xóa, ngăn không cho hành động xóa xảy ra
+        }
+    }
 
+    $('#all').click(function (e) {
+        $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
+        e.stopImmediatePropagation();
+    });
+  
     // print data
     var myApp = new function () {
         this.printTable = function () {
@@ -278,16 +255,49 @@ MODAL
         }
     }
 
-    //Modal
-    $("#show-emp").on("click", function () {
-        $("#ModalUP").modal({backdrop: false, keyboard: false})
-    });
+    var tdBriefs = document.querySelectorAll('.brief-content');
+    for(var i = 0; i < tdBriefs.length; i++){
+        var tdBrief = tdBriefs[i];
+        var firstElement = tdBrief.firstElementChild;
+        firstElement.style.fontWeight = "400";
+        firstElement.style.fontStyle = "normal";
+        firstElement.style.color = "#000";
 
-    function save() {
+        var content = firstElement.textContent;
 
-        swal("Đã lưu thành công.!", {});
+        if (content.length > 200) {
+            var truncatedContent = content.substring(0, 200) + "...";
+            firstElement.textContent = truncatedContent;
+        }else{
+            firstElement.textContent = content + "...";
+        }
 
+        var lengthChildren = tdBrief.children.length;
+        for (var j = 1; i < lengthChildren; j++) {
+            var children = tdBrief.children[j];
+            if(children != undefined){
+                children.style.display = 'none';
+            }
+            if(j > lengthChildren) break;
+        }
     }
+
+    var ems = document.querySelectorAll('em');
+    for(var i = 0; i < ems.length; i++){
+        var em = ems[i];
+        em.style.fontStyle = 'normal'
+        em.style.color = "#000";
+        em.style.fontWeight = "400";
+    }
+
+    var strongs = document.querySelectorAll('strong');
+    for(var i = 0; i < strongs.length; i++){
+        var strong = strongs[i];
+        strong.style.fontStyle = 'normal'
+        strong.style.color = "#000";
+        strong.style.fontWeight = "400";
+    }
+
 </script>
 
 </body>

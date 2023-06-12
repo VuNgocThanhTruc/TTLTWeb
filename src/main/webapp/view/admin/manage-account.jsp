@@ -32,6 +32,8 @@
 
     List<UserModel> listAccountAdmin = (List<UserModel>) request.getAttribute("listAccAdmin");
 
+    List<UserModel> listAccountLocked = (List<UserModel>) request.getAttribute("listAccLocked");
+
     Boolean isGrantAdd = false;
     Boolean isGrantEdit = false;
     Boolean isGrantDel = false;
@@ -64,7 +66,7 @@
                         <div class="col-sm-5" style="padding-left: 10px">
 
                             <div class="tabs"
-                                 style="display: flex; min-width: 346px; max-width: 342px;padding: 3px; border-radius: 5px; background-color: #ededef">
+                                 style="display: flex; min-width: 170px; padding: 3px; border-radius: 5px; background-color: #ededef">
                                 <div class="tab-item active"
                                      style="padding: 5px 10px; text-align: center ;border-radius: 4px;font-size: 15px;min-width: 170px;cursor: pointer; max-width: 180px">
                                     <b>Tài khoản admin</b>
@@ -75,6 +77,10 @@
                                     <b>Tài khoản người dùng</b>
                                 </div>
 
+                                <div class="tab-item"
+                                     style="padding: 5px 10px; text-align: center ;border-radius: 4px;font-size: 15px;min-width: 170px;cursor: pointer; max-width: 180px">
+                                    <b>Tài khoản bị khóa</b>
+                                </div>
                             </div>
 
                         </div>
@@ -129,12 +135,12 @@
                                     <th>Sex</th>
                                     <th>Address</th>
                                     <th>Nhóm quyền</th>
-                                    <th>Chức năng</th>
+                                    <th>Chi tiết</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <%
-                                    for (UserModel acc :
+                                    if(listAccountAdmin != null) for (UserModel acc :
                                             listAccountAdmin) {%>
                                 <tr>
                                     <td><%=acc.getId()%>
@@ -154,42 +160,9 @@
                                     <td><%=acc.getNameRole()%>
                                     </td>
                                     <td>
-                                        <%--chức năng xóa người dùng--%>
-                                        <%if (isGrantDel == true) {%>
-                                        <a class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                           href="manage-blog?action=delete&id=<%=acc.getId()%>"><i
-                                                class="fas fa-trash-alt"></i></a>
-                                        <%} else {%>
-                                        <button
-                                                class="btn btn-primary btn-sm trash"
-                                                type="button"
-                                                title="Không có quyền này!"
-                                                style="opacity: 0.5; cursor: not-allowed;"
-                                                disabled
-                                        >
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <%}%>
-                                        <%-- chức năng sửa thông tin người dùng--%>
-                                        <%if (isGrantEdit == true) {%>
-                                        <a href="manage-blog?action=edit-blog&id-blog=<%=acc.getId()%>               ">
-                                            <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
-                                                    id="show-confirm-admin"
-                                                    data-toggle="modal" data-target="#ModalConfirm"><i
-                                                    class="fas fa-edit"></i>
-                                            </button>
+                                        <a href="manage-account?action=profile-user&id-user=<%=acc.getId()%>" style="display: flex; align-items: center;">
+                                            <p title="Xem chi tiết" style="margin: 0; padding-left: 20px; font-size: 17px"><i style="width: 100%;height: 100%" class="fas fa-angle-right"></i></p>
                                         </a>
-                                        <%} else {%>
-                                        <button
-                                                class="btn btn-primary btn-sm edit"
-                                                type="button"
-                                                title="Không có quyền này!"
-                                                style="opacity: 0.5; cursor: not-allowed;"
-                                                disabled
-                                        >
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <%}%>
                                     </td>
                                 </tr>
                                 <%
@@ -239,7 +212,7 @@
                             <div>Chưa có tài khoản nào</div>
                             <%
                             } else {%>
-                            <table class="display table table-hover table-bordered" id="">
+                            <table class="display table table-hover table-bordered">
                                 <thead>
                                 <tr>
                                     <th>ID</th>
@@ -250,7 +223,7 @@
                                     <th>Sex</th>
                                     <th>Address</th>
                                     <th>Nhóm quyền</th>
-                                    <th>Chức năng</th>
+                                    <th>Chi tiết</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -275,44 +248,9 @@
                                     <td><%=acc.getNameRole()%>
                                     </td>
                                     <td>
-                                        <%--chức năng xóa người dùng--%>
-                                        <%if (isGrantDel == true) {%>
-                                        <a class="btn btn-primary btn-sm trash" type="button"
-                                           title="Xóa"
-                                           href="manage-blog?action=delete&id=<%=acc.getId()%>"><i
-                                                class="fas fa-trash-alt"></i></a>
-                                        <%} else {%>
-                                        <button
-                                                class="btn btn-primary btn-sm trash"
-                                                type="button"
-                                                title="Không có quyền này!"
-                                                style="opacity: 0.5; cursor: not-allowed;"
-                                                disabled
-                                        >
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <%}%>
-                                        <%-- chức năng sửa thông tin người dùng--%>
-                                        <%if (isGrantEdit == true) {%>
-                                        <a href="manage-blog?action=edit-blog&id-blog=<%=acc.getId()%>               ">
-                                            <button class="btn btn-primary btn-sm edit" type="button"
-                                                    title="Sửa"
-                                                    id="show-confirm"
-                                                    data-toggle="modal" data-target="#ModalConfirm"><i
-                                                    class="fas fa-edit"></i>
-                                            </button>
+                                        <a href="manage-account?action=profile-user&id-user=<%=acc.getId()%>" style="display: flex; align-items: center;">
+                                            <p title="Xem chi tiết" style="margin: 0; padding-left: 20px; font-size: 17px"><i style="width: 100%;height: 100%" class="fas fa-angle-right"></i></p>
                                         </a>
-                                        <%} else {%>
-                                        <button
-                                                class="btn btn-primary btn-sm edit"
-                                                type="button"
-                                                title="Không có quyền này!"
-                                                style="opacity: 0.5; cursor: not-allowed;"
-                                                disabled
-                                        >
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <%}%>
                                     </td>
                                 </tr>
                                 <%
@@ -321,6 +259,54 @@
                             </table>
                             <%
                                 }%>
+                        </div>
+
+                        <div class="tab-pane">
+                            <table class="display table table-hover table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Tel</th>
+                                    <th>Sex</th>
+                                    <th>Address</th>
+                                    <th>Nhóm quyền</th>
+                                    <th>Chi tiết</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <%
+                                    if(listAccountLocked != null) for (UserModel acc :
+                                            listAccountLocked) {%>
+                                <tr>
+                                    <td><%=acc.getId()%>
+                                    </td>
+                                    <td><%=acc.getName()%>
+                                    </td>
+                                    <td><%=acc.getUsername()%>
+                                    </td>
+                                    <td><%=acc.getEmail()%>
+                                    </td>
+                                    <td><%=acc.getTel()%>
+                                    </td>
+                                    <td><%=acc.getSex()%>
+                                    </td>
+                                    <td><%=acc.getAddress()%>
+                                    </td>
+                                    <td><%=acc.getNameRole()%>
+                                    </td>
+                                    <td>
+                                        <a href="manage-account?action=profile-user&id-user=<%=acc.getId()%>" style="display: flex; align-items: center;">
+                                            <p title="Xem chi tiết" style="margin: 0; padding-left: 20px; font-size: 17px"><i style="width: 100%;height: 100%" class="fas fa-angle-right"></i></p>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <%
+                                    }%>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -348,6 +334,7 @@
     const tabs = $$('.tab-item');
     const panes = $$('.tab-pane');
 
+
     tabs.forEach((tab, index) => {
         const pane = panes[index];
         tab.onclick = function () {
@@ -358,5 +345,11 @@
             pane.classList.add('active')
         }
     })
+
+    const tab_menu = $('.tabs')
+    const length_tab = tabs.length;
+    var width_tab = 170 * length_tab + 7;
+    tab_menu.style.width = width_tab + 'px';
+    console.log('width_tab: ' + width_tab)
 </script>
 </html>

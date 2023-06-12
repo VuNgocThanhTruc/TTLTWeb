@@ -33,7 +33,7 @@
                 <b>
                     <%=user !=null ? user.getName() : "Guest"%>
                 </b></p>
-            <p class="app-sidebar__user-designation">Chào mừng bạn trở lại</p>
+            <p class="app-sidebar__user-designation"> <%=role !=null ? role.getName() : "Chào mừng"%></p>
         </div>
     </div>
     <hr>

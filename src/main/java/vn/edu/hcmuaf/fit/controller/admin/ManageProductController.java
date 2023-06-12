@@ -28,6 +28,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.*;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @MultipartConfig
@@ -66,7 +68,11 @@ public class ManageProductController extends HttpServlet {
         } else if (SystemConstant.DELETE.equals(typeParam)) {
             if (idProductParam != null) {
                 ProductDAO.deleteProduct(Integer.parseInt(idProductParam));
-                DBConnect.getInstall().insert(new Log(3,Integer.parseInt(user == null ? user.getId() : "-1"), request.getRemoteAddr(),request.getRequestURI(),"Delete Product ID :" +idProductParam, 0));
+                DBConnect.getInstall().insert(new Log(3,
+                        Integer.parseInt(user == null ? "-1" : user.getId()),
+                        request.getRemoteAddr(),request.getRequestURI(),
+                        "Delete Product ID :" +idProductParam,
+                        0));
             }
             request.setAttribute("listProduct", ProductService.getListProduct());
             view = "/view/admin/manage-product.jsp";
@@ -74,11 +80,11 @@ public class ManageProductController extends HttpServlet {
             //Export Data
             ExportService exportService = new ExportService();
             exportService.exportProduct(request, response);
-            DBConnect.getInstall().insert(new Log(Log.INFO,Integer.parseInt(user == null ? user.getId() : "-1"), request.getRemoteAddr(),request.getRequestURI(),"Export Data :" +ProductService.getListProduct().toString(), 0));
+            DBConnect.getInstall().insert(new Log(Log.INFO,Integer.parseInt(user == null ? "-1" : user.getId()), request.getRemoteAddr(),request.getRequestURI(),"Export Data :" +ProductService.getListProduct().toString(), 0));
             view = "/view/admin/manage-product.jsp";
         }else if (typeParam == null) {
             view = "/view/admin/manage-product.jsp";
-            DBConnect.getInstall().insert(new Log(Log.INFO, Integer.parseInt(user == null ? user.getId() : "-1"), request.getRemoteAddr(), request.getRequestURI(),"Show list product: "+ProductService.getListProduct().toString(), 0));
+            DBConnect.getInstall().insert(new Log(Log.INFO, Integer.parseInt(user == null ? "-1" : user.getId()), request.getRemoteAddr(), request.getRequestURI(),"Show list product: "+ProductService.getListProduct().toString(), 0));
             request.setAttribute("listProduct", ProductService.getListProduct());
         }
 
@@ -138,12 +144,11 @@ public class ManageProductController extends HttpServlet {
         int width = Integer.parseInt(request.getParameter("width"));
         int weight = Integer.parseInt(request.getParameter("weight"));
         String pDescription = request.getParameter("description");
-        int pidStore = Integer.parseInt("1");
-        String id = request.getParameter("idProduct");
+        String avatar = request.getParameter("valueImage");
+        List<String> listFileNameImage = uploadLibraryImage(request,"product");
+        String imageFileName = uploadImageServer(request,"product")!=null && uploadImageServer(request,"product").length()>0?uploadImageServer(request,"product"):avatar;
 
-        String imageFileName = updateImageServer(request,"product");
-
-        boolean checkUpdateProduct = ProductService.updateProduct(pid, pName, imageFileName, pidTypeProduct, pidStatus, pBrand, pPrice, pDescription, height,length,width,weight);
+        boolean checkUpdateProduct = ProductService.updateProduct(pid, pName,imageFileName, pidTypeProduct, pidStatus, pBrand, pPrice, pDescription, height,length,width,weight, listFileNameImage);
         request.setAttribute("message", checkUpdateProduct);
         request.setAttribute("categoryTypeProduct", CategorySevice.getListTypeProduct());
         request.setAttribute("categoryBrand", CategorySevice.getListBrand());
@@ -164,7 +169,7 @@ public class ManageProductController extends HttpServlet {
         boolean checkUpdateProduct = ProductService.updateProductBasic(pid, pName, brand, pidStatus, pPrice, pidTypeProduct);
         DBConnect.getInstall().insert(
                 new Log(0,
-                        Integer.parseInt(user == null ? user.getId() : "-1"),
+                        Integer.parseInt(user == null ? "-1" : user.getId()),
                         request.getRemoteAddr(),request.getRequestURI(),
                         "Edit Product id: " +pid+", Name: "+ pName +", Id Type Product: " +pidTypeProduct +", Status: " +pidStatus+", Price: "+ pPrice+", brand: " + brand ,
                         0));
@@ -179,9 +184,7 @@ public class ManageProductController extends HttpServlet {
     protected void doPost_Add(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         UserModel user =(UserModel) session.getAttribute("userlogin");
-        response.setContentType("text/html;charset=UTF-8");
         String pName = request.getParameter("name_product");
-        String pAvatar = request.getParameter("ImageUpload");
         int pidTypeProduct = Integer.parseInt(request.getParameter("categoryTypeProduct"));
         int pidStatus = Integer.parseInt(request.getParameter("statusProduct"));
         int pBrand = Integer.parseInt(request.getParameter("categoryBrand"));
@@ -194,13 +197,16 @@ public class ManageProductController extends HttpServlet {
         int weight = Integer.parseInt(request.getParameter("weight"));
         int pidStore = Integer.parseInt("1");
 
-        String imageFileName = updateImageServer(request,"product");
+        String imageFileName = uploadImageServer(request,"product");
 
-        boolean checkAddNew = new ProductService().addNewProduct(pName, imageFileName, pidTypeProduct, pidStatus, pBrand, pPrice, pQuantity, pDescription, pidStore, Integer.parseInt(user.getId()),height,length,width,weight);
+        List<String> listFileNameImage = uploadLibraryImage(request,"product");
+
+        boolean checkAddNew = new ProductService().addNewProduct(pName, imageFileName, pidTypeProduct, pidStatus, pBrand, pPrice, pQuantity, pDescription, pidStore, Integer.parseInt(user.getId()),height,length,width,weight,listFileNameImage);
         DBConnect.getInstall().insert(
                 new Log(0,
-                        Integer.parseInt(user == null ? user.getId() : "-1"),
-                        request.getRemoteAddr(),request.getRequestURI(),
+                        Integer.parseInt(user == null ? "-1" : user.getId()),
+                        request.getRemoteAddr(),
+                        request.getRequestURI(),
                         "Add New Product " +"Name: "+ pName +", Id Type Product: " +pidTypeProduct +", Status: " +pidStatus + ", Brand: " + pBrand+", Price: "+ pPrice+", Quantity: " + pQuantity+", Description: " + pDescription+", Id Store: " + pidStore ,
                         0));
         request.setAttribute("message", checkAddNew);
@@ -210,8 +216,35 @@ public class ManageProductController extends HttpServlet {
         request.getRequestDispatcher("/view/admin/manage-product.jsp").forward(request, response);
     }
 
+    protected List<String> uploadLibraryImage(HttpServletRequest request,String saveIntoPath) throws ServletException, IOException {
+        List<String> listNameFileImage = new LinkedList<>();
+        String uploadPath = getServletContext().getRealPath("") + File.separator +"/images/"+saveIntoPath+"/";  // upload path where we have to upload our actual image
+
+        if(ServletFileUpload.isMultipartContent(request)){
+            try {
+                for (Part part : request.getParts()) {
+                    if (part.getContentType() != null && part.getName().equals("uploadfilelibrary")) {
+                        String fileName = part.getSubmittedFileName();
+                        FileOutputStream fos = new FileOutputStream(uploadPath+fileName);
+                        InputStream fileContent = part.getInputStream();
+
+                        byte[] data = new byte[fileContent.available()];
+                        fileContent.read(data);
+                        fos.write(data);
+                        fos.close();
+                        listNameFileImage.add(fileName);
+                    }
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return listNameFileImage;
+    }
+
     //        update image from client path to server
-    protected String updateImageServer(HttpServletRequest request, String saveIntoPath) throws ServletException, IOException {
+    protected String uploadImageServer(HttpServletRequest request, String saveIntoPath) throws ServletException, IOException {
         Part file = request.getPart("ImageUpload");
 
         String imageFileName = file.getSubmittedFileName();  // get selected image file name
@@ -227,10 +260,9 @@ public class ManageProductController extends HttpServlet {
             is.read(data);
             fos.write(data);
             fos.close();
-            return imageFileName;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
         }
+        return imageFileName;
     }
 }

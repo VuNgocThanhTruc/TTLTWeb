@@ -65,7 +65,7 @@ public class ManageConfirmController extends HttpServlet {
 
         DBConnect.getInstall().insert(
                 new Log(1,
-                        Integer.parseInt(user == null ? user.getId() : "-1"),
+                        Integer.parseInt(user == null ? "-1" : user.getId()),
                         request.getRemoteAddr(),request.getRequestURI(),
                         "Edit confirm: id: " + id,
                         0));

@@ -472,12 +472,18 @@
 
         $.ajax({
             type: 'POST',
+            dataType: 'json',
             data: {
                 "id_item": idProduct * 1,
             },
             url: "<%=request.getContextPath()%>/cart?action=add-to-cart",
             success: function (data) {
-                numCart.innerText = data
+                swal("Đã thêm sản phẩm vào giỏ hàng!", {
+                    buttons: false,
+                    timer: 1000,
+                    icon: "success",
+                });
+                numCart.innerText = data.numCart
             }
         });
     }

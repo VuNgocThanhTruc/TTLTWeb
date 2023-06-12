@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.dao;
 
+import vn.edu.hcmuaf.fit.db.ConnectToDatabase;
 import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.ComponentModel;
 import vn.edu.hcmuaf.fit.model.FunctionModel;
@@ -203,6 +204,7 @@ public class AuthoritiesDAO {
         return result;
     }
 
+    //Lay ra trang thai phan quyen
     public Boolean getDecFunctionOfRole(String idRole, String idComponent, String idFunction){
         String query = "select isGrant from decentralizes where id_role = ? and id_component = ? and id_function =? ";
         try {
@@ -219,22 +221,21 @@ public class AuthoritiesDAO {
         }
         return false;
     }
-    public static void main(String[] args) {
-        AuthoritiesDAO ad = new AuthoritiesDAO();
-        System.out.println(ad.getAllComponent());
-        //System.out.println(ad.getAllFunction());
-        //ad.getAuthoritiesOfComponent(1,1);
-        //System.out.println(ad.createIdRoleRamdom());
-        //ad.resetRoleById(1);
-        //ad.decentralizeFunctionForRole("2", "3","3",false);
-        //ad.createRoleDecDefault("1");
 
-        //ad.createRoleDecDefault("1");
-        //ad.deleteDecentralizeRole("1");
-        //ad.printDecentralizeOfRole("1");
-//        System.out.println(ad.getRoleById("1"));
+    //Xoa nhom quyen
+    public void deleteRole(String idRole){
+        String sql = "delete from roles where id_role = ? ";
+        Connection connection = new ConnectToDatabase().getConnect();
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, idRole);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
+    //Reset quyen
     public void resetRoleById(String idRole) {
         String query = "update decentralizes set isGrant = 0 where id_role = ?";
         try {

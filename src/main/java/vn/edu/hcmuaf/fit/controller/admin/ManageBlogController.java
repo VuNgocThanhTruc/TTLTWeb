@@ -20,6 +20,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @MultipartConfig
 @WebServlet(name = "ManageBlogController", value = "/admin/manage-blog")
@@ -37,7 +39,7 @@ public class ManageBlogController extends HttpServlet {
                 dao.deleteBlog(Integer.parseInt(idBlog));
                 DBConnect.getInstall().insert(
                         new Log(2,
-                                Integer.parseInt(user == null ? user.getId() : "-1"),
+                                Integer.parseInt(user == null ? "-1" : user.getId()),
                                 request.getRemoteAddr(),
                                 request.getRequestURI(),
                                 "Delete Blog id: "  + idBlog,
@@ -48,6 +50,10 @@ public class ManageBlogController extends HttpServlet {
                 request.setAttribute("blog", blog);
                 view = "/view/admin/edit-blog.jsp";
             } else if (SystemConstant.ADD.equals(actionParam)) {
+                String back = request.getParameter("back");
+                if(back != null && back.equals("true")){
+                    request.setAttribute("previous-page", "manage-blog");
+                }
                 view = "/view/admin/add-blog.jsp";
             }
         }
@@ -71,32 +77,25 @@ public class ManageBlogController extends HttpServlet {
         UserModel user =(UserModel) session.getAttribute("userlogin");
 
         String title = request.getParameter("title");
-        String brief = request.getParameter("brief");
+
         String detail = request.getParameter("detail");
-
-        Part file = request.getPart("ImageUpload");
-        String imageFileName = file.getSubmittedFileName();  // get selected image file name
-        String uploadPath = getServletContext().getRealPath("") + File.separator + "/images/blog/" + imageFileName;  // upload path where we have to upload our actual image
-        // Uploading our selected image into the images folder
-
-        try {
-            FileOutputStream fos = new FileOutputStream(uploadPath);
-            InputStream is = file.getInputStream();
-
-            byte[] data = new byte[is.available()];
-            is.read(data);
-            fos.write(data);
-            fos.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        // Xử lý tóm tắt nội dung
+        String brief = "";
+        String regex = "(?i)<img[^>]+>";
+        brief = detail.replaceAll(regex, "");
+        //Lấy một ảnh trong nội dung làm ảnh bìa
+        String coverImage = "<img alt='' src='' style='height:100px'; width:300px' />'";
+        Pattern pattern = Pattern.compile("<img[^>]+>");
+        Matcher matcher = pattern.matcher(detail);
+        if (matcher.find()) {
+            coverImage = matcher.group();
         }
-        BlogService.insertBlog( title, brief, detail, imageFileName);
+        BlogService.insertBlog(title, brief, detail, coverImage, user == null ? "1" : user.getId());
         DBConnect.getInstall().insert(
                 new Log(2,
-                        Integer.parseInt(user == null ? user.getId() : "-1"),
+                        Integer.parseInt(user == null ? "-1" : user.getId()),
                         request.getRemoteAddr(),request.getRequestURI(),
-                        "Add Blog Title: "  + title+", brief: " + brief+", detail: " + detail+", imageFileName: "+ imageFileName,
+                        "Add Blog Title: "  + title+", brief: " + brief+", detail: " + detail+", imageFileName: "+ coverImage,
                         0));
         response.sendRedirect(request.getContextPath() + "/admin/manage-blog");
 
@@ -107,31 +106,22 @@ public class ManageBlogController extends HttpServlet {
         UserModel user =(UserModel) session.getAttribute("userlogin");
         String id = request.getParameter("id-blog");
         String title = request.getParameter("title");
-        String brief = request.getParameter("brief");
         String detail = request.getParameter("detail");
-        Part file = request.getPart("ImageUpload");
-        String imageFileName = file.getSubmittedFileName();  // get selected image file name
-        String uploadPath = getServletContext().getRealPath("") + File.separator + "/images/blog/" + imageFileName;  // upload path where we have to upload our actual image
-
-        // Uploading our selected image into the images folder
-
-        try {
-            FileOutputStream fos = new FileOutputStream(uploadPath);
-            InputStream is = file.getInputStream();
-
-            byte[] data = new byte[is.available()];
-            is.read(data);
-            fos.write(data);
-            fos.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        // Xử lý tóm tắt nội dung
+        String brief = "";
+        String regex = "(?i)<img[^>]+>";
+        brief = detail.replaceAll(regex, "");
+        //Lấy một ảnh trong nội dung làm ảnh bìa
+        String coverImage = "<img alt='' src='' style='height:100px'; width:300px' />'";
+        Pattern pattern = Pattern.compile("<img[^>]+>");
+        Matcher matcher = pattern.matcher(detail);
+        if (matcher.find()) {
+            coverImage = matcher.group();
         }
-
-        BlogService.updateBlog(id, title, brief, detail, imageFileName);
+        BlogService.updateBlog(id, title, brief, detail, coverImage);
         DBConnect.getInstall().insert(
                 new Log(1,
-                        Integer.parseInt(user == null ? user.getId() : "-1"),
+                        Integer.parseInt(user == null ? "-1" : user.getId()),
                         request.getRemoteAddr(),request.getRequestURI(),
                         "Edit Blog id: "  + id,
                         0));

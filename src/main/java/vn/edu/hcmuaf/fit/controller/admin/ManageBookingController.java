@@ -39,7 +39,7 @@ public class ManageBookingController extends HttpServlet {
 
             DBConnect.getInstall().insert(
                     new Log(0,
-                            Integer.parseInt(user == null ? user.getId() : "-1"),
+                            Integer.parseInt(user == null ? "-1" : user.getId()),
                             request.getRemoteAddr() == null ? "Không xác định" : request.getRemoteAddr(),
                             request.getRequestURI(),
                             "List booking",
@@ -60,7 +60,7 @@ public class ManageBookingController extends HttpServlet {
 
                 DBConnect.getInstall().insert(
                         new Log(0,
-                                Integer.parseInt(user == null ? user.getId() : "-1"),
+                                Integer.parseInt(user == null ? "-1" : user.getId()),
                                 request.getRemoteAddr(),request.getRequestURI(),
                                 "Change statis booking: id:" + idBookingParam,
                                 0));
@@ -76,7 +76,7 @@ public class ManageBookingController extends HttpServlet {
 
                 DBConnect.getInstall().insert(
                         new Log(2,
-                                Integer.parseInt(user == null ? user.getId() : "-1"),
+                                Integer.parseInt(user == null ? "-1" : user.getId()),
                                 request.getRemoteAddr(),request.getRequestURI(),
                                 "Delete Booking: id: " + request.getParameter("id"),
                                 0));

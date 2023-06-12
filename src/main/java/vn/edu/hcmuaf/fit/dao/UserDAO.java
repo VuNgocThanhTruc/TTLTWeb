@@ -108,38 +108,40 @@ public class UserDAO implements ObjectDAO {
 
 
     public int checkLogin(String username, String pass) {
-//        User user = mapUser.get(username);
         UserModel user = loadUsername().get(username);
-
         if (user != null) {
             int id = user.getId_type_user();
-            if (user.getPassword().equals(pass) && id == 1) {
+            boolean isLocked = user.getLocked();
+            System.out.println("check login : " + isLocked);
+            if (user.getPassword().equals(pass) && id == 1 && isLocked == false) {
                 return 1;
-            } else if (user.getPassword().equals(pass) && id == 2) {
+            } else if (user.getPassword().equals(pass) && id == 2 && isLocked == false) {
                 return 2;
-            } else if (user.getPassword().equals(pass) && id == 3) {
+            } else if (user.getPassword().equals(pass) && id == 3 && isLocked == false) {
                 return 3;
-            } else {
-                return 0;
+            } else if(isLocked == false){
+                return 4;
+            }else{
+                return 5;
             }
-
         }
         return 0;
     }
 
     public int checkLoginbyEmail(String email, String pass) {
-//        User user = mapUser.get(username);
         UserModel user = loadEmail().get(email);
         if (user != null) {
             int id = user.getId_type_user();
-            if (user.getPassword().equals(pass) && id == 1) {
+            boolean isLocked = user.getLocked();
+            if (user.getPassword().equals(pass) && id == 1 && isLocked == false) {
                 return 1;
-            } else if (user.getPassword().equals(pass) && id == 2) {
+            } else if (user.getPassword().equals(pass) && id == 2 && isLocked == false) {
                 return 2;
+            } else if(isLocked == false) {
+                return 4;
             } else {
-                return 0;
+                return 5;
             }
-
         }
         return 0;
     }
@@ -338,17 +340,11 @@ public class UserDAO implements ObjectDAO {
         return listAllUser;
     }
 
-
-    public static void main(String[] args) {
-        UserModel user = getUserById("1");
-        System.out.println(user.getAvatar());;
-    }
-
     //Lấy ra toàn bộ tài khoản người dùng
     public List<UserModel> getListAccountUser() {
         List<UserModel> listAccountUser = new ArrayList<UserModel>();
         try {
-            ResultSet rs = new ConnectToDatabase().selectData("select id, name, username,email, password, avatar, tel, id_type_user, dob, sex, address, id_role from users where id_type_user = 1");
+            ResultSet rs = new ConnectToDatabase().selectData("select id, name, username,email, password, avatar, tel, id_type_user, dob, sex, address, id_role from users left join user_log on users.id = user_log.id_user where (user_log.locked is null or user_log.locked = 0) and users.id_type_user = 1");
             while (rs.next()) {
                 String id = rs.getString("id");
                 String name = rs.getString("name");
@@ -377,7 +373,7 @@ public class UserDAO implements ObjectDAO {
     public List<UserModel> getListAccountAdmin() {
         List<UserModel> listAccountAdmin = new ArrayList<UserModel>();
         try {
-            ResultSet rs = new ConnectToDatabase().selectData("select id, name, username,email, password, avatar, tel, id_type_user, dob, sex, address, id_role from users where id_type_user = 2");
+            ResultSet rs = new ConnectToDatabase().selectData("select id, name, username,email, password, avatar, tel, id_type_user, dob, sex, address, id_role from users left join user_log on users.id = user_log.id_user where (user_log.locked is null or user_log.locked = 0) and users.id_type_user = 2;");
             while (rs.next()) {
                 String id = rs.getString("id");
                 String name = rs.getString("name");
@@ -432,4 +428,92 @@ public class UserDAO implements ObjectDAO {
         return user;
     }
 
+    //Lay ra user by username
+    public static UserModel getUserByUsername(String user_name){
+        UserModel user = null;
+        try {
+            PreparedStatement ps = DBConnect.getInstall().preStatement("select id, name, username,email, password, avatar, tel, id_type_user, dob, sex, address, id_role from users where username = ?");
+            ps.setString(1, user_name);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String name = rs.getString("name");
+                String username = rs.getString("username");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String avatar = rs.getString("avatar");
+                String tel = rs.getString("tel");
+                int id_type_user = rs.getInt("id_type_user");
+                String dob = rs.getString("dob");
+                int sex = rs.getInt("sex");
+                String address = rs.getString("address");
+                String idRole = rs.getString("id_role");
+                user = new UserModel(id, name, username, email, password, avatar, tel, id_type_user,
+                        dob, sex, address, idRole);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    public List<UserModel> getListAccountLocked(){
+        List<UserModel> listAccountLocked = new ArrayList<UserModel>();
+        try {
+            ResultSet rs = new ConnectToDatabase().selectData("select id, name, username,email, password, avatar, tel, id_type_user, dob, sex, address, id_role FROM user_log JOIN users ON user_log.id_user = users.id where locked = true");
+            while (rs.next()) {
+                String id = rs.getString("id");
+                String name = rs.getString("name");
+                String username = rs.getString("username");
+                String email = rs.getString("email");
+                String password = rs.getString("password");
+                String avatar = rs.getString("avatar");
+                String tel = rs.getString("tel");
+                int id_type_user = rs.getInt("id_type_user");
+                String dob = rs.getString("dob");
+                int sex = rs.getInt("sex");
+                String address = rs.getString("address");
+                String idRole = rs.getString("id_role");
+                UserModel user = new UserModel(id, name, username, email, password, avatar, tel, id_type_user,
+                        dob, sex, address, idRole);
+                listAccountLocked.add(user);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listAccountLocked;
+    }
+
+    public Boolean getStatusLockUser(String id){
+        Boolean isLocked = false;
+        try {
+            PreparedStatement ps = DBConnect.getInstall().preStatement("select locked from user_log where id_user = ?");
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                isLocked = rs.getBoolean("locked");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return isLocked;
+    }
+
+    public void changeStatusUser(String idUser, String action){
+        Boolean lockedValue = false;
+        if (action.equals("lock")) {
+            lockedValue = true;
+        } else if (action.equals("unlock")) {
+            lockedValue = false;
+        }
+        try {
+            PreparedStatement ps = DBConnect.getInstall().preStatement("UPDATE user_log SET locked = ? WHERE id_user = ?");
+            // Cập nhật giá trị locked
+            ps.setBoolean(1, lockedValue);
+            ps.setString(2, idUser);
+            ps.executeUpdate();
+        }catch (Exception e){
+            e.getMessage();
+        }
+    }
 }
