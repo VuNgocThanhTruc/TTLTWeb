@@ -662,8 +662,8 @@ public class ProductDAO {
 
                     while (rs.next()) {
                         countIncomeByYear = rs.getInt("countIncome");
-                        System.out.println(countIncomeByYear);
-                        list.add(countIncomeByYear/countSum*100);
+                        System.out.println((float)countIncomeByYear);
+                        list.add(Math.round((float)countIncomeByYear/countSum)*100);
                     }
                 }
             }

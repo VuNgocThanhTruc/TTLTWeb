@@ -75,6 +75,8 @@ public class ProductService {
 
     public static List<RateReviewModel> getListCommentByIdProduct(int idProduct) {
         return ProductDAO.getListCommentByIdProduct(idProduct);
+    }public static List<Integer> getIncomeByYear(String year) {
+        return ProductDAO.getIncomeByYear(year);
     }
 
     public static void main(String[] args) {

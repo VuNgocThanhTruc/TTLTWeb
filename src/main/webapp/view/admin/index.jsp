@@ -1,19 +1,19 @@
 <%@ page import="java.util.List" %><%--<%@ page contentType="text/html;charset=UTF-8" language="java" %>--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
-<% List<Integer> list= (List<Integer>) request.getAttribute("list"); %>
+<% List<Integer> listIncomeByYear = (List<Integer>) request.getAttribute("listIncomeByYear"); %>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <title>Bảng điều khiển | ADMIN</title>
-    <%@include file="../../common/admin/head.jsp"%>
+    <%@include file="../../common/admin/head.jsp" %>
 </head>
 <body onload="time()" class="app sidebar-mini rtl">
 <!-- Navbar-->
-<%@include file="../../common/admin/header.jsp"%>
+<%@include file="../../common/admin/header.jsp" %>
 
-<%@include file="../../common/admin/sidebar.jsp"%>
+<%@include file="../../common/admin/sidebar.jsp" %>
 <main class="app-content">
     <div class="row">
         <div class="col-md-12">
@@ -110,7 +110,7 @@
                                 </tr>
                                 <tr>
                                     <td>MT9835</td>
-                                    <td>Đặng Hoàng Phúc	</td>
+                                    <td>Đặng Hoàng Phúc</td>
                                     <td>
                                         40.650.000 đ
                                     </td>
@@ -202,17 +202,18 @@
         <p><b>Copyright
             <script type="text/javascript">
                 document.write(new Date().getFullYear());
-            </script> Quản lý admin
+            </script>
+            Quản lý admin
         </b></p>
     </div>
 </main>
 
-<%@include file="../../common/admin/script.jsp"%>
+<%@include file="../../common/admin/script.jsp" %>
 <!--===============================================================================================-->
 <script type="text/javascript" src="js/plugins/chart.js"></script>
 <script type="text/javascript">
     var data = {
-        labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6"],
+        labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6","Tháng 7","Tháng 8","Tháng 9","Tháng 10","Tháng 11","Tháng 12"],
         datasets: [{
             label: "Dữ liệu đầu tiên",
             fillColor: "rgba(255, 213, 59, 0.767), 212, 59)",
@@ -221,8 +222,41 @@
             pointStrokeColor: "rgb(255, 212, 59)",
             pointHighlightFill: "rgb(255, 212, 59)",
             pointHighlightStroke: "rgb(255, 212, 59)",
-            <%=list%>
-            data: [20, 59, 90, 51, 56, 100]
+            data: [
+            <%for (int i=0;i<listIncomeByYear.size();i++){%>
+            <%=listIncomeByYear.get(i)%>
+                <%=i<listIncomeByYear.size()-1?",":""%>
+            <%}%>
+            ]
+        },
+            {
+                label: "Dữ liệu kế tiếp",
+                fillColor: "rgba(9, 109, 239, 0.651)  ",
+                pointColor: "rgb(9, 109, 239)",
+                strokeColor: "rgb(9, 109, 239)",
+                pointStrokeColor: "rgb(9, 109, 239)",
+                pointHighlightFill: "rgb(9, 109, 239)",
+                pointHighlightStroke: "rgb(9, 109, 239)",
+                data: [48, 48, 49, 39, 86, 10]
+            }
+        ]
+    };
+    var dataProductBestSelling  = {
+        labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6","Tháng 7","Tháng 8","Tháng 9","Tháng 10","Tháng 11","Tháng 12"],
+        datasets: [{
+            label: "Dữ liệu đầu tiên",
+            fillColor: "rgba(255, 213, 59, 0.767), 212, 59)",
+            strokeColor: "rgb(255, 212, 59)",
+            pointColor: "rgb(255, 212, 59)",
+            pointStrokeColor: "rgb(255, 212, 59)",
+            pointHighlightFill: "rgb(255, 212, 59)",
+            pointHighlightStroke: "rgb(255, 212, 59)",
+            data: [
+                <%for (int i=0;i<listIncomeByYear.size();i++){%>
+                <%=listIncomeByYear.get(i)%>
+                <%=i<listIncomeByYear.size()-1?",":""%>
+                <%}%>
+            ]
         },
             {
                 label: "Dữ liệu kế tiếp",
@@ -240,7 +274,7 @@
     var lineChart = new Chart(ctxl).Line(data);
 
     var ctxb = $("#barChartDemo").get(0).getContext("2d");
-    var barChart = new Chart(ctxb).Bar(data);
+    var barChart = new Chart(ctxb).Bar(dataProductBestSelling);
 </script>
 </body>
 
