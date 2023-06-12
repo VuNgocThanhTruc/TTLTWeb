@@ -3914,3 +3914,11 @@ button.disible {
   color: #fff;
 
 }
+
+span.px-2.bg-danger.border-0.text-light.sum-num-cart {
+  position: absolute;
+  top: -14px;
+  height: fit-content;
+  width: fit-content;
+  border-radius: 100%;
+}

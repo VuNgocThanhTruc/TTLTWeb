@@ -472,6 +472,7 @@
 
         $.ajax({
             type: 'POST',
+            dataType: 'json',
             data: {
                 "id_item": idProduct * 1,
             },
@@ -482,7 +483,7 @@
                     timer: 1000,
                     icon: "success",
                 });
-                numCart.innerText = data
+                numCart.innerText = data.numCart
             }
         });
     }
