@@ -289,9 +289,9 @@
     </div>
 </main>
 
-<script src="../../admin/js/jquery-3.2.1.min.js"></script>
+<script src="../../admin/js/plugins/jquery-3.2.1.min.js"></script>
 <script src="../../admin/js/popper.min.js"></script>
-<script src="../../admin/js/bootstrap.min.js"></script>
+<script src="../../admin/js/plugins/bootstrap.min.js"></script>
 <script src="../../admin/js/main.js"></script>
 <script src="../../admin/doc/js/plugins/pace.min.js"></script>
 <script>

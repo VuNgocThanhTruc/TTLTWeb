@@ -388,10 +388,10 @@
                                     Timestamp dateStart = Timestamp.valueOf(product.getDateStart());
                                     Timestamp dateEnd = Timestamp.valueOf(product.getDateEnd());
                                     if (dateEnd.getTime() > timestamp.getTime() && dateStart.getTime() < timestamp.getTime()) {
-                                        int priceDiscount = (int) Math.ceil(product.getPrice() * (100 - product.getPercentDiscount()) / 100);
+
                             %>
                                 <div class="product-price" style=" text-align: center;">
-                                    <span class="pro-price"><%=priceDiscount%>₫</span>
+                                    <span class="pro-price"><%=product.getPriceDiscount()%>₫</span>
                                     <span class=""
                                           style="text-decoration: line-through;"><%=product.getPrice()%>₫</span>
 
@@ -472,12 +472,18 @@
 
         $.ajax({
             type: 'POST',
+            dataType: 'json',
             data: {
                 "id_item": idProduct * 1,
             },
             url: "<%=request.getContextPath()%>/cart?action=add-to-cart",
             success: function (data) {
-                numCart.innerText = data
+                swal("Đã thêm sản phẩm vào giỏ hàng!", {
+                    buttons: false,
+                    timer: 1000,
+                    icon: "success",
+                });
+                numCart.innerText = data.numCart
             }
         });
     }

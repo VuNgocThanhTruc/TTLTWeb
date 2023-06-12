@@ -2,6 +2,8 @@ package vn.edu.hcmuaf.fit.controller.admin;
 
 import vn.edu.hcmuaf.fit.dao.CustomerDAO;
 import vn.edu.hcmuaf.fit.model.CustomerModel;
+import vn.edu.hcmuaf.fit.model.UserModel;
+import vn.edu.hcmuaf.fit.service.AccountService;
 import vn.edu.hcmuaf.fit.service.CustomerServices;
 
 import javax.servlet.*;
@@ -14,15 +16,20 @@ import java.util.List;
 public class ManageCustomerController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        xóa khách hàng
-       if (request.getParameter("action") != null ){
-           if(request.getParameter("action").equals("delete") ){
-               CustomerDAO dao = new CustomerDAO();
-               dao.deleteCustomer(Integer.parseInt(request.getParameter("id")));
-           }
-       }
-        List<CustomerModel> listCustomer = CustomerServices.getCustomer();
-        request.setAttribute("listCustomer",listCustomer);
+        AccountService accountService = new AccountService();
+        //Gọi danh sách người dùng
+        List<UserModel> listAccUser = accountService.getListAccountUser();
+        request.setAttribute("listAccUser", listAccUser);
+        //        xóa khách hàng
+//       if (request.getParameter("action") != null ){
+//           if(request.getParameter("action").equals("delete") ){
+//               CustomerDAO dao = new CustomerDAO();
+//               dao.deleteCustomer(Integer.parseInt(request.getParameter("id")));
+//           }
+//       }
+
+//        List<CustomerModel> listCustomer = CustomerServices.getCustomer();
+//        request.setAttribute("listCustomer",listCustomer);
         request.getRequestDispatcher("/view/admin/manage-customer.jsp").forward(request,response);
 
 //        CustomerDAO
