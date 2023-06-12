@@ -95,7 +95,7 @@ public class ManageInventoryController extends HttpServlet {
 
     }
 
-    //xóa discount
+    //xóa kho
     private void doGet_Del(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
