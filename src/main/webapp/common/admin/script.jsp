@@ -125,6 +125,10 @@
             return i;
         }
     }
+
+    function confirmNotify(message) {
+        return confirm(message);
+    }
 </script>
 </body>
 </html>

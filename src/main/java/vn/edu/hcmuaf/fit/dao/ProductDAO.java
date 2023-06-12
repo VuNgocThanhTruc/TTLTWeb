@@ -212,40 +212,46 @@ public class ProductDAO {
 
 
     public static ProductModel getDetailProduct(int idProduct) {
+        String sql = "select p.id ,p.`name`,p.id_type_product,p.id_status_device,p.id_brand,p.price,p.avatar,p.`describe`,p.created_by,p.created_date,p.modified_date,p.modified_by,p.height, p.length, p.width, p.weight,d.date_start,d.date_end,d.percent_discount from products p LEFT JOIN  discounts d on p.id= d.id_product\n" +
+                "WHERE p.id ="+ idProduct +
+                " UNION\n" +
+                "select p.id ,p.`name`,p.id_type_product,p.id_status_device,p.id_brand,p.price,p.avatar,p.`describe`,p.created_by,p.created_date,p.modified_date,p.modified_by,p.height, p.length, p.width, p.weight,d.date_start,d.date_end,d.percent_discount from products p RIGHT JOIN   discounts d on p.id= d.id_product \n" +
+                "WHERE p.id =" +idProduct;
 
-        String sql = "select * from products " + "where id= ?";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
-            ps.setInt(1, idProduct);
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery(sql);
 
             while (rs.next()) {
-                String sql2 = "select url from library_images l where id_product=" + rs.getInt(1);
-                PreparedStatement ps2 = DBConnect.getInstall().preStatement(sql2);
-                ResultSet rs2 = ps2.executeQuery(sql2);
-                LinkedList<LibraryImageModel> listImage = new LinkedList<>();
+                    String sql2 = "select url from library_images l where id_product=" + rs.getInt(1);
+                    PreparedStatement ps2 = DBConnect.getInstall().preStatement(sql2);
+                    ResultSet rs2 = ps2.executeQuery(sql2);
+                    LinkedList<LibraryImageModel> listImage = new LinkedList<>();
 
+                    while (rs2.next()) {
+                        listImage.add(new LibraryImageModel(rs2.getString(1)));
+                    }
+                    ProductModel productModel = new ProductModel();
+                    productModel.setId(rs.getInt("id"));
+                    productModel.setName(rs.getString("name"));
+                    productModel.setPrice(rs.getInt("price"));
+                    productModel.setIdBrand(rs.getInt("id_brand"));
+                    productModel.setIdTypeProduct(rs.getInt("id_type_product"));
+                    productModel.setIdStatusDevice(rs.getInt("id_status_device"));
+                    productModel.setDescribe(rs.getString("describe"));
+                    productModel.setHeight(rs.getInt("height"));
+                    productModel.setLength(rs.getInt("length"));
+                    productModel.setWidth(rs.getInt("width"));
+                    productModel.setWeight(rs.getInt("weight"));
+                    productModel.setAvatar(rs.getString("avatar"));
+                    productModel.setDateStart(rs.getString("date_start"));
+                    productModel.setDateEnd(rs.getString("date_end"));
+                productModel.setPercentDiscount(rs.getInt("percent_discount"));
+                    productModel.setListImage(listImage);
 
-                while (rs2.next()) {
-                    listImage.add(new LibraryImageModel(rs2.getString(1)));
+                    return productModel;
                 }
-                ProductModel productModel = new ProductModel();
-                productModel.setId(rs.getInt("id"));
-                productModel.setName(rs.getString("name"));
-                productModel.setPrice(rs.getInt("price"));
-                productModel.setIdBrand(rs.getInt("id_brand"));
-                productModel.setIdTypeProduct(rs.getInt("id_type_product"));
-                productModel.setIdStatusDevice(rs.getInt("id_status_device"));
-                productModel.setDescribe(rs.getString("describe"));
-                productModel.setAvatar(rs.getString("avatar"));
-                productModel.setHeight(rs.getInt("height"));
-                productModel.setLength(rs.getInt("length"));
-                productModel.setWidth(rs.getInt("width"));
-                productModel.setWeight(rs.getInt("weight"));
-                productModel.setListImage(listImage);
 
-                return productModel;
-            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -480,6 +486,8 @@ public class ProductDAO {
                 productModel.setLength(rs.getInt("length"));
                 productModel.setWidth(rs.getInt("width"));
                 productModel.setWeight(rs.getInt("weight"));
+
+
                 productModel.setListImage(listImage);
 
                 list.add(productModel);

@@ -9,7 +9,19 @@
 
     <%@include file="../../common/web/head.jsp" %>
     <title><%=blog.getTitle()%> | Phone Care</title>
-
+    <style>
+        #heading{
+            display: flex;
+            justify-content: space-between;
+            flex-grow: 1;
+            align-items: center;
+            border-bottom: 2px solid #FFD43B;
+        }
+        #new-blog img{
+            max-width: 100px;
+            max-height: 65px;
+        }
+    </style>
 </head>
 
 <body>
@@ -55,12 +67,12 @@
                         <%for (BlogModel newblog : newListBlog) {%>
                         <div class="item-article clearfix">
                             <div class="post-image">
-                                <a href="">
-                                    <img src="images/blog/<%=newblog.getAvatar()%>" alt=""></a>
+                                <a id="new-blog" href="detail-blog?id-blog=<%=newblog.getId()%>">
+                                        <%=newblog.getAvatar()%>
                             </div>
                             <div class="post-content">
                                 <h3>
-                                    <a href="list-blog"><%=newblog.getTitle()%>
+                                    <a href="detail-blog?id-blog=<%=newblog.getId()%>"><%=newblog.getTitle()%>
                                     </a>
                                 </h3>
                                 <span class="author"><%=newblog.getUserCreated()%></span>
@@ -174,22 +186,23 @@
         </div>
         <div class="col-md-9 col-sm-12 col-xs-12 article-area">
             <div class="content-page">
+                <div id="heading"class="tile-title">
+                    <button style="background: none; color: #808990;" class="btn btn-cancel" onclick="goBack()"><i class="fas fa-angle-left"></i> Quay lại</button>
+                    <ul class="article-info-more" style="padding-left: 0 ">
+                        <li> Người viết:<%=blog.getUserCreated()%> lúc
+                            <time pubdate="" datetime="<%=blog.getCreatedDate()%>"><%=blog.getCreatedDate()%>
+                            </time>
+                        </li>
+                        <li><i class="far fa-file-alt"></i><a style="color:black;text-decoration: none;" href="#">
+                            <%=blog.getTypeBlog()%>
+                        </a></li>
+                    </ul>
+                </div>
                 <div class="article-content" style="font-size: 18px">
                     <div class="box-article-heading clearfix">
-                        <div class="background-img">
-                            <img src="images/blog/<%=blog.getAvatar()%>" alt="">
-                        </div>
                         <h1 class="sb-title-article"><%=blog.getTitle()%>
                         </h1>
-                        <ul class="article-info-more" style="padding-left: 0 ">
-                            <li> Người viết:<%=blog.getUserCreated()%> lúc
-                                <time pubdate="" datetime="<%=blog.getCreatedDate()%>"><%=blog.getCreatedDate()%>
-                                </time>
-                            </li>
-                            <li><i class="far fa-file-alt"></i><a style="color:black;text-decoration: none;" href="#">
-                                <%=blog.getTypeBlog()%>
-                            </a></li>
-                        </ul>
+
                     </div>
                     <%=blog.getDetailContent()%>
                 </div>
@@ -199,6 +212,11 @@
 </div>
 
 <%@include file="../../common/web/footer.jsp" %>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 </body>
 
 </html>

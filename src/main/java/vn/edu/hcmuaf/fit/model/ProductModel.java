@@ -1,5 +1,9 @@
 package vn.edu.hcmuaf.fit.model;
+
 import vn.edu.hcmuaf.fit.service.CategorySevice;
+
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 public class ProductModel {
@@ -20,6 +24,7 @@ public class ProductModel {
     private String dateStart;
     private String dateEnd;
     private int percentDiscount;
+
 
     public ProductModel() {
     }
@@ -66,9 +71,7 @@ public class ProductModel {
     }
 
 
-    public long getPrice() {
-        return price;
-    }
+
 
     public int getIdBrand() {
         return idBrand;
@@ -96,9 +99,6 @@ public class ProductModel {
         this.name = name;
     }
 
-    public void setPrice(long price) {
-        this.price = price;
-    }
 
     public void setIdBrand(int idBrand) {
         this.idBrand = idBrand;
@@ -115,6 +115,7 @@ public class ProductModel {
     public void setDescribe(String describe) {
         this.describe = describe;
     }
+
     public int getHeight() {
         return height;
     }
@@ -186,13 +187,49 @@ public class ProductModel {
         this.percentDiscount = percentDiscount;
     }
 
-    public String getCategory(int idTypeProduct){
+    public long getPrice() {
+        return price;
+    }
+
+    public long getPriceDiscount() {
+        Date serverTime = new Date();
+        Timestamp timestamp = new Timestamp(serverTime.getTime());
+        if (dateStart != null || dateEnd != null) {
+            Timestamp start = Timestamp.valueOf(dateStart);
+            Timestamp end = Timestamp.valueOf(dateEnd);
+            if (end.getTime() > timestamp.getTime() && start.getTime() <timestamp.getTime()) {
+                int priceDiscount = (int) Math.ceil(price * (100 - percentDiscount) / 100);
+                System.out.println("a");
+                System.out.println(end.getTime());
+                System.out.println(start.getTime());
+                System.out.println(priceDiscount);
+                return priceDiscount;
+
+            }
+            System.out.println("b");
+            return price;
+        }
+        System.out.println("c");
+        return price;
+    }
+
+//    public long getPriceDiscount() {
+//        return priceDiscount;
+//    }
+
+
+
+    public void setPrice(long price) {
+        this.price = price;
+    }
+
+    public String getCategory(int idTypeProduct) {
         String result = "";
-        List<CategoryModel>  listBrand = CategorySevice.getListTypeProduct();
-        for (CategoryModel category: listBrand) {
-            System.out.println("category: " + category + ", idTypeProduct: " +idTypeProduct);
-            if(category.getId() == idTypeProduct){
-                System.out.println("category true: " + category + ", idTypeProduct: " +idTypeProduct);
+        List<CategoryModel> listBrand = CategorySevice.getListTypeProduct();
+        for (CategoryModel category : listBrand) {
+            System.out.println("category: " + category + ", idTypeProduct: " + idTypeProduct);
+            if (category.getId() == idTypeProduct) {
+                System.out.println("category true: " + category + ", idTypeProduct: " + idTypeProduct);
                 result = category.getName();
                 break;
             }

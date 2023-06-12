@@ -1,5 +1,7 @@
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.Map" %>
+<%@page import="java.util.Date" %>
+<%@page import="java.sql.Timestamp" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" isELIgnored="false" %>
 <%@include file="../../common/taglib.jsp" %>
 <!DOCTYPE html>
@@ -95,6 +97,39 @@
                                             onclick="updateItemCart(<%=item.getKey()%>),1">
                                         <i class="fas fa-plus"></i>
                                     </button>
+                                    <!-- Quantity -->
+                                    <!-- Price -->
+                                    <%
+                                        if (item.getValue().getProductModel().getDateStart() != null || item.getValue().getProductModel().getDateEnd() != null) {
+                                            Date serverTime = new Date();
+                                            Timestamp timestamp = new Timestamp(serverTime.getTime());
+                                            Timestamp dateStart = Timestamp.valueOf(item.getValue().getProductModel().getDateStart());
+                                            Timestamp dateEnd = Timestamp.valueOf(item.getValue().getProductModel().getDateEnd());
+                                            if (dateEnd.getTime() > timestamp.getTime() && dateStart.getTime() < timestamp.getTime()) {
+
+                                    %>
+                                    <p class="text-start text-md-center">
+                                        <strong><%=item.getValue().getProductModel().getPriceDiscount()%>₫
+                                        </strong>
+                                        <strong style="text-decoration: line-through;font-weight: normal;"><%=item.getValue().getProductModel().getPrice()%>₫
+                                        </strong>
+                                    </p><%} else { %>
+                                    <p class="text-start text-md-center">
+                                        <strong><%=item.getValue().getProductModel().getPrice()%>₫
+                                        </strong>
+
+                                    </p>
+                                    <%
+                                        }
+                                    } else {
+                                    %>
+                                    <p class="text-start text-md-center">
+                                        <strong><%=item.getValue().getProductModel().getPrice()%>₫
+                                        </strong>
+
+                                    </p>
+                                    <%}%>
+                                    <!-- Price -->
                                 </div>
                                 <!-- Quantity -->
 

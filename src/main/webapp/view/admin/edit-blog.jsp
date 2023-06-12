@@ -127,6 +127,44 @@
         transform: rotate(-45deg);
         margin-top: -2px;
     }
+    .cke_inner.cke_reset{
+        height: inherit;
+    }
+    .form-group{
+        width: 100%;
+    }
+
+    #header-blog{
+        display: inline-block;
+        width: 100%;
+        font-size: 2.0rem;
+        font-weight: 500;
+        font-family: system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';
+        border: none;
+        background: none;
+    }
+    .hidden-label {
+        display: none;
+    }
+    #cke_1_top{
+        border: none;
+        background: #fff;
+    }
+    #cke_detail{
+        height: 100vh;
+        border: none;
+    }
+    #cke_1_bottom{
+        display: none;
+    }
+    .cke_inner.cke_reset #cke_1_contents{
+        height: inherit;
+    }
+    #heading{
+        display: flex;
+        justify-content: space-between;
+        flex-grow: 1;
+    }
 </style>
 <!-- Navbar-->
 <%@include file="../../common/admin/header.jsp" %>
@@ -146,55 +184,65 @@
     <div class="row">
         <div class="col-md-12">
             <div class="tile">
-                <h3 class="tile-title">Chỉnh sửa nâng cao</h3>
                 <div class="tile-body">
                     <form class="row" action="<%=pageContextPath%>/admin/manage-blog?action=edit&id-blog=<%=blog==null?"":blog.getId()%>"
                           method="post" enctype="multipart/form-data">
+                        <div id="heading"class="tile-title">
+                            <a style="background: none; color: #808990;" class="btn btn-cancel" href="manage-blog"><i class="fas fa-angle-left"></i> Quay lại</a>
+                            <input class="btn btn-save" type="submit" value="Xuất bản" onclick="return confirmNotify('Bạn chắc chắn muốn xuất bản?')">
+                        </div>
                         <input type="hidden" class="form-control" placeholder="" name="id-blog"
                                value="<%=blog==null?"":blog.getId()%>">
-                        <div class="form-group col-md-3">
-                            <label class="control-label">Tiêu đề tin</label>
-                            <input class="form-control" type="text" placeholder=""
+                        <div class="form-group">
+                            <input id="header-blog" class="form-control" type="text" placeholder="Tiêu đề"
                                    name="title" value="<%= blog==null?"":blog.getTitle() %>">
                         </div>
-                        <div class="form-group col-md-12">
-                            <label class="control-label">Ảnh tin tức</label>
-                            <div id="myfileupload">
-                                <input type="file" id="uploadfile" name="ImageUpload" onchange="readURL(this)"
-                                       value="<%=blog.getAvatar()%>"/>
-                            </div>
 
-                            <div id="thumbbox">
-                                <img height="450" width="400" alt="Thumb image" id="thumbimage"
-                                     src="../images/blog/<%=blog.getAvatar()%>"/>
-                                <a class="removeimg" href="javascript:"></a>
-                            </div>
-                            <div id="boxchoice">
-                                <a href="javascript:" class="Choicefile"><i class="fas fa-cloud-upload-alt"></i>
-                                    Chọn ảnh</a>
-                                <p style="clear:both"></p>
-                            </div>
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label class="control-label">Nội dung tóm tắt</label>
-                            <textarea  id="input" class="form-control" rows="3"
-                                      required="required"
-                                      name="brief"><%= blog == null ? "" : blog.getBriefContent() %></textarea>
-                        </div>
-                        <div class="form-group col-md-12">
-                            <label class="control-label">Nội dung chi tiết</label>
+                        <div style="position: relative" class="form-group">
+                            <label id="placehoder-content-blog"
+                                   style="position: absolute; top: 60px; left: 20px; color: #b3b3b1"
+                                   class="control-label">Nội dung viết ở đây</label>
                             <textarea  id="detail" class="form-control" rows="3"
-                                      required="required"
-                                      name="detail"><%= blog == null ? "" : blog.getDetailContent() %></textarea>
-                            <script>CKEDITOR.replace('detail');</script>
-
+                                       required="required"
+                                       name="detail"><%= blog == null ? "" : blog.getDetailContent() %>
+                            </textarea>
+                            <script>
+                                CKEDITOR.replace('detail', {
+                                    extraPlugins:'filebrowser',
+                                    filebrowserBrowseUrl: '/list',
+                                    filebrowserUploadMethod: 'form',
+                                    filebrowserUploadUrl: 'upload',
+                                    filebrowserImageUploadUrl: 'upload',
+                                    toolbar: [
+                                        { name: 'document', items: ['Save'] },
+                                        { name: 'clipboard', items: ['Cut', 'Copy', 'Paste'] },
+                                        { name: 'editing', items: ['Bold', 'Italic', 'Underline', 'Strike', 'NumberedList', 'BulletedList', 'Blockquote'] },
+                                        { name: 'insert', items: ['Table', 'Image', 'Link'] },
+                                        { name: 'others', items: ['RemoveFormat'] },
+                                        { name: 'undo', items: ['Undo', 'Redo'] }
+                                    ],on: {
+                                        instanceReady: function(evt) {
+                                            var editor = evt.editor;
+                                            var label = document.getElementById('placehoder-content-blog');
+                                            const cke_1_contents = document.getElementById('cke_1_contents');
+                                            cke_1_contents.style.height = 'inherit';
+                                            if (editor.getData().trim() !== '') {
+                                                label.classList.add('hidden-label');
+                                            }
+                                            editor.on('change', function() {
+                                                if (editor.getData().trim() !== '') {
+                                                    label.classList.add('hidden-label');
+                                                } else {
+                                                    label.classList.remove('hidden-label');
+                                                }
+                                            });
+                                        }
+                                    }
+                                })
+                            </script>
                         </div>
-                        <input class="btn btn-save" type="submit" value="Lưu lại" onclick="save()"></input>
-                        <a class="btn btn-cancel" href="manage-blog">Hủy bỏ</a>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>

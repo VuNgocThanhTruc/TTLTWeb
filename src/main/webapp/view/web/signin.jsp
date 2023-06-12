@@ -8,12 +8,17 @@
     <link rel="stylesheet" href="././css/sign.css">
     <title>Đăng nhập | Phone Care</title>
     <meta name="google-signin-scope" content="profile email">
-
 </head>
 
 <body>
 <%@include file="../../common/web/header.jsp" %>
-<% String mess = (String) session.getAttribute("mess"); %>
+<%
+    String urlCurrent = (String) session.getAttribute("URL-current");
+    String mess = (String) session.getAttribute("mess");
+    String username = (String) session.getAttribute("username");
+    String name = (String) session.getAttribute("name");
+    String avatar = (String) session.getAttribute("avatar");
+%>
 
 <!--Content-->
 <div class="content">
@@ -26,21 +31,37 @@
             </div>
             <div class="signin-right " id="a-sign">
                 <form action="login?action=login" method="post">
+                    <input type="hidden" name="url" value="<%=urlCurrent%>">
+                    <%if (mess == "error-password") { %>
+                    <div style="text-align: center;">
+                        <img style="border-radius: 100%; width: 80px;height: 80px; object-fit: contain" src="images/user/<%=avatar%>" alt="avatar">
+                    </div>
+                    <div style="font-size: 18px; font-weight: 600; text-align: center;margin: 20px 0;">
+                        Đăng nhập với tư cách <%=name%>
+                    </div>
+                    <%}%>
+
                     <%if (mess == "errorsignin") { %>
                     <div class="alert alert-danger">
                         <strong>Tài khoản hoặc Email</strong> hoặc <strong>mật khẩu </strong>không chính xác
                     </div>
                     <%}%>
-                    <div class="username form-control1 ">
-                        <input type="text" id="username" name="username" placeholder="Tài khoản hoặc Email">
+
+                    <div class="username form-control1" <%if (mess == "error-password") { %>style="display: none"<%}%>>
+                        <input type="text" id="username" name="username" placeholder="Tài khoản hoặc Email" <%if (username != null) { %>value="<%=username%>" <%}%>>
                     </div>
                     <div class="password form-control1">
                         <input type="password" id="password" name="password" placeholder="Mật khẩu">
                         <!--                        <div class="error" style="position: absolute; bottom: 0;background: #fff; padding:10px; border:1px solid #ccc; color: red">Please fill out this field </div>-->
                     </div>
+                    <%if (mess == "error-password") { %>
+                    <div class="alert alert-danger">
+                        Mật khẩu không chính xác. <strong><a href="signin">Không phải bạn?</a></strong>
+                    </div>
+                    <%}%>
+
                     <div class="submit">
                         <input type="submit" value="Đăng nhập" id="submit"/>
-
                         <div class="forgetpassword">
                             <a href="getPassword">Quên mật khẩu?</a> hoặc <a href="signup">Đăng ký</a>
                         </div>
@@ -57,13 +78,9 @@
                                     class="fa fa-google-plus-square"></i>
                             </button>
                         </a>
-
                     </div>
-
                 </form>
             </div>
-
-
         </div>
     </section>
 

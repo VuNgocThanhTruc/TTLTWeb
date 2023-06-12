@@ -1,5 +1,6 @@
 package vn.edu.hcmuaf.fit.model;
 
+import vn.edu.hcmuaf.fit.service.AccountService;
 import vn.edu.hcmuaf.fit.service.AuthoritiesService;
 
 public class UserModel {
@@ -16,6 +17,8 @@ public class UserModel {
     String address;
 
     String idRole;
+
+    Boolean isLocked;
 
     public UserModel() {
     }
@@ -151,6 +154,16 @@ public class UserModel {
         AuthoritiesService auth = new AuthoritiesService();
         return auth.getNameRoleById(this.idRole);
     }
+
+    public Boolean getLocked() {
+        AccountService accountService = new AccountService();
+        return accountService.getStatusLockUser(this.id);
+    }
+
+    public void setLocked(Boolean locked) {
+        isLocked = locked;
+    }
+
 
 
     @Override
