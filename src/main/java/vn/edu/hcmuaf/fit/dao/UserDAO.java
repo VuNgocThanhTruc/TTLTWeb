@@ -506,14 +506,46 @@ public class UserDAO implements ObjectDAO {
         } else if (action.equals("unlock")) {
             lockedValue = false;
         }
+
+        if(checkUserLogged(idUser)){
+            try {
+                PreparedStatement ps = DBConnect.getInstall().preStatement("UPDATE user_log SET locked = ? WHERE id_user = ?");
+                ps.setBoolean(1, lockedValue);
+                ps.setString(2, idUser);
+                ps.executeUpdate();
+            }catch (Exception e){
+                e.getMessage();
+            }
+        }else{
+            String sql = "INSERT INTO `user_log`(`id_user`, `locked`, `reason`, `number_warning`, `modified_date`) VALUES(?,true,?,?,?)";
+            java.sql.Date now = new java.sql.Date(System.currentTimeMillis());
+            try {
+                PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
+                ps.setString(1, idUser);
+                ps.setString(2, "Hệ thống khóa tài khoản");
+                ps.setInt(3, 0);
+                ps.setDate(4,now);
+                ps.executeUpdate();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    //Kiểm tra tài khoản có nằm trong danh sách tài khoản bị cảnh báo hay không
+    public boolean checkUserLogged(String idUser){
+        boolean result = false;
         try {
-            PreparedStatement ps = DBConnect.getInstall().preStatement("UPDATE user_log SET locked = ? WHERE id_user = ?");
-            // Cập nhật giá trị locked
-            ps.setBoolean(1, lockedValue);
-            ps.setString(2, idUser);
-            ps.executeUpdate();
+            PreparedStatement ps = DBConnect.getInstall().preStatement("SELECT id_user FROM user_log WHERE id_user = ?");
+            ps.setString(1, idUser);
+            ResultSet rs = ps.executeQuery();
+            result = rs.next();
         }catch (Exception e){
             e.getMessage();
         }
+        return result;
+    }
+
+    public static void main(String[] args) {
+
     }
 }
