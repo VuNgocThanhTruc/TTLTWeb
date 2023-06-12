@@ -3,6 +3,7 @@ package vn.edu.hcmuaf.fit.dao;
 import com.restfb.types.User;
 import vn.edu.hcmuaf.fit.db.ConnectToDatabase;
 import vn.edu.hcmuaf.fit.db.DBConnect;
+import vn.edu.hcmuaf.fit.model.DiscountModel;
 import vn.edu.hcmuaf.fit.model.UserModel;
 
 import java.sql.*;
@@ -430,4 +431,5 @@ public class UserDAO implements ObjectDAO {
         }
         return user;
     }
+
 }

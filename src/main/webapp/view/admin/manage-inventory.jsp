@@ -13,10 +13,11 @@
 <%@ page import="vn.edu.hcmuaf.fit.model.*" %>
 <%@page import="java.util.Date" %>
 <%@page import="java.sql.Timestamp" %>
+<%@ page import="vn.edu.hcmuaf.fit.dao.InventoriesDAO" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Quản lý Giảm Giá | ADMIN</title>
+    <title>Quản lý kho | ADMIN</title>
     <%@include file="../../common/admin/head.jsp" %>
     <style>
         .tabs .tab-item.active {
@@ -33,6 +34,8 @@
 <%
 
     List<DiscountModel> discountList = (List<DiscountModel>) DiscountDAO.getDiscountManage();
+    List<InventoriesModel> listInventoryNotNull=(List<InventoriesModel>) InventoriesDAO.getListInventoryNotNull();
+    List<InventoriesModel> listInventoryNull=(List<InventoriesModel>) InventoriesDAO.getListInventoryNull();
 
     Boolean isGrantAdd = false;
     Boolean isGrantEdit = false;
@@ -51,7 +54,7 @@
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
-            <li class="breadcrumb-item active"><a href="manage-discount"><b>Quản lý giảm giá</b></a></li>
+            <li class="breadcrumb-item active"><a href="manage-inventory"><b>Quản lý kho</b></a></li>
         </ul>
         <div id="clock"></div>
     </div>
@@ -68,12 +71,12 @@
                                  style="display: flex; min-width: 346px; max-width: 342px;padding: 3px; border-radius: 5px; background-color: #ededef">
                                 <div class="tab-item active"
                                      style="padding: 5px 10px; text-align: center ;border-radius: 4px;font-size: 15px;min-width: 170px;cursor: pointer; max-width: 180px">
-                                    <b>Sản phẩm đang giảm giá</b>
+                                    <b>Có trong kho</b>
                                 </div>
 
                                 <div class="tab-item"
                                      style="padding: 5px 10px; text-align: center ;border-radius: 4px;font-size: 15px;min-width: 170px;cursor: pointer; max-width: 180px">
-                                    <b>Sản phẩm đang chờ hoặc hết giảm giá</b>
+                                    <b>Chưa có trong kho</b>
                                 </div>
 
                             </div>
@@ -113,71 +116,56 @@
                                 </div>
                             </div>
 
-                                <% if (discountList == null) {
+                                <%-- in ra tin tức--%>
+                                <% if (listInventoryNotNull == null) {
                                 %>
                                 <div>Chưa có dữ liệu</div>
                                 <%
-                                } else { %>
-
-                                <table class="display table table-hover table-bordered" id="adminTable">
+                                } else {%>
+                                <table class="display table table-hover table-bordered" id="">
                                     <thead>
                                     <tr>
-<%--                                        <th width="10"><input type="checkbox" id="all"></th>--%>
+                                        <%--                                        <th width="10"><input type="checkbox" id="all"></th>--%>
                                         <th>ID</th>
-                                        <th>Loại sản phẩm</th>
                                         <th>Tên sản phẩm</th>
                                         <th>Ảnh</th>
                                         <th>Giá tiền</th>
-                                        <th>Giảm giá</th>`
-                                        <th>Giá tiền giảm</th>`
-                                        <th>Ngày giờ bắt đầu</th>
-                                        <th>Ngày giờ kết thúc</th>
+
+                                        <th>Số lượng</th>`
+                                        <th>Ngày giờ nhập</th>
+
                                         <th>Chức năng</th>
 
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <%
+                                        for (InventoriesModel list : listInventoryNotNull) {
 
-                                        for (DiscountModel list : discountList) {
-                                            Date serverTime = new Date();
-                                            Timestamp timestamp = new Timestamp(serverTime.getTime());
-                                            Timestamp dateStart = Timestamp.valueOf(list.getDateStart());
-                                            Timestamp dateEnd = Timestamp.valueOf(list.getDateEnd());
-                                            if(dateEnd.getTime() > timestamp.getTime() && dateStart.getTime() <timestamp.getTime()){
-                                            int priceDiscount= (int) Math.ceil(list.getPrice()*(100-list.getPercentDiscount())/100);
                                     %>
                                     <tr>
-<%--                                        <td width="10"><input type="checkbox" name="check1" value="1"></td>--%>
-                                        <td><%=list.getIdDiscount()%>
+                                        <%--                                        <td width="10"><input type="checkbox" name="check1" value="1"></td>--%>
+                                        <td><%=list.getIdProduct()%>
                                         </td>
-                                        <td><%=list.getNameTypeProduct()%>
+                                        <td><%=list.getName()%>
                                         </td>
-                                        <td><%=list.getNameProduct()%>
-                                        </td>
+
                                         <td>
                                             <img src="<% out.print("../images/product/"+list.getAvatar());%>"
                                                  alt="" width="100px;" class="avatar">
                                         </td>
                                         <td><%=list.getPrice()%>₫
                                         </td>
-                                        <td><%=list.getPercentDiscount()%>%
+                                        <td><%=list.getQuantity()%>
                                         </td>
 
-                                        <td><%= priceDiscount %>₫
+                                        <td><%=list.getModifiedDate()%>
                                         </td>
-                                        <td><%=list.getDateStart()%>
-                                        </td>
-                                        <td><%=list.getDateEnd()%>
-                                        </td>
-
-
-
 
                                         <td>
                                             <%--Xóa--%>
                                             <%if (isGrantDel == true) {%>
-                                            <a href="manage-discount?type=del&id=<%=list.getIdDiscount()%>">
+                                            <a href="manage-inventory?type=del&id=<%=list.getIdProduct()%>">
                                                 <button class="btn btn-primary btn-sm trash" type="button" title="Xóa">
                                                     <i class="fas fa-trash-alt"> </i>
                                                 </button>
@@ -195,7 +183,7 @@
                                             <%}%>
                                             <%--Sửa--%>
                                             <%if (isGrantEdit == true) {%>
-                                            <a href="manage-discount?type=edit&id-product=<%=list.getIdProduct()%>">
+                                            <a href="manage-inventory?type=edit&id-product=<%=list.getIdProduct()%>">
                                                 <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
                                                         id="show-emp" data-toggle="modal" data-target="#ModalUP">
                                                     <i class="fas fa-edit"></i>
@@ -214,7 +202,7 @@
                                             <%}%>
                                         </td>
                                     </tr>
-                                    <%}}%>
+                                    <%}%>
                                     </tbody>
                                 </table>
                                 <%}%>
@@ -253,110 +241,72 @@
                                 </div>
                             </div>
 
-                                <%-- in ra tin tức--%>
-                                <% if (discountList == null) {
-                                %>
-                                <div>Chưa có dữ liệu</div>
+                            <%-- in ra tin tức--%>
+                            <% if (listInventoryNull == null) {
+                            %>
+                            <div>Chưa có dữ liệu</div>
+                            <%
+                            } else {%>
+                            <table class="display table table-hover table-bordered" id="">
+                                <thead>
+                                <tr>
+                                    <%--                                        <th width="10"><input type="checkbox" id="all"></th>--%>
+                                    <th>ID</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Ảnh</th>
+                                    <th>Giá tiền</th>
+
+
+                                    <th>Chức năng</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
                                 <%
-                                } else {%>
-                                <table class="display table table-hover table-bordered" id="">
-                                    <thead>
-                                    <tr>
-<%--                                        <th width="10"><input type="checkbox" id="all"></th>--%>
-                                        <th>ID</th>
-                                        <th>Loại sản phẩm</th>
-                                        <th>Tên sản phẩm</th>
-                                        <th>Ảnh</th>
-                                        <th>Giá tiền</th>
-                                        <th>Giảm giá</th>`
-                                        <th>Giá tiền giảm</th>`
-                                        <th>Ngày giờ bắt đầu</th>
-                                        <th>Ngày giờ kết thúc</th>
-                                        <th>Chức năng</th>
+                                    for (InventoriesModel list : listInventoryNull) {
 
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <%
-                                        for (DiscountModel list : discountList) {
-                                            Date serverTime = new Date();
-                                            Timestamp timestamp = new Timestamp(serverTime.getTime());
-                                            Timestamp dateStart = Timestamp.valueOf(list.getDateStart());
-                                            Timestamp dateEnd = Timestamp.valueOf(list.getDateEnd());
-                                            if(dateEnd.getTime() < timestamp.getTime() || dateStart.getTime() >timestamp.getTime()){
-                                            int priceDiscount= (int) Math.ceil(list.getPrice()*(100-list.getPercentDiscount())/100);
-                                    %>
-                                    <tr>
-<%--                                        <td width="10"><input type="checkbox" name="check1" value="1"></td>--%>
-                                        <td><%=list.getIdDiscount()%>
-                                        </td>
-                                        <td><%=list.getNameTypeProduct()%>
-                                        </td>
-                                        <td><%=list.getNameProduct()%>
-                                        </td>
-                                        <td>
-                                            <img src="<% out.print("../images/product/"+list.getAvatar());%>"
-                                                 alt="" width="100px;" class="avatar">
-                                        </td>
-                                        <td><%=list.getPrice()%>₫
-                                        </td>
-                                        <td><%=list.getPercentDiscount()%>%
-                                        </td>
+                                %>
+                                <tr>
+                                    <%--                                        <td width="10"><input type="checkbox" name="check1" value="1"></td>--%>
+                                    <td><%=list.getIdProduct()%>
+                                    </td>
+                                    <td><%=list.getName()%>
+                                    </td>
 
-                                        <td><%= priceDiscount %>₫
-                                        </td>
-                                        <td><%=list.getDateStart()%>
-                                        </td>
-                                        <td><%=list.getDateEnd()%>
-                                        </td>
+                                    <td>
+                                        <img src="<% out.print("../images/product/"+list.getAvatar());%>"
+                                             alt="" width="100px;" class="avatar">
+                                    </td>
+                                    <td><%=list.getPrice()%>₫
+                                    </td>
 
+                                    <td>
 
-
-
-                                        <td>
-                                            <%--Xóa--%>
-                                            <%if (isGrantDel == true) {%>
-                                            <a href="manage-discount?type=del&id=<%=list.getIdDiscount()%>">
-                                                <button class="btn btn-primary btn-sm trash" type="button" title="Xóa">
-                                                    <i class="fas fa-trash-alt"> </i>
-                                                </button>
-                                            </a>
-                                            <%} else {%>
-                                            <button
-                                                    class="btn btn-primary btn-sm trash"
-                                                    type="button"
-                                                    title="Không có quyền này!"
-                                                    style="opacity: 0.5; cursor: not-allowed;"
-                                                    disabled
-                                            >
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                            <%}%>
-                                            <%--Sửa--%>
-                                            <%if (isGrantEdit == true) {%>
-                                            <a href="manage-discount?type=edit&id-product=<%=list.getIdProduct()%>">
-                                                <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
-                                                        id="show-emp" data-toggle="modal" data-target="#ModalUP">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
-                                            </a>
-                                            <%} else {%>
-                                            <button
-                                                    class="btn btn-primary btn-sm edit"
-                                                    type="button"
-                                                    title="Không có quyền này!"
-                                                    style="opacity: 0.5; cursor: not-allowed;"
-                                                    disabled
-                                            >
+                                        <%--Sửa--%>
+                                        <%if (isGrantEdit == true) {%>
+                                        <a href="manage-inventory?type=editInventory&id-product=<%=list.getIdProduct()%>">
+                                            <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"
+                                                    id="show-emp" data-toggle="modal" data-target="#ModalUP">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                            <%}%>
-                                        </td>
-                                    </tr>
-                                    <%}}%>
-                                    </tbody>
-                                </table>
+                                        </a>
+                                        <%} else {%>
+                                        <button
+                                                class="btn btn-primary btn-sm edit"
+                                                type="button"
+                                                title="Không có quyền này!"
+                                                style="opacity: 0.5; cursor: not-allowed;"
+                                                disabled
+                                        >
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <%}%>
+                                    </td>
+                                </tr>
                                 <%}%>
+                                </tbody>
+                            </table>
+                            <%}%>
                         </div>
                     </div>
                 </div>

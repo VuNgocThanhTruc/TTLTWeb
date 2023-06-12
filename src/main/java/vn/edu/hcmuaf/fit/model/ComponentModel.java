@@ -44,7 +44,7 @@ public class ComponentModel {
     public String getIcon(){
         String result = "";
         switch (this.code){
-            case "QLKH": result = "app-menu__icon bx bx-tachometer";
+            case "QLKH": result = "app-menu__icon bx bx-user";
                 break;
             case "QLSP": result = "app-menu__icon bx bxl-product-hunt";
                 break;
@@ -67,6 +67,8 @@ public class ComponentModel {
             case "QLQ": result = "app-menu__icon bx bxs-key";
                 break;
             case "QLL": result = "app-menu__icon bx bx-file-blank";
+                break;
+            case "QLK": result = "app-menu__icon bx bx-store";
                 break;
        default: result = "";
         }
@@ -99,6 +101,8 @@ public class ComponentModel {
             case "QLQ": result = "manage-authorities?action=manage-authorities";
                 break;
             case "QLL": result = "manage-log?action=manage-log";
+                break;
+            case "QLK": result = "manage-inventory";
                 break;
             default: result = "";
         }
