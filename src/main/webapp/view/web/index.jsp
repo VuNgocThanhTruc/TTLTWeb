@@ -308,7 +308,6 @@
 <script>
     var tdBriefs = document.querySelectorAll('.brief-content');
     for(var i = 0; i < tdBriefs.length; i++){
-        console.log("i", i)
         var tdBrief = tdBriefs[i];
         var firstElement = tdBrief.firstElementChild;
         firstElement.style.fontWeight = "normal";

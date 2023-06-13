@@ -2,8 +2,11 @@ package vn.edu.hcmuaf.fit.db;
 
 import org.jdbi.v3.core.Jdbi;
 import vn.edu.hcmuaf.fit.bean.AbBean;
+import vn.edu.hcmuaf.fit.bean.Notification;
+import vn.edu.hcmuaf.fit.bean.NotificationHasLink;
 
 import java.sql.*;
+import java.util.Date;
 
 public class DBConnect {
     String url = "jdbc:mysql://localhost:3306/phone_care";
@@ -47,23 +50,11 @@ public class DBConnect {
     public Connection getConnection(){
         return this.conn;
     }
-
-    public static void main(String[] args) {
-        Statement statement = DBConnect.getInstall().get();
-        if (statement!= null)
-            try {
-                ResultSet rs = statement.executeQuery("select * from products");
-                rs.last();
-                System.out.println(rs.getRow());
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        else{
-            System.out.println("Connect error");
-        }
-    }
-
     public boolean insert(AbBean bean){
         return bean.insert(JdbiConnector.me());
+    }
+
+    public boolean insertNotify(Notification notification){
+        return notification.insert(JdbiConnector.me());
     }
 }
