@@ -141,16 +141,14 @@
 </body>
 <script type="text/javascript">
 
-    const $ = document.querySelector.bind(document);
-    const $$ = document.querySelectorAll.bind(document);
-    const tabs = $$('.tab-item');
-    const panes = $$('.tab-pane');
+    const tabs = document.querySelectorAll('.tab-item');
+    const panes = document.querySelectorAll('.tab-pane');
 
     tabs.forEach((tab, index) => {
         const pane = panes[index];
         tab.onclick = function () {
-            $('.tab-item.active').classList.remove('active')
-            $('.tab-pane.active').classList.remove('active')
+            document.querySelector('.tab-item.active').classList.remove('active')
+            document.querySelector('.tab-pane.active').classList.remove('active')
 
             this.classList.add('active')
             pane.classList.add('active')

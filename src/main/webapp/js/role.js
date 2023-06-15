@@ -15,3 +15,6 @@ cbs.forEach((e) => {
     })
 })
 
+function confirmNotify(message) {
+    return confirm(message);
+}

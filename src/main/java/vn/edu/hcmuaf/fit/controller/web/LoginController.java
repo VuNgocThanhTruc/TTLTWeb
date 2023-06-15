@@ -110,6 +110,7 @@ public class LoginController extends HttpServlet {
                 failedUserLoginCount = 0;
                 if(!urlCurrent.equals("null")){
                     view = urlCurrent;
+                    session.setAttribute("URL-current", "null");
                 }
                 java.sql.Date now = new java.sql.Date(System.currentTimeMillis());
                 LogService.logAccess(now);
