@@ -47,6 +47,7 @@ public class LogService {
                                 -1,
                                 ipAddress,
                                 request.getRequestURI(),
+                                "Ip address login failed many times",
                                 "Login failed "+ failedLoginCount +" times",
                                 0));
             }else if(failedLoginCount == LOGIN_FAILED_LOG_LOCK_IP){
@@ -57,6 +58,7 @@ public class LogService {
                                 -1,
                                 ipAddress,
                                 request.getRequestURI(),
+                                "Ip address login failed too many times",
                                 "Login failed "+ failedLoginCount +" times, Suspected illegal login attempt",
                                 0));
             }
@@ -132,6 +134,7 @@ public class LogService {
                                 -1,
                                 username,
                                 request.getRequestURI(),
+                                "User login failed many times",
                                 "User login failed "+ failedLoginCount +" times",
                                 0));
             }else if(failedLoginCount == LOGIN_FAILED_LOG_LOCK_USER){
@@ -143,6 +146,7 @@ public class LogService {
                                 -1,
                                 username,
                                 request.getRequestURI(),
+                                "User login failed too many times",
                                 "User login failed "+ failedLoginCount +" times, Suspected illegal login attempt",
                                 0));
             }

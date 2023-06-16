@@ -147,6 +147,7 @@
                                             <th>Id user</th>
                                             <th>IP Address</th>
                                             <th>Src</th>
+                                            <th>Title</th>
                                             <th>Content</th>
                                             <th>Thời gian tạo</th>
                                             <th>Trạng thái</th>
@@ -164,6 +165,8 @@
                                         <td><%=log.getIp_address()%>
                                         </td>
                                         <td><%=log.getSrc()%>
+                                        </td>
+                                        <td><%=log.getTitle()%>
                                         </td>
                                         <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px"> <span class="content-log" style="display: inline-block; max-width: 100%;max-height: 19px; overflow: hidden; text-overflow: ellipsis"><%=log.getContent()%></span>
                                         </td>

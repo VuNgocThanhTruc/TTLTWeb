@@ -33,6 +33,7 @@ public class ManageAccountController extends HttpServlet {
                                 Integer.parseInt(user == null ? "-1" : user.getId()),
                                 request.getRemoteAddr(),
                                 request.getRequestURI(),
+                                "Lấy ra danh sách các tài khoản",
                                 "List account: "  + listAccUser + listAccAdmin,
                                 0));
                 request.setAttribute("listAccUser", listAccUser);
@@ -63,6 +64,7 @@ public class ManageAccountController extends HttpServlet {
                             Integer.parseInt(user == null ? "-1" : user.getId()),
                             request.getRemoteAddr(),
                             request.getRequestURI(),
+                            "Lấy ra danh sách các tài khoản",
                             "List account: "  + listAccUser + listAccAdmin,
                             0));
             request.setAttribute("listAccUser", listAccUser);

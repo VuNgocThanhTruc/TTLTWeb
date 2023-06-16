@@ -58,6 +58,7 @@ public class ManageAuthoritiesController extends HttpServlet {
                     new Log(3,
                             Integer.parseInt(user == null ? "-1" : user.getId()),
                             request.getRemoteAddr(),request.getRequestURI(),
+                            "Xóa nhóm quyền",
                             "Delete Role: id:" +idRoleDel,
                             0));
             view = "/view/admin/manage-authorities.jsp";
@@ -107,6 +108,7 @@ public class ManageAuthoritiesController extends HttpServlet {
                     new Log(2,
                             Integer.parseInt(user == null ? "-1" : user.getId()),
                             request.getRemoteAddr(),request.getRequestURI(),
+                            "Thêm nhóm quyền",
                             "Add Role: id: " + idRole +", nameRole :" + nameRole,
                             0));
 
@@ -145,6 +147,7 @@ public class ManageAuthoritiesController extends HttpServlet {
                     new Log(2,
                             Integer.parseInt(user == null ? "-1" : user.getId()),
                             request.getRemoteAddr(),request.getRequestURI(),
+                            "Cập nhật nhóm quyền",
                             "Edit Role: id: " + idRole +", nameRole :" + nameRole,
                             0));
 

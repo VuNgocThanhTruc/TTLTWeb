@@ -42,16 +42,14 @@ public class ManageBookingController extends HttpServlet {
                             Integer.parseInt(user == null ? "-1" : user.getId()),
                             request.getRemoteAddr() == null ? "Không xác định" : request.getRemoteAddr(),
                             request.getRequestURI(),
+                            "Lấy danh sách lịch đặt đã xác nhận",
                             "List booking",
                             0));
 
             view = "/view/admin/manage-booked.jsp";
         } else if (statusParam.equalsIgnoreCase("wait-accept")) {
             String typeStatus = request.getParameter("type-status");
-
             if (typeStatus != null) {
-                System.out.println("change status:"+statusParam);
-
                 String idBookingParam = request.getParameter("id-booking");
                 if (idBookingParam != null) {
                     boolean checkUpdateStatusBooking = BookingService.updateStatusBooking(typeStatus,idBookingParam);
@@ -62,7 +60,8 @@ public class ManageBookingController extends HttpServlet {
                         new Log(0,
                                 Integer.parseInt(user == null ? "-1" : user.getId()),
                                 request.getRemoteAddr(),request.getRequestURI(),
-                                "Change statis booking: id:" + idBookingParam,
+                                "Thay đổi trạng thái lịch đặt",
+                                "Change status booking: id:" + idBookingParam,
                                 0));
             }
             listBooking = BookingService.getListBooking(0);
@@ -78,6 +77,7 @@ public class ManageBookingController extends HttpServlet {
                         new Log(2,
                                 Integer.parseInt(user == null ? "-1" : user.getId()),
                                 request.getRemoteAddr(),request.getRequestURI(),
+                                "Xóa lịch đặt",
                                 "Delete Booking: id: " + request.getParameter("id"),
                                 0));
             }

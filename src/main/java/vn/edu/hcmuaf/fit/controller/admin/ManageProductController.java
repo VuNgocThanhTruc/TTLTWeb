@@ -71,6 +71,7 @@ public class ManageProductController extends HttpServlet {
                 DBConnect.getInstall().insert(new Log(3,
                         Integer.parseInt(user == null ? "-1" : user.getId()),
                         request.getRemoteAddr(),request.getRequestURI(),
+                        "Xóa sản phẩm",
                         "Delete Product ID :" +idProductParam,
                         0));
             }
@@ -80,11 +81,11 @@ public class ManageProductController extends HttpServlet {
             //Export Data
             ExportService exportService = new ExportService();
             exportService.exportProduct(request, response);
-            DBConnect.getInstall().insert(new Log(Log.INFO,Integer.parseInt(user == null ? "-1" : user.getId()), request.getRemoteAddr(),request.getRequestURI(),"Export Data :" +ProductService.getListProduct().toString(), 0));
+            DBConnect.getInstall().insert(new Log(Log.INFO,Integer.parseInt(user == null ? "-1" : user.getId()), request.getRemoteAddr(),request.getRequestURI(),"Xuất dữ liệu danh sách sản phẩm","Export Data :" +ProductService.getListProduct().toString(), 0));
             view = "/view/admin/manage-product.jsp";
         }else if (typeParam == null) {
             view = "/view/admin/manage-product.jsp";
-            DBConnect.getInstall().insert(new Log(Log.INFO, Integer.parseInt(user == null ? "-1" : user.getId()), request.getRemoteAddr(), request.getRequestURI(),"Show list product: "+ProductService.getListProduct().toString(), 0));
+            DBConnect.getInstall().insert(new Log(Log.INFO, Integer.parseInt(user == null ? "-1" : user.getId()), request.getRemoteAddr(), request.getRequestURI(),"Lấy danh sách sản phẩm","Show list product: "+ProductService.getListProduct().toString(), 0));
             request.setAttribute("listProduct", ProductService.getListProduct());
         }
 
@@ -171,6 +172,7 @@ public class ManageProductController extends HttpServlet {
                 new Log(0,
                         Integer.parseInt(user == null ? "-1" : user.getId()),
                         request.getRemoteAddr(),request.getRequestURI(),
+                        "Sửa sản phẩm",
                         "Edit Product id: " +pid+", Name: "+ pName +", Id Type Product: " +pidTypeProduct +", Status: " +pidStatus+", Price: "+ pPrice+", brand: " + brand ,
                         0));
         PrintWriter out = response.getWriter();
@@ -207,6 +209,7 @@ public class ManageProductController extends HttpServlet {
                         Integer.parseInt(user == null ? "-1" : user.getId()),
                         request.getRemoteAddr(),
                         request.getRequestURI(),
+                        "Thêm sản phẩm",
                         "Add New Product " +"Name: "+ pName +", Id Type Product: " +pidTypeProduct +", Status: " +pidStatus + ", Brand: " + pBrand+", Price: "+ pPrice+", Quantity: " + pQuantity+", Description: " + pDescription+", Id Store: " + pidStore ,
                         0));
         request.setAttribute("message", checkAddNew);

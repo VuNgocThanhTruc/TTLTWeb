@@ -54,6 +54,7 @@ public class ManageOrderController extends HttpServlet {
                         new Log(0,
                                 Integer.parseInt(user == null ? "-1" : user.getId()),
                                 request.getRemoteAddr(),request.getRequestURI(),
+                                "Xuất dữ liệu chi tiết đặt hàng",
                                 "Export Data Detail Booking id: "  + idBooking,
                                 0));
             }
@@ -101,6 +102,7 @@ public class ManageOrderController extends HttpServlet {
                             new Log(1,
                                     Integer.parseInt(user == null ? "-1" : user.getId()),
                                     request.getRemoteAddr(),request.getRequestURI(),
+                                    "Sửa lịch đặt",
                                     "Update Booking id: "  + idBooking+", desc: " +desc +", date: " +date+", status: "+ status+", username: "+username + ", email: "+email +", tel: " + tel + "address: " +address ,
                                     0));
                     response.sendRedirect(request.getContextPath() + "/admin/manage-order?type=edit&id-booking=" + id);
@@ -121,6 +123,7 @@ public class ManageOrderController extends HttpServlet {
                             new Log(0,
                                     Integer.parseInt(user == null ? "-1" : user.getId()),
                                     request.getRemoteAddr(),request.getRequestURI(),
+                                    "Thêm đặt lịch",
                                     "Add Booking id: "  + idBooking+", desc: " +desc +", date: " +date+", status: "+ status+", username: "+username + ", email: "+email +", tel: " + tel + "address: " +address ,
                                     0));
                     response.sendRedirect(request.getContextPath() + "/admin/manage-order");

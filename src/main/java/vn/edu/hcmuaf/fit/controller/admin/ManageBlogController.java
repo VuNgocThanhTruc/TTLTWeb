@@ -42,6 +42,7 @@ public class ManageBlogController extends HttpServlet {
                                 Integer.parseInt(user == null ? "-1" : user.getId()),
                                 request.getRemoteAddr(),
                                 request.getRequestURI(),
+                                "Xóa tin tức",
                                 "Delete Blog id: "  + idBlog,
                                 0));
             } else if (actionParam.equals("edit-blog")) {
@@ -95,6 +96,7 @@ public class ManageBlogController extends HttpServlet {
                 new Log(2,
                         Integer.parseInt(user == null ? "-1" : user.getId()),
                         request.getRemoteAddr(),request.getRequestURI(),
+                        "Thêm tin tức",
                         "Add Blog Title: "  + title+", brief: " + brief+", detail: " + detail+", imageFileName: "+ coverImage,
                         0));
         response.sendRedirect(request.getContextPath() + "/admin/manage-blog");
@@ -123,6 +125,7 @@ public class ManageBlogController extends HttpServlet {
                 new Log(1,
                         Integer.parseInt(user == null ? "-1" : user.getId()),
                         request.getRemoteAddr(),request.getRequestURI(),
+                        "Cập nhật tin tức",
                         "Edit Blog id: "  + id,
                         0));
         response.sendRedirect(request.getContextPath() + "/admin/manage-blog?action=edit-blog&id-blog=" + id);

@@ -128,6 +128,11 @@
                     </div>
                   </div>
 
+                  <div id="Title">
+                    <h5 style="margin-top: 20px"><i class="fas fa-h-square"></i> Tiêu đề</h5>
+                    <p><%=log.getTitle()%></p>
+                  </div>
+
                   <div id="Content">
                     <h5 style="margin-top: 20px"><i class="fas fa-poll-h"></i> Nội dung</h5>
                     <p><%=log.getContent()%></p>

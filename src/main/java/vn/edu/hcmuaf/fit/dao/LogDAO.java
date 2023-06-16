@@ -22,7 +22,7 @@ public class LogDAO {
         Jdbi me = JdbiConnector.me();
         List<Log> logs = me.withHandle(
                 handle -> {
-                    return handle.createQuery("select  id, level, id_user, ip_address, src, content, create_at, status from logs").mapToBean(Log.class)
+                    return handle.createQuery("select  id, level, id_user, ip_address, src, title, content, create_at, status from logs").mapToBean(Log.class)
                             .stream().collect(Collectors.toList());
                 }
         );
@@ -31,14 +31,14 @@ public class LogDAO {
 
     public static Log getLogById(String idLog){
         Connection conn = DBConnect.getInstall().getConnection();
-        String query = "select id,level, id_user, ip_address, src, content, create_at,status from logs where id = ?";
+        String query = "select id,level, id_user, ip_address, src, title, content, create_at,status from logs where id = ?";
         Log log = null;
         try{
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1, idLog);
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
-                log = new Log(rs.getInt("id"),rs.getInt("level"),rs.getInt("id_user"), rs.getString("ip_address"), rs.getString("src"), rs.getString("content"), rs.getTimestamp("create_at"), rs.getInt("status"));
+                log = new Log(rs.getInt("id"),rs.getInt("level"),rs.getInt("id_user"), rs.getString("ip_address"), rs.getString("src"), rs.getString("title"),rs.getString("content"), rs.getTimestamp("create_at"), rs.getInt("status"));
             }
 
         } catch (Exception e){
