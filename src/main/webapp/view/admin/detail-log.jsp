@@ -135,7 +135,9 @@
 
                   <div id="Content">
                     <h5 style="margin-top: 20px"><i class="fas fa-poll-h"></i> Nội dung</h5>
-                    <p><%=log.getContent()%></p>
+                    <div style="max-height: 500px; overflow: scroll">
+                      <p><%=log.getContent()%></p>
+                    </div>
                   </div>
                 </div>
 

@@ -45,6 +45,9 @@ public class ManageBlogController extends HttpServlet {
                                 "Xóa tin tức",
                                 "Delete Blog id: "  + idBlog,
                                 0));
+                List<BlogModel> listBlog = BlogService.getBlogAdmin();
+                request.setAttribute("listBlog", listBlog);
+                view = "/view/admin/manage-blog.jsp";
             } else if (actionParam.equals("edit-blog")) {
                 String idBlog = request.getParameter("id-blog");
                 BlogModel blog = BlogService.getDetailBlogForId(idBlog);
@@ -57,9 +60,17 @@ public class ManageBlogController extends HttpServlet {
                 }
                 view = "/view/admin/add-blog.jsp";
             }
+        }else{
+            List<BlogModel> listBlog = BlogService.getBlogAdmin();
+            request.setAttribute("listBlog", listBlog);
+            DBConnect.getInstall().insert(
+                    new Log(0,
+                            Integer.parseInt(user == null ? "-1" : user.getId()),
+                            request.getRemoteAddr(),request.getRequestURI(),
+                            "Lấy danh sách tin tức",
+                            "List Blog : " + listBlog,
+                            0));
         }
-        List<BlogModel> listBlog = BlogService.getBlogAdmin();
-        request.setAttribute("listBlog", listBlog);
         request.getRequestDispatcher(view).forward(request, response);
     }
 
@@ -85,7 +96,8 @@ public class ManageBlogController extends HttpServlet {
         String regex = "(?i)<img[^>]+>";
         brief = detail.replaceAll(regex, "");
         //Lấy một ảnh trong nội dung làm ảnh bìa
-        String coverImage = "<img alt='' src='' style='height:100px'; width:300px' />'";
+        String imageSystem = request.getContextPath()+"/images/logo/logo_PhoneCare.png";
+        String coverImage = "<img alt='img blog' src="+imageSystem+" style='object-fit:contain' />'";
         Pattern pattern = Pattern.compile("<img[^>]+>");
         Matcher matcher = pattern.matcher(detail);
         if (matcher.find()) {
@@ -114,7 +126,8 @@ public class ManageBlogController extends HttpServlet {
         String regex = "(?i)<img[^>]+>";
         brief = detail.replaceAll(regex, "");
         //Lấy một ảnh trong nội dung làm ảnh bìa
-        String coverImage = "<img alt='' src='' style='height:100px'; width:300px' />'";
+        String imageSystem = request.getContextPath()+"/images/logo/logo_PhoneCare.png";
+        String coverImage = "<img alt='img blog' src="+imageSystem+" style='object-fit:contain' />'";
         Pattern pattern = Pattern.compile("<img[^>]+>");
         Matcher matcher = pattern.matcher(detail);
         if (matcher.find()) {

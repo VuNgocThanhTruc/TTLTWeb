@@ -187,10 +187,6 @@ MODAL
 <script src="../../admin/doc/js/plugins/pace.min.js"></script>
 <!-- Page specific javascripts-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<!-- Data table plugin-->
-<script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
-<script type="text/javascript">$('#sampleTable').DataTable();</script>
 <script>
     function deleteRow(r) {
         var i = r.parentNode.parentNode.rowIndex;

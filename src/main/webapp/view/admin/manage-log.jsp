@@ -15,23 +15,28 @@
     <style>
         .tabs .tab-item.active {
             background-color: #ffffff;
+            border-left: 3px solid #f2f6fc;
         }
 
         .log-check-0.log-INFO{
             font-weight: bolder;
             background-color: #d2e8ff;
+            border-left: 3px solid #61aeff;
         }
         .log-check-0.log-ALERT{
             font-weight: bolder;
-            background-color: #fcf8e3;
+            background-color: #d2e8ff;
+            border-left: 3px solid #fff565;
         }
         .log-check-0.log-WARNING{
             font-weight: bolder;
-            background-color: #ffdebd;
+            background-color: #d2e8ff;
+            border-left: 3px solid #ffdebd;
         }
         .log-check-0.log-DANGER{
             font-weight: bolder;
-            background-color: #f1c2c2;
+            background-color: #d2e8ff;
+            border-left: 3px solid #ff0000;
         }
         .log-check-1.log-INFO{
             font-weight: 500;
@@ -51,6 +56,12 @@
         }
         p{
             margin: 0;
+        }
+        .fm-col{
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
         }
     </style>
     <title>Quản lý log | ADMIN</title>
@@ -139,19 +150,18 @@
                                 <% if (logs == null) { %>
                                 <div>Chưa thiết lập quyền nào</div>
                                 <% } else { %>
-                                <table class="table table-hover table-bordered" id="logTable">
+                                <table style="font-size: 14px" class="table table-hover table-bordered" id="logTable">
                                     <thead>
                                         <tr>
                                             <th width="10"><input type="checkbox" id="all"></th>
-                                            <th>Mức độ</th>
-                                            <th>Id user</th>
-                                            <th>IP Address</th>
-                                            <th>Src</th>
-                                            <th>Title</th>
-                                            <th>Content</th>
-                                            <th>Thời gian tạo</th>
+                                            <th width="70px">Mức độ</th>
+                                            <th width="50px">Id user</th>
+                                            <th width="70px">IP Address</th>
+                                            <th width="100px">Src</th>
+                                            <th width="100px">Title</th>
+                                            <th width="100px">Thời gian tạo</th>
                                             <th>Trạng thái</th>
-                                            <th>Chi tiết</th>
+                                            <th style="text-align: center" title="Xem chi tiết">Xem</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -160,20 +170,18 @@
                                         <td width="10"><input type="checkbox" name="check1" class="select-log"></td>
                                         <td><%=log.getLevelWithName()%>
                                         </td>
-                                        <td><%=log.getId_user()%>
+                                        <td class="fm-col"><%=log.getId_user()%>
                                         </td>
-                                        <td><%=log.getIp_address()%>
+                                        <td class="fm-col"><%=log.getIp_address()%>
                                         </td>
-                                        <td><%=log.getSrc()%>
+                                        <td class="fm-col"><%=log.getSrc()%>
                                         </td>
-                                        <td><%=log.getTitle()%>
+                                        <td class="fm-col"><%=log.getTitle()%>
                                         </td>
-                                        <td style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px"> <span class="content-log" style="display: inline-block; max-width: 100%;max-height: 19px; overflow: hidden; text-overflow: ellipsis"><%=log.getContent()%></span>
-                                        </td>
-                                        <td><%String formattedDate = formatter.format(log.getCreate_at());%>
+                                        <td class="fm-col"><%String formattedDate = formatter.format(log.getCreate_at());%>
                                             <%=formattedDate%>
                                         </td>
-                                        <td class="status-log"><%=log.getNameStatus()%>
+                                        <td class="status-log fm-col"><%=log.getNameStatus()%>
                                         </td>
                                         <td style="text-align: center"><a class="link-log" href="manage-log?action=detail-log&id-log=<%=log.getId()%>"><i style="width: 100%;height: 100%" class="fas fa-angle-right"></i></a>
                                         </td>

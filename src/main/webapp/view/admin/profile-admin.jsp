@@ -13,7 +13,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Quản lý quyền | ADMIN</title>
+    <title>Profile | ADMIN</title>
     <%@include file="../../common/admin/head.jsp" %>
     <link rel="stylesheet" type="text/css" href="../css/common.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -151,7 +151,7 @@
                     <div style="margin: 0; padding: 0;max-width: 100%;" class="container">
                         <div class="row">
                             <%-- Profile left--%>
-                            <div class="col-xl-3 left">
+                            <div class="col-xl-4 left">
                                 <div class="card mb-4 mb-xl-0">
                                     <h3 class="card-header">Thông tin tài khoản</h3>
                                     <div style="padding: 30px" class="card-body">
@@ -198,7 +198,7 @@
                                 </div>
                             </div>
                             <%-- Profile right--%>
-                            <div class="col-xl-9 right">
+                            <div class="col-xl-8 right">
                                 <div class="card mb-4">
                                     <h3 class="card-header">Hoạt động gần đây</h3>
                                     <div class="card-body p-5">

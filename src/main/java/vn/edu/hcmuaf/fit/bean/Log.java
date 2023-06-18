@@ -113,6 +113,9 @@ public class Log extends AbBean implements Serializable {
     }
 
     public String getContent() {
+        if(content.length() > 5000){
+            return content.substring(0, 5000) + "...";
+        }
         return content;
     }
 

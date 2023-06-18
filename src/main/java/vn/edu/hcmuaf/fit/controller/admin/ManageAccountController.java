@@ -34,7 +34,7 @@ public class ManageAccountController extends HttpServlet {
                                 request.getRemoteAddr(),
                                 request.getRequestURI(),
                                 "Lấy ra danh sách các tài khoản",
-                                "List account: "  + listAccUser + listAccAdmin,
+                                "" + listAccUser + listAccAdmin,
                                 0));
                 request.setAttribute("listAccUser", listAccUser);
                 request.setAttribute("listAccAdmin", listAccAdmin);

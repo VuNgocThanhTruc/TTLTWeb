@@ -55,12 +55,12 @@ public class LogService {
                 SecurityService.lockIpAddress(ipAddress, "Đăng nhập sai quá nhiều lần", failedLoginCount);
                 DBConnect.getInstall().insert(
                         new Log(3,
-                                -1,
-                                ipAddress,
-                                request.getRequestURI(),
-                                "Ip address login failed too many times",
-                                "Login failed "+ failedLoginCount +" times, Suspected illegal login attempt",
-                                0));
+                        -1,
+                        ipAddress,
+                        request.getRequestURI(),
+                        "Ip address login failed too many times",
+                        "Login failed "+ failedLoginCount +" times, Suspected illegal login attempt",
+                        0));
             }
         }
     }
@@ -118,9 +118,6 @@ public class LogService {
         if (failedLoginCount == null) {
             failedLoginCount = 0;
         }
-        System.out.println("so sanh user: "+ username + ", "+ userLoginFailed);
-        System.out.println("ket qua ss user: "+ username.equals(userLoginFailed));
-        System.out.println("----------------------------------------------");
         if(userLoginFailed == null){
             session.setAttribute("userLoginFailed", username);
         }else if(username.equals(session.getAttribute("userLoginFailed"))) {
@@ -129,26 +126,32 @@ public class LogService {
             session.setAttribute("userLoginFailed", username);
             if(failedLoginCount == LOGIN_FAILED_LOG_USER && failedLoginCount < LOGIN_FAILED_LOG_LOCK_USER){
                 //Gửi lock cảnh báo user đăng nhập sai nhiều lần
+                UserModel user = UserDAO.loadUsername().get(username);
+                int id_user = Integer.parseInt(user.getId());
                 DBConnect.getInstall().insert(
                         new Log(2,
-                                -1,
-                                username,
+                                user == null ? -1 : id_user,
+                                request.getRemoteAddr(),
                                 request.getRequestURI(),
                                 "User login failed many times",
                                 "User login failed "+ failedLoginCount +" times",
+                                null,
                                 0));
             }else if(failedLoginCount == LOGIN_FAILED_LOG_LOCK_USER){
                 //Gửi lock cảnh báo user đăng nhập sai quá nhiều lần và lock user
                 UserModel user = UserDAO.loadUsername().get(username);
+                int id_user = Integer.parseInt(user.getId());
                 SecurityService.lockUser(user.getId(), "User đăng nhập sai quá nhiều lần", failedLoginCount);
                 DBConnect.getInstall().insert(
                         new Log(3,
-                                -1,
-                                username,
+                                user == null ? -1 : id_user,
+                                request.getRemoteAddr(),
                                 request.getRequestURI(),
                                 "User login failed too many times",
                                 "User login failed "+ failedLoginCount +" times, Suspected illegal login attempt",
+                                null,
                                 0));
+
             }
         }
     }

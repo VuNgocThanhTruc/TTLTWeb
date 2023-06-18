@@ -239,22 +239,20 @@ public class ProductModel {
 
     @Override
     public String toString() {
-        return "ProductModel{" +
+        return "ProductModel :" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", idTypeProduct=" + idTypeProduct +
                 ", idStatusDevice=" + idStatusDevice +
                 ", idBrand=" + idBrand +
                 ", price=" + price +
-                ", describe='" + describe + '\'' +
                 ", height=" + height +
                 ", length=" + length +
                 ", width=" + width +
                 ", weight=" + weight +
-                ", listImage=" + listImage +
                 ", dateStart='" + dateStart + '\'' +
                 ", dateEnd='" + dateEnd + '\'' +
                 ", percentDiscount=" + percentDiscount +
-                '}';
+                "<br>";
     }
 }

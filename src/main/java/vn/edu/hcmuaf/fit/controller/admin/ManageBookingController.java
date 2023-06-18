@@ -52,16 +52,15 @@ public class ManageBookingController extends HttpServlet {
             if (typeStatus != null) {
                 String idBookingParam = request.getParameter("id-booking");
                 if (idBookingParam != null) {
-                    boolean checkUpdateStatusBooking = BookingService.updateStatusBooking(typeStatus,idBookingParam);
+                    boolean checkUpdateStatusBooking = BookingService.updateStatusBooking(typeStatus, idBookingParam);
                     request.setAttribute("message", checkUpdateStatusBooking);
                 }
-
                 DBConnect.getInstall().insert(
                         new Log(0,
                                 Integer.parseInt(user == null ? "-1" : user.getId()),
                                 request.getRemoteAddr(),request.getRequestURI(),
                                 "Thay đổi trạng thái lịch đặt",
-                                "Change status booking: id:" + idBookingParam,
+                                "Mã lịch đặt" + idBookingParam,
                                 0));
             }
             listBooking = BookingService.getListBooking(0);
@@ -74,11 +73,11 @@ public class ManageBookingController extends HttpServlet {
                 listBooking = BookingService.getListBooking(0);
 
                 DBConnect.getInstall().insert(
-                        new Log(2,
+                        new Log(3,
                                 Integer.parseInt(user == null ? "-1" : user.getId()),
                                 request.getRemoteAddr(),request.getRequestURI(),
                                 "Xóa lịch đặt",
-                                "Delete Booking: id: " + request.getParameter("id"),
+                                "Mã lịch đặt: " + request.getParameter("id"),
                                 0));
             }
         }
