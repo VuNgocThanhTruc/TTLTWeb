@@ -108,17 +108,12 @@
                         <%-- Tabs --%>
                         <div class="col-sm-5" style="padding-left: 10px">
                             <div class="tabs"
-                                 style="display: flex; min-width: 346px; max-width: 342px;padding: 3px; border-radius: 5px; background-color: #ededef">
+                                 style="display: flex;padding: 3px; border-radius: 5px; background-color: #ededef">
                                 <div class="tab-item active"
                                      style="padding: 5px 10px; text-align: center ;border-radius: 4px;font-size: 15px;min-width: 170px;cursor: pointer; max-width: 180px">
                                     <b>Thông tin log</b>
                                 </div>
-                                <div class="tab-item"
-                                     style="padding: 5px 10px; text-align: center ;border-radius: 4px;font-size: 15px;min-width: 170px;cursor: pointer; max-width: 180px">
-                                    <b>Cảnh báo log</b>
-                                </div>
                             </div>
-
                         </div>
                     </div>
                     <div class="tab-content">
@@ -278,7 +273,10 @@
         })
     })
 
-
+    const tab_menu = document.querySelector('.tabs')
+    const length_tab = tabs.length;
+    var width_tab = 170 * length_tab + 7;
+    tab_menu.style.width = width_tab + 'px';
 </script>
 
 </body>

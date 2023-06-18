@@ -10,7 +10,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Chi tiết Log | ADMIN</title>
+    <title>Log | ADMIN</title>
   <%@include file="../../common/admin/head.jsp" %>
   <style>
     .tabs .tab-item.active {
@@ -92,18 +92,8 @@
           <div class="row element-button">
             <%-- Tabs --%>
             <div class="col-sm-5" style="padding-left: 10px">
-              <div class="tabs"
-                   style="display: flex; min-width: 346px; max-width: 342px;padding: 3px; border-radius: 5px; background-color: #ededef">
-                <div class="tab-item active"
-                     style="padding: 5px 10px; text-align: center ;border-radius: 4px;font-size: 15px;min-width: 170px;cursor: pointer; max-width: 180px">
-                  <b>Chi tiết log</b>
-                </div>
-                <div class="tab-item"
-                     style="padding: 5px 10px; text-align: center ;border-radius: 4px;font-size: 15px;min-width: 170px;cursor: pointer; max-width: 180px">
-                  <b>Khác</b>
-                </div>
-              </div>
-
+              <%--BACK--%>
+                <a href="<%=request.getContextPath()%>/admin/manage-log?action=manage-log" style="background: none; color: #808990;" class="btn"><i class="fas fa-angle-left"></i> Quay lại</a>
             </div>
           </div>
           <div class="tab-content">
@@ -140,14 +130,8 @@
                     </div>
                   </div>
                 </div>
-
-            </div>
-
-            <div class="tab-pane">
-              <h1>Tab 2</h1>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -163,24 +147,5 @@
 <script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript">$('#logTable').DataTable();</script>
-
-<script>
-  // chuyển tab
-  const tabs = document.querySelectorAll('.tab-item');
-  const panes = document.querySelectorAll('.tab-pane');
-
-  tabs.forEach((tab, index) => {
-    const pane = panes[index];
-    tab.onclick = function () {
-      document.querySelector('.tab-item.active').classList.remove('active')
-      document.querySelector('.tab-pane.active').classList.remove('active')
-      this.classList.add('active')
-      pane.classList.add('active')
-    }
-  })
-
-
-</script>
-
 </body>
 </html>

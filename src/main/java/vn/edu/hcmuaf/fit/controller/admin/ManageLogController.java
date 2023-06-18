@@ -19,7 +19,9 @@ public class ManageLogController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         String view = "";
-
+        if(action == null){
+            action = "manage-log";
+        }
         if(action.equals("manage-log")){
             List<Log> logs = LogDAO.loadAllLog();
             logs.sort(new Comparator<Log>() {
