@@ -172,6 +172,30 @@ public class UserDAO implements ObjectDAO {
         }
     }
 
+    public void signupAdmin(String name, int sex, String dob, String email, String username, String password, String idRole) {
+        String sql = "insert into users(name,username,email,password,avatar,tel,id_type_user,dob,sex,address, id_role) values (?,?,?,?,?,?,?,?,?,?,?)";
+        Connection connect = ConnectToDatabase.getConnect();
+        try {
+            PreparedStatement ps = connect.prepareStatement(sql);
+            ps.setString(1, name);
+            ps.setString(2, username);
+            ps.setString(3, email);
+            ps.setString(4, password);
+            ps.setString(5, "no-avatar.png");
+            ps.setString(6, null);
+            ps.setInt(7, 1);
+            ps.setString(8, dob);
+            ps.setInt(9, sex);
+            ps.setString(10, null);
+            ps.setString(11, idRole);
+            ps.executeUpdate();
+
+
+        } catch (Exception e) {
+            System.out.println("Error when signup custommer:" + e.getMessage());
+        }
+    }
+
     public void signupWithAPI(String id, String name, String email, String tel, int sex, String dob) {
         String sql = "insert into users(name,username,email,password,avatar,tel,id_type_user,dob,sex, id_role) values (?,?,?,?,?,?,?,?,?,?)";
         Connection connect = ConnectToDatabase.getConnect();

@@ -92,7 +92,7 @@
                             <div class="row element-button">
                                 <div class="col-sm-2">
                                     <%if (isGrantAdd == true) {%>
-                                    <a class="btn btn-add btn-sm" href="manage-account.jsp?action=add"
+                                    <a class="btn btn-add btn-sm" href="manage-account?action=add-account-admin"
                                        title="Thêm"><i
                                             class="fas fa-plus"></i>
                                         Tạo mới
@@ -180,7 +180,7 @@
                             <div class="row element-button">
                                 <div class="col-sm-2">
                                     <%if (isGrantAdd == true) {%>
-                                    <a class="btn btn-add btn-sm" href="manage-account.jsp?action=add"
+                                    <a class="btn btn-add btn-sm" href="manage-account?action=add-account-admin"
                                        title="Thêm"><i
                                             class="fas fa-plus"></i>
                                         Tạo mới

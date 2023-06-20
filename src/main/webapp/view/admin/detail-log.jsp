@@ -80,7 +80,7 @@
   <div class="app-title">
     <ul class="app-breadcrumb breadcrumb side">
       <li class="breadcrumb-item active"><a href="manage-blog.jsp"><b>Quản lý log</b></a></li>
-      <li class="breadcrumb-item active"><a href="manage-blog.jsp"><b>Chi tiết log</b></a></li>
+      <li class="breadcrumb-item active"><b style="color: #000000">Chi tiết log</b></li>
     </ul>
     <div id="clock"></div>
   </div>
