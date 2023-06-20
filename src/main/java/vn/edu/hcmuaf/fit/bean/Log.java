@@ -184,6 +184,22 @@ public class Log extends AbBean implements Serializable {
             return "Chưa kiểm tra";
         }
     }
+
+    @Override
+    public String toString() {
+        return "Log: " +
+                "id=" + id +
+                ", level=" + level +
+                ", src='" + src +
+                ", id_user=" + id_user +
+                ", ip_address='" + ip_address +
+                ", title='" + title +
+                ", content='" + content +
+                ", create_at=" + create_at +
+                ", status=" + status +
+                "<br>";
+    }
+
     public void checked(String idLog){
         LogDAO.checked(idLog);
     }

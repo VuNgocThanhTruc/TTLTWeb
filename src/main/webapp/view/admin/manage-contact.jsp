@@ -44,7 +44,15 @@
     <div class="col-md-12">
       <div class="tile">
         <div class="tile-body">
+
           <div class="row element-button">
+            <div class="col-sm-2">
+              <a href="export-excel?type=exportContactExcel" class="btn" type="button" title="Xuất dữ liệu"
+                 style="line-height: 0px;border: 1px solid #000000; font-size: 13px; padding: 5px 10px"
+              ><i class='bx bxs-file-export'></i> Xuất Excel</a>
+            </div>
+          </div>
+
           <% if (listContact == null){
           %>
           <div>Chưa có phản hồi </div>

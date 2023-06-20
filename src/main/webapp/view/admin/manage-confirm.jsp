@@ -62,6 +62,12 @@
                             <a class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i
                                     class="fas fa-trash-alt"></i> Xóa tất cả </a>
                         </div>
+
+                        <div class="col-sm-2">
+                            <a href="export-excel?type=exportWaitAcceptExcel" class="btn" type="button" title="Xuất dữ liệu"
+                                   style="line-height: 0px;border: 1px solid #000000; font-size: 13px; padding: 5px 10px"
+                            ><i class='bx bxs-file-export'></i> Xuất Excel</a>
+                        </div>
                     </div>
                     <table class="table table-hover table-bordered" id="sampleTable">
                         <thead>

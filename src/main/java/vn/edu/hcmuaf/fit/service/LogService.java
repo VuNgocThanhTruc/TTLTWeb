@@ -67,7 +67,7 @@ public class LogService {
 
     // Ghi lại số người truy cập
     public static void logAccess(java.util.Date date) {
-        Connection connection = new ConnectToDatabase().getConnect();
+        Connection connection = new ConnectToDatabase().getConnect();;
         if(isFirstAccess(date)){
             String sql = "insert into number_visitors values(?,1)";
             PreparedStatement ps = null;
@@ -91,22 +91,14 @@ public class LogService {
     }
 
     public static boolean isFirstAccess(java.util.Date date) {
-        VisitorModel Visitor = null;
         String sql = "select date_access, amount from number_visitors where date_access = ? ";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ps.setDate(1,(java.sql.Date) date);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Visitor = new VisitorModel(rs.getDate(1), rs.getInt(2));
-            }
-
+            return rs.next() == false;
         }catch (Exception e){
             e.getMessage();
-        }
-
-        if(Visitor == null){
-            return true;
         }
         return false;
     }

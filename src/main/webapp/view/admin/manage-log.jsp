@@ -106,14 +106,10 @@
                     <%-- Nav Tab  --%>
                     <div class="row element-button">
                         <%-- Tabs --%>
-                        <div class="col-sm-5" style="padding-left: 10px">
-                            <div class="tabs"
-                                 style="display: flex;padding: 3px; border-radius: 5px; background-color: #ededef">
-                                <div class="tab-item active"
-                                     style="padding: 5px 10px; text-align: center ;border-radius: 4px;font-size: 15px;min-width: 170px;cursor: pointer; max-width: 180px">
-                                    <b>Thông tin log</b>
-                                </div>
-                            </div>
+                        <div class="col-sm-2">
+                                <a href="export-excel?type=exportLogExcel" class="btn" type="button" title="Xuất dữ liệu"
+                                   style="line-height: 0px;border: 1px solid #000000; font-size: 13px; padding: 5px 10px"
+                                ><i class='bx bxs-file-export'></i> Xuất Excel</a>
                         </div>
                     </div>
                     <div class="tab-content">
@@ -230,20 +226,6 @@
         }
     });
 
-
-    // chuyển tab
-    const tabs = document.querySelectorAll('.tab-item');
-    const panes = document.querySelectorAll('.tab-pane');
-
-    tabs.forEach((tab, index) => {
-        const pane = panes[index];
-        tab.onclick = function () {
-            document.querySelector('.tab-item.active').classList.remove('active')
-            document.querySelector('.tab-pane.active').classList.remove('active')
-            this.classList.add('active')
-            pane.classList.add('active')
-        }
-    })
 
     //focus vào thẻ a trong table
 
