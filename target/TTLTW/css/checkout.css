@@ -1,0 +1,245 @@
+#checkout .content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#checkout .modal-checkout {
+  width: 96%;
+  max-width: 1000px;
+  min-height: 550px;
+  border-radius: 3px;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 5px 5px 30px rgba(0, 0, 0, .3);
+  padding: 24px 0;
+}
+
+#checkout .product {
+  position: absolute;
+  top: -25px;
+}
+
+#checkout .product .img {
+  height: 300px;
+  overflow: hidden;
+}
+
+#checkout .product .img img{
+  height: 100%;
+}
+
+#checkout .round-shape {
+  width: 150%;
+  height: 150%;
+  position: absolute;
+  top: 50%;
+  left: 158%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background-color: #ce7515;
+  box-shadow: 0 0 25px rgba(0, 0, 0, .3);
+}
+
+#checkout .product-slideshow {
+  width: 500px;
+}
+
+#checkout .dots {
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  left: 40%;
+}
+
+#checkout .dot {
+  cursor: pointer;
+  height: 10px;
+  width: 10px;
+  margin: 0 5px;
+  background-color: #F28102;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+  box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+}
+
+#checkout .dot.active {
+  background-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 7px rgba(0, 0, 0, .6);
+}
+
+#checkout .dot:hover {
+  background-color: rgba(255, 255, 255, .8);
+}
+
+/* Fading animation */
+.fade-checkout {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+  from {
+    opacity: .4
+  }
+
+  to {
+    opacity: 1
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: .4
+  }
+
+  to {
+    opacity: 1
+  }
+}
+
+#checkout .modal-info{
+  padding: 0 24px;
+}
+
+#checkout .product-name {
+  color: #111;
+  font-size: 1.7rem;
+  font-weight: 300;
+  line-height: 2rem;
+  text-align: center;
+}
+
+#checkout .product-code-name {
+  font-size: .8rem;
+  font-weight: 300;
+  text-align: center;
+  margin: 8px auto 5px;
+}
+
+#checkout .product .price {
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: .18rem;
+  text-align: center;
+}
+
+#checkout h2 {
+  font-size: 2.25rem;
+  margin-left: 1rem;
+}
+
+#checkout form .form-list {
+  margin-top: 1.5rem;
+  margin-left: 3.5rem;
+}
+
+#checkout .form-list-row {
+  margin: 1rem 0;
+  list-style-type: none;
+}
+
+#checkout label {
+  font-size: 1rem;
+}
+
+#checkout form input {
+  font-size: 1rem;
+  padding: .4rem 30px;
+  border: none;
+  border-bottom: solid 2px #fff;
+  background-color: transparent;
+  transition: all .3s ease;
+  outline: none;
+  box-shadow: none;
+}
+
+#checkout form textarea{
+  box-shadow: none;
+  background-color: transparent;
+  border: solid 2px #fff;
+}
+
+#checkout form label, #checkout .payment{
+  color: #fff;
+}
+
+#checkout .sum-money {
+  z-index: 999;
+  position: absolute;
+  bottom: 120px;
+  text-align: center;
+  width: 100%;
+}
+
+#checkout input:focus,
+#checkout i:focus,
+#checkout form textarea:focus {
+  border-color: #a68463;
+}
+
+#checkout .user .fa-user {
+  font-size: 1rem;
+}
+
+#checkout input[type=text],#checkout input[type=email],#checkout input[type=tel] {
+  position: relative;
+  left: -16px;
+  width: 70%;
+}
+
+#checkout .email .fa-credit-card {
+  font-size: 1rem;
+}
+
+#checkout .email input {
+  position: relative;
+  left: -20px;
+  padding-left: 30px;
+}
+
+#checkout .checkbox {
+  margin-top: 2rem;
+}
+
+#checkout .checkbox input {
+  width: auto;
+}
+
+.checkbox span {
+  font-size: .8rem;
+}
+
+#checkout button.btn-submit  {
+  color: white;
+  font-size: 1rem;
+  margin-left: 1rem;
+  padding: 1rem 2.5rem;
+  position: absolute;
+  bottom: 0;
+  border: none;
+  border-radius: 3px;
+  background-color: #ce7515;
+  box-shadow: 0 0 20px rgba(0, 0, 0, .25);
+  transition: all .3s ease;
+  left: -150px;
+}
+
+#checkout button.btn-submit:hover {
+  background-color: #F28102;
+}
+
+form i {
+  color: #fff;
+}
+
+#checkout .back_to_cart{
+  position: absolute;
+  left: 30px;
+  bottom: 0;
+}

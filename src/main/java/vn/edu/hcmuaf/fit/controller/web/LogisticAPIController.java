@@ -49,6 +49,7 @@ public class LogisticAPIController extends HttpServlet {
         String token = (String) APIConstants.LOGISTIC_ID_TOKEN;
         req.addHeader("Authorization", "Bearer " + paramToken);
 
+
         try {
             HttpResponse res = client.execute(req);
             String responseString = EntityUtils.toString(res.getEntity(), "UTF-8");
@@ -82,7 +83,9 @@ public class LogisticAPIController extends HttpServlet {
         }
         //        get data lead time
         else if ("leadTime".equals(param))
-            doPostLeadTime(request, response, logisticIDToken);
+            doPostLeadTime(response, logisticIDToken, fromDistrictID, fromWardID, toDistrictID, toWardID, height, length, width, weight);
+        else if ("calculateFee".equals(param))
+            doPostCalculateFee(response, logisticIDToken, fromDistrictID, fromWardID, toDistrictID, toWardID, height, length, width, weight);
         else if ("registerTransport".equals(param))
             registerTransport(response, idBooking, logisticIDToken, fromDistrictID, fromWardID, toDistrictID, toWardID, height, length, width, weight);
         else if ("allTransports".equals(param))
@@ -113,7 +116,6 @@ public class LogisticAPIController extends HttpServlet {
             while ((inputLine = in.readLine()) != null) {
                 strBuf.append(inputLine);
             }
-            System.out.println("strBuf: " + strBuf);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -128,84 +130,34 @@ public class LogisticAPIController extends HttpServlet {
         JsonObject jsonRes = gson.fromJson(strBuf.toString(), JsonObject.class);
 
         PrintWriter out = response.getWriter();
-
-        System.out.println(strBuf);
 
         out.println(strBuf);
         out.close();
     }
 
-    private void doPostLeadTime(HttpServletRequest request, HttpServletResponse response, String logisticIDToken) throws IOException {
-        System.out.println("this");
-
+    public void doPostLeadTime(HttpServletResponse response, String logisticIDToken, String fromDistrictID, String fromWardID, String toDistrictID, String toWardID, String height, String length, String width, String weight) throws IOException {
         String apiURL = APIConstants.LOGISTIC_HOST_API + "/leadTime";
-
-        BufferedReader br = request.getReader();
-        StringBuilder stringBuilder = new StringBuilder();
-        String line;
-        while ((line = br.readLine()) != null) {
-            stringBuilder.append(line);
-        }
-
-        JSONObject json = new JSONObject();
-        json.put("from_district_id", APIConstants.ID_DISTRICT_STORE);
-        json.put("'from_ward_id'", APIConstants.ID_WARD_STORE);
-        json.put("to_district_id", APIConstants.ID_DISTRICT_STORE);
-        json.put("to_ward_id", APIConstants.ID_WARD_STORE);
-        json.put("height", 100);
-        json.put("length", 100);
-        json.put("width", 100);
-        json.put("weight", 100);
-
+        String param = "?from_district_id=" + fromDistrictID + "&from_ward_id=" + fromWardID + "&to_district_id=" + toDistrictID + "&to_ward_id=" + toWardID + "&height=" + height + "&length=" + length + "&width=" + width + "&weight=" + weight;
         StringBuilder strBuf = new StringBuilder();
 
-        HttpURLConnection conn = null;
-        try {
-            URL url = new URL(apiURL);
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/json; utf-8");
-            conn.setRequestProperty("Accept", "application/json");
-            conn.setRequestProperty("Access-Control-Allow-Origin", "http://140.238.54.136");
-            conn.setRequestProperty("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-            conn.setRequestProperty("Access-Control-Max-Age", "3600");
-            conn.setRequestProperty("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+        URL url = new URL(apiURL + param);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Authorization", "Bearer " + logisticIDToken);
+        int responseCode = conn.getResponseCode();
+        System.out.println("responseCode " + responseCode);
 
-            conn.setRequestProperty("Authorization", "Bearer " + logisticIDToken);
-            conn.setDoOutput(true);
-
-            try (OutputStream os = conn.getOutputStream()) {
-                byte[] input = json.toString().getBytes("utf-8");
-                os.write(input, 0, input.length);
-            }
-
-            if (conn.getResponseCode() != 200) {
-                throw new RuntimeException("HTTP POST Request Failed with Error code : "
-                        + conn.getResponseCode());
-            }
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        if (responseCode == 200 | responseCode == 201) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 strBuf.append(inputLine);
             }
-            System.out.println("strBuf: " + strBuf);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (conn != null) {
-                conn.disconnect();
-            }
+            PrintWriter out = response.getWriter();
+            out.println(strBuf.toString());
+            out.close();
         }
 
-        Gson gson = new Gson();
-        JsonObject jsonRes = gson.fromJson(strBuf.toString(), JsonObject.class);
-
-        PrintWriter out = response.getWriter();
-        out.println(strBuf);
-        out.close();
     }
 
     private void doPostLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -286,7 +238,6 @@ public class LogisticAPIController extends HttpServlet {
 
             JsonObject objTransport = jsonRes.get("Transport").getAsJsonObject();
             String idTransport = objTransport.get("id").getAsString();
-            System.out.println("strBuf.toString(): " + strBuf.toString());
             PrintWriter out = response.getWriter();
             out.println(strBuf.toString());
             out.close();
@@ -296,6 +247,31 @@ public class LogisticAPIController extends HttpServlet {
             bookingModel.setIdTransport(idTransport);
 
             BookingService.updateBookingIDTransport(bookingModel);
+        }
+
+    }
+
+    public void doPostCalculateFee(HttpServletResponse response, String logisticIDToken, String fromDistrictID, String fromWardID, String toDistrictID, String toWardID, String height, String length, String width, String weight) throws IOException {
+        String apiURL = APIConstants.LOGISTIC_HOST_API + "/calculateFee";
+        String param = "?from_district_id=" + fromDistrictID + "&from_ward_id=" + fromWardID + "&to_district_id=" + toDistrictID + "&to_ward_id=" + toWardID + "&height=" + height + "&length=" + length + "&width=" + width + "&weight=" + weight;
+        StringBuilder strBuf = new StringBuilder();
+
+        URL url = new URL(apiURL + param);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Authorization", "Bearer " + logisticIDToken);
+        int responseCode = conn.getResponseCode();
+        System.out.println("responseCode " + responseCode);
+
+        if (responseCode == 200 | responseCode == 201) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                strBuf.append(inputLine);
+            }
+            PrintWriter out = response.getWriter();
+            out.println(strBuf.toString());
+            out.close();
         }
 
     }

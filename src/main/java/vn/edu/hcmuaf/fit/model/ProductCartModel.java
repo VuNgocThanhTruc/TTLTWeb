@@ -29,9 +29,9 @@ public class ProductCartModel {
         this.productModel = productModel;
     }
 
-    public float getSumMoney(){
-        float res = 0;
-        res= (quantity*productModel.getPriceDiscount());
+    public int getSumMoney(){
+        int res = 0;
+        res=(int) (quantity*productModel.getPriceDiscount());
         return res;
     }
 

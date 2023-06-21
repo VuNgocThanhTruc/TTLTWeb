@@ -357,6 +357,7 @@ public class ProductDAO {
                 productModel.setWidth(rs.getInt("width"));
                 productModel.setWeight(rs.getInt("weight"));
                 productModel.setListImage(listImage);
+                productModel.setAvatar(rs.getString("avatar"));
 
                 list.add(productModel);
             }
