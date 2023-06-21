@@ -66,4 +66,15 @@ public class DetailBookingModel {
     public void setPrice(String price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "DetailBookingModel: " +
+                "id=" + id +
+                ", id_booking=" + id_booking +
+                ", id_product=" + id_product +
+                ", quantity=" + quantity +
+                ", name='" + name +
+                ", price='" + price + "<br>";
+    }
 }

@@ -111,6 +111,12 @@
                                        onclick="myFunction(this)"><i
                                             class="fas fa-trash-alt"></i> Xóa tất cả </a>
                                 </div>
+
+                                <div class="col-sm-2">
+                                    <a href="export-excel?type=exportProductDiscountExcel" class="btn" type="button" title="Xuất dữ liệu"
+                                       style="line-height: 0px;border: 1px solid #000000; font-size: 13px; padding: 5px 10px"
+                                    ><i class='bx bxs-file-export'></i> Xuất Excel</a>
+                                </div>
                             </div>
 
                                 <% if (discountList == null) {
@@ -128,8 +134,8 @@
                                         <th>Tên sản phẩm</th>
                                         <th>Ảnh</th>
                                         <th>Giá tiền</th>
-                                        <th>Giảm giá</th>`
-                                        <th>Giá tiền giảm</th>`
+                                        <th>Giảm giá</th>
+                                        <th>Giá tiền giảm</th>
                                         <th>Ngày giờ bắt đầu</th>
                                         <th>Ngày giờ kết thúc</th>
                                         <th>Chức năng</th>
@@ -251,6 +257,12 @@
                                        onclick="myFunction(this)"><i
                                             class="fas fa-trash-alt"></i> Xóa tất cả </a>
                                 </div>
+
+                                <div class="col-sm-2">
+                                    <a href="export-excel?type=exportProductNoDiscountExcel" class="btn" type="button" title="Xuất dữ liệu"
+                                       style="line-height: 0px;border: 1px solid #000000; font-size: 13px; padding: 5px 10px"
+                                    ><i class='bx bxs-file-export'></i> Xuất Excel</a>
+                                </div>
                             </div>
 
                                 <%-- in ra tin tức--%>
@@ -268,8 +280,8 @@
                                         <th>Tên sản phẩm</th>
                                         <th>Ảnh</th>
                                         <th>Giá tiền</th>
-                                        <th>Giảm giá</th>`
-                                        <th>Giá tiền giảm</th>`
+                                        <th>Giảm giá</th>
+                                        <th>Giá tiền giảm</th>
                                         <th>Ngày giờ bắt đầu</th>
                                         <th>Ngày giờ kết thúc</th>
                                         <th>Chức năng</th>

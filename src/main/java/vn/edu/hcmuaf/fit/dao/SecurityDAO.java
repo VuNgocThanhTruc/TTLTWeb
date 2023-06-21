@@ -45,4 +45,19 @@ public class SecurityDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public static void lockUserAlerted(String id_user, String reason, int number_warning){
+        String sql = "UPDATE user_log set locked = 1, reason = ?,number_warning = ?, modified_date = ? where id_user = ?";
+        java.sql.Date now = new java.sql.Date(System.currentTimeMillis());
+        try {
+            PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
+            ps.setString(1, reason);
+            ps.setInt(2, number_warning);
+            ps.setDate(3,now);
+            ps.setString(4, id_user);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

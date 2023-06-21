@@ -248,7 +248,7 @@ public class BookingModel {
 
     @Override
     public String toString() {
-        return "BookingModel{" +
+        return "BookingModel: " +
                 "id='" + id + '\'' +
                 ", date_booking='" + date_booking + '\'' +
                 ", id_user='" + id_user + '\'' +
@@ -262,7 +262,6 @@ public class BookingModel {
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", quantity=" + quantity +
-                ", avatar='" + avatar + '\'' +
                 ", address='" + address + '\'' +
                 ", email='" + email + '\'' +
                 ", toDistrictId=" + toDistrictId +
@@ -270,8 +269,7 @@ public class BookingModel {
                 ", height=" + height +
                 ", length=" + length +
                 ", width=" + width +
-                ", weight=" + weight +
-                '}';
+                ", weight=" + weight;
     }
 
     public int getFromWardId() {

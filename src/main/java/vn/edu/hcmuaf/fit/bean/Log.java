@@ -16,6 +16,7 @@ public class Log extends AbBean implements Serializable {
     private String src;
     private int id_user;
     private String ip_address;
+    private String title;
     private String content;
     private Timestamp create_at;
     private  int status;
@@ -36,7 +37,16 @@ public class Log extends AbBean implements Serializable {
 
     public Log() {
     }
-
+    public Log(int level,int userId, String ip_address, String src, String title, String content, Timestamp creatAt, int status) {
+        this.level = level;
+        this.src = src;
+        this.id_user = userId;
+        this.ip_address = ip_address;
+        this.title = title;
+        this.content = content;
+        this.create_at = creatAt;
+        this.status = status;
+    }
     public Log(int level,int userId, String ip_address, String src,  String content, Timestamp creatAt, int status) {
         this.level = level;
         this.src = src;
@@ -46,13 +56,23 @@ public class Log extends AbBean implements Serializable {
         this.create_at = creatAt;
         this.status = status;
     }
-    public Log(int id, int level,int userId, String ip_address, String src,  String content, Timestamp creatAt, int status) {
+    public Log(int id, int level,int userId, String ip_address, String src, String title, String content, Timestamp creatAt, int status) {
         this.id = id;
         this.level = level;
         this.src = src;
         this.id_user = userId;
+        this.title = title;
         this.content = content;
         this.create_at = creatAt;
+        this.status = status;
+    }
+    public Log(int level,int userId, String ip_address, String src, String title, String content,int status) {
+        this.level = level;
+        this.src = src;
+        this.ip_address = ip_address;
+        this.id_user = userId;
+        this.title = title;
+        this.content = content;
         this.status = status;
     }
     public Log(int level,int userId, String ip_address, String src, String content,int status) {
@@ -93,6 +113,9 @@ public class Log extends AbBean implements Serializable {
     }
 
     public String getContent() {
+        if(content.length() > 5000){
+            return content.substring(0, 5000) + "...";
+        }
         return content;
     }
 
@@ -133,12 +156,23 @@ public class Log extends AbBean implements Serializable {
         this.ip_address = ip_address;
     }
 
+    public String getTitle() {
+        return title;
+    }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public boolean insert(Jdbi db){
         Integer i = db.withHandle(handle ->
-                handle.execute("INSERT INTO logs(`level`, `id_user`, `ip_address`, `src`, `content`, `create_at`, `status`)  VALUES(?,?,?,?,?,NOW(),?)",
-                        this.level, getId_user() == -1 ? null : getId_user(), this.ip_address, this.src, this.content, this.status)
+                handle.execute("INSERT INTO logs(`level`, `id_user`, `ip_address`, `src`, `title`,`content`, `create_at`, `status`)  VALUES(?,?,?,?,?,?,NOW(),?)",
+                        this.level, getId_user() == -1 ? null : getId_user(),
+                        getIp_address().trim() == ""? "Không xác định" : getIp_address(),
+                        getSrc(),
+                        getTitle(),
+                        getContent(),
+                        getStatus())
         );
         return i==1;
     }
@@ -150,6 +184,22 @@ public class Log extends AbBean implements Serializable {
             return "Chưa kiểm tra";
         }
     }
+
+    @Override
+    public String toString() {
+        return "Log: " +
+                "id=" + id +
+                ", level=" + level +
+                ", src='" + src +
+                ", id_user=" + id_user +
+                ", ip_address='" + ip_address +
+                ", title='" + title +
+                ", content='" + content +
+                ", create_at=" + create_at +
+                ", status=" + status +
+                "<br>";
+    }
+
     public void checked(String idLog){
         LogDAO.checked(idLog);
     }

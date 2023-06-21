@@ -331,6 +331,26 @@ public class AuthoritiesDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public String getIdRoleByName(String name){
+        String query = "SELECT id_role FROM `roles` WHERE name_role = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, name);
+            rs = ps.executeQuery();
+            while (rs.next()){
+                return rs.getString("id_role");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return "";
+    }
+
+    public static void main(String[] args) {
+        AuthoritiesDAO authoritiesDAO = new AuthoritiesDAO();
+        System.out.println(authoritiesDAO.getIdRoleByName("User"));;
+    }
 }
 
 

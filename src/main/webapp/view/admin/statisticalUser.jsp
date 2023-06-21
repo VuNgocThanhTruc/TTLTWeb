@@ -25,6 +25,35 @@
             cursor: pointer;
             max-width: 100px
         }
+
+        .tab-pane-login-failed{
+            display: none;
+        }
+
+        .tabs-login-failed{
+            display: flex;
+            min-width: 246px;
+            max-width: 342px;
+            padding: 3px;
+            border-radius: 5px;
+            background-color: #ededef;
+        }
+        .tabs-login-failed .tab-item-login-failed{
+            padding: 5px 10px;
+            text-align: center;
+            border-radius: 4px;
+            font-size: 15px;
+            min-width: 80px;
+            cursor: pointer;
+            max-width: 100px;
+        }
+        .tab-pane-login-failed.active{
+            display: block;
+        }
+
+        .tabs-login-failed .tab-item-login-failed.active {
+            background-color: #ffffff;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 </head>
@@ -63,87 +92,100 @@
     <div class="col-md-12 col-lg-6">
         <div class="row">
             <div class="col-md-12">
-                <%--Bảng ip đăng nập sai nhiều lần--%>
+                <%--Bảng đăng nập sai nhiều lần--%>
 
-                    <div class="tile">
-                        <h3 class="tile-title">Địa chỉ ip đăng nhập sai nhều lần</h3>
-                        <div>
-                            <% if (ipWarningStatistics == null) {%>
-                            <div>Chưa có tài khoản nào</div>
-                            <%} else {%>
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Địa chỉ IP</th>
-                                    <th>Số lần cảnh báo</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <% for (Map<String, Object> data : ipWarningStatistics) {%>
-                                <tr>
-                                    <td><%=data.get("ip")%>
-                                    </td>
-                                    <td><%=data.get("amount")%>
-                                    </td>
-                                </tr>
+                    <div  class="tile">
+                        <div style="display: flex; justify-content: space-between;" class="tile-title">
+                            <div style="font-size: 20px; font-weight: bold">Thống kê đăng nhập sai nhều lần</div>
+                            <div class="tabs-login-failed"
+                                 style="display: flex; min-width: 165px; max-width: 165px;padding: 3px; border-radius: 5px; background-color: #ededef">
+                                <div class="tab-item-login-failed active">
+                                    <b>IP</b>
+                                </div>
+
+                                <div class="tab-item-login-failed">
+                                    <b>User</b>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content-login-failed" style="overflow: scroll; max-height: 260px">
+                            <div class="tab-pane-login-failed active">
+                                <% if (ipWarningStatistics == null) {%>
+                                <div>Chưa có tài khoản nào</div>
+                                <%} else {%>
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Địa chỉ IP</th>
+                                        <th>Số lần cảnh báo</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <% for (Map<String, Object> data : ipWarningStatistics) {%>
+                                    <tr>
+                                        <td><%=data.get("ip")%>
+                                        </td>
+                                        <td><%=data.get("amount")%>
+                                        </td>
+                                    </tr>
+                                    <%}%>
+                                    </tbody>
+                                </table>
                                 <%}%>
-                                </tbody>
-                            </table>
-                            <%}%>
+                            </div>
+
+                            <div class="tab-pane-login-failed">
+                                <% if (userWarningStatistics == null) {%>
+                                <div>Chưa có tài khoản nào</div>
+                                <%} else {%>
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th style="text-align: center">ID user</th>
+                                        <th style="text-align: center">Name user</th>
+                                        <th style="text-align: center">Trạng thái tài khoản</th>
+                                        <th style="text-align: center">Số lần cảnh báo</th>
+                                        <th style="text-align: center">Cập nhật lần cuối</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <% for (Map<String, Object> data : userWarningStatistics) {%>
+                                    <tr>
+                                        <%
+                                            String id_user_warning =(String) data.get("id");
+                                            boolean isLocked = (Boolean) data.get("locked");
+                                            String statusUser = "";
+                                            if(isLocked){
+                                                statusUser = "Đã khóa";
+                                            }else{
+                                                statusUser = "Đang hoạt động";
+                                            }
+                                            UserModel user_warning = AccountService.getUserById(id_user_warning);
+                                            String name_user_warning = user_warning.getName();
+                                        %>
+                                        <td>
+                                            <a href="manage-account?action=profile-user&id-user=<%=id_user_warning%>" style="display: flex; align-items: center;">
+                                                <p title="Xem chi tiết" style="margin: 0; padding-left: 20px; font-size: 17px">#<%=id_user_warning%></p>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="manage-account?action=profile-user&id-user=<%=id_user_warning%>" style="display: flex; align-items: center;">
+                                                <p title="Xem chi tiết" style="margin: 0; padding-left: 20px; font-size: 17px"><%=name_user_warning%></p>
+                                            </a>
+                                        </td>
+                                        <td><%=statusUser%></td>
+                                        <td><%=data.get("amount")%></td>
+                                        <td><%=data.get("modified_date")%></td>
+                                    </tr>
+                                    <%}%>
+                                    </tbody>
+                                </table>
+                                <%}%>
+                            </div>
                         </div>
                     </div>
                 <%--Bảng user đăng nhập sai nhiều lần--%>
-                    <div class="tile">
-                        <h3 class="tile-title">User đăng nhập sai nhều lần</h3>
-                        <div>
-                            <% if (userWarningStatistics == null) {%>
-                            <div>Chưa có tài khoản nào</div>
-                            <%} else {%>
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th>ID user</th>
-                                    <th>Name user</th>
-                                    <th>Trạng thái tài khoản</th>
-                                    <th>Số lần cảnh báo</th>
-                                    <th>Cập nhật lần cuối</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <% for (Map<String, Object> data : userWarningStatistics) {%>
-                                <tr>
-                                    <%
-                                        String id_user_warning =(String) data.get("id");
-                                        boolean isLocked = (Boolean) data.get("locked");
-                                        String statusUser = "";
-                                        if(isLocked){
-                                            statusUser = "Đã khóa";
-                                        }else{
-                                            statusUser = "Đang hoạt động";
-                                        }
-                                        UserModel user_warning = AccountService.getUserById(id_user_warning);
-                                        String name_user_warning = user_warning.getName();
-                                    %>
-                                    <td>
-                                        <a href="manage-account?action=profile-user&id-user=<%=id_user_warning%>" style="display: flex; align-items: center;">
-                                            <p title="Xem chi tiết" style="margin: 0; padding-left: 20px; font-size: 17px">#<%=id_user_warning%></p>
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="manage-account?action=profile-user&id-user=<%=id_user_warning%>" style="display: flex; align-items: center;">
-                                            <p title="Xem chi tiết" style="margin: 0; padding-left: 20px; font-size: 17px"><%=name_user_warning%></p>
-                                        </a>
-                                    </td>
-                                    <td><%=statusUser%></td>
-                                    <td><%=data.get("amount")%></td>
-                                    <td><%=data.get("modified_date")%></td>
-                                </tr>
-                                <%}%>
-                                </tbody>
-                            </table>
-                            <%}%>
-                        </div>
-                    </div>
+
             </div>
         </div>
     </div>
@@ -152,7 +194,7 @@
     <!--Right-->
     <div class="col-md-12 col-lg-6">
         <div class="col-md-12">
-            <div class="tile">
+            <div class="tile" style="height: 380px">
                 <h3 style="display: flex; justify-content: space-between;" class="tile-title">
                     <div style="line-height: 34px;">Thống kê số lượng truy cập</div>
                     <div class="tabs"
@@ -173,19 +215,19 @@
                 <div class="tab-content">
                     <div class="tab-pane active">
                         <div class="embed-responsive">
-                            <canvas id="statiscalUserChartDay" style="width:100%;max-width:600px"></canvas>
+                            <canvas id="statiscalUserChartDay" style="width:100%"></canvas>
                         </div>
                     </div>
 
                     <div class="tab-pane">
                         <div class="embed-responsive">
-                            <canvas id="statiscalUserChartMonth" style="width:100%;max-width:600px"></canvas>
+                            <canvas id="statiscalUserChartMonth" style="width:100%"></canvas>
                         </div>
                     </div>
 
                     <div class="tab-pane">
                         <div class="embed-responsive">
-                            <canvas id="statiscalUserChartYear" style="width:100%;max-width:600px"></canvas>
+                            <canvas id="statiscalUserChartYear" style="width:100%"></canvas>
                         </div>
                     </div>
                 </div>
@@ -271,6 +313,20 @@
 
             this.classList.add('active')
             pane.classList.add('active')
+        }
+    })
+
+    const tabs_login = document.querySelectorAll('.tab-item-login-failed');
+    const panes_login = document.querySelectorAll('.tab-pane-login-failed');
+
+    tabs_login.forEach((tab_login, index) => {
+        const pane_login = panes_login[index];
+        tab_login.onclick = function () {
+            document.querySelector('.tab-item-login-failed.active').classList.remove('active')
+            document.querySelector('.tab-pane-login-failed.active').classList.remove('active')
+
+            this.classList.add('active')
+            pane_login.classList.add('active')
         }
     })
 </script>
