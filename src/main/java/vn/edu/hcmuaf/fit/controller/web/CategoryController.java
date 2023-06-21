@@ -18,6 +18,7 @@ public class CategoryController extends HttpServlet {
         List<ProductModel> listProduct = new ProductService().getListProductForBrand(categoryPram);
 
         request.setAttribute("listProduct", listProduct);
+        request.setAttribute("nameBrand", categoryPram);
         request.getRequestDispatcher("view/web/product.jsp").forward(request, response);
     }
 

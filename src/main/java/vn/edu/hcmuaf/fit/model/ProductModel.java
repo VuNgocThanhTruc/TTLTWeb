@@ -25,6 +25,7 @@ public class ProductModel {
     private String dateEnd;
     private int percentDiscount;
 
+    private Date created_date;
 
     public ProductModel() {
     }
@@ -191,6 +192,14 @@ public class ProductModel {
         return price;
     }
 
+    public Date getCreated_date() {
+        return created_date;
+    }
+
+    public void setCreated_date(Date created_date) {
+        this.created_date = created_date;
+    }
+
     public long getPriceDiscount() {
         Date serverTime = new Date();
         Timestamp timestamp = new Timestamp(serverTime.getTime());
@@ -250,9 +259,10 @@ public class ProductModel {
                 ", length=" + length +
                 ", width=" + width +
                 ", weight=" + weight +
+                ", dateCreate='" + created_date + '\'' +
                 ", dateStart='" + dateStart + '\'' +
                 ", dateEnd='" + dateEnd + '\'' +
-                ", percentDiscount=" + percentDiscount +
+                ", percentDiscount=" + percentDiscount + "\n" +
                 "<br>";
     }
 }
