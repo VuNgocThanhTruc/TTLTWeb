@@ -60,6 +60,7 @@ public class CartController extends HttpServlet {
         request.setAttribute("listProduct", listProduct);
         request.setAttribute("activeProduct", "active");
         json.put("numCart", numCart);
+        json.put("sumMoneyCart", getSumMoneyCart(cart));
 
         PrintWriter out = response.getWriter();
         out.println(json.toString());

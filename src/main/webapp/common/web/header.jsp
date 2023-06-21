@@ -203,10 +203,10 @@
             <form action="#" method="post" class="last">
                 <input type="hidden" name="cmd" value="_cart">
                 <input type="hidden" name="display" value="1">
-                <button class="w3view-cart btn position-relative" type="submit" name="submit" value="" onclick="addBtnCart()">
+                <a href="cart" class="w3view-cart btn position-relative" type="submit" name="submit" value="" onclick="addBtnCart()">
                     <div class="icon-ol"><i class="icon-header fas fa-shopping-cart" aria-hidden="true"></i></div>
                     <span class="p-1 bg-danger border-0 text-light sum-num-cart"><%=numCart%></span>
-                </button>
+                </a>
             </form>
         </div>
 
