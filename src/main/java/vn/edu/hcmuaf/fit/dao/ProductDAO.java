@@ -306,7 +306,8 @@ public class ProductDAO {
                 productModel.setIdStatusDevice(rs.getInt("id_status_device"));
                 productModel.setDescribe(rs.getString("describe"));
                 productModel.setListImage(listImage);
-
+                productModel.setAvatar(rs.getString("avatar"));
+                productModel.setCreated_date(rs.getDate("created_date"));
                 list.add(productModel);
             }
             return list;

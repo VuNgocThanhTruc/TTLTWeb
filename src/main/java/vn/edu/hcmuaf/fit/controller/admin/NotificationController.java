@@ -40,6 +40,9 @@ public class NotificationController extends HttpServlet {
                     length ++;
                 }
                 String avatar = user.getAvatar();
+                if (avatar == null || avatar.equals("")){
+                    avatar = "no-avatar.png";
+                }
                 if(notification instanceof NotificationHasLink){
                     content += "<a class=\"notification-link\" data-notification-id=\""+notification.getId()+"\" href=\""+((NotificationHasLink) notification).getLinkNotify()+"\"> <div class=\"notification_item "+ class_checked +"\">\n" +
                             "<div class=\"notification_avatar\">\n" +

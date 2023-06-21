@@ -194,12 +194,14 @@
     });
 
     /* Nhận và kiểm tra có thông báo theo thời gian thực */
-    $(document).ready(function(){
-        function checkNewNotifications(){
+
+    function checkNewNotifications(){
             notificationAjax()
-        }
+    }
+
+    $(document).ready(function(){
+        setInterval(checkNewNotifications, 2000);
     });
-    setInterval(checkNewNotifications, 3000);
     function notificationAjax() {
         $.ajax({
             url: "notification",
