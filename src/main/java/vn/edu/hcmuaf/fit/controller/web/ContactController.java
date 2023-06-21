@@ -1,6 +1,10 @@
 package vn.edu.hcmuaf.fit.controller.web;
 
+import vn.edu.hcmuaf.fit.bean.Notification;
+import vn.edu.hcmuaf.fit.bean.NotificationHasLink;
 import vn.edu.hcmuaf.fit.dao.ContactDAO;
+import vn.edu.hcmuaf.fit.model.UserModel;
+import vn.edu.hcmuaf.fit.service.NotificationService;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -24,14 +28,22 @@ public class ContactController extends HttpServlet {
 
         HttpSession session = request.getSession();
         session.setAttribute("mess", null);
-
         String name = request.getParameter("name");
         String tel = request.getParameter("tel");
         String email = request.getParameter("email");
         String content = request.getParameter("content");
         ContactDAO contactDAO =new ContactDAO();
         contactDAO.add(name,tel,email,content);
-        response.sendRedirect("contact");
+
+        //Gửi thông báo đến admin
+        ServletContext context = getServletContext();
+        UserModel user = (UserModel) session.getAttribute("userlogin");
+        String idUser = user.getId();
+        String title = "Có một liên hệ mới từ <strong>" + name + "</strong>";
+        String link = "manage-contact";
+        Notification notification = new NotificationHasLink(idUser, title, link);
+        NotificationService.sendNotifyHasLink((NotificationHasLink) notification, context);
         session.setAttribute("mess", "successSend");
+        response.sendRedirect("contact");
     }
 }

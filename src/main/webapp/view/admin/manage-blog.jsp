@@ -226,11 +226,6 @@ MODAL
 <script src="../../admin/doc/js/plugins/pace.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <script>
-    function deleteRow(r) {
-        var i = r.parentNode.parentNode.rowIndex;
-        document.getElementById("myTable").deleteRow(i);
-    }
-
     function confirmDelete() {
         if (confirm("Bạn có chắc chắn muốn xóa?")) {
             return true; // Nếu người dùng chấp nhận xóa, tiếp tục hành động

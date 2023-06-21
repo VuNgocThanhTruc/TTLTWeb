@@ -329,27 +329,25 @@
 </body>
 <script type="text/javascript">
 
-    const $ = document.querySelector.bind(document);
-    const $$ = document.querySelectorAll.bind(document);
-    const tabs = $$('.tab-item');
-    const panes = $$('.tab-pane');
+
+    const tabs = document.querySelectorAll('.tab-item');
+    const panes = document.querySelectorAll('.tab-pane');
 
 
     tabs.forEach((tab, index) => {
         const pane = panes[index];
         tab.onclick = function () {
-            $('.tab-item.active').classList.remove('active')
-            $('.tab-pane.active').classList.remove('active')
+            document.querySelector('.tab-item.active').classList.remove('active')
+            document.querySelector('.tab-pane.active').classList.remove('active')
 
             this.classList.add('active')
             pane.classList.add('active')
         }
     })
 
-    const tab_menu = $('.tabs')
+    const tab_menu = document.querySelector('.tabs')
     const length_tab = tabs.length;
     var width_tab = 170 * length_tab + 7;
     tab_menu.style.width = width_tab + 'px';
-    console.log('width_tab: ' + width_tab)
 </script>
 </html>

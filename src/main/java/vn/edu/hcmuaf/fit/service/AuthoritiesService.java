@@ -109,4 +109,18 @@ public class AuthoritiesService {
             }
         }
     }
+    //Cấp toàn bộ quyền
+    public void grantAllForAdmin(String idRole){
+        if(idRole.equals("1")){
+            for(ComponentModel component : getAllComponent()){
+                if(!authoritiesDAO.checkComponentExistDec(component.getId())){
+                    for(FunctionModel function : getAllFunction()){
+                        decentralizeFunctionForRole(idRole, component.getId(), function.getId(), true);
+                    }
+                    continue;
+                }
+            }
+
+        }
+    }
 }

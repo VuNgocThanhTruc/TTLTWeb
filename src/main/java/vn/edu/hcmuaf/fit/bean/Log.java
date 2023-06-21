@@ -140,7 +140,7 @@ public class Log extends AbBean implements Serializable {
                 handle.execute("INSERT INTO logs(`level`, `id_user`, `ip_address`, `src`, `content`, `create_at`, `status`)  VALUES(?,?,?,?,?,NOW(),?)",
                         this.level, getId_user() == -1 ? null : getId_user(), this.ip_address, this.src, this.content, this.status)
         );
-        return true;
+        return i==1;
     }
 
     public String getNameStatus(){
