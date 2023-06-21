@@ -401,3 +401,7 @@ table.table td .add {
   font-size: 15px;
   text-align: center;
 }
+.scrollable-div {
+    max-height: 300px; /* Đặt chiều cao tối đa của thẻ div */
+    overflow-y: auto; /* Cho phép cuộn dọc khi nội dung vượt quá chiều cao */
+}

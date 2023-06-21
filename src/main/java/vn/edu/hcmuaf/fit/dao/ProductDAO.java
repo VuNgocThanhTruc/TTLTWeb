@@ -99,7 +99,10 @@ public class ProductDAO {
     public static List<ProductModel> getNextListProduct(int amount) {
         LinkedList<ProductModel> list = new LinkedList<ProductModel>();
 
-        String sql = "select p.id ,`name`,id_type_product,id_status_device,id_brand,price,avatar,`describe`,created_by,created_date,modified_date,modified_by from products p \n" +
+        String sql = "select p.id ,p.`name`,p.id_type_product,p.id_status_device,p.id_brand,p.price,p.avatar,p.`describe`,p.created_by,p.created_date,p.modified_date,p.modified_by,p.height, p.length, p.width, p.weight,d.date_start,d.date_end,d.percent_discount from products p LEFT JOIN  discounts d on p.id= d.id_product\n" +
+                "UNION\n" +
+                "select p.id ,p.`name`,p.id_type_product,p.id_status_device,p.id_brand,p.price,p.avatar,p.`describe`,p.created_by,p.created_date,p.modified_date,p.modified_by,p.height, p.length, p.width, p.weight,d.date_start,d.date_end,d.percent_discount from products p RIGHT JOIN   discounts d on p.id= d.id_product\n" +
+                "\n" +
                 "WHERE p.id_status_device =1 ORDER BY id desc LIMIT ?,4";
 
         try {
@@ -126,6 +129,8 @@ public class ProductDAO {
                 productModel.setIdStatusDevice(rs.getInt("id_status_device"));
                 productModel.setDescribe(rs.getString("describe"));
                 productModel.setAvatar(rs.getString("avatar"));
+                productModel.setDateStart(rs.getString("date_start"));
+                productModel.setDateEnd(rs.getString("date_end"));
                 productModel.setListImage(listImage);
 
                 list.add(productModel);

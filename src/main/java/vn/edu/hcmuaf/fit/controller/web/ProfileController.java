@@ -3,6 +3,7 @@ package vn.edu.hcmuaf.fit.controller.web;
 import vn.edu.hcmuaf.fit.dao.UserDAO;
 import vn.edu.hcmuaf.fit.model.UserModel;
 
+import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -14,7 +15,7 @@ import static java.lang.Integer.parseInt;
 public class ProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/view/web/profile-admin.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/web/profile.jsp").forward(request, response);
     }
 
     @Override
@@ -48,36 +49,36 @@ public class ProfileController extends HttpServlet {
             System.out.println(id + " " + hovaten + " " + 0 + " " + email + " " + tel + " " + dob + " " + address);
             request.getRequestDispatcher("/view/web/profile-admin.jsp").forward(request, response);
 
-        }
-//        else if (action.equals("addImage")) {
-//
-//            System.out.println("In do post method of Add Image servlet.");
-//            Part file = request.getPart("image");
-//
-//            String imageFileName = file.getSubmittedFileName();  // get selected image file name
-//            System.out.println("Selected Image File Name : " + imageFileName);
-//
-//            String uploadPath = "E:/WebProgramming/src/main/webapp/images/user/" + imageFileName;  // upload path where we have to upload our actual image
-//            System.out.println("Upload Path : " + uploadPath);
-//
-//            try {
-//
-//                FileOutputStream fos = new FileOutputStream(uploadPath);
-//                InputStream is = file.getInputStream();
-//
-//                byte[] data = new byte[is.available()];
-//                is.read(data);
-//                fos.write(data);
-//                fos.close();
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            User user = (User) session.getAttribute("userlogin");
-//
-//            UserDAO userDAO = new UserDAO();
-//            userDAO.addImage(user.getId(),imageFileName);
-//            request.getRequestDispatcher("/view/web/profile-admin.jsp").forward(request, response);
+        } else if (action.equals("addImage")) {
+
+            System.out.println("In do post method of Add Image servlet.");
+            Part file = request.getPart("image");
+
+            String imageFileName = file.getSubmittedFileName();  // get selected image file name
+            System.out.println("Selected Image File Name : " + imageFileName);
+
+            String uploadPath = "E:/WebProgramming/src/main/webapp/images/user/" + imageFileName;  // upload path where we have to upload our actual image
+            System.out.println("Upload Path : " + uploadPath);
+
+            try {
+
+                FileOutputStream fos = new FileOutputStream(uploadPath);
+                InputStream is = file.getInputStream();
+
+                byte[] data = new byte[is.available()];
+                is.read(data);
+                fos.write(data);
+                fos.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            UserModel user = (UserModel) session.getAttribute("userlogin");
+
+            UserDAO userDAO = new UserDAO();
+            userDAO.addImage(user.getId(), imageFileName);
+            request.getRequestDispatcher("/view/web/profile-admin.jsp").forward(request, response);
 //        }
+        }
     }
 }
