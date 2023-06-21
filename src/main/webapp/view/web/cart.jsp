@@ -42,7 +42,7 @@
                             for (Map.Entry<Integer, ProductCartModel> item : cart.entrySet()) {
                         %>
                         <%--                        <form action="${pageContext.request.contextPath}/cart?action=update-cart" method="post">--%>
-                        <div class="row cart-item_<%=item.getKey()%>">
+                        <div class="row cart-item_<%=item.getKey()%> my-3">
                             <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
                                 <!-- Image -->
                                 <div class="bg-image hover-overlay hover-zoom ripple rounded"
@@ -81,7 +81,8 @@
                                 <!-- Quantity -->
                                 <div class="d-flex mb-4" style="max-width: 300px">
                                     <button class="btn btn-dark px-3 me-2"
-                                            onclick="updateItemCart(<%=item.getKey()%>,-1)">
+                                            onclick="updateItemCart(<%=item.getKey()%>,-1)"
+                                            style="height: 40px">
                                         <i class="fas fa-minus"></i>
                                     </button>
                                     <input type="hidden" name="id_item" value="<%=item.getKey()%>">
@@ -94,7 +95,7 @@
                                     </div>
 
                                     <button class="btn btn-dark px-3 ms-2"
-                                            onclick="updateItemCart(<%=item.getKey()%>),1">
+                                            onclick="updateItemCart(<%=item.getKey()%>,1)" style="height: 40px">
                                         <i class="fas fa-plus"></i>
                                     </button>
                                     <!-- Quantity -->
@@ -111,13 +112,9 @@
                                     <p class="text-start text-md-center">
                                         <strong><%=item.getValue().getProductModel().getPriceDiscount()%>₫
                                         </strong>
-                                        <strong style="text-decoration: line-through;font-weight: normal;"><%=item.getValue().getProductModel().getPrice()%>₫
+                                        <strong style="text-decoration: line-through;font-weight: normal;"><%=item.getValue().getProductModel().getPrice()%>
+                                            ₫
                                         </strong>
-                                    </p><%} else { %>
-                                    <p class="text-start text-md-center">
-                                        <strong><%=item.getValue().getProductModel().getPrice()%>₫
-                                        </strong>
-
                                     </p>
                                     <%
                                         }
@@ -132,13 +129,6 @@
                                     <!-- Price -->
                                 </div>
                                 <!-- Quantity -->
-
-                                <!-- Price -->
-                                <p class="text-start text-md-center">
-                                    <strong><%=item.getValue().getProductModel().getPrice()%>
-                                    </strong>
-                                </p>
-                                <!-- Price -->
                             </div>
                         </div>
                         <%--                        </form>--%>
@@ -161,7 +151,7 @@
                                 <div>
                                     <strong>Tổng tiền</strong>
                                 </div>
-                                <span><strong class="change-cart-summoney">
+                                <span><strong id="change-cart-summoney">
                             <%
                                 float res = 0;
                                 if (cart != null)
@@ -203,8 +193,8 @@
 <script>
     function deleteItemCart(idItem) {
         let numCart = document.querySelector(".sum-num-cart")
-        let listCartEle = document.getElementById('cart-item');
         let cartItemEle = document.querySelector('div.cart-item_' + idItem);
+        let sumMoneyCartEle = document.getElementById('change-cart-summoney');
 
         $.ajax({
             type: 'POST',
@@ -221,6 +211,7 @@
                 });
 
                 numCart.innerText = data.numCart
+                sumMoneyCartEle.innerText = data.sumMoneyCart
                 cartItemEle.remove()
             }
         });
@@ -228,41 +219,37 @@
 
     function updateItemCart(idItem, type = 0) {
         let inputQuantityEle = document.getElementById('quantity_' + idItem);
+        let sumMoneyCartEle = document.getElementById('change-cart-summoney');
+
         let quantity = inputQuantityEle.value
-        let listCartEle = document.getElementById('cart-item');
-        let cartItemEle = document.querySelector('div.cart-item_' + idItem);
         let numCart = document.querySelector(".sum-num-cart")
 
-        $.ajax({
-            dataType: 'json',
-            type: 'POST',
-            data: {
-                "id_item": idItem * 1,
-                "quantity": quantity * 1 + type
-            },
-            url: "<%=request.getContextPath()%>/cart?action=update-cart",
-            success: function (data) {
-                swal("Giỏ hàng đã được cập nhật!", {
-                    buttons: false,
-                    timer: 1000,
-                    icon: "success",
-                });
-                numCart.innerText = data.numCart
-                console.log(data)
-                for (let i = 0; i < data.listProduct.length; i++) {
-                    if (data.listProduct[i].idItem == idItem) {
-                        console.log("in if 1")
-                        if (data.listProduct[i].quantity == 0) {
-                            console.log("in if 2")
-                            cartItemEle.remove()
-                        } else {
-                            console.log("in else if 2")
-                            inputQuantityEle.value = data.listProduct[i].quantity
-                        }
-                    }
-                }
+        if (quantity == 1 && type == -1) {
+            let isDelete = confirm("Bạn có chắc muốn xóa sản phẩm ra khỏi đơn hàng?")
+            if (isDelete) {
+                deleteItemCart(idItem)
             }
-        });
+        } else {
+            $.ajax({
+                dataType: 'json',
+                type: 'POST',
+                data: {
+                    "id_item": idItem * 1,
+                    "quantity": quantity * 1 + type
+                },
+                url: "<%=request.getContextPath()%>/cart?action=update-cart",
+                success: function (data) {
+                    swal("Giỏ hàng đã được cập nhật!", {
+                        buttons: false,
+                        timer: 1000,
+                        icon: "success",
+                    });
+                    numCart.innerText = data.numCart
+                    sumMoneyCartEle.innerText = data.sumMoneyCart
+                    inputQuantityEle.value = quantity * 1 + type
+                }
+            });
+        }
     }
 </script>
 </body>

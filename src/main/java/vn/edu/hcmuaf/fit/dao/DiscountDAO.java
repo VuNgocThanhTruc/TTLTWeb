@@ -133,7 +133,7 @@ public class DiscountDAO {
     public static List<DiscountModel> getProductNoDiscount() {
         LinkedList<DiscountModel> discounts = new LinkedList<>();
 
-        String sql = "Select p.id,t.name_type_product,p.`name`,p.avatar,p.price from products p  LEFT JOIN   discounts d on p.id=d.id_product join type_products t on p.id_type_product=t.id WHERE d.id_product is NULL group by t.id";
+        String sql = "Select p.id,t.name_type_product,p.`name`,p.avatar,p.price from products p  LEFT JOIN   discounts d on p.id=d.id_product join type_products t on p.id_type_product=t.id WHERE d.id_product is NULL group by p.id";
         try {
 
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);

@@ -31,7 +31,7 @@ public class ProductCartModel {
 
     public float getSumMoney(){
         float res = 0;
-        res= (quantity*productModel.getPrice());
+        res= (quantity*productModel.getPriceDiscount());
         return res;
     }
 
