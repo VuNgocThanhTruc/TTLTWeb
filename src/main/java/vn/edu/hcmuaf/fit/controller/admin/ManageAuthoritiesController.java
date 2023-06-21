@@ -1,6 +1,7 @@
 package vn.edu.hcmuaf.fit.controller.admin;
 
 import com.sun.mail.iap.Response;
+import org.json.JSONObject;
 import vn.edu.hcmuaf.fit.bean.Log;
 import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.ComponentModel;
@@ -14,6 +15,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +31,6 @@ public class ManageAuthoritiesController extends HttpServlet {
         AuthoritiesService authoritiesService = new AuthoritiesService();
         String view = "";
         String action = request.getParameter("action");
-
         if(action.equals("add-authorities")){
             List<ComponentModel> components = authoritiesService.getAllComponent();
             List<FunctionModel> functions = authoritiesService.getAllFunction();
@@ -58,7 +59,8 @@ public class ManageAuthoritiesController extends HttpServlet {
                     new Log(3,
                             Integer.parseInt(user == null ? "-1" : user.getId()),
                             request.getRemoteAddr(),request.getRequestURI(),
-                            "Delete Role: id:" +idRoleDel,
+                            "Xóa nhóm quyền",
+                            "Role: id= " +idRoleDel,
                             0));
             view = "/view/admin/manage-authorities.jsp";
         }else if(action.equals("manage-authorities")) {
@@ -73,6 +75,8 @@ public class ManageAuthoritiesController extends HttpServlet {
                             request.getRemoteAddr(),request.getRequestURI(),
                             "Manage Authorities Page",
                             0));
+        } else if (action.equals("checkRelogin")) {
+            System.out.println("dang checkRelogin");
         }
         request.getRequestDispatcher(view).forward(request,response);
     }
@@ -107,7 +111,8 @@ public class ManageAuthoritiesController extends HttpServlet {
                     new Log(2,
                             Integer.parseInt(user == null ? "-1" : user.getId()),
                             request.getRemoteAddr(),request.getRequestURI(),
-                            "Add Role: id: " + idRole +", nameRole :" + nameRole,
+                            "Thêm nhóm quyền",
+                            "Role: id= " + idRole +", nameRole :" + nameRole,
                             0));
 
             request.setAttribute("notify","Đã thêm nhóm quyền: " + nameRole);
@@ -145,12 +150,11 @@ public class ManageAuthoritiesController extends HttpServlet {
                     new Log(2,
                             Integer.parseInt(user == null ? "-1" : user.getId()),
                             request.getRemoteAddr(),request.getRequestURI(),
+                            "Cập nhật nhóm quyền",
                             "Edit Role: id: " + idRole +", nameRole :" + nameRole,
                             0));
 
             request.setAttribute("notify","Đã sửa nhóm quyền: " + nameRole);
-        }else if(action.equals("") || action == null) {
-            System.out.println("post-authorities-null");
         }
 
         List<RoleModel> roles = authoritiesService.getAllRole();

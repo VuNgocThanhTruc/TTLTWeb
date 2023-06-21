@@ -3,6 +3,8 @@ package vn.edu.hcmuaf.fit.service;
 import vn.edu.hcmuaf.fit.dao.ProductDAO;
 import vn.edu.hcmuaf.fit.model.*;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ProductService {
@@ -20,6 +22,44 @@ public class ProductService {
 
     public static List<ProductModel> getNextListProduct(int amount) {
         return ProductDAO.getNextListProduct(amount);
+    }
+
+    public static List<ProductModel> getListProductSortBy(int sortType, String brand) {
+        List<ProductModel> listProductSort = null;
+        if(brand == null || brand.equals("null")){
+            listProductSort = ProductService.getTop8();
+        }else{
+            listProductSort = new ProductService().getListProductForBrand(brand);
+        }
+        if(sortType == 1){
+            Collections.sort(listProductSort, new Comparator<ProductModel>() {
+                @Override
+                public int compare(ProductModel product1, ProductModel product2) {
+                    return Long.compare(product1.getPrice(), product2.getPrice());
+                }
+            });
+        } else if (sortType == 2){
+            Collections.sort(listProductSort, new Comparator<ProductModel>() {
+                @Override
+                public int compare(ProductModel product1, ProductModel product2) {
+                    return Long.compare(product2.getPrice(), product1.getPrice());
+                }
+            });
+        } else if (sortType == 3){
+            Collections.sort(listProductSort, new Comparator<ProductModel>() {
+                @Override
+                public int compare(ProductModel product1, ProductModel product2) {
+                    return product1.getName().compareToIgnoreCase(product2.getName());
+                }
+            });
+        } else if (sortType == 4){
+            Collections.sort(listProductSort, Comparator.comparing(ProductModel::getName, Comparator.reverseOrder()));
+        }else if (sortType == 5){
+            Collections.sort(listProductSort, Comparator.comparing(ProductModel::getCreated_date));
+        }else if (sortType == 6){
+            Collections.sort(listProductSort, Comparator.comparing(ProductModel::getCreated_date, Comparator.reverseOrder()));
+        }
+        return listProductSort;
     }
 
     public static List<ProductModel> getSellerProduct() {
@@ -79,13 +119,4 @@ public class ProductService {
         return ProductDAO.getIncomeByYear(year);
     }
 
-    public static void main(String[] args) {
-        ProductService p = new ProductService();
-//        for (ProductModel pr : p.getSellerProduct()) {
-//            System.out.println(pr.getName());
-//        }
-        for (ProductModel pr : getDifferentProduct()) {
-            System.out.println(pr.getName());
-        }
-    }
 }

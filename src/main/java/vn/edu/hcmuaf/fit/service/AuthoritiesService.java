@@ -7,6 +7,7 @@ import vn.edu.hcmuaf.fit.model.RoleModel;
 import vn.edu.hcmuaf.fit.model.UserModel;
 
 import javax.servlet.ServletContext;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -93,21 +94,29 @@ public class AuthoritiesService {
 
     public static void checkRelogin(ServletContext context, UserModel user){
         Boolean requiredLogin = (Boolean) context.getAttribute("requiredLogin");
+        UserModel userModel = null;
         if(requiredLogin != null && requiredLogin){
-            Set<UserModel> listUserNeedRelogin =(Set<UserModel>) context.getAttribute("listUserNeedRelogin");
+            Set<UserModel> listUserNeedRelogin = (Set<UserModel>) context.getAttribute("listUserNeedRelogin");
             if(user != null) {
                 if(listUserNeedRelogin != null){
                     for (UserModel userNeedRelogin : listUserNeedRelogin){
                         if(userNeedRelogin.getId().equals(user.getId())){
-                            listUserNeedRelogin.remove(userNeedRelogin);
+                            userModel = userNeedRelogin;
+                            break;
                         }
                     }
                 }
             }
+            if(userModel != null){
+                listUserNeedRelogin.remove(userModel);
+            }
             if(listUserNeedRelogin.size() == 0){
                 context.setAttribute("requiredLogin", false);
+            }else{
+                context.setAttribute("listUserNeedRelogin", listUserNeedRelogin);
             }
         }
+
     }
     //Cấp toàn bộ quyền
     public void grantAllForAdmin(String idRole){

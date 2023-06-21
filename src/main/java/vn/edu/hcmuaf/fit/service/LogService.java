@@ -47,6 +47,7 @@ public class LogService {
                                 -1,
                                 ipAddress,
                                 request.getRequestURI(),
+                                "Ip address login failed many times",
                                 "Login failed "+ failedLoginCount +" times",
                                 0));
             }else if(failedLoginCount == LOGIN_FAILED_LOG_LOCK_IP){
@@ -54,18 +55,19 @@ public class LogService {
                 SecurityService.lockIpAddress(ipAddress, "Đăng nhập sai quá nhiều lần", failedLoginCount);
                 DBConnect.getInstall().insert(
                         new Log(3,
-                                -1,
-                                ipAddress,
-                                request.getRequestURI(),
-                                "Login failed "+ failedLoginCount +" times, Suspected illegal login attempt",
-                                0));
+                        -1,
+                        ipAddress,
+                        request.getRequestURI(),
+                        "Ip address login failed too many times",
+                        "Login failed "+ failedLoginCount +" times, Suspected illegal login attempt",
+                        0));
             }
         }
     }
 
     // Ghi lại số người truy cập
     public static void logAccess(java.util.Date date) {
-        Connection connection = new ConnectToDatabase().getConnect();
+        Connection connection = new ConnectToDatabase().getConnect();;
         if(isFirstAccess(date)){
             String sql = "insert into number_visitors values(?,1)";
             PreparedStatement ps = null;
@@ -89,22 +91,14 @@ public class LogService {
     }
 
     public static boolean isFirstAccess(java.util.Date date) {
-        VisitorModel Visitor = null;
         String sql = "select date_access, amount from number_visitors where date_access = ? ";
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
             ps.setDate(1,(java.sql.Date) date);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Visitor = new VisitorModel(rs.getDate(1), rs.getInt(2));
-            }
-
+            return rs.next() == false;
         }catch (Exception e){
             e.getMessage();
-        }
-
-        if(Visitor == null){
-            return true;
         }
         return false;
     }
@@ -116,9 +110,6 @@ public class LogService {
         if (failedLoginCount == null) {
             failedLoginCount = 0;
         }
-        System.out.println("so sanh user: "+ username + ", "+ userLoginFailed);
-        System.out.println("ket qua ss user: "+ username.equals(userLoginFailed));
-        System.out.println("----------------------------------------------");
         if(userLoginFailed == null){
             session.setAttribute("userLoginFailed", username);
         }else if(username.equals(session.getAttribute("userLoginFailed"))) {
@@ -127,24 +118,32 @@ public class LogService {
             session.setAttribute("userLoginFailed", username);
             if(failedLoginCount == LOGIN_FAILED_LOG_USER && failedLoginCount < LOGIN_FAILED_LOG_LOCK_USER){
                 //Gửi lock cảnh báo user đăng nhập sai nhiều lần
+                UserModel user = UserDAO.loadUsername().get(username);
+                int id_user = Integer.parseInt(user.getId());
                 DBConnect.getInstall().insert(
                         new Log(2,
-                                -1,
-                                username,
+                                user == null ? -1 : id_user,
+                                request.getRemoteAddr(),
                                 request.getRequestURI(),
+                                "User login failed many times",
                                 "User login failed "+ failedLoginCount +" times",
+                                null,
                                 0));
             }else if(failedLoginCount == LOGIN_FAILED_LOG_LOCK_USER){
                 //Gửi lock cảnh báo user đăng nhập sai quá nhiều lần và lock user
                 UserModel user = UserDAO.loadUsername().get(username);
+                int id_user = Integer.parseInt(user.getId());
                 SecurityService.lockUser(user.getId(), "User đăng nhập sai quá nhiều lần", failedLoginCount);
                 DBConnect.getInstall().insert(
                         new Log(3,
-                                -1,
-                                username,
+                                user == null ? -1 : id_user,
+                                request.getRemoteAddr(),
                                 request.getRequestURI(),
+                                "User login failed too many times",
                                 "User login failed "+ failedLoginCount +" times, Suspected illegal login attempt",
+                                null,
                                 0));
+
             }
         }
     }

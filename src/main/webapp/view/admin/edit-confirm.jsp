@@ -116,13 +116,13 @@
                             <div class="form-group  col-md-3">
                                 <label class="control-label">Tình trạng</label>
                                 <select class="form-control" name="status">
-                                    <option value="1" <%=booking.getStatus_booking() == 1 ? "selected" : ""%>>
+                                    <option value="1" <%=booking.getStatusBooking().getId() == 1 ? "selected" : ""%>>
                                         Đã xác nhận
                                     </option>
-                                    <option value="0" <%=booking.getStatus_booking() == 0 ? "selected" : ""%>>
+                                    <option value="0" <%=booking.getStatusBooking().getId() == 0 ? "selected" : ""%>>
                                         Chờ xác nhận
                                     </option>
-                                    <option value="-1" <%=booking.getStatus_booking() == -1 ? "selected" : ""%>>
+                                    <option value="-1" <%=booking.getStatusBooking().getId() == -1 ? "selected" : ""%>>
                                         Đã hủy
                                     </option>
                                 </select>

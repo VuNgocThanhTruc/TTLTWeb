@@ -46,6 +46,7 @@ public class ManageProductController extends HttpServlet {
         UserModel user =(UserModel) session.getAttribute("userlogin");
 
         if (SystemConstant.LIST.equals(typeParam)) {
+            DBConnect.getInstall().insert(new Log(Log.INFO, Integer.parseInt(user == null ? "-1" : user.getId()), request.getRemoteAddr(), request.getRequestURI(),"Lấy danh sách sản phẩm",ProductService.getListProduct().toString(), 0));
             view = "/view/admin/manage-product.jsp";
         } else if (SystemConstant.ADD.equals(typeParam)) {
             String addStyleParam = request.getParameter("action");
@@ -71,6 +72,7 @@ public class ManageProductController extends HttpServlet {
                 DBConnect.getInstall().insert(new Log(3,
                         Integer.parseInt(user == null ? "-1" : user.getId()),
                         request.getRemoteAddr(),request.getRequestURI(),
+                        "Xóa sản phẩm",
                         "Delete Product ID :" +idProductParam,
                         0));
             }
@@ -80,11 +82,11 @@ public class ManageProductController extends HttpServlet {
             //Export Data
             ExportService exportService = new ExportService();
             exportService.exportProduct(request, response);
-            DBConnect.getInstall().insert(new Log(Log.INFO,Integer.parseInt(user == null ? "-1" : user.getId()), request.getRemoteAddr(),request.getRequestURI(),"Export Data :" +ProductService.getListProduct().toString(), 0));
+            DBConnect.getInstall().insert(new Log(Log.INFO,Integer.parseInt(user == null ? "-1" : user.getId()), request.getRemoteAddr(),request.getRequestURI(),"Xuất dữ liệu danh sách sản phẩm","Export Data :" +ProductService.getListProduct().toString(), 0));
             view = "/view/admin/manage-product.jsp";
         }else if (typeParam == null) {
             view = "/view/admin/manage-product.jsp";
-            DBConnect.getInstall().insert(new Log(Log.INFO, Integer.parseInt(user == null ? "-1" : user.getId()), request.getRemoteAddr(), request.getRequestURI(),"Show list product: "+ProductService.getListProduct().toString(), 0));
+            DBConnect.getInstall().insert(new Log(Log.INFO, Integer.parseInt(user == null ? "-1" : user.getId()), request.getRemoteAddr(), request.getRequestURI(),"Lấy danh sách sản phẩm",ProductService.getListProduct().toString(), 0));
             request.setAttribute("listProduct", ProductService.getListProduct());
         }
 
@@ -131,6 +133,8 @@ public class ManageProductController extends HttpServlet {
         }
     }
     private void doPost_Edit(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, FileUploadException {
+        HttpSession session = request.getSession();
+        UserModel user =(UserModel) session.getAttribute("userlogin");
         int pid = Integer.parseInt(request.getParameter("id-product"));
         String pName = request.getParameter("name_product");
         int pidTypeProduct = Integer.parseInt(request.getParameter("categoryTypeProduct"));
@@ -153,6 +157,14 @@ public class ManageProductController extends HttpServlet {
         request.setAttribute("categoryTypeProduct", CategorySevice.getListTypeProduct());
         request.setAttribute("categoryBrand", CategorySevice.getListBrand());
         request.setAttribute("listProduct", ProductService.getListProduct());
+
+        DBConnect.getInstall().insert(new Log(1,
+                Integer.parseInt(user == null ? "-1" : user.getId()),
+                request.getRemoteAddr(),request.getRequestURI(),
+                "Cập nhật sản phẩm",
+                "Mã sản phẩm: " + pid +",tên sản phẩm: "+pName + ", file ảnh: " + imageFileName +", trạng thái" +pidStatus+", thương hiệu" + pBrand + ", giá" + pPrice + ", width" + width + ", height" + height + ", weight" + weight,
+                0));
+
         response.sendRedirect(request.getRequestURI());
     }
 
@@ -168,9 +180,10 @@ public class ManageProductController extends HttpServlet {
 
         boolean checkUpdateProduct = ProductService.updateProductBasic(pid, pName, brand, pidStatus, pPrice, pidTypeProduct);
         DBConnect.getInstall().insert(
-                new Log(0,
+                new Log(1,
                         Integer.parseInt(user == null ? "-1" : user.getId()),
                         request.getRemoteAddr(),request.getRequestURI(),
+                        "Sửa sản phẩm",
                         "Edit Product id: " +pid+", Name: "+ pName +", Id Type Product: " +pidTypeProduct +", Status: " +pidStatus+", Price: "+ pPrice+", brand: " + brand ,
                         0));
         PrintWriter out = response.getWriter();
@@ -207,6 +220,7 @@ public class ManageProductController extends HttpServlet {
                         Integer.parseInt(user == null ? "-1" : user.getId()),
                         request.getRemoteAddr(),
                         request.getRequestURI(),
+                        "Thêm sản phẩm",
                         "Add New Product " +"Name: "+ pName +", Id Type Product: " +pidTypeProduct +", Status: " +pidStatus + ", Brand: " + pBrand+", Price: "+ pPrice+", Quantity: " + pQuantity+", Description: " + pDescription+", Id Store: " + pidStore ,
                         0));
         request.setAttribute("message", checkAddNew);

@@ -4,6 +4,8 @@ import vn.edu.hcmuaf.fit.dao.BlogDAO;
 import vn.edu.hcmuaf.fit.dao.BookingDAO;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlogModel {
     private String userCreate;
@@ -74,23 +76,29 @@ public class BlogModel {
     public int getTypeBlog() {
         return typeBlog;
     }
-
+    public String getNameStatus(){
+        if(getStatus() == 1){
+            return "Đang đăng";
+        }else{
+            return "Không đăng";
+        }
+    }
     @Override
     public String toString() {
-        return "BlogModel{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", brefContent='" + briefContent + '\'' +
-                ", detailContent='" + detailContent + '\'' +
-                ", status=" + status +
-                ", avatar='" + avatar + '\'' +
-                ", createdDate=" + createdDate +
-                ", userCreate=" + userCreate +
-                '}';
+        return "<br>Blog: mã=" + id +
+                ", tiêu đề='" + title +
+                ", ngày tạo=" + createdDate +
+                ", mã người tạo=" + userCreate +
+                ", trạng thái=" + getNameStatus()
+                ;
     }
 
     public static void main(String[] args) {
-        BlogModel blog = BlogDAO.getDetailBlogForId(2+"");
-        System.out.println(blog);
+        BlogModel blog = new BlogModel(1, "Đây là title","Đây là mô tả", "Đây là nội dung chính", 1, "anhdaidien", 1, new Date(2023, 1,1), "1");
+        BlogModel blog2 = new BlogModel(2, "Đây là title","Đây là mô tả", "Đây là nội dung chính", 1, "anhdaidien", 1, new Date(2023, 1,1), "1");
+        List<BlogModel> list = new ArrayList<BlogModel>();
+        list.add(blog);
+        list.add(blog2);
+        System.out.println(list);
     }
 }

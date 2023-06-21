@@ -29,13 +29,27 @@ public class ManageOrderController extends HttpServlet {
         if (typeParam != null) {
             if (typeParam.equals("delete")) {
                 BookingDAO dao = new BookingDAO();
-                dao.deleteConfirm(Integer.parseInt(request.getParameter("id")));
+                dao.deleteConfirm(Integer.parseInt(request.getParameter("id-booking")));
+                DBConnect.getInstall().insert(
+                        new Log(3,
+                                Integer.parseInt(user == null ? "-1" : user.getId()),
+                                request.getRemoteAddr(),request.getRequestURI(),
+                                "Xóa đơn hàng",
+                                "Mã đơn hàng: "  + request.getParameter("id-booking"),
+                                0));
             } else if (typeParam.equals("list")) {
                 String idBooking = request.getParameter("id-booking");
                 if (idBooking != null) {
                     request.setAttribute("idBooking", idBooking);
                     request.setAttribute("listDetailBooking", BookingService.getListDetailBooking(idBooking));
                     view = "/view/admin/listDetailBooking.jsp";
+                    DBConnect.getInstall().insert(
+                            new Log(0,
+                                    Integer.parseInt(user == null ? "-1" : user.getId()),
+                                    request.getRemoteAddr(),request.getRequestURI(),
+                                    "Lấy chi tiết danh sách sản phẩm được đặt của đơn hàng",
+                                    BookingService.getListDetailBooking(idBooking).toString(),
+                                    0));
                 }
             } else if (typeParam.equals("edit")) {
                 String idBooking = request.getParameter("id-booking");
@@ -54,6 +68,7 @@ public class ManageOrderController extends HttpServlet {
                         new Log(0,
                                 Integer.parseInt(user == null ? "-1" : user.getId()),
                                 request.getRemoteAddr(),request.getRequestURI(),
+                                "Xuất dữ liệu chi tiết đặt hàng",
                                 "Export Data Detail Booking id: "  + idBooking,
                                 0));
             }
@@ -101,7 +116,8 @@ public class ManageOrderController extends HttpServlet {
                             new Log(1,
                                     Integer.parseInt(user == null ? "-1" : user.getId()),
                                     request.getRemoteAddr(),request.getRequestURI(),
-                                    "Update Booking id: "  + idBooking+", desc: " +desc +", date: " +date+", status: "+ status+", username: "+username + ", email: "+email +", tel: " + tel + "address: " +address ,
+                                    "Cập nhật lịch đặt",
+                                    "Mã: "  + idBooking+", mô tả: " +desc +", thời gian: " +date+", trạng thái: "+ status+", username: "+username + ", email: "+email +", số điện thoại: " + tel + "địa chỉ: " +address ,
                                     0));
                     response.sendRedirect(request.getContextPath() + "/admin/manage-order?type=edit&id-booking=" + id);
                 }
@@ -121,7 +137,8 @@ public class ManageOrderController extends HttpServlet {
                             new Log(0,
                                     Integer.parseInt(user == null ? "-1" : user.getId()),
                                     request.getRemoteAddr(),request.getRequestURI(),
-                                    "Add Booking id: "  + idBooking+", desc: " +desc +", date: " +date+", status: "+ status+", username: "+username + ", email: "+email +", tel: " + tel + "address: " +address ,
+                                    "Thêm đặt lịch",
+                                    "Mã: "  + idBooking+", mô tả: " +desc +", thời gian: " +date+", trạng thái: "+ status+", username: "+username + ", email: "+email +", số điện thoại: " + tel + "địa chỉ: " +address ,
                                     0));
                     response.sendRedirect(request.getContextPath() + "/admin/manage-order");
                 }

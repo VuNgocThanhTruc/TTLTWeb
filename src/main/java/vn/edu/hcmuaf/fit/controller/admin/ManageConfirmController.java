@@ -67,6 +67,7 @@ public class ManageConfirmController extends HttpServlet {
                 new Log(1,
                         Integer.parseInt(user == null ? "-1" : user.getId()),
                         request.getRemoteAddr(),request.getRequestURI(),
+                        "Cập nhật chờ xác nhận",
                         "Edit confirm: id: " + id,
                         0));
 

@@ -25,6 +25,7 @@ public class ProductModel {
     private String dateEnd;
     private int percentDiscount;
 
+    private Date created_date;
 
     public ProductModel() {
     }
@@ -191,7 +192,19 @@ public class ProductModel {
         return price;
     }
 
+
     public int getPriceDiscount() {
+
+    public Date getCreated_date() {
+        return created_date;
+    }
+
+    public void setCreated_date(Date created_date) {
+        this.created_date = created_date;
+    }
+
+    public long getPriceDiscount() {
+
         Date serverTime = new Date();
         Timestamp timestamp = new Timestamp(serverTime.getTime());
         if (dateStart != null || dateEnd != null) {
@@ -236,22 +249,21 @@ public class ProductModel {
 
     @Override
     public String toString() {
-        return "ProductModel{" +
+        return "ProductModel :" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", idTypeProduct=" + idTypeProduct +
                 ", idStatusDevice=" + idStatusDevice +
                 ", idBrand=" + idBrand +
                 ", price=" + price +
-                ", describe='" + describe + '\'' +
                 ", height=" + height +
                 ", length=" + length +
                 ", width=" + width +
                 ", weight=" + weight +
-                ", listImage=" + listImage +
+                ", dateCreate='" + created_date + '\'' +
                 ", dateStart='" + dateStart + '\'' +
                 ", dateEnd='" + dateEnd + '\'' +
-                ", percentDiscount=" + percentDiscount +
-                '}';
+                ", percentDiscount=" + percentDiscount + "\n" +
+                "<br>";
     }
 }

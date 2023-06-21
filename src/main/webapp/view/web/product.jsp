@@ -318,19 +318,16 @@
                 <div class="col-md-4 d-sm-none d-md-block d-none d-sm-block" style="float: left">
                     <div class="option browse-tags">
               <span class="custom-dropdown custom-dropdown--grey">
-                <select class="sort-by custom-dropdown__select">
-                  <option value="price-ascending">Giá: Tăng dần</option>
-                  <option value="price-descending">Giá: Giảm dần
+                <select id="sort-select" class="sort-by custom-dropdown__select">
+                  <option value="1">Giá: Tăng dần</option>
+                  <option value="2">Giá: Giảm dần
                   </option>
-                  <option value="title-ascending">Tên: A-Z</option>
-                  <option value="title-descending">Tên: Z-A</option>
-                  <option value="created-ascending">Cũ nhất
+                  <option value="3">Tên: A-Z</option>
+                  <option value="4">Tên: Z-A</option>
+                  <option value="5">Cũ nhất
                   </option>
-                  <option value="created-descending">Mới nhất
+                  <option value="6">Mới nhất
                   </option>
-                  <option value="best-selling">Bán chạy nhất
-                  </option>
-                  <option value="quantity-descending">Tồn kho: Giảm dần</option>
                 </select>
               </span>
                     </div>
@@ -338,8 +335,8 @@
             </div>
 
             <%--            print list product--%>
+            <input id="name-brand" type="hidden" value="<%=request.getAttribute("nameBrand")%>">
             <div class="row list-product">
-
                 <%List<ProductModel> listProduct = (List<ProductModel>) request.getAttribute("listProduct");%>
                 <%
                     if (listProduct.isEmpty()) {
@@ -490,6 +487,31 @@
             url: "<%=request.getContextPath()%>/LoadDataAJAX",
             success: function (data) {
                 listProduct.innerHTML += data
+            }
+        });
+    }
+
+
+    //Sắp xếp sản phẩm ajax
+
+    const selectSortType = document.querySelector('#sort-select');
+    selectSortType.addEventListener('change', function() {
+        const selectedValue = this.value;
+        const brand = document.getElementById("name-brand").value
+        console.log(selectedValue, brand)
+        sortBy(selectedValue, brand);
+    });
+
+    function sortBy(sort, brand) {
+        let listProduct = document.querySelector(".list-product")
+        let lengthBoxProduct = document.getElementsByClassName("product").length
+
+        $.ajax({
+            type: 'GET',
+            data: {sortType: sort, nameBrand: brand},
+            url: "<%=request.getContextPath()%>/sort-product",
+            success: function (data) {
+                listProduct.innerHTML = data
             }
         });
     }

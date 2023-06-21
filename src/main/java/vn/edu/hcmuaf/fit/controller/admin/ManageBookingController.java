@@ -42,27 +42,25 @@ public class ManageBookingController extends HttpServlet {
                             Integer.parseInt(user == null ? "-1" : user.getId()),
                             request.getRemoteAddr() == null ? "Không xác định" : request.getRemoteAddr(),
                             request.getRequestURI(),
+                            "Lấy danh sách lịch đặt đã xác nhận",
                             "List booking",
                             0));
 
             view = "/view/admin/manage-booked.jsp";
         } else if (statusParam.equalsIgnoreCase("wait-accept")) {
             String typeStatus = request.getParameter("type-status");
-
             if (typeStatus != null) {
-                System.out.println("change status:"+statusParam);
-
                 String idBookingParam = request.getParameter("id-booking");
                 if (idBookingParam != null) {
-                    boolean checkUpdateStatusBooking = BookingService.updateStatusBooking(typeStatus,idBookingParam);
+                    boolean checkUpdateStatusBooking = BookingService.updateStatusBooking(typeStatus, idBookingParam);
                     request.setAttribute("message", checkUpdateStatusBooking);
                 }
-
                 DBConnect.getInstall().insert(
                         new Log(0,
                                 Integer.parseInt(user == null ? "-1" : user.getId()),
                                 request.getRemoteAddr(),request.getRequestURI(),
-                                "Change statis booking: id:" + idBookingParam,
+                                "Thay đổi trạng thái lịch đặt",
+                                "Mã lịch đặt" + idBookingParam,
                                 0));
             }
             listBooking = BookingService.getListBooking(0);
@@ -75,10 +73,11 @@ public class ManageBookingController extends HttpServlet {
                 listBooking = BookingService.getListBooking(0);
 
                 DBConnect.getInstall().insert(
-                        new Log(2,
+                        new Log(3,
                                 Integer.parseInt(user == null ? "-1" : user.getId()),
                                 request.getRemoteAddr(),request.getRequestURI(),
-                                "Delete Booking: id: " + request.getParameter("id"),
+                                "Xóa lịch đặt",
+                                "Mã lịch đặt: " + request.getParameter("id"),
                                 0));
             }
         }

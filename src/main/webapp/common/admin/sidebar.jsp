@@ -24,6 +24,11 @@
     String idRole = user.getIdRole();
     RoleModel role = auth.getRoleById(idRole);
     auth.grantAllForAdmin(idRole);
+
+    String menu_select = request.getParameter("menu");
+    if(menu_select == null){
+        menu_select = "BDK";
+    }
 %>
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">
@@ -39,7 +44,7 @@
     </div>
     <hr>
     <ul class="app-menu">
-        <li><a class="app-menu__item active " href="index"><i class='app-menu__icon bx bx-tachometer'></i><span
+        <li><a class="app-menu__item <%if(menu_select.equals("BDK")){%>active<%}%>" href="index"><i class='app-menu__icon bx bx-tachometer'></i><span
                 class="app-menu__label">Bảng điều khiển</span></a></li>
 
         <% for(ComponentModel component : components) { %>
@@ -48,7 +53,7 @@
                 Boolean isGrant = auth.getDecentralizeFuncOfRole(idRole, idComponent, "1");
             %>
             <% if(isGrant == true) {%>
-            <li><a class="app-menu__item" href="<%=component.getHref()%>"><i class='<%=component.getIcon()%>'></i><span
+            <li><a class="app-menu__item <%if(menu_select.equals(component.getCode())){%>active<%}%> " href="<%=component.getHref()%>"><i class='<%=component.getIcon()%>'></i><span
                     class="app-menu__label"><%=component.getName()%></span></a></li>
             <%}%>
         <%}%>

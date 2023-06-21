@@ -78,31 +78,31 @@ public class ComponentModel {
     public String getHref(){
         String result = "";
         switch (this.code){
-            case "QLKH": result = "manage-customer";
+            case "QLKH": result = "manage-customer?menu=QLKH";
                 break;
-            case "QLSP": result = "manage-product";
+            case "QLSP": result = "manage-product?menu=QLSP";
                 break;
-            case "QLDH": result = "manage-order";
+            case "QLDH": result = "manage-order?menu=QLDH";
                 break;
-            case "QLDLSC": result = "manage-booking?status=accepted";
+            case "QLDLSC": result = "manage-booking?status=accepted&menu=QLDLSC";
                 break;
-            case "CXN": result = "manage-booking?status=wait-accept";
+            case "CXN": result = "manage-booking?status=wait-accept&menu=CXN";
                 break;
-            case "QLTT": result = "manage-blog";
+            case "QLTT": result = "manage-blog?menu=QLTT";
                 break;
-            case "QLA": result = "manage-image";
+            case "QLA": result = "manage-image?menu=QLA";
                 break;
-            case "QLLH": result = "manage-contact";
+            case "QLLH": result = "manage-contact?menu=QLLH";
                 break;
-            case "QLTK": result = "manage-account?action=manager-account";
+            case "QLTK": result = "manage-account?action=manager-account&menu=QLTK";
                 break;
-            case "QLGG": result = "manage-discount";
+            case "QLGG": result = "manage-discount?menu=QLGG";
                 break;
-            case "QLQ": result = "manage-authorities?action=manage-authorities";
+            case "QLQ": result = "manage-authorities?action=manage-authorities&menu=QLQ";
                 break;
-            case "QLL": result = "manage-log?action=manage-log";
+            case "QLL": result = "manage-log?action=manage-log&menu=QLL";
                 break;
-            case "QLK": result = "manage-inventory";
+            case "QLK": result = "manage-inventory&menu=QLK";
                 break;
             default: result = "";
         }
