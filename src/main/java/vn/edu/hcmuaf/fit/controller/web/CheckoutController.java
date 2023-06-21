@@ -75,9 +75,14 @@ public class CheckoutController extends HttpServlet {
         if (idInserted > 0) {
             session.setAttribute("mess", "success");
             ServletContext context = getServletContext();
-            String idUser = user.getId();
+            String idUser = "";
+            if(user != null){
+                idUser = user.getId();
+            }else{
+                idUser = null;
+            }
             String title = "Có một đơn đặt hàng mới từ <strong>" + name + "</strong>";
-            String link = "manage-confirm";
+            String link = "manage-booking?status=wait-accept";
             Notification notification = new NotificationHasLink(idUser, title, link);
             NotificationService.sendNotifyHasLink((NotificationHasLink) notification, context);
         }

@@ -3,8 +3,10 @@ package vn.edu.hcmuaf.fit.service;
 import vn.edu.hcmuaf.fit.dao.ProductDAO;
 import vn.edu.hcmuaf.fit.model.*;
 
+import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class ProductService {
@@ -35,14 +37,67 @@ public class ProductService {
             Collections.sort(listProductSort, new Comparator<ProductModel>() {
                 @Override
                 public int compare(ProductModel product1, ProductModel product2) {
-                    return Long.compare(product1.getPrice(), product2.getPrice());
+                    long priceProduct1 = 0;
+                    long priceProduct2 = 0;
+                    Date serverTime = new Date();
+                    Timestamp timestamp = new Timestamp(serverTime.getTime());
+                    if(product1.getDateStart() != null || product1.getDateEnd() != null){
+                        Timestamp dateStartProduct1 = Timestamp.valueOf(product1.getDateStart());
+                        Timestamp dateEndProduct1 = Timestamp.valueOf(product1.getDateEnd());
+                        if (dateEndProduct1.getTime() > timestamp.getTime() && dateStartProduct1.getTime() < timestamp.getTime())  {
+                            priceProduct1 = product1.getPriceDiscount();
+                        }else {
+                            priceProduct1 = product1.getPrice();
+                        }
+                    }else{
+                        priceProduct1 = product1.getPrice();
+                    }
+                    if(product2.getDateStart() != null || product2.getDateEnd() != null){
+                        Timestamp dateStartProduct2 = Timestamp.valueOf(product2.getDateStart());
+                        Timestamp dateEndProduct2 = Timestamp.valueOf(product2.getDateEnd());
+                        if (dateEndProduct2.getTime() > timestamp.getTime() && dateStartProduct2.getTime() < timestamp.getTime())  {
+                            priceProduct2 = product2.getPriceDiscount();
+                        }else {
+                            priceProduct2 = product2.getPrice();
+                        }
+                    }else{
+                        priceProduct2 = product2.getPrice();
+                    }
+                    System.out.println(priceProduct1 +", " + priceProduct2);
+                    return Long.compare(priceProduct1, priceProduct2);
                 }
             });
         } else if (sortType == 2){
             Collections.sort(listProductSort, new Comparator<ProductModel>() {
                 @Override
                 public int compare(ProductModel product1, ProductModel product2) {
-                    return Long.compare(product2.getPrice(), product1.getPrice());
+                    long priceProduct1 = 0;
+                    long priceProduct2 = 0;
+                    Date serverTime = new Date();
+                    Timestamp timestamp = new Timestamp(serverTime.getTime());
+                    if(product1.getDateStart() != null || product1.getDateEnd() != null) {
+                        Timestamp dateStartProduct1 = Timestamp.valueOf(product1.getDateStart());
+                        Timestamp dateEndProduct1 = Timestamp.valueOf(product1.getDateEnd());
+                        if (dateEndProduct1.getTime() > timestamp.getTime() && dateStartProduct1.getTime() < timestamp.getTime()) {
+                            priceProduct1 = product1.getPriceDiscount();
+                        } else {
+                            priceProduct1 = product1.getPrice();
+                        }
+                    }else{
+                        priceProduct1 = product1.getPrice();
+                    }
+                    if(product2.getDateStart() != null || product2.getDateEnd() != null){
+                        Timestamp dateStartProduct2 = Timestamp.valueOf(product2.getDateStart());
+                        Timestamp dateEndProduct2 = Timestamp.valueOf(product2.getDateEnd());
+                        if (dateEndProduct2.getTime() > timestamp.getTime() && dateStartProduct2.getTime() < timestamp.getTime())  {
+                            priceProduct2 = product2.getPriceDiscount();
+                        }else {
+                            priceProduct2 = product2.getPrice();
+                        }
+                    }else{
+                        priceProduct2 = product2.getPrice();
+                    }
+                    return Long.compare(priceProduct2, priceProduct1);
                 }
             });
         } else if (sortType == 3){

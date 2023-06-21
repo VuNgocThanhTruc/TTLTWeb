@@ -192,9 +192,6 @@ public class ProductModel {
         return price;
     }
 
-
-    public int getPriceDiscount() {
-
     public Date getCreated_date() {
         return created_date;
     }
@@ -264,6 +261,7 @@ public class ProductModel {
                 ", dateStart='" + dateStart + '\'' +
                 ", dateEnd='" + dateEnd + '\'' +
                 ", percentDiscount=" + percentDiscount + "\n" +
+                ","+getPriceDiscount() +
                 "<br>";
     }
 }
