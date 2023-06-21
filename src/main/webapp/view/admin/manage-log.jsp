@@ -95,7 +95,7 @@
 <main class="app-content">
     <div class="app-title">
         <ul class="app-breadcrumb breadcrumb side">
-            <li class="breadcrumb-item active"><a href="manage-blog.jsp"><b>Quản lý log</b></a></li>
+            <li class="breadcrumb-item active"><a href="manage-log"><b>Quản lý log</b></a></li>
         </ul>
         <div id="clock"></div>
     </div>
@@ -111,32 +111,34 @@
                                    style="line-height: 0px;border: 1px solid #000000; font-size: 13px; padding: 5px 10px"
                                 ><i class='bx bxs-file-export'></i> Xuất Excel</a>
                         </div>
+
+                            <div id="function-btn" style="justify-content: space-between;display: none">
+                                <div style="margin-left: 8px">
+                                    <%--  Các chức năng  --%>
+                                    <button style="width: 90px; height: 32px" class="btn btn-primary btn-sm trash" name="action"
+                                            value="delete" type="submit" title="Xóa">
+                                        <i class="fas fa-trash-alt"></i> Xóa
+                                    </button>
+                                    <button id="log-checked-all" style="background-color: #28a745; color: #fff;width: 90px; height: 32px; margin-left: 5px"
+                                            class="btn btn-primary btn-sm" name="action" value="check" type="submit"
+                                            title="Xóa">
+                                        <i class="fas fa-check-square"></i> Đã xem
+                                    </button>
+                                </div>
+                                <!--  thông báo  -->
+                                <div>
+                                    <div class="notify">
+                                        <% if (request.getAttribute("notify") != null) {%>
+                                        <%=request.getAttribute("notify")%>
+                                        <%}%>
+                                    </div>
+                                </div>
+                            </div>
                     </div>
                     <div class="tab-content">
                         <div class="tab-pane active">
-                            <form method="POST" action="/admin/manage-log">
-                                <div id="function-btn" style="justify-content: space-between;display: none" class="row element-button">
-                                    <div style="margin-left: 18px">
-                                        <%--  Các chức năng  --%>
-                                        <button style="width: 90px;" class="btn btn-primary btn-sm trash" name="action"
-                                                value="delete" type="submit" title="Xóa">
-                                            <i class="fas fa-trash-alt"></i> Xóa
-                                        </button>
-                                        <button style="background-color: #28a745; color: #fff;width: 90px; margin-left: 5px"
-                                                class="btn btn-primary btn-sm" name="action" value="check" type="submit"
-                                                title="Xóa">
-                                            <i class="fas fa-check-square"></i> Đã xem
-                                        </button>
-                                    </div>
-                                    <!--  thông báo  -->
-                                    <div>
-                                        <div class="notify">
-                                            <% if (request.getAttribute("notify") != null) {%>
-                                            <%=request.getAttribute("notify")%>
-                                            <%}%>
-                                        </div>
-                                    </div>
-                                </div>
+                            <form id="log-form">
+
                                 <!-- danh sách log -->
                                 <% if (logs == null) { %>
                                 <div>Chưa thiết lập quyền nào</div>
@@ -158,7 +160,7 @@
                                     <tbody>
                                     <%for (Log log : logs) {%>
                                     <tr style="font-weight: bold" class="log-check-<%=log.getStatus()%> log-<%=log.getLevelWithName()%>">
-                                        <td width="10"><input type="checkbox" name="check1" class="select-log"></td>
+                                        <td width="10"><input type="checkbox" name="check-log" class="select-log" value="<%=log.getId()%>"></td>
                                         <td><%=log.getLevelWithName()%>
                                         </td>
                                         <td class="fm-col"><%=log.getId_user()%>
@@ -183,24 +185,13 @@
                                 <%}%>
                             </form>
                         </div>
-
-                        <div class="tab-pane">
-                            <h1>Tab cảnh báo</h1>
-                        </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </main>
 
-<%@include file="../../common/admin/script.jsp" %>
-<!-- Essential javascripts for application to work-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="src/jquery.table2excel.js"></script>
-<!-- Page specific javascripts-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <!-- Data table plugin-->
 <script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
@@ -209,6 +200,7 @@
 <script>
     // select all checkbox
     $('#all').click(function (e) {
+        console.log("click")
         $('#logTable tbody :checkbox').prop('checked', $(this).is(':checked'));
         if ($(this).is(':checked')) {
             $('#function-btn').show();
@@ -255,10 +247,37 @@
         })
     })
 
-    const tab_menu = document.querySelector('.tabs')
-    const length_tab = tabs.length;
-    var width_tab = 170 * length_tab + 7;
-    tab_menu.style.width = width_tab + 'px';
+    //Đánh dấu đã kiểm tra tất cả các log
+
+    $(document).ready(function() {
+        $('#log-checked-all').click(function(e) {
+            setCheckedAllLog()
+            $('input[type="checkbox"]:checked').each(function() {
+                var trElement = $(this).closest('tr')
+                trElement.css('background-color', '#ffffff');
+                trElement.find('.status-log').text('Đã kiểm tra');
+            });
+        });
+    });
+
+    function setCheckedAllLog() {
+        var logCheckboxes = document.getElementsByName("check-log");
+        var logIds = Array.from(logCheckboxes).filter(function(checkbox) {
+            return checkbox.checked;
+        }).map(function(checkbox) {
+            return checkbox.value;
+        });
+
+        var params = "" + logIds.join(",");
+
+        $.ajax({
+            url: 'manage-log',
+            method: 'GET',
+            data: {
+                action: "changeCheckedAllLog", checkbox: params
+            }
+        });
+    }
 </script>
 
 </body>

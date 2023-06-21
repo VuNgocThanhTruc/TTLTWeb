@@ -10,6 +10,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Comparator;
 import java.util.List;
 
@@ -44,6 +45,17 @@ public class ManageLogController extends HttpServlet {
 
             request.setAttribute("log", log);
             view = "/view/admin/detail-log.jsp";
+        }else if(action.equals("changeCheckedAllLog")){
+            String logIdsParam = request.getParameter("checkbox");
+            System.out.println(logIdsParam);
+            if (logIdsParam != null && !logIdsParam.isEmpty()) {
+                String[] logIds = logIdsParam.split(",");
+                for (String logId : logIds) {
+                    Log log = LogDAO.getLogById(logId);
+                    log.checked(logId);
+                }
+            }
+            System.out.println("checked");
         }
         request.getRequestDispatcher(view).forward(request,response);
     }
