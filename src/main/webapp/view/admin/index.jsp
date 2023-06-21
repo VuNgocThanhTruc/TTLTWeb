@@ -15,6 +15,12 @@
 <head>
     <title>Bảng điều khiển | ADMIN</title>
     <%@include file="../../common/admin/head.jsp" %>
+    <style>
+        .scrollable-div {
+            max-height: 300px; /* Đặt chiều cao tối đa của thẻ div */
+            overflow-y: auto; /* Cho phép cuộn dọc khi nội dung vượt quá chiều cao */
+        }
+    </style>
 </head>
 <body onload="time()" class="app sidebar-mini rtl">
 <!-- Navbar-->
@@ -92,7 +98,7 @@
                 <div class="col-md-12">
                     <div class="tile">
                         <h3 class="tile-title">Sản phẩm sắp hết hàng</h3>
-                        <div>
+                        <div class="scrollable-div">
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
@@ -142,7 +148,7 @@
                 <div class="col-md-12">
                     <div class="tile">
                         <h3 class="tile-title">Sản phẩm tồn kho lâu</h3>
-                        <div>
+                        <div class="scrollable-div">
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
@@ -198,7 +204,7 @@
                 <div class="col-md-12">
                     <div class="tile">
                         <h3 class="tile-title">Khách hàng mới</h3>
-                        <div>
+                        <div class="scrollable-div">
                             <table class="table table-hover">
                                 <thead>
                                 <tr>

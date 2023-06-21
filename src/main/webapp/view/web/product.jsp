@@ -2,6 +2,8 @@
 <%@ page import="vn.edu.hcmuaf.fit.model.ProductModel" %>
 <%@page import="java.util.Date" %>
 <%@page import="java.sql.Timestamp" %>
+<%@ page import="java.text.DecimalFormat" %>
+<%@ page import="java.text.NumberFormat" %>
 <%--
   Created by IntelliJ IDEA.
   User: vutru
@@ -20,6 +22,11 @@
     <title>Điện thoại | Phone Care</title>
     <link rel="stylesheet" href="css/product.css">
     <link rel="stylesheet" type="text/css" href="css/rate_review.css">
+    <style>
+        .list-product .block-banner-category {
+            height:400px
+        }
+    </style>
 </head>
 
 <body>
@@ -27,7 +34,9 @@
 <%@include file="../../common/web/header.jsp" %>
 <%
     String checkTagBrand = (String) request.getParameter("brand");
-
+    DecimalFormat decimalFormat = new DecimalFormat("#,###");
+    String priceConvert ;
+    String priceDiscountConvert ;
 %>
 
 <div class="breadcrumb-shop">
@@ -335,37 +344,18 @@
                 <div>Không tìm thấy sản phẩm!</div>
                 <%
                 } else { %>
-                <% for (ProductModel product : listProduct) { %>
+                <% for (ProductModel product : listProduct) {
+                    priceDiscountConvert = decimalFormat.format(product.getPriceDiscount());
+                    priceConvert = decimalFormat.format(product.getPrice());%>
                 <div class="product col-md-3 col-sm-6 col-xs-6 col-6 mb-5">
                     <div class="block-banner-category">
                         <div class="product-img fade-box">
                             <a href="detail-product?id-product=<%=product.getId()%>" title="" class="img-resize">
-                                <img src="images/product/<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>"
+                                <img src="images/product/<%=product.getAvatar()%>"
                                      alt="" class="lazyloaded">
                             </a>
                         </div>
                         <div class="product-detail clearfix">
-                            <%--                            <form class="mini-cart" action="${pageContext.request.contextPath}/cart?action=add-to-cart"--%>
-                            <%--                                  method="post">--%>
-                            <%--                                <fieldset>--%>
-                            <%--                                    <input type="hidden" name="cmd" value="_cart">--%>
-                            <%--                                    <input type="hidden" name="add" value="1">--%>
-                            <%--                                    <input type="hidden" name="business" value="">--%>
-                            <%--                                    <input type="hidden" name="image"--%>
-                            <%--                                           value="<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>">--%>
-                            <%--                                    <input type="hidden" name="item_name" value="<%=product.getName()%>">--%>
-                            <%--                                    <input type="hidden" name="amount" value="<%=product.getPrice()%>">--%>
-                            <%--                                    <input type="hidden" name="discount_amount" value="10000">--%>
-                            <%--                                    <input type="hidden" name="currency_code" value="VND">--%>
-                            <%--                                    <input type="hidden" name="id_item" value="<%=product.getId()%>">--%>
-                            <%--                                    <input type="hidden" name="return" value=" ">--%>
-                            <%--                                    <input type="hidden" name="cancel_return" value=" ">--%>
-                            <%--                                    <button class="btn btn-cart btn-add-cart" type="submit"><i--%>
-                            <%--                                            class="icon-header fas fa-shopping-cart"--%>
-                            <%--                                            aria-hidden="true"></i>--%>
-                            <%--                                    </button>--%>
-                            <%--                                </fieldset>--%>
-                            <%--                            </form>--%>
 
                             <button class="btn" onclick="addToCartAJAX(<%=product.getId()%>)"><i
                                     class="icon-header fas fa-shopping-cart"></i>
@@ -379,6 +369,7 @@
                                 </a>
                             </div>
                             <%
+
                                 if (product.getDateStart() != null || product.getDateEnd() != null) {
                                     Date serverTime = new Date();
                                     Timestamp timestamp = new Timestamp(serverTime.getTime());
@@ -386,26 +377,27 @@
                                     Timestamp dateEnd = Timestamp.valueOf(product.getDateEnd());
                                     if (dateEnd.getTime() > timestamp.getTime() && dateStart.getTime() < timestamp.getTime()) {
 
+
                             %>
                                 <div class="product-price" style=" text-align: center;">
-                                    <span class="pro-price"><%=product.getPriceDiscount()%>₫</span>
+                                    <span class="pro-price"><%=priceDiscountConvert%>₫</span>
                                     <span class=""
-                                          style="text-decoration: line-through;"><%=product.getPrice()%>₫</span>
+                                          style="text-decoration: line-through;"><%=priceConvert%>₫</span>
 
                                     <span class="pro-sale"
-                                          style="background-color: #ff6600;color: white;border: dashed;border-radius: 8px; "> -<%=product.getPercentDiscount()%>%</span>
+                                          style="background-color: #ff6600;color: white;border: dashed;border-radius: 8px; "> -<%=priceDiscountConvert%>%</span>
 
                                 </div>
                                 <%} else { %>
                                 <div class="product-price" style=" text-align: center;">
-                                    <span class="pro-price"><%=product.getPrice()%>₫</span>
+                                    <span class="pro-price"><%=priceConvert%>₫</span>
                                 </div>
                                 <%
                                     }
                                 } else {
                                 %>
                                 <div class="product-price" style=" text-align: center;">
-                                    <span class="pro-price"><%=product.getPrice()%>₫</span>
+                                    <span class="pro-price"><%=priceConvert%>₫</span>
                                 </div>
                                 <%}%>
 
