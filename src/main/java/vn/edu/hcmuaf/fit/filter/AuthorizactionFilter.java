@@ -62,28 +62,37 @@ public class AuthorizactionFilter implements Filter {
                         filterChain.doFilter(servletRequest, servletResponse);
                     }
                 } else {
-                    String urlCurrent = request.getRequestURL().toString();
-                    String queryString = request.getQueryString();
-                    if (queryString != null) {
-                        urlCurrent += "?" + queryString + "&back=true";
+                    if(url.contains("notification") == false){
+                        String urlCurrent = request.getRequestURL().toString();
+                        String queryString = request.getQueryString();
+                        if (queryString != null) {
+                            urlCurrent += "?" + queryString + "&back=true";
+                        }
+                        session.setAttribute("URL-current", urlCurrent);
+                    }else{
+                        String urlCurrent = "null";
+                        session.setAttribute("URL-current", urlCurrent);
                     }
-                    session.setAttribute("URL-current", urlCurrent);
                     response.sendRedirect(request.getContextPath() + "/signin");
                 }
             } else {
-                String urlCurrent = request.getRequestURL().toString();
-                String queryString = request.getQueryString();
-                if (queryString != null && !queryString.contains("back=true")) {
-                    urlCurrent += "?" + queryString + "&back=true";
+                if(url.contains("notification") == false){
+                    String urlCurrent = request.getRequestURL().toString();
+                    String queryString = request.getQueryString();
+                    if (queryString != null && !queryString.contains("back=true")) {
+                        urlCurrent += "?" + queryString + "&back=true";
+                    }
+                    session.setAttribute("URL-current", urlCurrent);
+                }else{
+                    String urlCurrent = "null";
+                    session.setAttribute("URL-current", urlCurrent);
                 }
-                session.setAttribute("URL-current", urlCurrent);
                 response.sendRedirect(request.getContextPath() + "/signin");
             }
         } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }
     }
-
 
     @Override
     public void destroy() {
