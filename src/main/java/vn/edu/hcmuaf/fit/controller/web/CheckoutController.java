@@ -1,8 +1,12 @@
 package vn.edu.hcmuaf.fit.controller.web;
 
+import vn.edu.hcmuaf.fit.bean.Notification;
+import vn.edu.hcmuaf.fit.bean.NotificationHasLink;
 import vn.edu.hcmuaf.fit.model.*;
 import vn.edu.hcmuaf.fit.service.CheckoutService;
+import vn.edu.hcmuaf.fit.service.NotificationService;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -70,6 +74,12 @@ public class CheckoutController extends HttpServlet {
         int idInserted = checkoutService.insertBookingCart(booking);
         if (idInserted > 0) {
             session.setAttribute("mess", "success");
+            ServletContext context = getServletContext();
+            String idUser = user.getId();
+            String title = "Có một đơn đặt hàng mới từ <strong>" + name + "</strong>";
+            String link = "manage-confirm";
+            Notification notification = new NotificationHasLink(idUser, title, link);
+            NotificationService.sendNotifyHasLink((NotificationHasLink) notification, context);
         }
 
         HashMap<Integer, ProductCartModel> cart = (HashMap<Integer, ProductCartModel>) session.getAttribute("cart");
