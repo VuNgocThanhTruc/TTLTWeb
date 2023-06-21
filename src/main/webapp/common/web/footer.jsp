@@ -151,8 +151,7 @@
                                          data-hide-cover="false"
                                          data-show-facepile="true">
                                         <blockquote cite="#" class="fb-xfbml-parse-ignore"><a
-                                                href="mailTo:20130479@st.hcmuaf.edu.vn">Nguyễn Mạnh
-                                            Quyền </a>
+                                                href="mailTo:20130479@st.hcmuaf.edu.vn">Nguyễn Minh Trộng</a>
                                         </blockquote>
                                     </div>
                                 </div>
