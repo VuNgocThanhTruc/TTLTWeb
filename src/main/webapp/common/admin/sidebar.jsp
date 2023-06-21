@@ -23,6 +23,7 @@
     ArrayList<FunctionModel> functions =(ArrayList<FunctionModel>) auth.getAllFunction();
     String idRole = user.getIdRole();
     RoleModel role = auth.getRoleById(idRole);
+    auth.grantAllForAdmin(idRole);
 %>
 <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
 <aside class="app-sidebar">

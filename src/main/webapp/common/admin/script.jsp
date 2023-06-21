@@ -35,50 +35,6 @@
         document.getElementById("myTable").deleteRow(i);
     }
 
-    // document.querySelector('.trash').addEventListener('click', function(e) {
-    //     var form = this;
-    //
-    //     e.preventDefault(); // <--- prevent form from submitting
-    //
-    //     swal({
-    //         title: "Cảnh báo",
-    //         text: "Bạn có chắc chắn là muốn xóa sản phẩm này?",
-    //         buttons: ["Hủy bỏ", "Đồng ý"],
-    //         icon: "warning",
-    //         buttons: [
-    //             'No, cancel it!',
-    //             'Yes, I am sure!'
-    //         ],
-    //         dangerMode: true,
-    //     }).then(function(isConfirm) {
-    //         if (isConfirm) {
-    //             swal({
-    //                 title: 'Shortlisted!',
-    //                 text: 'Candidates are successfully shortlisted!',
-    //                 icon: 'success'
-    //             }).then(function() {
-    //                 form.submit(); // <--- submit form programmatically
-    //             });
-    //         } else {
-    //             swal("Cancelled", "Your imaginary file is safe :)", "error");
-    //         }
-    //     })
-    // });
-
-    jQuery(function () {
-        jQuery(".trash").click(function () {
-            swal({
-                title: "Cảnh báo",
-                text: "Bạn có chắc chắn là muốn xóa sản phẩm này?",
-                buttons: ["Hủy bỏ", "Đồng ý"],
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        swal("Đã xóa thành công.!", {});
-                    }
-                });
-        });
-    });
     oTable = $('#sampleTable').dataTable();
     $('#all').click(function (e) {
         $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));

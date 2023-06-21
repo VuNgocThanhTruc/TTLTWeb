@@ -6,6 +6,7 @@ import vn.edu.hcmuaf.fit.model.ComponentModel;
 import vn.edu.hcmuaf.fit.model.FunctionModel;
 import vn.edu.hcmuaf.fit.model.RoleModel;
 import vn.edu.hcmuaf.fit.model.UserModel;
+import vn.edu.hcmuaf.fit.service.AuthoritiesService;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -316,6 +317,19 @@ public class AuthoritiesDAO {
             }
         }
         return list;
+    }
+
+    //Kiểm tra xem component có tồn tại trong phân quyền hay không
+    public boolean checkComponentExistDec(String idComponent){
+        String query = "SELECT id_component FROM `decentralizes` WHERE id_component = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, idComponent);
+            rs = ps.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 

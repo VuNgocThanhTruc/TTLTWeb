@@ -24,6 +24,7 @@
             top: -10px;
             left: 12px;
             font-weight: 500;
+            display: none;
         }
         .notification_container{
             width: 450px;
@@ -102,6 +103,8 @@
             transition: background-color .3s;
             align-items: center;
             cursor: pointer;
+            margin-bottom: 8px;
+            min-height: 75px;
         }
 
         .notification_item:hover{
@@ -112,6 +115,29 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
+        }
+        .notify_checked{
+           background-color:  #f7e5e4;
+        }
+        .notification_empty{
+            text-align: center;
+            padding-bottom: 20px;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #cccccc;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #555;
         }
 
         @keyframes notify_animation {
@@ -124,19 +150,6 @@
             }
         }
     </style>
-    <script>
-        $(document).ready(function(){
-            $("#notify").click(function(){
-                $("#notification").toggle();
-            });
-
-            $(".notification_container").click(function(event){
-                event.stopPropagation();
-            });
-        });
-
-
-    </script>
 </head>
 <body>
 <% String getPath = (String) request.getContextPath(); %>
@@ -149,93 +162,14 @@
         <li>
             <div style="padding: 14px 30px;">
                     <i id="notify" style="color: #fff; font-size: 20px; position: relative ;cursor: pointer;" class="fas fa-bell">
-                        <div class="amount-notyfy"><span>10</span></div>
+                        <div class="amount-notyfy"><span id="notify-amount">0</span></div>
                         <div id="notification" style="position: absolute; display: none;right: 0; top: 30px; background-color: #fff; border-radius: 10px; font-family:'Segoe UI',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';">
                             <ul class="notification_container">
                                 <header>
-                                    <h5>Thông báo</h5>
-                                    <button style="outline: none" class="notification_btn_view">Đánh dấu đã đọc</button>
+                                    <h4>Thông báo</h4>
+                                    <button id="notification-checked-all" style="outline: none" class="notification_btn_view">Đánh dấu đã đọc</button>
                                 </header>
                                 <div class="notification_content">
-                                    <div class="notification_item">
-                                        <div class="notification_avatar">
-                                            <img src="../admin/images/admin.png" alt="avatar">
-                                        </div>
-                                        <div class="notification_message">
-                                            <div>Một liên hệ mới</div>
-                                            <div class="notification_createdTime">2 tháng trước</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="notification_item">
-                                        <div class="notification_avatar">
-                                            <img src="../admin/images/admin.png" alt="avatar">
-                                        </div>
-                                        <div class="notification_message">
-                                            <div>Một liên hệ mới và một liên hệ mới</div>
-                                            <div class="notification_createdTime">2 tháng trước</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="notification_item">
-                                        <div class="notification_avatar">
-                                            <img src="../admin/images/admin.png" alt="avatar">
-                                        </div>
-                                        <div class="notification_message">
-                                            <div>Một liên hệ mới và một liên hệ mới</div>
-                                            <div class="notification_createdTime">2 tháng trước</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="notification_item">
-                                        <div class="notification_avatar">
-                                            <img src="../admin/images/admin.png" alt="avatar">
-                                        </div>
-                                        <div class="notification_message">
-                                            <div>Một liên hệ mới và một liên hệ mới</div>
-                                            <div class="notification_createdTime">2 tháng trước</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="notification_item">
-                                        <div class="notification_avatar">
-                                            <img src="../admin/images/admin.png" alt="avatar">
-                                        </div>
-                                        <div class="notification_message">
-                                            <div>Một liên hệ mới</div>
-                                            <div class="notification_createdTime">2 tháng trước</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="notification_item">
-                                        <div class="notification_avatar">
-                                            <img src="../admin/images/admin.png" alt="avatar">
-                                        </div>
-                                        <div class="notification_message">
-                                            <div>Một liên hệ mới</div>
-                                            <div class="notification_createdTime">2 tháng trước</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="notification_item">
-                                        <div class="notification_avatar">
-                                            <img src="../admin/images/admin.png" alt="avatar">
-                                        </div>
-                                        <div class="notification_message">
-                                            <div>Một liên hệ mới và một liên hệ mới và một liên hệ mới và một liên hệ mới</div>
-                                            <div class="notification_createdTime">2 tháng trước</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="notification_item">
-                                        <div class="notification_avatar">
-                                            <img src="../admin/images/admin.png" alt="avatar">
-                                        </div>
-                                        <div class="notification_message">
-                                            <div>Một liên hệ mới</div>
-                                            <div class="notification_createdTime">2 tháng trước</div>
-                                        </div>
-                                    </div>
                                 </div>
                             </ul>
                         </div>
@@ -247,5 +181,106 @@
         </li>
     </ul>
 </header>
+<script>
+    /* toggle modal thông báo */
+    $(document).ready(function(){
+        $("#notify").click(function(){
+            $("#notification").toggle();
+        });
+
+        $(".notification_container").click(function(event){
+            event.stopPropagation();
+        });
+    });
+
+    /* Nhận và kiểm tra có thông báo theo thời gian thực */
+    function checkNewNotifications(){
+        notificationAjax()
+    }
+    setInterval(checkNewNotifications, 3000);
+    function notificationAjax() {
+        $.ajax({
+            url: "notification",
+            data: {action: "checkNewNotify"},
+            type: "GET",
+            success: function(response) {
+                if (response === "true") {
+                    loadNotificationAdmin();
+                }
+            }
+        });
+    }
+
+    /*Load các thông báo lên admin*/
+    loadNotificationAdmin();
+    var notify_amount = document.querySelector("#notify-amount")
+    var notify_content = document.querySelector(".notification_content")
+    function loadNotificationAdmin() {
+        $.ajax({
+            url: "notification",
+            data: {action: "loadNotifyAdmin"},
+            type: "GET",
+            success: function(response) {
+                notify_amount.innerHTML = response.notifyLength
+                notify_content.innerHTML = response.notifyContent
+            },
+            error: function(xhr, status, error) {
+                console.error("Lỗi khi tải các thông báo lên admin: " + error);
+            }
+        });
+        /*Nếu có thông báo chưa đọc thì mới hiển thị số lượng*/
+        $(document).ready(function() {
+            var notifyAmount = parseInt($('#notify-amount').text());
+
+            if (notifyAmount === 0) {
+                $('.amount-notyfy').hide();
+            } else {
+                $('.amount-notyfy').show();
+            }
+        });
+    }
+
+    /*Đánh dấu đã đọc thông báo*/
+    $(document).ready(function() {
+        $('.notification-link').click(function(e) {
+            e.preventDefault();
+            var notificationId = $(this).data('notification-id');
+            // Đánh dấu thông báo đã được đọc trong bảng notifications
+            setCheckedNotify(notificationId);
+            //Xóa background chưa đọc
+            $(this).find('.notification_item').removeClass('notify_checked');
+            // Chuyển hướng đến liên kết
+            window.location.href = $(this).attr('href');
+        });
+    });
+
+    function setCheckedNotify(notificationId) {
+        $.ajax({
+            url: 'notification',
+            method: 'GET',
+            data: {
+                notificationId: notificationId, action: "changeCheckedNotify"
+            }
+        });
+    }
+
+    //Đánh dấu đã đọc tất cả các thông báo
+    $(document).ready(function() {
+        $('#notification-checked-all').click(function(e) {
+            setCheckedAllNotify()
+            loadNotificationAdmin();
+        });
+    });
+
+    function setCheckedAllNotify() {
+        $.ajax({
+            url: 'notification',
+            method: 'GET',
+            data: {
+                action: "changeCheckedAllNotify"
+            }
+        });
+    }
+</script>
 </body>
 </html>
