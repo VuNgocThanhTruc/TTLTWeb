@@ -506,6 +506,7 @@ div.pro-text {
 
 }
 .list-product .block-banner-category {
+  height: 400px;
   position: relative;
   overflow: hidden;
   border-radius: 8px;

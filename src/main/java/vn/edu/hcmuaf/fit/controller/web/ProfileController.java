@@ -15,7 +15,7 @@ import static java.lang.Integer.parseInt;
 public class ProfileController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/view/profile-admin.jsp").forward(request, response);
+        request.getRequestDispatcher("/view/web/profile.jsp").forward(request, response);
     }
 
     @Override

@@ -12,7 +12,7 @@ public class ProductModel {
     private int idTypeProduct;
     private int idStatusDevice;
     private int idBrand;
-    private long price;
+    private int price;
     private String describe;
     private String avatar;
 
@@ -29,7 +29,7 @@ public class ProductModel {
     public ProductModel() {
     }
 
-    public ProductModel(int id, String name, int idTypeProduct, int idStatusDevice, int idBrand, long price, String describe, int height, int length, int width, int weight, List<LibraryImageModel> listImage) {
+    public ProductModel(int id, String name, int idTypeProduct, int idStatusDevice, int idBrand, int price, String describe, int height, int length, int width, int weight, List<LibraryImageModel> listImage) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -44,7 +44,7 @@ public class ProductModel {
         this.listImage = listImage;
     }
 
-    public ProductModel(int id, String name, int idTypeProduct, int idStatusDevice, int idBrand, long price, String describe, int height, int length, int width, int weight, List<LibraryImageModel> listImage, String dateStart, String dateEnd, int percentDiscount) {
+    public ProductModel(int id, String name, int idTypeProduct, int idStatusDevice, int idBrand, int price, String describe, int height, int length, int width, int weight, List<LibraryImageModel> listImage, String dateStart, String dateEnd, int percentDiscount) {
         this.id = id;
         this.name = name;
         this.idTypeProduct = idTypeProduct;
@@ -187,11 +187,11 @@ public class ProductModel {
         this.percentDiscount = percentDiscount;
     }
 
-    public long getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public long getPriceDiscount() {
+    public int getPriceDiscount() {
         Date serverTime = new Date();
         Timestamp timestamp = new Timestamp(serverTime.getTime());
         if (dateStart != null || dateEnd != null) {
@@ -199,17 +199,14 @@ public class ProductModel {
             Timestamp end = Timestamp.valueOf(dateEnd);
             if (end.getTime() > timestamp.getTime() && start.getTime() <timestamp.getTime()) {
                 int priceDiscount = (int) Math.ceil(price * (100 - percentDiscount) / 100);
-                System.out.println("a");
-                System.out.println(end.getTime());
-                System.out.println(start.getTime());
-                System.out.println(priceDiscount);
+
                 return priceDiscount;
 
             }
-            System.out.println("b");
+
             return price;
         }
-        System.out.println("c");
+
         return price;
     }
 
@@ -219,7 +216,7 @@ public class ProductModel {
 
 
 
-    public void setPrice(long price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
