@@ -390,28 +390,27 @@
                                     if (dateEnd.getTime() > timestamp.getTime() && dateStart.getTime() < timestamp.getTime()) {
 
                             %>
-                                <div class="product-price" style=" text-align: center;">
-                                    <span class="pro-price"><%=product.getPriceDiscount()%>₫</span>
-                                    <span class=""
-                                          style="text-decoration: line-through;"><%=product.getPrice()%>₫</span>
+                            <div class="product-price" style=" text-align: center;">
+                                <span class="pro-price"><%=product.getPriceDiscount()%>₫</span>
+                                <span class=""
+                                      style="text-decoration: line-through;"><%=product.getPrice()%>₫</span>
 
-                                    <span class="pro-sale"
-                                          style="background-color: #ff6600;color: white;border: dashed;border-radius: 8px; "> -<%=product.getPercentDiscount()%>%</span>
+                                <span class="pro-sale"
+                                      style="background-color: #ff6600;color: white;border: dashed;border-radius: 8px; "> -<%=product.getPercentDiscount()%>%</span>
 
-                                </div>
-                                <%} else { %>
-                                <div class="product-price" style=" text-align: center;">
-                                    <span class="pro-price"><%=product.getPrice()%>₫</span>
-                                </div>
-                                <%
-                                    }
-                                } else {
-                                %>
-                                <div class="product-price" style=" text-align: center;">
-                                    <span class="pro-price"><%=product.getPrice()%>₫</span>
-                                </div>
-                                <%}%>
-
+                            </div>
+                            <%} else { %>
+                            <div class="product-price" style=" text-align: center;">
+                                <span class="pro-price"><%=product.getPrice()%>₫</span>
+                            </div>
+                            <%
+                                }
+                            } else {
+                            %>
+                            <div class="product-price" style=" text-align: center;">
+                                <span class="pro-price"><%=product.getPrice()%>₫</span>
+                            </div>
+                            <%}%>
 
 
                         </div>
@@ -475,6 +474,7 @@
             dataType: 'json',
             data: {
                 "id_item": idProduct * 1,
+                "quantity": 1
             },
             url: "<%=request.getContextPath()%>/cart?action=add-to-cart",
             success: function (data) {

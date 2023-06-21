@@ -57,8 +57,8 @@
                             %>
                             <div class="productSlides fade-checkout">
                                 <div class="img">
-<%--                                    <img src="images/product/<%=item.getValue().getProductModel().getAvatar()%>"--%>
-<%--                                         class="img-fluid w-100">--%>
+                                    <img src="images/product/<%=item.getValue().getProductModel().getAvatar()%>"
+                                         class="img-fluid w-100">
                                 </div>
                                 <h1 class="product-name">
                                     <%=item.getValue().getProductModel().getName()%>
@@ -87,7 +87,18 @@
                     </div>
 
                     <div class="sum-money">
-                        <h3 class="d-flex justify-content-center">Thành tiền: ${convertMoney(300000)}</h3>
+                        <div class="service-fee">Giá tiền vận chuyển: <span></span></div>
+                        <div class="lead-time">Thời gian dự kiến giao: <span></span></div>
+                        <h3 class="d-flex justify-content-center">Thành tiền:
+                            <%
+                                float res = 0;
+                                if (cart != null)
+                                    for (Map.Entry<Integer, ProductCartModel> item : cart.entrySet()) {
+                                        res += item.getValue().getSumMoney();
+                                    }
+                            %>
+                            <%=res%>
+                        </h3>
                     </div>
                     <div class="round-shape"></div>
                     <a class="back_to_cart" href="cart"><i class="fas fa-arrow-left mr-2"></i>Quay lại trang giỏ
@@ -109,26 +120,28 @@
                                     <div class="email">
                                         <label for="email">Email</label><br>
                                         <i class="fa fa-envelope-o"></i><input type="email" name="email" id="email"
-                                                                                 required>
+                                                                               required>
                                     </div>
                                 </li>
                                 <li class="form-list-row">
                                     <div class="tel">
                                         <label for="tel">Số điện thoại</label><br>
                                         <i class="fa fa-phone"></i><input type="tel" name="tel" id="tel"
-                                                                                 required>
+                                                                          required>
                                     </div>
                                 </li>
 
                                 <li class="form-list-row">
-                                    <div >
+                                    <div>
                                         <a class="text-light line"
-                                                data-toggle="modal" data-target="#modalGetAddress">
+                                           data-toggle="modal" data-target="#modalGetAddress">
                                             Chọn địa chỉ
                                         </a>
                                         <br>
-                                        <i class="far fa-credit-card"></i><input type="text" name="address" id="address" class="address"
+                                        <i class="far fa-credit-card"></i><input type="text" name="address" id="address"
+                                                                                 class="address"
                                                                                  required>
+                                        <input type="hidden" name="service-fee" class="service-fee-input">
                                         <input type="hidden" name="id-province" class="id-province">
                                         <input type="hidden" name="id-district" class="id-district">
                                         <input type="hidden" name="id-ward" class="id-ward">
@@ -312,34 +325,41 @@
                 await autoLoginLogisticAPI()
 
                 //display service fee
-                const options = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + logisticIDToken
-                    },
-                    body: JSON.stringify({
-                        'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,
-                        'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,
-                        'to_district_id': valueDistrict,
-                        'to_ward_id': valueWard,
-                        'height': height,
-                        'length': length,
-                        'width': width,
-                        'weight': weight,
-                    })
+                const data = {
+                    'logisticIDToken': logisticIDToken,
+                    'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,
+                    'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,
+                    'to_district_id': valueDistrict,
+                    'to_ward_id': valueWard,
+                    'height': height,
+                    'length': length,
+                    'width': width,
+                    'weight': weight,
                 };
 
-                await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/calculateFee`, options)
-                    .then(response => response.json())
-                    .then(data => {
+                await $.ajax({
+                    type: 'POST',
+                    data: data,
+                    url: `<%=request.getContextPath()%>/api/logistic?action=calculateFee`,
+                    success: function (data) {
                         if (data.status === 200) {
                             serviceFee.text(data.data[0].service_fee)
+                            document.querySelector('input[name="service-fee"]').value = data.data[0].service_fee
                         }
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    });
+                    }
+                });
+
+                await $.ajax({
+                    type: 'POST',
+                    data: data,
+                    url: `<%=request.getContextPath()%>/api/logistic?action=leadTime`,
+                    success: function (data) {
+                        console.log(data)
+                        if (data.status === 200) {
+                            leadTime.text(data.data[0].formattedDate)
+                        }
+                    }
+                });
 
 
             }
@@ -364,7 +384,7 @@
                             tagSelectModalGetProvince.appendChild(option);
                         }
                         valueProvince = tagSelectModalGetProvince.value * 1
-                        console.log("valueProvince: "+valueProvince)
+                        console.log("valueProvince: " + valueProvince)
                         $('.id-province').val(valueProvince)
                         handleEventSelectProvinceChange()
                         handleEventSelectDistrictChange()
@@ -379,7 +399,7 @@
             $(".select-province").change(async function () {
                 valueProvince = tagSelectModalGetProvince.value * 1
                 $('.id-province').val(valueProvince)
-                console.log("valueProvince: "+valueProvince)
+                console.log("valueProvince: " + valueProvince)
 
                 tagSelectModalGetDistrict.innerHTML = ''
                 // await autoLoginLogisticAPI()

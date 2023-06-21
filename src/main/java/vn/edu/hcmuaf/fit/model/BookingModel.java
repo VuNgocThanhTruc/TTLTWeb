@@ -30,6 +30,7 @@ public class BookingModel {
     private int weight;
     private String idTransport;
     private int createBy;
+    private int sumMoney;
 
     public BookingModel(String id, String date_booking, String id_user, String id_payment, String description, StatusBooking statusBooking, String username, String nameTypePayment, String tel, int id_product, String name, int price, int quantity, String avatar, String address, String email) {
         this.id = id;
@@ -288,6 +289,14 @@ public class BookingModel {
 
     public void setFromDistrictId(int fromDistrictId) {
         this.fromDistrictId = fromDistrictId;
+    }
+
+    public int getSumMoney() {
+        return sumMoney;
+    }
+
+    public void setSumMoney(int sumMoney) {
+        this.sumMoney = sumMoney;
     }
 }
 
