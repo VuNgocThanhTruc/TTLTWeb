@@ -45,13 +45,9 @@
                 <div class="tile-body">
                     <form action="<%=pageContextPath%>/admin/manage-authorities?action=add-authorities" method="post">
                         <div class="row">
-                            <div class="form-group col-md-3">
-                                <label class="control-label">Tên nhóm quyền </label>
-                                <input class="form-control" type="text" placeholder="" name="name-role"
-                                       value="">
-                            </div>
-                        <!-- Cài đặt quyền -->
+                            <input id="name-role" type="text" placeholder="Tên nhóm quyền" title="Tên nhóm quyền" name="name-role" required autofocus>
 
+                        <!-- Cài đặt quyền -->
                             <label  style="width: 100%; padding: 0 15px;" class="control-label">Cài đặt quyền</label>
                             <div style="width: 100%; padding:  0 15px">
                             <c:if test="${components == null}" >
@@ -87,11 +83,11 @@
                             <div class="form-group col-md-12">
                                 <label class="control-label">Mô tả quyền</label>
                                 <textarea class="form-control" name="describe-role"
-                                          id="description"></textarea>
+                                          id="description" required="required" ></textarea>
                                 <script>CKEDITOR.replace('description');</script>
                             </div>
-                            <button style="margin-left: 15px" class="btn btn-save" type="submit" onclick="save()">Lưu lại</button>
-                            <button style="margin-left: 15px" class="btn btn-cancel" data-dismiss="modal" type="reset">Hủy bỏ</button>
+                            <button style="margin-left: 15px" class="btn btn-save" type="submit" onclick="return confirmNotify('Bạn chắc chắn muốn thêm nhóm quyền ?')">Lưu lại</button>
+                            <a style="margin-left: 15px" class="btn btn-cancel" onclick="return confirmNotify('Bạn chắc chắn muốn hủy bỏ?')" href="manage-authorities?action=manage-authorities">Hủy bỏ</a>
                         </div>
                     </form>
                 </div>
@@ -100,7 +96,6 @@
     </div>
 </main>
 
-<%@include file="../../common/admin/script.jsp" %>
 <script type="text/javascript" src="../js/role.js"></script>
 </body>
 </html>

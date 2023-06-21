@@ -93,7 +93,6 @@
                     <table class="table table-hover table-bordered" id="sampleTable">
                         <thead>
                         <tr>
-                            <th width="10"><input type="checkbox" id="all"></th>
                             <th>STT</th>
                             <th>Tên quyền</th>
                             <th>Mô tả</th>
@@ -103,7 +102,6 @@
                         <tbody>
                         <%for(RoleModel roleModel : roles) { %>
                         <tr>
-                            <td width="10"><input type="checkbox" name="check1" value="1"></td>
                             <td width="30" style="text-align: center"><%=stt+=1%></td>
                             <td><%=roleModel.getName()%></td>
                             <td><%=roleModel.getDescribe()%></td>
@@ -168,11 +166,11 @@
 <div class="modal-decentralize" id="modal-<%=roleModel.getId()%>" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
-        <div class="modal-content">
+        <div style="max-height: calc(90vh);" class="modal-content">
             <div class="header">
                 <div style="padding: 16px">Phân quyền cho nhóm quyền: <span style="color: var(--info)"><%=roleModel.getName()%></span></div>
             </div>
-            <div class="modal-body">
+            <div style="overflow-y: auto; overscroll-behavior: contain;" class="modal-body">
                 <%--table role--%>
                 <table style="font-size: 14px" class="table table-hover table-bordered" id="sampleTable">
                     <thead>

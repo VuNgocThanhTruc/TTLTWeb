@@ -45,36 +45,6 @@
       <div class="tile">
         <div class="tile-body">
           <div class="row element-button">
-            <div class="col-sm-2">
-              <%--Tạo mới--%>
-                <%if(isGrantAdd == true) {%>
-              <a class="btn btn-add btn-sm" href="manage-blog?action=add" title="Thêm"><i
-                      class="fas fa-plus"></i>
-                Tạo mới</a>
-                <%} else {%>
-                <button
-                        class="btn btn-add btn-sm"
-                        type="button"
-                        title="Không có quyền này!"
-                        style="opacity: 0.5; cursor: not-allowed;"
-                        disabled
-                >
-                  <i class="fas fa-plus"></i> Tạo mới
-                </button>
-                <%}%>
-            </div>
-
-            <%--                        <div class="col-sm-2">--%>
-            <%--                            <a class="btn btn-delete btn-sm print-file" type="button" title="In"--%>
-            <%--                               onclick="myApp.printTable()"><i class="fas fa-print"></i> In dữ liệu</a>--%>
-            <%--                        </div>--%>
-
-            <%--                        <div class="col-sm-2">--%>
-            <%--                            <a class="btn btn-delete btn-sm" type="button" title="Xóa" onclick="myFunction(this)"><i--%>
-            <%--                                    class="fas fa-trash-alt"></i> Xóa tất cả </a>--%>
-            <%--                        </div>--%>
-          </div>
-          <%--                    in ra tin tức--%>
           <% if (listContact == null){
           %>
           <div>Chưa có phản hồi </div>
@@ -203,78 +173,7 @@ MODAL
 <script src="../../admin/doc/js/plugins/pace.min.js"></script>
 <!-- Page specific javascripts-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<!-- Data table plugin-->
-<script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
-<script type="text/javascript">$('#sampleTable').DataTable();</script>
 <script>
-  function deleteRow(r) {
-    var i = r.parentNode.parentNode.rowIndex;
-    document.getElementById("myTable").deleteRow(i);
-  }
-
-  jQuery(function () {
-    jQuery(".trash").click(function () {
-      swal({
-        title: "Cảnh báo",
-
-        text: "Bạn có chắc chắn là muốn xóa?",
-        buttons: ["Hủy bỏ", "Đồng ý"],
-      })
-              .then((willDelete) => {
-                if (willDelete) {
-                  swal("Đã xóa thành công.!", {});
-                }
-              });
-    });
-  });
-  oTable = $('#sampleTable').dataTable();
-  $('#all').click(function (e) {
-    $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
-    e.stopImmediatePropagation();
-  });
-
-  //time
-  function time() {
-    var today = new Date();
-    var weekday = new Array(7);
-    weekday[0] = "Chủ Nhật";
-    weekday[1] = "Thứ Hai";
-    weekday[2] = "Thứ Ba";
-    weekday[3] = "Thứ Tư";
-    weekday[4] = "Thứ Năm";
-    weekday[5] = "Thứ Sáu";
-    weekday[6] = "Thứ Bảy";
-    var day = weekday[today.getDay()];
-    var dd = today.getDate();
-    var mm = today.getMonth() + 1;
-    var yyyy = today.getFullYear();
-    var h = today.getHours();
-    var m = today.getMinutes();
-    var s = today.getSeconds();
-    m = checkTime(m);
-    s = checkTime(s);
-    nowTime = h + " giờ " + m + " phút " + s + " giây";
-    if (dd < 10) {
-      dd = '0' + dd
-    }
-    if (mm < 10) {
-      mm = '0' + mm
-    }
-    today = day + ', ' + dd + '/' + mm + '/' + yyyy;
-    tmp = '<span class="date"> ' + today + ' - ' + nowTime +
-            '</span>';
-    document.getElementById("clock").innerHTML = tmp;
-    clocktime = setTimeout("time()", "1000", "Javascript");
-
-    function checkTime(i) {
-      if (i < 10) {
-        i = "0" + i;
-      }
-      return i;
-    }
-  }
-
   // print data
   var myApp = new function () {
     this.printTable = function () {

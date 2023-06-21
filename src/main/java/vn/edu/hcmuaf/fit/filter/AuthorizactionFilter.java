@@ -73,7 +73,7 @@ public class AuthorizactionFilter implements Filter {
             } else {
                 String urlCurrent = request.getRequestURL().toString();
                 String queryString = request.getQueryString();
-                if (queryString != null) {
+                if (queryString != null && !queryString.contains("back=true")) {
                     urlCurrent += "?" + queryString + "&back=true";
                 }
                 session.setAttribute("URL-current", urlCurrent);

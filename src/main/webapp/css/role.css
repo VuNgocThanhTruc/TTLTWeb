@@ -74,4 +74,18 @@ button.close {
     filter: alpha(opacity=20);
     opacity: .2;
 }
+#name-role::placeholder {
+    color: #b3b3b1; /* Màu chữ của placeholder */
+}
+#name-role{
+    display: inline-block;
+    width: 100%;
+    font-size: 2.0rem;
+    font-weight: 500;
+    font-family: system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';
+    border: none;
+    background: none;
+    padding: 0 15px;
+    padding-bottom: 30px;
+}
 

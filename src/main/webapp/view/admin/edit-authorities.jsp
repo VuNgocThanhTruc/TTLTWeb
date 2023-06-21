@@ -61,16 +61,13 @@
                             <input type="hidden" name="id-role" value="<%=request.getAttribute("id-role")%>">
 
                             <!-- Tên nhóm quyền -->
-                            <div class="form-group col-md-3">
-                                <label class="control-label">Tên nhóm quyền </label>
-                                <input class="form-control" type="text" placeholder="" name="name-role"
-                                       value="<%=request.getAttribute("name-role")%>">
-                            </div>
+                            <input id="name-role" type="text" name="name-role" title="Tên nhóm quyền" required autofocus
+                                   value="<%=request.getAttribute("name-role")%>">
 
                             <!-- Cài đặt quyền -->
                             <label  style="width: 100%; padding: 0 15px;" class="control-label">Cài đặt quyền</label>
                             <div style="width: 100%; padding:  0 15px">
-                            <table style="font-size: 14px" class="table table-hover table-bordered" id="sampleTable">
+                            <table style="font-size: 14px" class="table table-hover table-bordered" id="decTable">
                                 <thead>
                                     <tr>
                                         <th width="70">Thành phần\Chức năng</th>
@@ -113,11 +110,11 @@
                             <div class="form-group col-md-12">
                                 <label class="control-label">Mô tả quyền</label>
                                 <textarea class="form-control" name="describe-role"
-                                          id="description"><%=request.getAttribute("describe-role")%></textarea>
+                                          id="description" required="required" ><%=request.getAttribute("describe-role")%></textarea>
                                 <script>CKEDITOR.replace('description');</script>
                             </div>
-                            <button style="margin-left: 15px" class="btn btn-save" type="submit">Lưu lại</button>
-                            <button style="margin-left: 15px" class="btn btn-cancel" type="reset">Hủy bỏ</button>
+                            <button style="margin-left: 15px" class="btn btn-save" type="submit" onclick="return confirmNotify('Bạn chắc chắn muốn sửa nhóm quyền ?')">Lưu lại</button>
+                            <a style="margin-left: 15px" class="btn btn-cancel" onclick="return confirmNotify('Bạn chắc chắn muốn hủy bỏ?')" href="manage-authorities?action=manage-authorities">Hủy bỏ</a>
                         </div>
                     </form>
                 </div>
@@ -126,7 +123,6 @@
     </div>
 </main>
 
-<%@include file="../../common/admin/script.jsp" %>
 <script type="text/javascript" src="../js/role.js"></script>
 </body>
 </html>
