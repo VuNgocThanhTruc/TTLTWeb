@@ -41,7 +41,7 @@ public class CartController extends HttpServlet {
             doPostAddToCart(request, response);
             view = request.getContextPath() + "/cart";
         } else if (actionParam.equals("update-cart")) {
-            doPostUpdateCart(request, response,json);
+            doPostUpdateCart(request, response, json);
             view = request.getContextPath() + "/cart";
         } else if (actionParam.equals("delete-item-cart")) {
             doPostDeleteCart(request, response);
@@ -60,6 +60,7 @@ public class CartController extends HttpServlet {
         request.setAttribute("listProduct", listProduct);
         request.setAttribute("activeProduct", "active");
         json.put("numCart", numCart);
+        json.put("sumMoneyCart", getSumMoneyCart(cart));
 
         PrintWriter out = response.getWriter();
         out.println(json.toString());
@@ -68,7 +69,7 @@ public class CartController extends HttpServlet {
         request.getRequestDispatcher("/view/web/product.jsp").forward(request, response);
     }
 
-    private void doPostUpdateCart(HttpServletRequest request, HttpServletResponse response,JSONObject json) {
+    private void doPostUpdateCart(HttpServletRequest request, HttpServletResponse response, JSONObject json) {
         int id = Integer.parseInt(request.getParameter("id_item"));
         //            update quantity in cart
         int quantity = Integer.parseInt(request.getParameter("quantity"));
@@ -82,7 +83,6 @@ public class CartController extends HttpServlet {
             productCartModel = new ProductCartModel(quantity, productModel);
             cart.put(id, productCartModel);
         } else {
-            System.out.println(cart);
 //            has item in cart
             if (cart.containsKey(id)) {
                 if (quantity <= 0) {
@@ -101,10 +101,10 @@ public class CartController extends HttpServlet {
 
         JSONObject jsonObject = new JSONObject();
         for (Map.Entry<Integer, ProductCartModel> entry : cart.entrySet()) {
-            jsonObject.put("idItem",entry.getKey());
-            jsonObject.put("quantity",entry.getValue().getQuantity());
+            jsonObject.put("idItem", entry.getKey());
+            jsonObject.put("quantity", entry.getValue().getQuantity());
         }
-        json.put("listProduct",jsonObject);
+        json.put("listProduct", jsonObject);
     }
 
     private void doPostDeleteCart(HttpServletRequest request, HttpServletResponse response) {
@@ -118,7 +118,9 @@ public class CartController extends HttpServlet {
     }
 
     private void doPostAddToCart(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("doPostAddToCart");
         int id = Integer.parseInt(request.getParameter("id_item"));
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
         ProductModel productModel = ProductService.getDetailProduct(id);
         ProductCartModel productCartModel;
 
@@ -126,15 +128,15 @@ public class CartController extends HttpServlet {
         HashMap<Integer, ProductCartModel> cart = (HashMap<Integer, ProductCartModel>) session.getAttribute("cart");
         if (cart == null) {
             cart = new HashMap<>();
-            productCartModel = new ProductCartModel(1, productModel);
+            productCartModel = new ProductCartModel(quantity, productModel);
             cart.put(id, productCartModel);
         } else {
 //            has item in cart
             if (cart.containsKey(id)) {
                 productCartModel = cart.get(id);
-                productCartModel.increaseQuantity();
+                productCartModel.setQuantity(productCartModel.getQuantity() + quantity);
             } else {//not has item in cart
-                productCartModel = new ProductCartModel(1, productModel);
+                productCartModel = new ProductCartModel(quantity, productModel);
                 cart.put(id, productCartModel);
             }
         }
@@ -144,8 +146,8 @@ public class CartController extends HttpServlet {
         }
     }
 
-    private float getSumMoneyCart(HashMap<Integer, ProductCartModel> cart) {
-        float res = 0;
+    private int getSumMoneyCart(HashMap<Integer, ProductCartModel> cart) {
+        int res = 0;
         for (Map.Entry<Integer, ProductCartModel> item : cart.entrySet()) {
             res += item.getValue().getSumMoney();
         }

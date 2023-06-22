@@ -379,6 +379,7 @@
 
 
                             %>
+<<<<<<< HEAD
                                 <div class="product-price" style=" text-align: center;">
                                     <span class="pro-price"><%=priceDiscountConvert%>₫</span>
                                     <span class=""
@@ -400,7 +401,29 @@
                                     <span class="pro-price"><%=priceConvert%>₫</span>
                                 </div>
                                 <%}%>
+=======
+                            <div class="product-price" style=" text-align: center;">
+                                <span class="pro-price"><%=product.getPriceDiscount()%>₫</span>
+                                <span class=""
+                                      style="text-decoration: line-through;"><%=product.getPrice()%>₫</span>
 
+                                <span class="pro-sale"
+                                      style="background-color: #ff6600;color: white;border: dashed;border-radius: 8px; "> -<%=product.getPercentDiscount()%>%</span>
+>>>>>>> 3a535eb ([Truc/cart]: handle cart in detailProduct.jsp)
+
+                            </div>
+                            <%} else { %>
+                            <div class="product-price" style=" text-align: center;">
+                                <span class="pro-price"><%=product.getPrice()%>₫</span>
+                            </div>
+                            <%
+                                }
+                            } else {
+                            %>
+                            <div class="product-price" style=" text-align: center;">
+                                <span class="pro-price"><%=product.getPrice()%>₫</span>
+                            </div>
+                            <%}%>
 
 
                         </div>
@@ -464,6 +487,7 @@
             dataType: 'json',
             data: {
                 "id_item": idProduct * 1,
+                "quantity": 1
             },
             url: "<%=request.getContextPath()%>/cart?action=add-to-cart",
             success: function (data) {
