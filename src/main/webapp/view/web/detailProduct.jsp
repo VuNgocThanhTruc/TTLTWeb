@@ -163,26 +163,26 @@
                                     <h1><%=product.getName()%>
                                     </h1>
 
-<%--                                     <span id="pro_sku">ID: <%=product.getId()%></span>--%>
+                                    <%--                                     <span id="pro_sku">ID: <%=product.getId()%></span>--%>
                                     <span id="pro_sku">SL: <%= inventories.getQuantity()%></span>
                                 </div>
 
-                                <% if (discount != null&& discount.getIdProduct()!=0) {
+                                <% if (discount != null && discount.getIdProduct() != 0) {
                                     Date serverTime = new Date();
                                     Timestamp timestamp = new Timestamp(serverTime.getTime());
                                     Timestamp dateStart = Timestamp.valueOf(discount.getDateStart());
                                     Timestamp dateEnd = Timestamp.valueOf(discount.getDateEnd());
-                                    if (dateEnd.getTime() > timestamp.getTime() && dateStart.getTime() <timestamp.getTime()) {
-                                        %>
+                                    if (dateEnd.getTime() > timestamp.getTime() && dateStart.getTime() < timestamp.getTime()) {
+                                %>
                                 <div class="product-price" id="price-preview">
-<%--                                    <p>Server time: <%=serverTime.toString()%>--%>
-<%--                                    </p>--%>
-<%--                                    <p>Server time: <%=timestamp.toString()%>--%>
-<%--                                    </p>--%>
-<%--                                    <p>date start: <%=dateStart.toString()%>--%>
-<%--                                    </p>--%>
-<%--                                    <p>date end: <%=dateEnd.toString()%>--%>
-<%--                                    </p>--%>
+                                    <%--                                    <p>Server time: <%=serverTime.toString()%>--%>
+                                    <%--                                    </p>--%>
+                                    <%--                                    <p>Server time: <%=timestamp.toString()%>--%>
+                                    <%--                                    </p>--%>
+                                    <%--                                    <p>date start: <%=dateStart.toString()%>--%>
+                                    <%--                                    </p>--%>
+                                    <%--                                    <p>date end: <%=dateEnd.toString()%>--%>
+                                    <%--                                    </p>--%>
                                     <span class="pro-price"><%=product.getPriceDiscount()%>₫</span>
                                     <span class=""
                                           style="text-decoration: line-through;"><%=product.getPrice()%>₫</span>
@@ -311,38 +311,13 @@
                                             <div class="row-flex">
                                                 <div class="snipcart-item block">
                                                     <div class="snipcart-details agileinfo_single_right_details">
-                                                        <form action="#" method="post" class="mini-cart">
-                                                            <fieldset>
-                                                                <input type="hidden" name="cmd" value="_cart">
-                                                                <input type="hidden" name="add" value="1">
-                                                                <input type="hidden" name="business" value=" ">
-                                                                <input type="hidden" name="image"
-                                                                       value="<%=!product.getListImage().isEmpty()?product.getListImage().get(0).getUrl():""%>">
-                                                                <input type="hidden" name="item_name"
-                                                                       value="<%=product.getName()%>">
-                                                                <input type="hidden" name="amount"
-                                                                       value="<%=product.getPrice()%>">
-                                                                <input type="hidden" name="discount \
-
-                                                                _amount"
-                                                                       value="10000">
-                                                                <input type="hidden" name="currency_code" value="VND">
-                                                                <input type="hidden" name="id_item"
-                                                                       value="<%=product.getId()%>">
-                                                                <input type="hidden" name="return" value=" ">
-                                                                <input type="hidden" name="cancel_return" value=" ">
-                                                                <button type="submit" name="submit" value="Thêm vào giỏ"
-                                                                        class="button btn-addtocart addtocart-modal"
-                                                                        onclick="addBtnCart()">Thêm vào giỏ
-                                                                </button>
-                                                            </fieldset>
-                                                        </form>
+                                                        <button type="button" value="Thêm vào giỏ"
+                                                                class="button buy-now addtocart-modal"
+                                                                onclick="addToCartAJAX(<%=product.getId()%>)">Thêm vào
+                                                            giỏ
+                                                        </button>
                                                     </div>
                                                 </div>
-                                                </button>
-                                                <a href="booking" type="button" class="buy-now button"
-                                                   style="display: block;">Đặt lịch
-                                                    ngay</a>
                                             </div>
 
                                             <!--                                            <a href="" target="_blank" class="button btn-check"-->
@@ -637,36 +612,40 @@
                 await autoLoginLogisticAPI()
 
                 //display service fee
-                const options = {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + logisticIDToken
-                    },
-                    body: JSON.stringify({
-                        'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,
-                        'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,
-                        'to_district_id': valueDistrict,
-                        'to_ward_id': valueWard,
-                        'height': height,
-                        'length': length,
-                        'width': width,
-                        'weight': weight,
-                    })
+                const data = {
+                    'logisticIDToken': logisticIDToken,
+                    'from_district_id': <%=APIConstants.ID_DISTRICT_STORE%>,
+                    'from_ward_id': <%=APIConstants.ID_WARD_STORE%>,
+                    'to_district_id': valueDistrict,
+                    'to_ward_id': valueWard,
+                    'height': height,
+                    'length': length,
+                    'width': width,
+                    'weight': weight,
                 };
 
-                await fetch(`<%=APIConstants.LOGISTIC_HOST_API%>/calculateFee`, options)
-                    .then(response => response.json())
-                    .then(data => {
+                await $.ajax({
+                    type: 'POST',
+                    data: data,
+                    url: `<%=request.getContextPath()%>/api/logistic?action=calculateFee`,
+                    success: function (data) {
                         if (data.status === 200) {
                             serviceFee.text(data.data[0].service_fee)
                         }
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    });
+                    }
+                });
 
-
+                await $.ajax({
+                    type: 'POST',
+                    data: data,
+                    url: `<%=request.getContextPath()%>/api/logistic?action=leadTime`,
+                    success: function (data) {
+                        console.log(data)
+                        if (data.status === 200) {
+                            leadTime.text(data.data[0].formattedDate)
+                        }
+                    }
+                });
             }
         })
 
@@ -689,7 +668,7 @@
                             tagSelectModalGetProvince.appendChild(option);
                         }
                         valueProvince = tagSelectModalGetProvince.value * 1
-                        console.log("valueProvince: "+valueProvince)
+                        console.log("valueProvince: " + valueProvince)
                         $('.id-province').val(valueProvince)
                         handleEventSelectProvinceChange()
                         handleEventSelectDistrictChange()
@@ -704,7 +683,6 @@
             $(".select-province").change(async function () {
                 valueProvince = tagSelectModalGetProvince.value * 1
                 $('.id-province').val(valueProvince)
-                console.log("valueProvince: "+valueProvince)
 
                 tagSelectModalGetDistrict.innerHTML = ''
                 // await autoLoginLogisticAPI()
@@ -774,6 +752,47 @@
         handleEventSelectProvinceChange()
         handleEventSelectDistrictChange()
     });
+
+    function addToCartAJAX(idProduct) {
+        let quantityEle = document.getElementById("quantity")
+        let numCart = document.querySelector(".sum-num-cart")
+        let quantity = quantityEle.value
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                "id_item": idProduct * 1,
+                "quantity": quantity * 1,
+            },
+            url: "<%=request.getContextPath()%>/cart?action=add-to-cart",
+            success: function (data) {
+                swal("Đã thêm sản phẩm vào giỏ hàng!", {
+                    buttons: false,
+                    timer: 1000,
+                    icon: "success",
+                });
+                numCart.innerText = data.numCart
+            }
+        });
+    }
+
+    function decreasesQuantity() {
+        let quantity = document.querySelector('#quantity.quantity-selector').value;
+        quantity *= 1;
+        if (quantity > 1) {
+            quantity--;
+        }
+        document.querySelector('#quantity.quantity-selector').value = quantity;
+    }
+
+    function increaseQuantity() {
+        var quantity = document.querySelector('#quantity.quantity-selector').value;
+
+        quantity *= 1;
+        quantity++;
+        document.querySelector('#quantity.quantity-selector').value = quantity;
+    }
 
 </script>
 

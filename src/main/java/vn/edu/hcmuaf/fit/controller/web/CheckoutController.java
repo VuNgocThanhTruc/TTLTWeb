@@ -29,6 +29,18 @@ public class CheckoutController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int serviceFee = Integer.parseInt(request.getParameter("service-fee"));
+        System.out.println("serviceFee:"+serviceFee);
+
+        HttpSession session = request.getSession();
+        HashMap<Integer, ProductCartModel> cart = (HashMap<Integer, ProductCartModel>) session.getAttribute("cart");
+        int sumMoney = 0;
+        for (Map.Entry<Integer, ProductCartModel> item : cart.entrySet()) {
+            sumMoney += item.getValue().getSumMoney();
+        }
+
+        System.out.println(sumMoney);
+
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String tel = request.getParameter("tel");
@@ -38,14 +50,10 @@ public class CheckoutController extends HttpServlet {
         String description = request.getParameter("description");
         String payment = request.getParameter("payment");
         String store = request.getParameter("store");
-        int toDistrictID = Integer.parseInt(request.getParameter("id-district")) ;
-        int toWardId =Integer.parseInt(request.getParameter("id-ward")) ;
-        int height =Integer.parseInt(request.getParameter("store")) ;
-        int length =Integer.parseInt(request.getParameter("store")) ;
-        int width = Integer.parseInt(request.getParameter("store"));
-        int weight =Integer.parseInt( request.getParameter("store"));
+        int toDistrictID = Integer.parseInt(request.getParameter("id-district"));
+        int toWardId = Integer.parseInt(request.getParameter("id-ward"));
 
-        HttpSession session = request.getSession();
+
         UserModel user = (UserModel) session.getAttribute("userlogin");
         CheckoutService checkoutService = new CheckoutService();
         BookingModel booking = new BookingModel();
@@ -66,10 +74,11 @@ public class CheckoutController extends HttpServlet {
         booking.setId_payment(payment);
         booking.setToDistrictId(toDistrictID);
         booking.setToWardId(toWardId);
-        booking.setHeight(height);
-        booking.setLength(length);
-        booking.setWidth(width);
-        booking.setWeight(weight);
+        booking.setHeight(100);
+        booking.setLength(100);
+        booking.setWidth(100);
+        booking.setWeight(100);
+        booking.setSumMoney(serviceFee + sumMoney);
 
         int idInserted = checkoutService.insertBookingCart(booking);
         if (idInserted > 0) {
@@ -86,8 +95,6 @@ public class CheckoutController extends HttpServlet {
             Notification notification = new NotificationHasLink(idUser, title, link);
             NotificationService.sendNotifyHasLink((NotificationHasLink) notification, context);
         }
-
-        HashMap<Integer, ProductCartModel> cart = (HashMap<Integer, ProductCartModel>) session.getAttribute("cart");
 
         boolean checkAddBooking = false;
         for (Map.Entry<Integer, ProductCartModel> productCart : cart.entrySet()) {
