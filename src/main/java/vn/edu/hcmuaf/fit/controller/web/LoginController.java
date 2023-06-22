@@ -1,6 +1,8 @@
 package vn.edu.hcmuaf.fit.controller.web;
 
+import vn.edu.hcmuaf.fit.bean.Log;
 import vn.edu.hcmuaf.fit.dao.UserDAO;
+import vn.edu.hcmuaf.fit.db.DBConnect;
 import vn.edu.hcmuaf.fit.model.UserModel;
 import vn.edu.hcmuaf.fit.service.AuthoritiesService;
 import vn.edu.hcmuaf.fit.service.LogService;
@@ -108,6 +110,25 @@ public class LoginController extends HttpServlet {
             if(user != null){
                 failedLoginCount = 0;
                 failedUserLoginCount = 0;
+                if(user.getId_type_user() == 2){
+                    DBConnect.getInstall().insert(
+                            new Log(2,
+                                    Integer.parseInt(user.getId()),
+                                    request.getRemoteAddr(),
+                                    request.getRequestURI(),
+                                    "Login to admin",
+                                    "Đăng nhập vào admin với tài khoản :"+ user.toString(),
+                                    0));
+                }else if (user.getId_type_user() == 1){
+                    DBConnect.getInstall().insert(
+                            new Log(1,
+                                    Integer.parseInt(user.getId()),
+                                    request.getRemoteAddr(),
+                                    request.getRequestURI(),
+                                    "Login to website",
+                                    "Đăng nhập vào website với tài khoản :"+ user.toString(),
+                                    0));
+                }
                 if(!urlCurrent.equals("null")){
                     view = urlCurrent;
                     session.setAttribute("URL-current", "null");

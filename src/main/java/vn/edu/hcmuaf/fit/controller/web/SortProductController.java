@@ -8,6 +8,9 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.List;
 
 @WebServlet(name = "SortProductController", value = "/sort-product")
@@ -20,47 +23,114 @@ public class SortProductController extends HttpServlet {
         System.out.println("Sắp xếp :" + sortType + ", " + nameBrand);
         System.out.println("listProduct: "+listProduct);
         PrintWriter out = response.getWriter();
+        DecimalFormat decimalFormat = new DecimalFormat("#,###");
         for (ProductModel p : listProduct) {
-            out.println(
-                    "                <div class=\"product col-md-3 col-sm-6 col-xs-6 col-6 mb-5\">\n" +
-                            "                    <div class=\"block-banner-category\">\n" +
-                            "                        <div class=\"product-img fade-box\">\n" +
-                            "                            <a href=\"detail-product?id-product=" + p.getId() + "\" title=\"\" class=\"img-resize\">\n" +
-                            "                                <img src=\"images/product/" + p.getAvatar() + "\" alt=\"\" class=\"lazyloaded\">\n" +
-                            "                            </a>\n" +
-                            "                        </div>\n" +
-                            "                        <div class=\"product-detail clearfix\">\n" +
-                            "                            <form class=\"mini-cart\" action=\"" + request.getContextPath() + "/cart?action=add-to-cart\"\n" +
-                            "                                  method=\"post\">\n" +
-                            "                                <fieldset>\n" +
-                            "                                    <input type=\"hidden\" name=\"cmd\" value=\"_cart\">\n" +
-                            "                                    <input type=\"hidden\" name=\"add\" value=\"1\">\n" +
-                            "                                    <input type=\"hidden\" name=\"business\" value=\"\">\n" +
-//                            "                                    <input type=\"hidden\" name=\"image\" value=\"" + p.getAvatar() + "\">\n" +
-                            "                                    <input type=\"hidden\" name=\"item_name\" value=\"" + p.getName() + "\">\n" +
-                            "                                    <input type=\"hidden\" name=\"amount\" value=" + p.getPrice() + ">\n" +
-                            "                                    <input type=\"hidden\" name=\"discount_amount\" value=\"10000\">\n" +
-                            "                                    <input type=\"hidden\" name=\"currency_code\" value=\"VND\">\n" +
-                            "                                    <input type=\"hidden\" name=\"id_item\" value=" + p.getId() + ">\n" +
-                            "                                    <input type=\"hidden\" name=\"return\" value=\" \">\n" +
-                            "                                    <input type=\"hidden\" name=\"cancel_return\" value=\" \">\n" +
-                            "                                    <button class=\"btn btn-cart\" type=\"submit\"><i\n" +
-                            "                                            class=\"icon-header fas fa-shopping-cart\"\n" +
-                            "                                            aria-hidden=\"true\" onclick=\"addBtnCart()\"></i>\n" +
-                            "                                    </button>\n" +
-                            "                                </fieldset>\n" +
-                            "                            </form>\n" +
-                            "\n" +
-                            "                            <div class=\"pro-text\">\n" + "<a style=\" color: black; font-size: 14px;text-decoration: none;\" href=\"detail-product?id-product="+p.getId()+"\" title=\"Xem sản phẩm\" inspiration=\"\" pack=\"\">"+p.getName()+"</a>" +
-                            "                            </div>\n" +
-                            "                            <div class=\"pro-price\">\n" +
-                            "                                <p>\n" + p.getPrice() +
-                            "                                </p>\n" +
-                            "                            </div>\n" +
-                            "                        </div>\n" +
-                            "                    </div>\n" +
-                            "                </div>\n" +
-                            "                ");
+            String priceDiscountConvert = decimalFormat.format(p.getPriceDiscount());
+            String priceConvert = decimalFormat.format(p.getPrice());
+            if (p.getDateStart() != null || p.getDateEnd() != null) {
+                Date serverTime = new Date();
+                Timestamp timestamp = new Timestamp(serverTime.getTime());
+                Timestamp dateStart = Timestamp.valueOf(p.getDateStart());
+                Timestamp dateEnd = Timestamp.valueOf(p.getDateEnd());
+                if (dateEnd.getTime() > timestamp.getTime() && dateStart.getTime() < timestamp.getTime())  {
+                    out.println(
+                            "<div class=\"product col-md-3 col-sm-6 col-xs-6 col-6 mb-5\">\n" +
+                                    "                    <div class=\"block-banner-category\">\n" +
+                                    "                        <div class=\"product-img fade-box\">\n" +
+                                    "                            <a href=\"detail-product?id-product="+p.getId()+"\" title=\"\" class=\"img-resize\">\n" +
+                                    "                                <img src=\"images/product/"+p.getAvatar()+"\"" +
+                                    "                                     alt=\"\" class=\"lazyloaded\">\n" +
+                                    "                            </a>\n" +
+                                    "                        </div>\n" +
+                                    "                        <div class=\"product-detail clearfix\">\n" +
+                                    "\n" +
+                                    "                            <button class=\"btn\" onclick=\"addToCartAJAX("+p.getId()+")\"><i\n" +
+                                    "                                    class=\"icon-header fas fa-shopping-cart\"></i>\n" +
+                                    "                            </button>\n" +
+                                    "\n" +
+                                    "                            <div class=\"pro-text\">\n" +
+                                    "                                <a style=\" color: black;font-size: 20px;text-decoration: none;font-weight: bold; \"\n" +
+                                    "                                   href=\"detail-product?id-product="+p.getId()+"\"" +
+                                    "                                   title=\"\" inspiration pack>\n" +
+                                    "                                    "+p.getName()+"" +
+                                    "                                </a>\n" +
+                                    "                            </div>\n" + " <div class=\"product-price\" style=\" text-align: center;\">\n" +
+                                    "                                    <span class=\"pro-price\">"+priceDiscountConvert+"₫</span>\n" +
+                                    "                                    <span class=\"\"\n" +
+                                    "                                          style=\"text-decoration: line-through;\">"+priceConvert+"₫</span>\n" +
+                                    "\n" +
+                                    "                                    <span class=\"pro-sale\"\n" +
+                                    "                                          style=\"background-color: #ff6600;color: white;border: dashed;border-radius: 8px; \"> -"+priceDiscountConvert+"</span>\n" +
+                                    "\n" +
+                                    "                                </div>" +
+                                    "                        </div>\n" +
+                                    "                    </div>\n" +
+                                    "                </div>"
+
+
+                    );
+                }else{
+                    out.println(
+                            "<div class=\"product col-md-3 col-sm-6 col-xs-6 col-6 mb-5\">\n" +
+                                    "                    <div class=\"block-banner-category\">\n" +
+                                    "                        <div class=\"product-img fade-box\">\n" +
+                                    "                            <a href=\"detail-product?id-product="+p.getId()+"\" title=\"\" class=\"img-resize\">\n" +
+                                    "                                <img src=\"images/product/"+p.getAvatar()+"\"" +
+                                    "                                     alt=\"\" class=\"lazyloaded\">\n" +
+                                    "                            </a>\n" +
+                                    "                        </div>\n" +
+                                    "                        <div class=\"product-detail clearfix\">\n" +
+                                    "\n" +
+                                    "                            <button class=\"btn\" onclick=\"addToCartAJAX("+p.getId()+")\"><i\n" +
+                                    "                                    class=\"icon-header fas fa-shopping-cart\"></i>\n" +
+                                    "                            </button>\n" +
+                                    "\n" +
+                                    "                            <div class=\"pro-text\">\n" +
+                                    "                                <a style=\" color: black;font-size: 20px;text-decoration: none;font-weight: bold; \"\n" +
+                                    "                                   href=\"detail-product?id-product="+p.getId()+"\"" +
+                                    "                                   title=\"\" inspiration pack>\n" +
+                                    "                                    "+p.getName()+"" +
+                                    "                                </a>\n" +
+                                    "                            </div>\n" +
+                                    "                                <div class=\"product-price\" style=\" text-align: center;\">\n" +
+                                    "                                    <span class=\"pro-price\">"+priceConvert+"₫</span>\n" +
+                                    "                                </div>" +
+                                    "                        </div>\n" +
+                                    "                    </div>\n" +
+                                    "                </div>"
+
+                    );
+                }
+            }else{
+                out.println(
+                        "<div class=\"product col-md-3 col-sm-6 col-xs-6 col-6 mb-5\">\n" +
+                                "                    <div class=\"block-banner-category\">\n" +
+                                "                        <div class=\"product-img fade-box\">\n" +
+                                "                            <a href=\"detail-product?id-product="+p.getId()+"\" title=\"\" class=\"img-resize\">\n" +
+                                "                                <img src=\"images/product/"+p.getAvatar()+"\"" +
+                                "                                     alt=\"\" class=\"lazyloaded\">\n" +
+                                "                            </a>\n" +
+                                "                        </div>\n" +
+                                "                        <div class=\"product-detail clearfix\">\n" +
+                                "\n" +
+                                "                            <button class=\"btn\" onclick=\"addToCartAJAX("+p.getId()+")\"><i\n" +
+                                "                                    class=\"icon-header fas fa-shopping-cart\"></i>\n" +
+                                "                            </button>\n" +
+                                "\n" +
+                                "                            <div class=\"pro-text\">\n" +
+                                "                                <a style=\" color: black;font-size: 20px;text-decoration: none;font-weight: bold; \"\n" +
+                                "                                   href=\"detail-product?id-product="+p.getId()+"\"" +
+                                "                                   title=\"\" inspiration pack>\n" +
+                                "                                    "+p.getName()+"" +
+                                "                                </a>\n" +
+                                "                            </div>\n" + "<div class=\"product-price\" style=\" text-align: center;\">\n" +
+                                "                                    <span class=\"pro-price\">"+priceConvert+"₫</span>\n" +
+                                "                                </div>"+
+                                "                        </div>\n" +
+                                "                    </div>\n" +
+                                "                </div>"
+                );
+            }
         }
     }
 

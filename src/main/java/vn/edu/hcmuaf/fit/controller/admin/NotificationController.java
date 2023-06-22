@@ -39,7 +39,10 @@ public class NotificationController extends HttpServlet {
                     class_checked = "notify_checked";
                     length ++;
                 }
-                String avatar = user.getAvatar();
+                String avatar = "";
+                if(user !=null){
+                     avatar = user.getAvatar();
+                }
                 if (avatar == null || avatar.equals("")){
                     avatar = "no-avatar.png";
                 }

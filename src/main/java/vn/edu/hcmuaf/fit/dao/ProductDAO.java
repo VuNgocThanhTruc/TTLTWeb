@@ -51,11 +51,9 @@ public class ProductDAO {
     public static List<ProductModel> getTop8() {
         LinkedList<ProductModel> list = new LinkedList<ProductModel>();
 
-        String sql = "select p.id ,p.`name`,p.id_type_product,p.id_status_device,p.id_brand,p.price,p.avatar,p.`describe`,p.created_by,p.created_date,p.modified_date,p.modified_by,p.height, p.length, p.width, p.weight,d.date_start,d.date_end,d.percent_discount from products p LEFT JOIN  discounts d on p.id= d.id_product\n" +
+        String sql = "select p.id,p.`name`,p.id_type_product,p.id_status_device,p.id_brand,p.price,p.avatar,p.`describe`,p.created_by,p.created_date,p.modified_date,p.modified_by,p.height, p.length, p.width, p.weight, p.created_date,d.date_start,d.date_end,d.percent_discount from products p LEFT JOIN  discounts d on p.id= d.id_product\n" +
                 "UNION\n" +
-                "select p.id ,p.`name`,p.id_type_product,p.id_status_device,p.id_brand,p.price,p.avatar,p.`describe`,p.created_by,p.created_date,p.modified_date,p.modified_by,p.height, p.length, p.width, p.weight,d.date_start,d.date_end,d.percent_discount from products p RIGHT JOIN   discounts d on p.id= d.id_product\n" +
-                "\n" +
-                "WHERE p.id_status_device =1 ORDER BY id desc LIMIT 0,8";
+                "select p.id ,p.`name`,p.id_type_product,p.id_status_device,p.id_brand,p.price,p.avatar,p.`describe`,p.created_by,p.created_date,p.modified_date,p.modified_by,p.height, p.length, p.width, p.weight, p.created_date,d.date_start,d.date_end,d.percent_discount from products p RIGHT JOIN   discounts d on p.id= d.id_product where p.id_status_device =1  ORDER BY id desc LIMIT 8;";
 
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -87,6 +85,7 @@ public class ProductDAO {
                 productModel.setDateEnd(rs.getString("date_end"));
                 productModel.setPercentDiscount(rs.getInt("percent_discount"));
                 productModel.setListImage(listImage);
+                productModel.setCreated_date(rs.getDate("created_date"));
 
                 list.add(productModel);
             }
@@ -284,7 +283,9 @@ public class ProductDAO {
     public static List<ProductModel> getlistProductForBrand(String brandPram) {
         LinkedList<ProductModel> list = new LinkedList<>();
 
-        String sql = "select * from products " + "join brands on brands.id = products.id_brand " + "where brands.name=?";
+        String sql = "select p.id,p.`name`,p.id_type_product,p.id_status_device,p.id_brand,p.price,p.avatar,p.`describe`,p.created_by,p.created_date,p.modified_date,p.modified_by,p.height, p.length, p.width, p.weight,d.date_start,d.date_end,d.percent_discount from products p LEFT JOIN  discounts d on p.id= d.id_product\n" +
+                "UNION\n" +
+                "select p.id ,p.`name`,p.id_type_product,p.id_status_device,p.id_brand,p.price,p.avatar,p.`describe`,p.created_by,p.created_date,p.modified_date,p.modified_by,p.height, p.length, p.width, p.weight,d.date_start,d.date_end,d.percent_discount from products p RIGHT JOIN   discounts d on p.id= d.id_product JOIN brands on brands.id = p.id_brand where brands.name= ? and p.id_status_device =1  ORDER BY id desc LIMIT 8;";
 
         try {
             PreparedStatement ps = DBConnect.getInstall().preStatement(sql);
@@ -312,6 +313,8 @@ public class ProductDAO {
                 productModel.setDescribe(rs.getString("describe"));
                 productModel.setListImage(listImage);
                 productModel.setAvatar(rs.getString("avatar"));
+                productModel.setDateStart(rs.getString("date_start"));
+                productModel.setDateEnd(rs.getString("date_end"));
                 productModel.setCreated_date(rs.getDate("created_date"));
                 list.add(productModel);
             }
